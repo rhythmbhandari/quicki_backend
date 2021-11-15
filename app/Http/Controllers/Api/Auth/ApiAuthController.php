@@ -599,7 +599,10 @@ class ApiAuthController extends Controller
     *   path="/api/user/upgrade_to_rider",
     *   tags={"Register and Authentication"},
     *   summary="Upgrade To Rider",
-    *   security={{"bearerAuth":{}}},
+    *   security={
+    *   {
+    *       "passport": {}},
+    *   },
     *
     *   @OA\RequestBody(
     *      @OA\MediaType(

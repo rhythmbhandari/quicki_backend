@@ -372,7 +372,7 @@
                 },
                 "security": [
                     {
-                        "bearerAuth": []
+                        "passport": []
                     }
                 ]
             }
@@ -473,24 +473,24 @@
                 "in": "header",
                 "bearerFormat": "JWT",
                 "scheme": "bearer"
-            }
-        }
-    },
-    "security": {
-        "0": [],
-        "passport": {
-            "type": "oauth2",
-            "description": "Laravel passport oauth2 security.",
-            "in": "header",
-            "scheme": "https",
-            "flows": {
-                "password": {
-                    "authorizationUrl": "http://puryaideu_v2.test/oauth/authorize",
-                    "tokenUrl": "http://puryaideu_v2.test/oauth/token",
-                    "refreshUrl": "http://puryaideu_v2.test/token/refresh",
-                    "scopes": []
+            },
+            "passport": {
+                "type": "oauth2",
+                "description": "Laravel passport oauth2 security.",
+                "in": "header",
+                "scheme": "https",
+                "flows": {
+                    "password": {
+                        "authorizationUrl": "http://puryaideu_v2.test/oauth/authorize",
+                        "tokenUrl": "http://puryaideu_v2.test/oauth/token",
+                        "refreshUrl": "http://puryaideu_v2.test/token/refresh",
+                        "scopes": []
+                    }
                 }
             }
         }
-    }
+    },
+    "security": [
+        []
+    ]
 }

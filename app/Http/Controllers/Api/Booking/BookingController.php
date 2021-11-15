@@ -28,7 +28,10 @@ class BookingController extends Controller
     *   path="/api/booking/create",
     *   tags={"Booking"},
     *   summary="Create Booking",
-    *   security={{"bearerAuth":{}}},
+    *   security={
+    *   {
+    *       "passport": {}},
+    *   },
     *   @OA\RequestBody(
     *      @OA\MediaType(
     *         mediaType="application/json",
