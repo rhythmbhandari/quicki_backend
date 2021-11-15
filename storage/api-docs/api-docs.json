@@ -1,0 +1,451 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Puryaideu V2 API",
+        "description": "Puryaideu APIs documentation",
+        "version": "2.0.0"
+    },
+    "paths": {
+        "/api/user/register": {
+            "post": {
+                "tags": [
+                    "Register and Authentication"
+                ],
+                "summary": "Register User",
+                "operationId": "2a95fc4264fd12a1e75e82939372be0a",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "example": {
+                                    "first_name": "Monkey",
+                                    "middle_name": "D.",
+                                    "last_name": "Luffy",
+                                    "image": "file()",
+                                    "email": "luffy@gmail.com",
+                                    "phone": "9816810976",
+                                    "gender": "male",
+                                    "password": "password",
+                                    "password_confirmation": "password",
+                                    "dob": "2000/01/01",
+                                    "facebook_id": "",
+                                    "google_id": ""
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "User Registration Successfull!",
+                                        "token": "123sfsdr234sdfs",
+                                        "user": "{created_user}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/api/rider/register": {
+            "post": {
+                "tags": [
+                    "Register and Authentication"
+                ],
+                "summary": "Register Rider",
+                "operationId": "804cbddf63875af9ebefee2665fdd658",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "example": {
+                                    "first_name": "Monkey",
+                                    "middle_name": "D.",
+                                    "last_name": "Luffy",
+                                    "image": "file()",
+                                    "email": "luffy@gmail.com",
+                                    "phone": "9816810976",
+                                    "gender": "male",
+                                    "password": "password",
+                                    "password_confirmation": "password",
+                                    "dob": "2000/01/01",
+                                    "facebook_id": "",
+                                    "google_id": "",
+                                    "rider": {
+                                        "experience": "5",
+                                        "trained": "YES"
+                                    },
+                                    "document": {
+                                        "document_number": "L12345345234",
+                                        "type": "license",
+                                        "issue_date": "2018/01/01",
+                                        "expiry_date": "2018/01/01",
+                                        "image": "file()"
+                                    },
+                                    "vehicle": {
+                                        "vehicle_type_id": "1",
+                                        "vehicle_number": "BA 99 PA 5544",
+                                        "brand": "TVS",
+                                        "model": "Apache 160R",
+                                        "vehicle_color": "black",
+                                        "make_year": "2016"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Rider Registration Successfull!",
+                                        "token": "123sfsdr234sdfs",
+                                        "rider": "{created_rider}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sms/send": {
+            "post": {
+                "tags": [
+                    "Send and Verify SMS/OTP"
+                ],
+                "summary": "Send SMS",
+                "operationId": "04518094aa4cbec58abd2913e65c8aed",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "example": {
+                                    "phone": "9816810976",
+                                    "user_role": "user"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Otp sent successfully!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sms/verify_user": {
+            "post": {
+                "tags": [
+                    "Send and Verify SMS/OTP"
+                ],
+                "summary": "Verify User OTP",
+                "operationId": "6950145d2e37c32a157b774fa29ee39c",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "example": {
+                                    "phone": "9816810976",
+                                    "code": "223305"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "User exits and verified!",
+                                        "token": "abxad5aSDsdfsdfs",
+                                        "user": "{user}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized: User does not Exist!"
+                    },
+                    "403": {
+                        "description": "Forbidden Access!"
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "404": {
+                        "description": "No Record found!"
+                    }
+                }
+            }
+        },
+        "/api/sms/verify_rider": {
+            "post": {
+                "tags": [
+                    "Send and Verify SMS/OTP"
+                ],
+                "summary": "Verify Rider OTP",
+                "operationId": "a5d03ade517d082d0eb87828608e337a",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "example": {
+                                    "phone": "9816810976",
+                                    "otp": "223305"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Rider exits and verified!",
+                                        "token": "abxad5aSDsdfsdfs",
+                                        "Rider": "{rider}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized: Rider does not Exist!"
+                    },
+                    "403": {
+                        "description": "Forbidden Access: User exists but is not registered as a rider!"
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "404": {
+                        "description": "No Record found!"
+                    }
+                }
+            }
+        },
+        "/api/user/upgrade_to_rider": {
+            "post": {
+                "tags": [
+                    "Register and Authentication"
+                ],
+                "summary": "Register Rider",
+                "operationId": "9f1689ab58a5b9caad9f28c3a25dd2ec",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "example": {
+                                    "rider": {
+                                        "experience": "5",
+                                        "trained": "YES"
+                                    },
+                                    "document": {
+                                        "document_number": "L12345345234",
+                                        "type": "license",
+                                        "issue_date": "2018/01/01",
+                                        "expiry_date": "2018/01/01",
+                                        "image": "file()"
+                                    },
+                                    "vehicle": {
+                                        "vehicle_type_id": "1",
+                                        "vehicle_number": "BA 99 PA 5544",
+                                        "brand": "TVS",
+                                        "model": "Apache 160R",
+                                        "vehicle_color": "black",
+                                        "make_year": "2016"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Rider Registration Successfull!",
+                                        "token": "123sfsdr234sdfs",
+                                        "rider": "{created_rider}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/vehicle_type/get_all_data": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "VehicleTypeController",
+                "operationId": "a039207529cf1a1a2c4baa844a974648",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "example": {
+                                    "email": "admin@gmail.com",
+                                    "phone": "9876543210",
+                                    "first_name": "admin",
+                                    "last_name": "user",
+                                    "gender": "male",
+                                    "password": "password",
+                                    "password_confirmation": "password",
+                                    "dob": "2000/01/01",
+                                    "license": {
+                                        "issue_date": "2018/01/01",
+                                        "expire_date": "2018/01/01",
+                                        "image": "file()"
+                                    },
+                                    "facebook_id": "",
+                                    "google_id": ""
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "bearerAuth",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "security": {
+        "0": [],
+        "passport": {
+            "type": "oauth2",
+            "description": "Laravel passport oauth2 security.",
+            "in": "header",
+            "scheme": "https",
+            "flows": {
+                "password": {
+                    "authorizationUrl": "http://puryaideu_v2.test/oauth/authorize",
+                    "tokenUrl": "http://puryaideu_v2.test/oauth/token",
+                    "refreshUrl": "http://puryaideu_v2.test/token/refresh",
+                    "scopes": []
+                }
+            }
+        }
+    }
+}

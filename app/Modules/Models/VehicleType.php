@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Modules\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Cviebrock\EloquentSluggable\Sluggable;
+
+
+use App\Modules\Models\Vehicle;
+use App\Modules\Models\Shift;
+
+class VehicleType extends Model
+{
+    use HasFactory, SoftDeletes, Sluggable;
+
+    protected $path = 'uploads/vehicle_type';
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
+    
+    protected $fillable = [ 
+        'name','slug','price_km','price_min','image', 'base_fare','commission','capacity','status','created_at','updated_at','deleted_at'
+    ];
+    protected $appends = [
+         'thumbnail_path', 'image_path'
+    ];
+
+    function getImagePathAttribute()
+    {
+        if ($this->image)
+            return $this->path . '/' . $this->type . '/' . $this->image;
+        else
+            return 'assets/media/noimage.png';
+    }
+
+    function getThumbnailPathAttribute()
+    {
+        if ($this->image)
+            return $this->path . '/' . $this->type . '/thumb/' . $this->image;
+        else
+            return 'assets/media/noimage.png';
+    }
+
+    //Vehicles of this type
+    public function vehicles(){
+        return $this->hasMany(Vehicle::class);
+    }
+
+    //Shifts for this vehicle type
+    public function shifts(){
+        return $this->hasMany(Shift::class);
+    }
+    // public function prices(){
+    //     return $this->hasMany(Price::class);
+    // }
+
+}
