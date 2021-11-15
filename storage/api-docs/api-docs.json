@@ -15,7 +15,7 @@
                 "operationId": "2a95fc4264fd12a1e75e82939372be0a",
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "example": {
                                     "first_name": "Monkey",
@@ -74,7 +74,7 @@
                 "operationId": "804cbddf63875af9ebefee2665fdd658",
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "example": {
                                     "first_name": "Monkey",
@@ -152,11 +152,11 @@
                 "operationId": "04518094aa4cbec58abd2913e65c8aed",
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "example": {
                                     "phone": "9816810976",
-                                    "user_role": "user"
+                                    "user_role": "customer"
                                 }
                             }
                         }
@@ -199,7 +199,7 @@
                 "operationId": "6950145d2e37c32a157b774fa29ee39c",
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "example": {
                                     "phone": "9816810976",
@@ -257,7 +257,7 @@
                 "operationId": "a5d03ade517d082d0eb87828608e337a",
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "example": {
                                     "phone": "9816810976",
@@ -311,11 +311,11 @@
                 "tags": [
                     "Register and Authentication"
                 ],
-                "summary": "Register Rider",
+                "summary": "Upgrade To Rider",
                 "operationId": "9f1689ab58a5b9caad9f28c3a25dd2ec",
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "example": {
                                     "rider": {
@@ -377,38 +377,83 @@
                 ]
             }
         },
-        "/api/vehicle_type/get_all_data": {
+        "/api/booking/create": {
             "post": {
                 "tags": [
-                    "Auth"
+                    "Booking"
                 ],
-                "summary": "VehicleTypeController",
-                "operationId": "a039207529cf1a1a2c4baa844a974648",
+                "summary": "Create Booking",
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "example": {
-                                    "email": "admin@gmail.com",
-                                    "phone": "9876543210",
-                                    "first_name": "admin",
-                                    "last_name": "user",
-                                    "gender": "male",
-                                    "password": "password",
-                                    "password_confirmation": "password",
-                                    "dob": "2000/01/01",
-                                    "license": {
-                                        "issue_date": "2018/01/01",
-                                        "expire_date": "2018/01/01",
-                                        "image": "file()"
-                                    },
-                                    "facebook_id": "",
-                                    "google_id": ""
+                                    "origin": "Sanepa, Lalitpur",
+                                    "destination": "New Baneshwor, Kathmandu",
+                                    "passenger_number": 2,
+                                    "vehicle_type_id": 1,
+                                    "distance": 12,
+                                    "duration": 20,
+                                    "location": {
+                                        "latitude_origin": 85.123423,
+                                        "longitude_origin": 27.123456,
+                                        "latitude_destination": 86.12313,
+                                        "longitude_destination": 27.234325
+                                    }
                                 }
                             }
                         }
                     }
                 },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Booking Successful!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized: User does not Exist!"
+                    },
+                    "403": {
+                        "description": "Forbidden Access: Booking is blocked for now!"
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "404": {
+                        "description": "No Record found!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/vehicle_type/get_all_data": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "VehicleTypeController",
+                "operationId": "6ecd07998d6d28060d2d886e0960ebfc",
                 "responses": {
                     "200": {
                         "description": "Success",

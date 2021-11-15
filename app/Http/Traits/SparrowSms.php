@@ -8,13 +8,14 @@ trait SparrowSms {
 
     public function sendSms(Request $request)
     {
-        $message = "Self Drive Nepal Application. Your Verification Code is-" . $request->code;
+       // dd($request->all(),config('app.name'),config('app.sparrow_key'));
+        $message =  config('app.name') . " Application. Your Verification Code is-" . $request->code;
 
         $phone = $request->phone;
 
         $args = http_build_query(array(
             'token' => config('app.sparrow_key'),
-            'from'  => 'InfoSMS',
+            'from'  => "InfoSMS",
             'to'    => $phone,
             'text'  => $message
         ));

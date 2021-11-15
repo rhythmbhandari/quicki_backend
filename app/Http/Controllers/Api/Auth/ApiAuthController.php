@@ -48,7 +48,7 @@ class ApiAuthController extends Controller
     *
     *   @OA\RequestBody(
     *      @OA\MediaType(
-    *         mediaType="multipart/form-data",
+    *          mediaType="application/json",
     *         @OA\Schema(
     *             
     *             example={
@@ -151,7 +151,7 @@ class ApiAuthController extends Controller
     *
     *   @OA\RequestBody(
     *      @OA\MediaType(
-    *         mediaType="multipart/form-data",
+    *          mediaType="application/json",
     *         @OA\Schema(
     *             
     *             example={
@@ -300,12 +300,12 @@ class ApiAuthController extends Controller
     *
     *   @OA\RequestBody(
     *      @OA\MediaType(
-    *         mediaType="multipart/form-data",
+    *          mediaType="application/json",
     *         @OA\Schema(
     *             
     *             example={
     *                  "phone": "9816810976",
-    *                  "user_role": "user",
+    *                  "user_role": "customer",
     *               }
     *         )
     *     )
@@ -398,7 +398,7 @@ class ApiAuthController extends Controller
     *
     *   @OA\RequestBody(
     *      @OA\MediaType(
-    *         mediaType="multipart/form-data",
+    *          mediaType="application/json",
     *         @OA\Schema(
     *             
     *             example={
@@ -496,7 +496,7 @@ class ApiAuthController extends Controller
     *
     *   @OA\RequestBody(
     *      @OA\MediaType(
-    *         mediaType="multipart/form-data",
+    *          mediaType="application/json",
     *         @OA\Schema(
     *             
     *             example={
@@ -598,12 +598,12 @@ class ApiAuthController extends Controller
     * @OA\Post(
     *   path="/api/user/upgrade_to_rider",
     *   tags={"Register and Authentication"},
+    *   summary="Upgrade To Rider",
     *   security={{"bearerAuth":{}}},
-    *   summary="Register Rider",
     *
     *   @OA\RequestBody(
     *      @OA\MediaType(
-    *         mediaType="multipart/form-data",
+    *          mediaType="application/json",
     *         @OA\Schema(
     *             
     *             example={                     

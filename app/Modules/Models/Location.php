@@ -5,6 +5,8 @@ namespace App\Modules\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Modules\Models\Booking;
+use App\Modules\Models\CompletedTrip;
 class Location extends Model
 {
     use HasFactory;
@@ -17,5 +19,13 @@ class Location extends Model
     protected $fillable = [  'longitude_origin','latitude_origin','longitude_destination','latitude_destination',
     'created_at','updated_at',
     ];
+
+
+    public function booking() {
+        return $this->belongsTo(Booking::class);
+    }
+    public function completed_trip() {
+        return $this->belongsTo(CompletedTrip::class);
+    }
 
 }
