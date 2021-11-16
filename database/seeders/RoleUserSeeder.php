@@ -19,8 +19,16 @@ class RoleUserSeeder extends Seeder
             'role_id'=>'1',
         ]);
         RoleUser::create([
+            'user_id'=>'1',
+            'role_id'=>'3',
+        ]);
+        RoleUser::create([
             'user_id'=>'2',
             'role_id'=>'2',
+        ]);
+        RoleUser::create([
+            'user_id'=>'2',
+            'role_id'=>'3',
         ]);
         RoleUser::create([
             'user_id'=>'3',

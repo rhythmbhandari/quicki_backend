@@ -18,33 +18,15 @@ use App\Http\Controllers\Api\User\RiderController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
-// Route::group(['middleware' => ['json.response']], function () {
-//     // ...
-//     // public routes
-   
-// });
-
-// Route::middleware('auth:api')->group(function () {
-//     // our routes to be protected will go in here
-  
-//     Route::get('/vehicle/model/list', [VehicleController::class, 'vehicleModelList'])->name('vehicle.model.list');
-// });
 
 Route::group(['as' => 'api.', ], function ($router) {
   //test
   $router->post('test',[ApiAuthController::class, 'test'])->name('test'); 
 
-  // public routes
+  //---------------------------------------------------------------------------------------------------------
+  //  REGISTER/AUTHENTICATION and SMS/OTP VERIFICATION ROUTES
+  //---------------------------------------------------------------------------------------------------------
   $router->post('/user/register', [ApiAuthController::class, 'register'])->name('user.register'); //stores the user (customer) data 
   $router->post('/user/login', [ApiAuthController::class, 'login'])->name('user.login');         //logins the user (customer)
 
@@ -56,6 +38,7 @@ Route::group(['as' => 'api.', ], function ($router) {
   $router->post('/sms/verify_rider',[ApiAuthController::class, 'verify_rider_otp'])->name('sms.verify_rider');   //Sends SMS to the provided number
   
 
+  $router->get('/vehicle_type/get_all_data', [VehicleTypeController::class, 'get_all_data'])->name('vehicle_type.get_all_data');
     
   //Route::post('/social/login', [ApiAuthController::class, 'socialLogin'])->name('socialLogin.api');
   //  Route::post('/verify-customer', [ApiAuthController::class, 'verifyCutomerAttributes'])->name('verifyCustomer.api');
@@ -65,11 +48,17 @@ Route::group(['as' => 'api.', ], function ($router) {
 //Requires valid token
 Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   
-  //Upgrade User to Rider 
+  //---------------------------------------------------------------------------------------------------------
+  //  USER UPGRADE TO RIDER
+  //---------------------------------------------------------------------------------------------------------
   $router->post('/user/upgrade_to_rider', [ApiAuthController::class, 'upgrade_to_rider'])->name('user.upgrade_to_rider');
 
+  //---------------------------------------------------------------------------------------------------------
+  //  BOOKING ROUTES
+  //---------------------------------------------------------------------------------------------------------
+  $router->post('/booking/create', [BookingController::class, 'store'])->name('booking.store');
 
-  $router->get('/vehicle_type/get_all_data', [VehicleTypeController::class, 'get_all_data'])->name('vehicle_type.get_all_data');
+
 
   
   $router->post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
@@ -77,13 +66,12 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->get('/show/profile', [ApiAuthController::class, 'showProfile'])->name('show.profile');
   $router->post('/forgot-password', [ApiAuthController::class, 'forgotPassword'])->name('forgot.password');
 
-  //$router->get('/vehicle_type/get_all_data', [VehicleTypeController::class, 'get_all_data'])->name('vehicle_type.get_all_data');
   $router->get('/auth_test', [VehicleTypeController::class, 'get_all_data'])->name('auth_test');
 
 
     
     //Booking
-    $router->post('/booking/create', [BookingController::class, 'bookingCreate'])->name('booking.create');
+    // $router->post('/booking/create', [BookingController::class, 'bookingCreate'])->name('booking.create');
     $router->get('/booking/list', [BookingController::class, 'bookingStatusList'])->name('booking.list');
     $router->get('/booking/list/upcoming', [BookingController::class, 'bookingUpcomingList'])->name('booking.list');
     $router->get('/booking/list/completed', [BookingController::class, 'bookingCompletedList'])->name('booking.list');

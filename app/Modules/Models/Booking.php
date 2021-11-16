@@ -13,8 +13,8 @@ class Booking extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'origin','destination','distance','duration','passenger_number','name','phone_number',
-        'user_id', 'status', 'rider_id', 'ride_status', 'location_id', 
+        'origin','destination','distance','duration','passenger_number', //'name','phone_number',
+        'user_id', 'status', 'rider_id', 'ride_status', 'location_id', 'vehicle_type_id',
         'updated_at','created_at','deleted_at'
     ];
 
@@ -22,7 +22,7 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
     public function location() {
-        return $this->belongsTo(Location::class);
+        return $this->hasOne(Location::class);
     }
   
     public function rider() {

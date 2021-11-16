@@ -64,34 +64,10 @@ class VehicleTypeController extends Controller
     }
 
  /**
-     * @OA\Post(
+     * @OA\Get(
      *   path="/api/vehicle_type/get_all_data",
      *   tags={"Auth"},
      *   summary="VehicleTypeController",
-     *   @OA\RequestBody(
-     *      @OA\MediaType(
-     *         mediaType="multipart/form-data",
-     *         @OA\Schema(
-     *             example={
-     *                 "email": "admin@gmail.com",
-     *                 "phone": "9876543210",
-     *                 "first_name": "admin",
-     *                 "last_name": "user",
-     *                 "gender": "male",
-     *                 "password": "password",
-     *                 "password_confirmation": "password",
-     *                 "dob": "2000/01/01",
-     *                 "license": {
-     *                      "issue_date": "2018/01/01",
-     *                      "expire_date": "2018/01/01",
-     *                      "image": "file()",
-     *                  },
-     *                  "facebook_id" : "",
-     *                  "google_id" : ""
-     *              }
-     *         )
-     *     )
-     *   ),
      *
      *   @OA\Response(
      *      response=200,
