@@ -3,9 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\ApiAuthController;
+use App\Http\Controllers\Api\User\UserController;
+use App\Http\Controllers\Api\User\RiderController;
 use App\Http\Controllers\Api\Vehicle\VehicleTypeController;
 use App\Http\Controllers\Api\Booking\BookingController;
-use App\Http\Controllers\Api\User\RiderController;
+use App\Http\Controllers\Api\Booking\CompletedTripController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +40,6 @@ Route::group(['as' => 'api.', ], function ($router) {
   $router->post('/sms/verify_rider',[ApiAuthController::class, 'verify_rider_otp'])->name('sms.verify_rider');   //Sends SMS to the provided number
   
 
-  $router->get('/vehicle_type/get_all_data', [VehicleTypeController::class, 'get_all_data'])->name('vehicle_type.get_all_data');
     
   //Route::post('/social/login', [ApiAuthController::class, 'socialLogin'])->name('socialLogin.api');
   //  Route::post('/verify-customer', [ApiAuthController::class, 'verifyCutomerAttributes'])->name('verifyCustomer.api');
@@ -47,21 +48,49 @@ Route::group(['as' => 'api.', ], function ($router) {
 
 //Requires valid token
 Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
+
+  
+  $router->get('/vehicle_type/get_all_data', [VehicleTypeController::class, 'get_all_data'])->name('vehicle_type.get_all_data');
   
   //---------------------------------------------------------------------------------------------------------
   //  USER UPGRADE TO RIDER
   //---------------------------------------------------------------------------------------------------------
   $router->post('/user/upgrade_to_rider', [ApiAuthController::class, 'upgrade_to_rider'])->name('user.upgrade_to_rider');
 
+
   //---------------------------------------------------------------------------------------------------------
-  //  BOOKING ROUTES
+  //  BOOKING and COMPLETED TRIP ROUTES
   //---------------------------------------------------------------------------------------------------------
   $router->post('/booking/create', [BookingController::class, 'store'])->name('booking.store');
+  $router->post('/booking/change_status', [BookingController::class, 'change_status'])->name('booking.change_status');
+  $router->get('/user/booking/active', [BookingController::class, 'getActiveUserBooking'])->name('user.booking.active');
+  $router->get('/rider/booking/active', [BookingController::class, 'getActiveRiderBooking'])->name('rider.booking.active');
+  $router->get('/user/booking/history', [CompletedTripController::class, 'getUserTrips'])->name('user.booking.history');
+  $router->get('/rider/booking/history', [CompletedTripController::class, 'getRiderTrips'])->name('rider.booking.history');
 
+
+  //---------------------------------------------------------------------------------------------------------
+  //  USER ROUTES
+  //---------------------------------------------------------------------------------------------------------
+  $router->get('/user/details', [UserController::class, 'getDetails'])->name('user.details');
+
+
+  //---------------------------------------------------------------------------------------------------------
+  //  RIDER ROUTES
+  //---------------------------------------------------------------------------------------------------------
+  $router->get('/rider/details', [RiderController::class, 'getDetails'])->name('rider.details');
+
+
+  //---------------------------------------------------------------------------------------------------------
+  //  AUTH ROUTES
+  //---------------------------------------------------------------------------------------------------------
+  $router->post('/logout', [ApiAuthController::class, 'logout'])->name('logout');
+
+  
 
 
   
-  $router->post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
+ 
   $router->post('/edit/profile', [ApiAuthController::class, 'editProfile'])->name('edit.profile');
   $router->get('/show/profile', [ApiAuthController::class, 'showProfile'])->name('show.profile');
   $router->post('/forgot-password', [ApiAuthController::class, 'forgotPassword'])->name('forgot.password');

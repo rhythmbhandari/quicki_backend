@@ -36,13 +36,13 @@
                     }
                 },
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Success",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "example": {
-                                        "message": "User Registration Successfull!",
+                                        "message": "User Registration Successful!",
                                         "token": "123sfsdr234sdfs",
                                         "user": "{created_user}"
                                     }
@@ -120,7 +120,7 @@
                             "application/json": {
                                 "schema": {
                                     "example": {
-                                        "message": "Rider Registration Successfull!",
+                                        "message": "Rider Registration Successful!",
                                         "token": "123sfsdr234sdfs",
                                         "rider": "{created_rider}"
                                     }
@@ -155,8 +155,7 @@
                         "application/json": {
                             "schema": {
                                 "example": {
-                                    "phone": "9816810976",
-                                    "user_role": "customer"
+                                    "phone": "9816810976"
                                 }
                             }
                         }
@@ -169,7 +168,7 @@
                             "application/json": {
                                 "schema": {
                                     "example": {
-                                        "message": "Otp sent successfully!"
+                                        "message": "SMS sent successfully!"
                                     }
                                 }
                             }
@@ -216,7 +215,7 @@
                             "application/json": {
                                 "schema": {
                                     "example": {
-                                        "message": "User exits and verified!",
+                                        "message": "User exits and verified! Login Successful!",
                                         "token": "abxad5aSDsdfsdfs",
                                         "user": "{user}"
                                     }
@@ -225,10 +224,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized: User does not Exist!"
-                    },
-                    "403": {
-                        "description": "Forbidden Access!"
+                        "description": "Otp verified but user does not exist!"
                     },
                     "422": {
                         "description": "Validation Fail",
@@ -261,7 +257,7 @@
                             "schema": {
                                 "example": {
                                     "phone": "9816810976",
-                                    "otp": "223305"
+                                    "code": "223305"
                                 }
                             }
                         }
@@ -274,7 +270,7 @@
                             "application/json": {
                                 "schema": {
                                     "example": {
-                                        "message": "Rider exits and verified!",
+                                        "message": "Rider exits and verified! Login Successful!",
                                         "token": "abxad5aSDsdfsdfs",
                                         "Rider": "{rider}"
                                     }
@@ -283,7 +279,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized: Rider does not Exist!"
+                        "description": "Unauthorized: Otp verified but rider does not Exist!"
                     },
                     "403": {
                         "description": "Forbidden Access: User exists but is not registered as a rider!"
@@ -349,7 +345,7 @@
                             "application/json": {
                                 "schema": {
                                     "example": {
-                                        "message": "Rider Registration Successfull!",
+                                        "message": "Rider Registration Successful!",
                                         "token": "123sfsdr234sdfs",
                                         "rider": "{created_rider}"
                                     }
@@ -372,7 +368,29 @@
                 },
                 "security": [
                     {
-                        "passport": []
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Logout"
+                ],
+                "summary": "Logout",
+                "operationId": "d4304b8b3cfb668ab4347281a78b5b01",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
                     }
                 ]
             }
@@ -394,6 +412,18 @@
                                     "vehicle_type_id": 1,
                                     "distance": 12,
                                     "duration": 20,
+                                    "stoppage": [
+                                        {
+                                            "name": "Sanepa, Lalitpur",
+                                            "latitude": 27.1234,
+                                            "longitude": 85.3434
+                                        },
+                                        {
+                                            "name": "New Baneshwor, Kathmandu",
+                                            "latitude": 28.3454,
+                                            "longitude": 87.1234
+                                        }
+                                    ],
                                     "location": {
                                         "latitude_origin": 85.123423,
                                         "longitude_origin": 27.123456,
@@ -406,23 +436,64 @@
                     }
                 },
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Success",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "example": {
-                                        "message": "Booking Successful!"
+                                        "message": "Booking Successful!",
+                                        "booking": {
+                                            "message": "Booking Successful!",
+                                            "booking": {
+                                                "origin": "Patan, Lalitpur",
+                                                "destination": "Kirtipur, Kathmandu",
+                                                "passenger_number": 2,
+                                                "vehicle_type_id": 1,
+                                                "distance": 12,
+                                                "duration": 20,
+                                                "stoppage": [
+                                                    {
+                                                        "name": "Sanepa, Lalitpur",
+                                                        "latitude": 27.1234,
+                                                        "longitude": 85.3434
+                                                    },
+                                                    {
+                                                        "name": "New Baneshwor, Kathmandu",
+                                                        "latitude": 28.3454,
+                                                        "longitude": 87.1234
+                                                    }
+                                                ],
+                                                "user_id": 3,
+                                                "status": "pending",
+                                                "updated_at": "2021-11-17T06:46:13.000000Z",
+                                                "created_at": "2021-11-17T06:46:13.000000Z",
+                                                "id": 3,
+                                                "location_id": 3,
+                                                "location": {
+                                                    "latitude_origin": 85.123423,
+                                                    "longitude_origin": 27.123456,
+                                                    "latitude_destination": 86.12313,
+                                                    "longitude_destination": 27.234325,
+                                                    "updated_at": "2021-11-17T06:46:13.000000Z",
+                                                    "created_at": "2021-11-17T06:46:13.000000Z",
+                                                    "id": 3
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
                     },
+                    "400": {
+                        "description": "You already have existing active bookings!"
+                    },
                     "401": {
-                        "description": "Unauthorized: User does not Exist!"
+                        "description": "Unauthenticated"
                     },
                     "403": {
-                        "description": "Forbidden Access: Booking is blocked for now!"
+                        "description": "Forbidden Access: Booking is off limits!"
                     },
                     "422": {
                         "description": "Validation Fail",
@@ -447,10 +518,578 @@
                 ]
             }
         },
+        "/api/booking/change_status": {
+            "post": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Change Status",
+                "operationId": "8519e8955b4047ac983d150fa6f0c387",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "booking_id": 1,
+                                    "new_status": "accepted",
+                                    "optional_data": {
+                                        "rider_id": 1,
+                                        "cancelled_by_id": 1,
+                                        "cancelled_by_type": "customer",
+                                        "cancel_message": "Timeout or somethin!"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Status Updated!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Booking Status Updated Successfully! Created Completed Booking History",
+                                        "completed_trip": {
+                                            "id": 4,
+                                            "user_id": 3,
+                                            "rider_id": null,
+                                            "booking_id": 2,
+                                            "location_id": 2,
+                                            "origin": "Sanepa, Lalitpur",
+                                            "destination": "New Baneshwor, Kathmandu",
+                                            "stoppage": [
+                                                {
+                                                    "name": "Sanepa, Lalitpur",
+                                                    "latitude": 27.1234,
+                                                    "longitude": 85.3434
+                                                },
+                                                {
+                                                    "name": "New Baneshwor, Kathmandu",
+                                                    "latitude": 28.3454,
+                                                    "longitude": 87.1234
+                                                }
+                                            ],
+                                            "distance": "12",
+                                            "duration": "20",
+                                            "passenger_number": 1,
+                                            "profile_img_user": null,
+                                            "profile_img_rider": null,
+                                            "status": "completed",
+                                            "cancelled_by_type": null,
+                                            "cancelled_by_id": null,
+                                            "cancel_message": null,
+                                            "deleted_at": null,
+                                            "created_at": "2021-11-17T06:43:25.000000Z",
+                                            "updated_at": "2021-11-17T06:43:58.000000Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden Access: Booking is off limits!"
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "404": {
+                        "description": "No Record found!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/booking/active": {
+            "get": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Active User Booking",
+                "operationId": "ba97d6130dcfa3ff629175b37b7d8e9d",
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Booking Successful!",
+                                        "booking": {
+                                            "message": "Booking Successful!",
+                                            "booking": {
+                                                "origin": "Patan, Lalitpur",
+                                                "destination": "Kirtipur, Kathmandu",
+                                                "passenger_number": 2,
+                                                "vehicle_type_id": 1,
+                                                "distance": 12,
+                                                "duration": 20,
+                                                "stoppage": [
+                                                    {
+                                                        "name": "Sanepa, Lalitpur",
+                                                        "latitude": 27.1234,
+                                                        "longitude": 85.3434
+                                                    },
+                                                    {
+                                                        "name": "New Baneshwor, Kathmandu",
+                                                        "latitude": 28.3454,
+                                                        "longitude": 87.1234
+                                                    }
+                                                ],
+                                                "user_id": 3,
+                                                "updated_at": "2021-11-17T06:46:13.000000Z",
+                                                "created_at": "2021-11-17T06:46:13.000000Z",
+                                                "id": 3,
+                                                "location_id": 3,
+                                                "location": {
+                                                    "latitude_origin": 85.123423,
+                                                    "longitude_origin": 27.123456,
+                                                    "latitude_destination": 86.12313,
+                                                    "longitude_destination": 27.234325,
+                                                    "updated_at": "2021-11-17T06:46:13.000000Z",
+                                                    "created_at": "2021-11-17T06:46:13.000000Z",
+                                                    "id": 3
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rider/booking/active": {
+            "get": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Active Rider Booking",
+                "operationId": "f3f70d7a1226f9797658bdb951a170a6",
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Booking Successful!",
+                                        "booking": {
+                                            "message": "Booking Successful!",
+                                            "booking": {
+                                                "origin": "Patan, Lalitpur",
+                                                "destination": "Kirtipur, Kathmandu",
+                                                "passenger_number": 2,
+                                                "vehicle_type_id": 1,
+                                                "distance": 12,
+                                                "duration": 20,
+                                                "stoppage": [
+                                                    {
+                                                        "name": "Sanepa, Lalitpur",
+                                                        "latitude": 27.1234,
+                                                        "longitude": 85.3434
+                                                    },
+                                                    {
+                                                        "name": "New Baneshwor, Kathmandu",
+                                                        "latitude": 28.3454,
+                                                        "longitude": 87.1234
+                                                    }
+                                                ],
+                                                "user_id": 3,
+                                                "updated_at": "2021-11-17T06:46:13.000000Z",
+                                                "created_at": "2021-11-17T06:46:13.000000Z",
+                                                "id": 3,
+                                                "location_id": 3,
+                                                "location": {
+                                                    "latitude_origin": 85.123423,
+                                                    "longitude_origin": 27.123456,
+                                                    "latitude_destination": 86.12313,
+                                                    "longitude_destination": 27.234325,
+                                                    "updated_at": "2021-11-17T06:46:13.000000Z",
+                                                    "created_at": "2021-11-17T06:46:13.000000Z",
+                                                    "id": 3
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/booking/history": {
+            "get": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "User Booking History",
+                "operationId": "2047e16056c029692c727bc7ec8a9fe2",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "completed_trips": [
+                                            {
+                                                "id": 1,
+                                                "user_id": 3,
+                                                "rider_id": 1,
+                                                "booking_id": 1,
+                                                "location_id": 1,
+                                                "origin": "Sanepa, Lalitpur",
+                                                "destination": "New Baneshwor, Kathmandu",
+                                                "distance": null,
+                                                "duration": null,
+                                                "passenger_number": 1,
+                                                "profile_img_user": null,
+                                                "profile_img_rider": null,
+                                                "status": "completed",
+                                                "cancelled_by_type": null,
+                                                "cancelled_by_id": null,
+                                                "cancel_message": null,
+                                                "deleted_at": null,
+                                                "created_at": "2021-11-16T12:31:03.000000Z",
+                                                "updated_at": "2021-11-16T12:46:58.000000Z",
+                                                "location": {
+                                                    "id": 1,
+                                                    "longitude_origin": 27.123456,
+                                                    "latitude_origin": 85.123423,
+                                                    "longitude_destination": 27.234325,
+                                                    "latitude_destination": 86.12313,
+                                                    "created_at": "2021-11-16T12:31:03.000000Z",
+                                                    "updated_at": "2021-11-16T12:31:03.000000Z"
+                                                },
+                                                "rider": {
+                                                    "id": 1,
+                                                    "user_id": 2,
+                                                    "experience": 3,
+                                                    "trained": "YES",
+                                                    "status": "active",
+                                                    "approved_at": "2021-11-16 12:18:06",
+                                                    "deleted_at": null,
+                                                    "last_deleted_by": null,
+                                                    "last_updated_by": null,
+                                                    "created_at": "2021-11-16T12:18:06.000000Z",
+                                                    "updated_at": "2021-11-16T12:18:06.000000Z",
+                                                    "vehicle": null
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rider/booking/history": {
+            "get": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Rider Booking History",
+                "operationId": "0eb8213542091fd71f660fa7c6a3cd65",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "completed_trips": [
+                                            {
+                                                "id": 1,
+                                                "user_id": 3,
+                                                "rider_id": 1,
+                                                "booking_id": 1,
+                                                "location_id": 1,
+                                                "origin": "Sanepa, Lalitpur",
+                                                "destination": "New Baneshwor, Kathmandu",
+                                                "distance": null,
+                                                "duration": null,
+                                                "passenger_number": 1,
+                                                "profile_img_user": null,
+                                                "profile_img_rider": null,
+                                                "status": "completed",
+                                                "cancelled_by_type": null,
+                                                "cancelled_by_id": null,
+                                                "cancel_message": null,
+                                                "deleted_at": null,
+                                                "created_at": "2021-11-16T12:31:03.000000Z",
+                                                "updated_at": "2021-11-16T12:46:58.000000Z",
+                                                "location": {
+                                                    "id": 1,
+                                                    "longitude_origin": 27.123456,
+                                                    "latitude_origin": 85.123423,
+                                                    "longitude_destination": 27.234325,
+                                                    "latitude_destination": 86.12313,
+                                                    "created_at": "2021-11-16T12:31:03.000000Z",
+                                                    "updated_at": "2021-11-16T12:31:03.000000Z"
+                                                },
+                                                "rider": {
+                                                    "id": 1,
+                                                    "user_id": 2,
+                                                    "experience": 3,
+                                                    "trained": "YES",
+                                                    "status": "active",
+                                                    "approved_at": "2021-11-16 12:18:06",
+                                                    "deleted_at": null,
+                                                    "last_deleted_by": null,
+                                                    "last_updated_by": null,
+                                                    "created_at": "2021-11-16T12:18:06.000000Z",
+                                                    "updated_at": "2021-11-16T12:18:06.000000Z",
+                                                    "vehicle": null
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rider/details": {
+            "get": {
+                "tags": [
+                    "Details"
+                ],
+                "summary": "Rider Details",
+                "operationId": "f565deb5e30886584e5e25c01b8f7715",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "user": {
+                                            "id": 4,
+                                            "slug": "gintama-d-luffy",
+                                            "first_name": "Gintama",
+                                            "middle_name": "D.",
+                                            "last_name": "Luffy",
+                                            "image": "file()",
+                                            "dob": "2000-01-01",
+                                            "gender": null,
+                                            "google_id": null,
+                                            "facebook_id": null,
+                                            "username": null,
+                                            "phone": "9816810976",
+                                            "email": "gintama@gmail.com",
+                                            "status": null,
+                                            "email_verified_at": null,
+                                            "last_logged_in": null,
+                                            "no_of_logins": null,
+                                            "avatar": null,
+                                            "deleted_at": null,
+                                            "last_updated_by": null,
+                                            "last_deleted_by": null,
+                                            "created_at": "2021-11-16T08:09:03.000000Z",
+                                            "updated_at": "2021-11-16T08:09:03.000000Z",
+                                            "name": "Gintama D. Luffy",
+                                            "rider": {
+                                                "id": 2,
+                                                "user_id": 4,
+                                                "experience": 5,
+                                                "trained": "YES",
+                                                "status": "in_active",
+                                                "approved_at": null,
+                                                "deleted_at": null,
+                                                "last_deleted_by": null,
+                                                "last_updated_by": null,
+                                                "created_at": "2021-11-16T08:09:03.000000Z",
+                                                "updated_at": "2021-11-16T08:09:03.000000Z",
+                                                "vehicle": {
+                                                    "id": 1,
+                                                    "slug": "ba-99-pa-5544",
+                                                    "rider_id": 2,
+                                                    "vehicle_type_id": 1,
+                                                    "vehicle_number": "BA 99 PA 5544",
+                                                    "image": null,
+                                                    "make_year": "2016",
+                                                    "vehicle_color": "black",
+                                                    "brand": "CF MOTO",
+                                                    "model": "NK 250",
+                                                    "status": "in_active",
+                                                    "deleted_at": null,
+                                                    "last_deleted_by": null,
+                                                    "last_updated_by": null,
+                                                    "created_at": "2021-11-16T08:09:03.000000Z",
+                                                    "updated_at": "2021-11-16T08:09:03.000000Z",
+                                                    "thumbnail_path": "assets/media/noimage.png",
+                                                    "image_path": "assets/media/noimage.png",
+                                                    "documents": "[]"
+                                                },
+                                                "documents": [
+                                                    {
+                                                        "id": 1,
+                                                        "documentable_type": "App\\\\Modules\\\\Models\\\\Rider",
+                                                        "documentable_id": 2,
+                                                        "type": "license",
+                                                        "document_number": "L12345345234",
+                                                        "issue_date": "2018-01-01",
+                                                        "expire_date": null,
+                                                        "image": "file()",
+                                                        "deleted_at": null,
+                                                        "created_at": "2021-11-16T08:09:03.000000Z",
+                                                        "updated_at": "2021-11-16T08:09:03.000000Z",
+                                                        "thumbnail_path": "uploads/document/license/thumb/file()",
+                                                        "image_path": "uploads/document/license/file()"
+                                                    }
+                                                ]
+                                            },
+                                            "documents": "[]"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/details": {
+            "get": {
+                "tags": [
+                    "Details"
+                ],
+                "summary": "User Details",
+                "operationId": "e06fa66e89b9f4ad3aad62aa32fc2cc2",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "user": {
+                                            "id": 4,
+                                            "slug": "gintama-d-luffy",
+                                            "first_name": "Gintama",
+                                            "middle_name": "D.",
+                                            "last_name": "Luffy",
+                                            "image": "file()",
+                                            "dob": "2000-01-01",
+                                            "gender": null,
+                                            "google_id": null,
+                                            "facebook_id": null,
+                                            "username": null,
+                                            "phone": "9816810976",
+                                            "email": "gintama@gmail.com",
+                                            "status": null,
+                                            "email_verified_at": null,
+                                            "last_logged_in": null,
+                                            "no_of_logins": null,
+                                            "avatar": null,
+                                            "deleted_at": null,
+                                            "last_updated_by": null,
+                                            "last_deleted_by": null,
+                                            "created_at": "2021-11-16T08:09:03.000000Z",
+                                            "updated_at": "2021-11-16T08:09:03.000000Z",
+                                            "name": "Gintama D. Luffy"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/vehicle_type/get_all_data": {
             "get": {
                 "tags": [
-                    "Auth"
+                    "Vehicle"
                 ],
                 "summary": "VehicleTypeController",
                 "operationId": "6ecd07998d6d28060d2d886e0960ebfc",
@@ -461,7 +1100,12 @@
                             "application/json": {}
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     },

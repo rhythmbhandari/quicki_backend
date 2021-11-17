@@ -22,10 +22,10 @@ class Location extends Model
 
 
     public function booking() {
-        return $this->belongsTo(Booking::class);
+        return $this->hasOne(Booking::class);
     }
     public function completed_trip() {
-        return $this->belongsTo(CompletedTrip::class);
+        return $this->hasOne(CompletedTrip::class);
     }
 
 }

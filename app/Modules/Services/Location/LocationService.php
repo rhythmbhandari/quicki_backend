@@ -20,4 +20,22 @@ class LocationService extends Service
         return $this->location;
     }
 
+
+    function create(array $data)
+    {
+        try{
+            $createdLocation = $this->location->create($data);
+            if($createdLocation)
+            {
+                return $createdLocation;
+            }
+            return NULL;
+        }
+        catch(Exception $e)
+        {
+            return NULL;
+        }
+       
+    }
+
 }
