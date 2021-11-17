@@ -9,12 +9,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Modules\Models\Rider;
 use App\Modules\Models\User;
 use App\Modules\Models\Location;
+use App\Modules\Models\CompletedTrip;
 class Booking extends Model
 {
     use HasFactory, SoftDeletes;
+
+    protected $casts = ['stoppage'=>'array'];
+
     protected $fillable = [
         'origin','destination','distance','duration','passenger_number', //'name','phone_number',
-        'user_id', 'status', 'rider_id', 'ride_status', 'location_id', 'vehicle_type_id',
+        'user_id', 'status', 'rider_id', 'status', 'location_id', 'vehicle_type_id', 'stoppage',
         'updated_at','created_at','deleted_at'
     ];
 
@@ -22,10 +26,15 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
     public function location() {
-        return $this->hasOne(Location::class);
+        return $this->belongsTo(Location::class);
     }
   
     public function rider() {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Rider::class);
     }
+
+    public function completed_trip() {
+        return $this->hasOne(CompletedTrip::class);
+    }
+
 }

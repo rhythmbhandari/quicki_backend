@@ -13,7 +13,7 @@ return [
                 \Illuminate\Routing\Middleware\SubstituteBindings::class,
                 \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
                 'auth',
-                'title' => 'Integration Swagger in Laravel with Passport Auth',
+                'title' => config('app.name') . ' API Documantation',
             ],
 
             'routes' => [

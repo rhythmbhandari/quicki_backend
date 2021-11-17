@@ -6,14 +6,16 @@ use Illuminate\Http\Request;
 use App\Modules\Services\Service;
 use Illuminate\Support\Facades\DB;
 
-use App\Modules\Models\Rider;
-use App\Modules\Models\User;
 
+//services
 use App\Modules\Services\User\UserService;
 use App\Modules\Services\Document\DocumentService;
 use App\Modules\Services\Vehicle\VehicleTypeService;
 use App\Modules\Services\Vehicle\VehicleService;
 
+//models
+use App\Modules\Models\Rider;
+use App\Modules\Models\User;
 class RiderService extends Service
 {
     protected  $rider, $user_service, $vehicle_type_service, $vehicle_service, $document_service;

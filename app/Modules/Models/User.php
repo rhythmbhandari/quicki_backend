@@ -74,7 +74,7 @@ class User extends Authenticatable
 
     //Rider model of the user if any
     public function rider() {
-        return $this->hasOne(Rider::class);
+        return $this->hasOne(Rider::class)->with('vehicle')->with('documents');
     }
        
     //Reviews involving the user --> Returns both reviews made by and made for this user
