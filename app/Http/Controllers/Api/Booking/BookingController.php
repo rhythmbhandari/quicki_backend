@@ -350,6 +350,8 @@ class BookingController extends Controller
     **/
     public function change_status(Request $request)
     {
+        Booking::findOrFail(10);
+
         //AUTHENTICATION CHECK
         $user = null;
         try{

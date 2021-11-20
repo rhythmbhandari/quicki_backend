@@ -23,9 +23,31 @@
     </head>
     <body class="antialiased d-flex justify-content-center align-items-center" >
         
-        <div class="card card-custom my-auto p-3 shadow h-100" >
+        <div class="card card-custom my-auto p-3 shadow h-100 mb-3" >
             Roles: 
+            <ul>
+                @foreach($roles as $role)
+                <li>{{$role->name}}</li>
+                @endforeach
+            </ul>
+        </div>
 
+        <div class="card card-custom my-auto p-3 shadow h-100 mb-3" >
+            Permissions: 
+            <ul>
+                @foreach($permissions as $permission)
+                <li>{{$permission->name}}</li>
+                @endforeach
+            </ul>
+        </div>
+
+        <div class="card card-custom my-auto p-3 shadow h-100 mb-3" >
+            Users: 
+            <ul>
+                @foreach($users as $user)
+                <li>{{$user->name}}</li>
+                @endforeach
+            </ul>
         </div>
 
 

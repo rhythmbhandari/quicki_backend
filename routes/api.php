@@ -5,9 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\ApiAuthController;
 use App\Http\Controllers\Api\User\UserController;
 use App\Http\Controllers\Api\User\RiderController;
+use App\Http\Controllers\Api\Location\RiderLocationController;
 use App\Http\Controllers\Api\Vehicle\VehicleTypeController;
 use App\Http\Controllers\Api\Booking\BookingController;
 use App\Http\Controllers\Api\Booking\CompletedTripController;
+use App\Http\Controllers\Api\Review\ReviewController;
+use App\Http\Controllers\Api\Document\DocumentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,11 +41,15 @@ Route::group(['as' => 'api.', ], function ($router) {
   $router->post('/sms/send',[ApiAuthController::class, 'send_otp'])->name('sms.send');   //Sends SMS to the provided number
   $router->post('/sms/verify_user',[ApiAuthController::class, 'verify_user_otp'])->name('sms.verify_user');   //Sends SMS to the provided number
   $router->post('/sms/verify_rider',[ApiAuthController::class, 'verify_rider_otp'])->name('sms.verify_rider');   //Sends SMS to the provided number
-  
-
-    
   //Route::post('/social/login', [ApiAuthController::class, 'socialLogin'])->name('socialLogin.api');
-  //  Route::post('/verify-customer', [ApiAuthController::class, 'verifyCutomerAttributes'])->name('verifyCustomer.api');
+  //Route::post('/verify-customer', [ApiAuthController::class, 'verifyCutomerAttributes'])->name('verifyCustomer.api');
+
+  //---------------------------------------------------------------------------------------------------------
+  //  REGISTER/AUTHENTICATION and SMS/OTP VERIFICATION ROUTES
+  //---------------------------------------------------------------------------------------------------------
+  $router->get('/vehicle_type/get_all_data', [VehicleTypeController::class, 'get_all_data'])->name('vehicle_type.get_all_data');
+    
+ 
 
 });
 
@@ -50,7 +57,6 @@ Route::group(['as' => 'api.', ], function ($router) {
 Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
 
   
-  $router->get('/vehicle_type/get_all_data', [VehicleTypeController::class, 'get_all_data'])->name('vehicle_type.get_all_data');
   
   //---------------------------------------------------------------------------------------------------------
   //  USER UPGRADE TO RIDER
@@ -67,18 +73,38 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->get('/rider/booking/active', [BookingController::class, 'getActiveRiderBooking'])->name('rider.booking.active');
   $router->get('/user/booking/history', [CompletedTripController::class, 'getUserTrips'])->name('user.booking.history');
   $router->get('/rider/booking/history', [CompletedTripController::class, 'getRiderTrips'])->name('rider.booking.history');
+  $router->post('/review/create', [ReviewController::class, 'store'])->name('review.store');
+
+  //---------------------------------------------------------------------------------------------------------
+  //  AVAILABLE AND ONLINE/OFFLINE RIDERS
+  //---------------------------------------------------------------------------------------------------------
+  $router->get('/riders/available', [RiderLocationController::class, 'getAvailableRiders'])->name('rider.available');
+  $router->post('/rider/online', [RiderLocationController::class, 'getRiderOnline'])->name('rider.online');
+  $router->post('/rider/offline', [RiderLocationController::class, 'getRiderOffline'])->name('rider.online');
 
 
   //---------------------------------------------------------------------------------------------------------
   //  USER ROUTES
   //---------------------------------------------------------------------------------------------------------
   $router->get('/user/details', [UserController::class, 'getDetails'])->name('user.details');
+  $router->post('/user/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
 
 
   //---------------------------------------------------------------------------------------------------------
   //  RIDER ROUTES
   //---------------------------------------------------------------------------------------------------------
   $router->get('/rider/details', [RiderController::class, 'getDetails'])->name('rider.details');
+  $router->post('/rider/profile/update', [RiderController::class, 'updateProfile'])->name('rider.profile.update');
+
+
+  
+  //---------------------------------------------------------------------------------------------------------
+  //  DOCUMENT
+  //---------------------------------------------------------------------------------------------------------
+  $router->post('/document/create', [DocumentController::class, 'store'])->name('document.create');
+  $router->post('/document/{document_id}/update', [DocumentController::class, 'update'])->name('document.update');
+
+
 
 
   //---------------------------------------------------------------------------------------------------------

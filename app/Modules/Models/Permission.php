@@ -6,17 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\Sluggable;
-use Spatie\Permission\Traits\HasPermissions;
 
 use App\Modules\Models\User;
-use App\Modules\Models\Permission;
+use App\Modules\Models\Role;
 
-
-class Role extends Model
+class Permission extends Model
 {   
-     use SoftDeletes, Sluggable, HasPermissions;
+     use SoftDeletes, Sluggable;
 
-    protected $path = 'uploads/role';
+    protected $path = 'uploads/permission';
 
     public function sluggable(): array
     {
@@ -27,7 +25,7 @@ class Role extends Model
         ];
     }
 
-    protected $fillable = [ 'name', 'slug','created_at','updated_at','deleted_at' ];
+    protected $fillable = [ 'name', 'slug', 'guard_name',  'created_at', 'deleted_at', 'updated_at','deleted_at' ];
     protected $appends = [  ];
 
     /**
@@ -39,9 +37,9 @@ class Role extends Model
     }
 
 
-    // public function permissions(){
+    // public function roles(){
     //     // return $this->hasMany(UserRole::class);
-    //     return $this->belongsToMany(Permission::class);
+    //     return $this->belongsToMany(Role::class);
     // }
 
 }

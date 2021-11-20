@@ -55,6 +55,7 @@ class ApiAuthController extends Controller
     *                 "first_name": "Monkey",
     *                 "middle_name": "D.",
     *                 "last_name": "Luffy",
+    *                 "username": "luffy",
     *                 "image": "file()",
     *                 "email": "luffy@gmail.com",
     *                 "phone": "9816810976",
@@ -159,6 +160,7 @@ class ApiAuthController extends Controller
     *                  "first_name": "Monkey",
     *                  "middle_name": "D.",
     *                  "last_name": "Luffy",
+    *                 "username": "luffy",
     *                  "image": "file()",
     *                  "email": "luffy@gmail.com",
     *                  "phone": "9816810976",
@@ -773,60 +775,7 @@ class ApiAuthController extends Controller
         {
             //do nothing
         }
-       
-       
-       /* if($model=='user')
-        {
-            $file = $request->file('image');
-            $fileName = $this->user->uploadFile($file);
-            if (!empty($user->image))
-                $this->user->__deleteImages($user);
-    
-            $data['image'] = $fileName;
-            $this->user->updateImage($user->id, $data);
-        }
-        else if($model == 'rider')
-        {
-            $file = $request->file('image');
-            $fileName = $this->user->uploadFile($file);
-            if (!empty($user->image))
-                $this->user->__deleteImages($user);
-    
-            $data['image'] = $fileName;
-            $this->user->updateImage($user->id, $data);
-        }
-        else if($model == 'vehicle_type')
-        {
-            $file = $request->file('image');
-            $fileName = $this->vehicle_type->uploadFile($file);
-            if (!empty($vehicle_type->image))
-                $this->vehicle_type->__deleteImages($vehicle_type);
-    
-            $data['image'] = $fileName;
-            $this->vehicle_type->updateImage($vehicle_type->id, $data);
-        }
-        else if($model == 'vehicle')
-        {
-            $file = $request->file('image');
-            $fileName = $this->vehicle->uploadFile($file);
-            if (!empty($vehicle->image))
-                $this->vehicle->__deleteImages($vehicle);
-    
-            $data['image'] = $fileName;
-            $this->vehicle->updateImage($vehicle->id, $data);
-        }
-        else if($model == 'document')
-        {
-            $file = $request->file('image');
-            $fileName = $this->user->uploadFile($file);
-            if (!empty($user->image))
-                $this->user->__deleteImages($user);
-    
-            $data['image'] = $fileName;
-            $this->user->updateImage($user->id, $data);
-        }
-        else{} */
-      
+            
        
     }
 

@@ -24,6 +24,7 @@ class DocumentService extends Service
     function create(array $data)
     {
         try {
+            $data['reason'] = isset($data['reason'])?$data['reason']:"pending";
             $createdDocument = $this->document->create($data);
             if($createdDocument)
                 return $createdDocument;
@@ -33,6 +34,25 @@ class DocumentService extends Service
         }
         return NULL;
     }
+
+
+
+    public function update($documentId,array $data)
+    {
+        try {
+        
+            $document= Document::findOrFail($documentId);
+            $updatedDocument = $document->update($data);
+            return $updatedDocument;
+
+        } catch (Exception $e) {
+            //$this->logger->error($e->getMessage());
+            return null;
+        }
+    }
+   
+
+
 
     function uploadFile($file)
     {
