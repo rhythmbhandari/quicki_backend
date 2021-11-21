@@ -15,6 +15,7 @@ use App\Modules\Services\User\UserService;
 //models
 use App\Modules\Models\Rider;
 use App\Modules\Models\RiderLocation;
+use App\Modules\Models\VehicleType;
 
 class RiderLocationController extends Controller
 {
@@ -40,11 +41,8 @@ class RiderLocationController extends Controller
     *         @OA\Schema(
     *             
     *             example={
-    *                  "type":"license",
-    *                  "document_number":"546352",
-    *                  "issue_date":"2000/01/01",
-    *                  "expiry_date":"2000/01/01",
-    *                  "image":"file()",
+    *                  "latitude":27.687169,
+    *                  "longitude":85.304219,
     *              }
     *         )
     *     )
@@ -113,6 +111,8 @@ class RiderLocationController extends Controller
             //UPDATE RIDER LOCATION
             $data['status'] = 'active';
             $updatedRiderLocation = $this->rider_location->update($rider_location->id, $data);
+            // $rider_location->status = 'active';
+            // $rider_location->save();
             $response = ['message' => 'Rider got Online Successfully!',  "updatedRiderLocation"=>RiderLocation::findOrFail($rider_location->id)];
             return response($response, 200);
         }
@@ -142,11 +142,8 @@ class RiderLocationController extends Controller
     *         @OA\Schema(
     *             
     *             example={
-    *                  "type":"license",
-    *                  "document_number":"546352",
-    *                  "issue_date":"2000/01/01",
-    *                  "expiry_date":"2000/01/01",
-    *                  "image":"file()",
+    *                  "latitude":27.687169,
+    *                  "longitude":85.304219,
     *              }
     *         )
     *     )
@@ -222,6 +219,8 @@ class RiderLocationController extends Controller
             //UPDATE RIDER LOCATION
             $data['status'] = 'in_active';
             $updatedRiderLocation = $this->rider_location->update($rider_location->id, $data);
+            // $rider_location->status = 'in_active';
+            // $rider_location->save();
             $response = ['message' => 'Rider got Offline Successfully!',  "updatedRiderLocation"=>RiderLocation::findOrFail($rider_location->id)];
             return response($response, 200);
         }
@@ -241,12 +240,25 @@ class RiderLocationController extends Controller
 
 
     /**
-    * @OA\Get(
+    * @OA\Post(
     *   path="/api/riders/available",
     *   tags={"AVAILABLE AND ONLINE/OFFLINE RIDERS"},
     *   summary="Available Riders",
     *   security={{"bearerAuth":{}}},
     *
+    *   @OA\RequestBody(
+    *      @OA\MediaType(
+    *          mediaType="application/json",
+    *         @OA\Schema(
+    *             
+    *             example={
+    *                  "origin_latitude":27.6871690,
+    *                  "origin_longitude":85.3042190,
+    *                  "vehicle_type_id":1,
+    *              }
+    *         )
+    *     )
+    *   ),
     *
     *      @OA\Response(
     *        response=200,
@@ -283,9 +295,25 @@ class RiderLocationController extends Controller
     *      ),
     *)
     **/
-    function getAvailableRiders()
+    function getAvailableRiders(Request $request)
     {
-        $available_riders = $this->rider_location->getAvailableRiders();
+           //VALIDATIONS
+           $validator = Validator::make($request->all(), [
+    
+            'origin_latitude' => 'required|numeric',
+            'origin_longitude' => 'required|numeric',
+            'vehicle_type_id' =>  ['required', function ($attribute, $value, $fail) {
+                $vehicle_type = VehicleType::find($value);
+
+                if ( !$vehicle_type) {
+                    $fail('The vehicle type does not exist!');
+                }
+            },],
+        ]);
+        if ($validator->fails()) {
+            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
+        }
+        $available_riders = $this->rider_location->getNearbyAvailableRiders($request->origin_latitude,$request->origin_longitude,$request->vehicle_type_id);
         $response = ['message' => 'Success!',  "available_riders"=>$available_riders];
         return response($response, 200);
 

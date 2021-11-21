@@ -35,19 +35,13 @@ class VehicleType extends Model
 
     function getPricePerKmAttribute()
     {
-        if($this->shift->exists())
-        {
-            // if(Carbon::now())
-        }
-        else{
-            return $this->price_km;
-        }
+        return $this->price_km;
     }
 
 
     function getPricePerMinAttribute()
     {
-        
+        return $this->price_min;
     }
 
     function getImagePathAttribute()

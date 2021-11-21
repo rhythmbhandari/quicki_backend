@@ -5,25 +5,31 @@ namespace App\Modules\Services\Booking;
 use Illuminate\Http\Request;
 use App\Modules\Services\Service;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
+use Carbon\Carbon;
 
 
 //services
 use App\Modules\Services\Location\LocationService;
+use App\Modules\Services\Location\RiderLocationService;
 use App\Modules\Services\Booking\CompletedTripService;
 
 //models
 use App\Modules\Models\Booking;
 use App\Modules\Models\CompletedTrip;
+use App\Modules\Models\VehicleType;
+use App\Modules\Models\Shift;
 
 class BookingService extends Service
 {
     protected $booking, $location_service;
 
-    function __construct(Booking $booking, LocationService $location_service, CompletedTripService $completed_trip_service)
+    function __construct(Booking $booking, LocationService $location_service, CompletedTripService $completed_trip_service, RiderLocationService $rider_location_service)
     {
         $this->booking = $booking;
         $this->location_service = $location_service;
         $this->completed_trip_service = $completed_trip_service;
+        $this->rider_location_service = $rider_location_service;
     }
 
     function getBooking(){
@@ -83,10 +89,22 @@ class BookingService extends Service
                 }
                 else if($new_status == "running")
                 {
+                    $booking->start_time = Carbon::now();
+                    $booking->save();
                     return $booking;
                 }
                 else if($new_status == "completed")
                 {
+                    if(!$booking->start_time)
+                    {
+                        $booking->start_time = Carbon::now();
+                        $booking->end_time = Carbon::now();
+                    }
+                    else {
+                        $booking->end_time = Carbon::now();
+                    }
+                    $booking->save();
+
                     //CREATE COMPLTED TRIP RECORD for COMPLETED STATUS
                     $cancelled_trip_data = $booking->toArray();
                     $cancelled_trip_data['booking_id'] = $booking->id;
@@ -97,6 +115,16 @@ class BookingService extends Service
                 }
                 else if($new_status == "cancelled")
                 {
+                    if(!$booking->start_time)
+                    {
+                        $booking->start_time = Carbon::now();
+                        $booking->end_time = Carbon::now();
+                    }
+                    else {
+                        $booking->end_time = Carbon::now();
+                    }
+                    $booking->save();
+
                     //CREATE COMPLTED TRIP RECORD for CANCELLED STATUS
                     $cancelled_trip_data = $booking->toArray();
                     $cancelled_trip_data['booking_id'] = $booking->id;
@@ -156,4 +184,183 @@ class BookingService extends Service
         }
     }
     
+
+    //Takes distance in km and duration in seconds
+    public function get_estimated_price(array $data)
+    {   
+        
+        $estimated_prices = []; //estimated price objects for every vehicle types
+        
+        //DEDUCING SHIFT SURGE
+        $vehicle_types = VehicleType::where('status','active')->get();
+        foreach($vehicle_types as $vehicle_type)
+        {
+            $estimated_prices[] = $this->calculateEstimatedPrice($data['origin_latitude'], $data['origin_longitude'], $vehicle_type->id, $data['distance'], $data['duration']);  
+        }
+
+        return $estimated_prices;
+
+    }
+
+
+    
+
+    public function calculateEstimatedPrice($origin_latitude, $origin_longitude, $vehicle_type_id, $distance, $duration)
+    {
+        $estimated_price = [];
+        $vehicle_type = VehicleType::find($vehicle_type_id);
+       
+        /*****REQUIRED DATA FOR CALCULATION*****
+        *-ORIGIN_LATITUDE
+        *-ORIGIN_LONGITUDE
+        *-DISTANCE
+        *-DURATION
+        */
+
+
+        //TO BE CALCULATED
+        $density_surge = 0;
+        $total_surge = 0;
+        $shift_surge = 0;
+        
+        //DEDUCTING DENSITY SURGE
+        //1 rider for 3 pending bookings ; for >1:4, the surge applies::TO BE FETCHED from DB SETTINGS 
+        $permissable_density = 1/3; 
+        //The density surge applies only if the current pending bookings is >= this value::TO BE FETCHED from DB SETTINGS 
+        $threshold_pending_booking = 3; 
+        $nearbyRiders = $this->get_available_riders_within_radius($origin_latitude, $origin_longitude,$vehicle_type->id);
+        $nearbyRiders = ($nearbyRiders > 0) ? $nearbyRiders : 1;
+        $nearbyPendingBookings = $this->get_nearby_pending_bookings($origin_latitude, $origin_longitude,$vehicle_type->id);
+        $nearbyPendingBookings = ($nearbyPendingBookings > 0) ? $nearbyPendingBookings : 1;
+        
+        $current_density = 1;
+        if(!$nearbyRiders || !$nearbyRiders) 
+            $current_density = 1;
+        else
+            $current_density = count($nearbyRiders)/count($nearbyPendingBookings); 
+
+        if( ($current_density < $permissable_density ) &&  ($current_pending_booking >= $threshold_pending_booking  )  )
+            $density_surge = 30;    //CONSTANT TO BE FETCHED from DB SETTINGS 
+        
+        //DEDUCTING SHIFT SURGE
+        $currentTime = Carbon::now();
+        // $shift = 
+        $shifts = Shift::where('vehicle_type_id',$vehicle_type_id)->where('status','active')->get();
+        // ->filter(function($shift) {
+        //         $startTime = Carbon::createFromFormat('H', $shift->time_from);
+        //         $endTime = Carbon::createFromFormat('H',  $shift->time_to);
+        //         if($currentTime->between($startTime, $endTime, true))   return true;
+        //         else return false;
+        //     })->first();
+        $shift = $shifts->filter(function($shift) {
+                    $startTime = Carbon::createFromFormat('H', $shift->time_from);
+                    $endTime = Carbon::createFromFormat('H',  $shift->time_to);
+                    if($currentTime->between($startTime, $endTime, true))   return true;
+                    else return false;
+                }); //->first();
+        //dd($shift);
+        $shift_rate = isset($shift->rate)?$shift->rate:1;
+        // $shift_surge = $total_price * $shift_rate/100 ;
+
+        $estimated_price['vehicle_type_id'] = $vehicle_type->id;
+        $estimated_price['vehicle_type_name'] = $vehicle_type->name;
+        $estimated_price['shift'] = isset($shift->title)?$shift->title:1;
+        $estimated_price['price_breakdown'] = [];
+        //Provided
+        $estimated_price['price_breakdown']['minimum_charge'] = 150;
+        //PRICE AFTER DISTANCE
+        $estimated_price['price_breakdown']['price_per_km'] = $vehicle_type->price_per_km;
+        $estimated_price['price_breakdown']['price_after_distance']  = ($vehicle_type->price_per_km * $distance);
+        
+        //PRICE AFTER SURGE
+        $estimated_price['price_breakdown']['shift_rate'] = $shift_rate;    //Default::TO BE FETCHED from DB SHIFTS 
+        $estimated_price['price_breakdown']['density_surge'] = $density_surge;
+        $estimated_price['price_breakdown']['shift_surge'] = $estimated_price['price_breakdown']['price_after_distance'] * $shift_rate ;
+        $estimated_price['price_breakdown']['surge']  = $shift_surge + $density_surge;
+        $estimated_price['price_breakdown']['price_after_surge']  =  $estimated_price['price_breakdown']['price_after_distance'] + $estimated_price['price_breakdown']['surge'] ;
+
+        //PRICE AFTER APP CHARGE
+        $estimated_price['price_breakdown']['app_charge_percent'] = 10;   //Default::TO BE FETCHED from DB SETTINGS 
+        $estimated_price['price_breakdown']['app_charge'] =  $estimated_price['price_breakdown']['app_charge_percent']/100 * $estimated_price['price_breakdown']['price_after_surge'];
+        $estimated_price['price_breakdown']['price_after_app_charge']  =  $estimated_price['price_breakdown']['price_after_surge'] + $estimated_price['price_breakdown']['surge'] ;
+
+        //PRICE AFTER DURATION CHARGE
+        $estimated_price['price_breakdown']['price_per_min'] = $vehicle_type->price_per_min;
+        $estimated_price['price_breakdown']['duration_charge'] = ($vehicle_type->price_per_min * $duration/60); 
+        $estimated_price['price_breakdown']['price_after_duration']  =  $estimated_price['price_breakdown']['price_after_app_charge'] + $estimated_price['price_breakdown']['duration_charge'] ;
+
+        $estimated_price['price_breakdown']['total_price'] = 
+        ($estimated_price['price_breakdown']['price_after_duration'] < $estimated_price['price_breakdown']['minimum_charge'])
+        ? $estimated_price['price_breakdown']['minimum_charge'] : $estimated_price['price_breakdown']['price_after_duration'];
+
+        return $estimated_price;
+    }
+
+
+
+    /**
+     * Fetches the rider locations with riders within the radius circle of certain origin latitude and longitude
+     */
+    public function get_available_riders_within_radius($origin_latitude, $origin_longitude, $vehicle_type_id,$radius=null)
+    {
+        $radius_distance = 5; //Radius in kilometers within origin center::To be fetched from DB SETTINGS
+        return $this->rider_location_service->getNearbyAvailableRiders($origin_latitude, $origin_longitude, $vehicle_type_id);
+    }
+    
+    /**
+     * Fetches the pending bookings within the radius circle of certain origin latitude and longitude
+     */
+    public function get_nearby_pending_bookings($origin_latitude, $origin_longitude, $vehicle_type_id=null,$radius=null)
+    {
+        try{
+            try{
+                if($radius==null)
+                {
+                    $radius = !empty( config('settings.scan_radius') ) ? floatval( config('settings.scan_radius') ) : 5.0;
+                }
+                else{
+                    $radius = floatval($radius);
+                }
+            }
+            catch(Exception $e)
+            {
+                $radius = 5.0;
+            }
+            $pending_bookings = [];
+            if($vehicle_type_id != null)
+                $pending_bookings = Booking::where('status','pending')->whereDate('created_at', Carbon::today())->get();
+            else
+                $pending_bookings = Booking::where('vehicle_type_id',$vehicle_type_id)->where('status','pending')->whereDate('created_at', Carbon::today())->get();
+
+            $nearby_pending_bookings = [];
+            foreach($pending_bookings as $booking)
+            {
+                $distance_from_origin = calcuateDistance( 
+                    floatval($origin_latitude), 
+                    floatval($origin_longitude), 
+                    floatval($booking->location->origin_latitude), 
+                    floatval($booking->location->origin_longitude)
+                );
+                
+                if( $distance_from_origin <= $radius )
+                {
+                    $nearby_pending_bookings[] = $booking;
+                }
+            }
+            //dd('ERROR: ',$nearby_pending_bookings);
+            return $nearby_pending_bookings;
+        }
+        catch(Exception $e)
+        {
+            return NULL;
+        }
+    }
+
+
+
+      
+  
+
+
+
 }

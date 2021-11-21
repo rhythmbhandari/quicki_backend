@@ -13,7 +13,7 @@ class RiderLocation extends Model
 {
     use HasFactory;
 
-    protected $TIME_DIFFERENCE = 30;
+    protected $TIME_DIFFERENCE = 60;
 
     protected $fillable = ([
         'longitude','latitude','rider_id','status',
@@ -30,20 +30,29 @@ class RiderLocation extends Model
         $diffInSeconds = Carbon::now()->diffInSeconds(Carbon::parse($this->updated_at));
         if( ($diffInSeconds <= $this->TIME_DIFFERENCE) && $this->status == "active" )
         {
+            // dd('available');
             return 'available';
         }
         else if( ($diffInSeconds > $this->TIME_DIFFERENCE) && $this->status == "active" )
         {
+            // dd('not available 1');
             $this->status = "in_active";
             $this->save();
             return 'not_available';
         }
-        else
+        else{
+            // dd('not available2');
             return 'not_available';
+        }
     }
 
     public function rider() {
         return $this->belongsTo(Rider::class)->with('user')->with('vehicle')->with('reviews');  //,'rider_id');
     }
+
+
+
+   
+
 
 }

@@ -5,6 +5,15 @@ use App\Http\Controllers\Controller;
 
 /*
 |--------------------------------------------------------------------------
+| ADMIN ROUTES
+|--------------------------------------------------------------------------
+*/
+include 'admin.php';
+
+
+
+/*
+|--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 |
@@ -18,7 +27,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test', [ Controller::class, 'test'])->name('test');
+// Route::get('/test', [ Controller::class, 'test'])->name('test');
 
 Auth::routes();
 

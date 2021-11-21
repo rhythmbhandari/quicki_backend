@@ -75,10 +75,12 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->get('/rider/booking/history', [CompletedTripController::class, 'getRiderTrips'])->name('rider.booking.history');
   $router->post('/review/create', [ReviewController::class, 'store'])->name('review.store');
 
+  $router->post('/booking/estimated_price', [BookingController::class, 'getEstimatedPrice'])->name('booking.estimated_price');
+
   //---------------------------------------------------------------------------------------------------------
   //  AVAILABLE AND ONLINE/OFFLINE RIDERS
   //---------------------------------------------------------------------------------------------------------
-  $router->get('/riders/available', [RiderLocationController::class, 'getAvailableRiders'])->name('rider.available');
+  $router->post('/riders/available', [RiderLocationController::class, 'getAvailableRiders'])->name('rider.available');
   $router->post('/rider/online', [RiderLocationController::class, 'getRiderOnline'])->name('rider.online');
   $router->post('/rider/offline', [RiderLocationController::class, 'getRiderOffline'])->name('rider.online');
 

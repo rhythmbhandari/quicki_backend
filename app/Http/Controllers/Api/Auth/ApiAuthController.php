@@ -78,7 +78,7 @@ class ApiAuthController extends Controller
     *                   @OA\Schema(      
     *                   example={
     *                           "message":"User Registration Successful!",
-    *                           "token":"123sfsdr234sdfs",
+    *                           "access_token":"123sfsdr234sdfs",
     *                           "user":"{created_user}",
     *                   }
     *                 )
@@ -132,8 +132,8 @@ class ApiAuthController extends Controller
                 if ($request->hasFile('image')) {
                     $this->uploadFile($request, $createdUser, $this->user);
                 }
-                $token = $createdUser->createToken('Laravel Password Grant Client')->accessToken;
-                $response = ['message' => 'User Registration Successful!', 'token' => $token, "user"=>$createdUser];
+                $accessToken = $createdUser->createToken('Laravel Password Grant Client')->accessToken;
+                $response = ['message' => 'User Registration Successful!', 'access_token' => $accessToken, "user"=>$createdUser];
                 return response($response, 201);
             }
             return response("Internal Server Error!", 500);
@@ -203,7 +203,7 @@ class ApiAuthController extends Controller
     *                @OA\Schema(      
     *                   example={
     *                           "message":"Rider Registration Successful!",
-    *                           "token":"123sfsdr234sdfs",
+    *                           "access_token":"123sfsdr234sdfs",
     *                           "rider":"{created_rider}",
     *                   }
     *                 )
@@ -284,8 +284,8 @@ class ApiAuthController extends Controller
                     $this->uploadFile($request, $createdRider->vehicle, $this->vehicle);
                 }
             
-                $token = $createdRider->user->createToken('Laravel Password Grant Client')->accessToken;
-                $response = ['message' => 'Rider Registration Successful!', 'token' => $token, "rider"=>$createdRider, "user"=>$createdRider->user,];
+                $accessToken = $createdRider->user->createToken('Laravel Password Grant Client')->accessToken;
+                $response = ['message' => 'Rider Registration Successful!', 'access_token' => $accessToken, "rider"=>$createdRider, "user"=>$createdRider->user,];
                 return response($response, 200);
             }
             return response("Internal Server Error!", 500);
@@ -296,7 +296,7 @@ class ApiAuthController extends Controller
     }
 
 
-        /**
+    /**
     * @OA\Post(
     *   path="/api/sms/send",
     *   tags={"Send and Verify SMS/OTP"},
@@ -414,7 +414,7 @@ class ApiAuthController extends Controller
     *                @OA\Schema(      
     *                   example={
     *                           "message":"User exits and verified! Login Successful!",
-    *                           "token":"abxad5aSDsdfsdfs",
+    *                           "access_token":"abxad5aSDsdfsdfs",
     *                           "user":"{user}",
     *                   }
     *                 )
@@ -502,7 +502,7 @@ class ApiAuthController extends Controller
     *                @OA\Schema(      
     *                   example={
     *                           "message":"Rider exits and verified! Login Successful!",
-    *                           "token":"abxad5aSDsdfsdfs",
+    *                           "access_token":"abxad5aSDsdfsdfs",
     *                           "Rider":"{rider}",
     *                   }
     *                 )
@@ -564,7 +564,7 @@ class ApiAuthController extends Controller
                     return response($response, 200);
                 }
                 $accessToken = $user->createToken('User Token!')->accessToken;
-                $response = ['message' => 'Forbidden Access: User exists but is not registered as a rider!','token'=>$accessToken,'user'=>$user];
+                $response = ['message' => 'Forbidden Access: User exists but is not registered as a rider!','access_token'=>$accessToken,'user'=>$user];
                 return response($response, 403);
             } else {
                 $response = ['message' => 'Unauthorized: Otp verified but rider does not Exist!'];
@@ -627,7 +627,7 @@ class ApiAuthController extends Controller
     *                @OA\Schema(      
     *                   example={
     *                           "message":"Rider Registration Successful!",
-    *                           "token":"123sfsdr234sdfs",
+    *                           "access_token":"123sfsdr234sdfs",
     *                           "rider":"{created_rider}",
     *                   }
     *                 )
@@ -709,9 +709,9 @@ class ApiAuthController extends Controller
                     $this->uploadFile($request, $createdRider->vehicle, $this->vehicle);
                 }
             
-                $token = $createdRider->user->createToken('Laravel Password Grant Client')->accessToken;
+                $accessToken = $createdRider->user->createToken('Laravel Password Grant Client')->accessToken;
               
-                $response = ['message' => 'Rider Registration Successful!', 'token' => $token, "rider"=>$createdRider, "user"=>$createdRider->user,];
+                $response = ['message' => 'Rider Registration Successful!', 'tokaccess_tokenen' => $accessToken, "rider"=>$createdRider, "user"=>$createdRider->user,];
                 return response($response, 200);
             }
             return response("Internal Server Error!", 500);
@@ -788,15 +788,15 @@ class ApiAuthController extends Controller
 
 
 
-    function test(Request $request)
-    {
-        //dd($request->all());
-        $user = User::find($request->id);
-        if($user)
-        {
-            dd($this->user->hasRole($user, $request->role));
-        }
+    // function test(Request $request)
+    // {
+    //     //dd($request->all());
+    //     $user = User::find($request->id);
+    //     if($user)
+    //     {
+    //         dd($this->user->hasRole($user, $request->role));
+    //     }
         
-    }
+    // }
 
 }
