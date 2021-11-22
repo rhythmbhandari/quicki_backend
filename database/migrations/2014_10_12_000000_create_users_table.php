@@ -39,10 +39,13 @@ class CreateUsersTable extends Migration
 
             $table->string('google_id')->nullable();
             $table->string('facebook_id')->nullable();
-            $table->string('username',191)->unique()->nullable();;
+            $table->string('username',191)->unique()->nullable();
             $table->string('phone')->unique()->nullable();
             $table->string('email',191)->unique()->nullable();
             $table->string('password');
+
+            $table->json('location')->nullable()->comment('Format: { home:{ name:"sanepa,lalitpur",latitude:27.343,longitude:85.3423 } ,work:{ name:"sanepa,lalitpur",latitude:27.343,longitude:85.3423 }  }  ');
+           
 
             $table->enum('status',['active','in_active'])->nullable();
 

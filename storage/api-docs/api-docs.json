@@ -283,7 +283,7 @@
                     "401": {
                         "description": "Unauthorized: Otp verified but rider does not Exist!"
                     },
-                    "403": {
+                    "400": {
                         "description": "Forbidden Access: User exists but is not registered as a rider!"
                     },
                     "422": {
@@ -413,6 +413,7 @@
                                     "passenger_number": 2,
                                     "vehicle_type_id": 1,
                                     "distance": 12,
+                                    "price": 160,
                                     "duration": 20,
                                     "stoppage": [
                                         {
@@ -806,7 +807,7 @@
                                                     "price_after_distance": 300,
                                                     "shift_rate": 1,
                                                     "density_surge": 0,
-                                                    "shift_surge": 300,
+                                                    "shift_surge": 0,
                                                     "surge": 0,
                                                     "price_after_surge": 300,
                                                     "app_charge_percent": 10,
@@ -1840,6 +1841,68 @@
                     },
                     "403": {
                         "description": "Forbidden Access"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/location/update": {
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Update User Location",
+                "operationId": "78b8c7e972006eedec2f731ac8f2187b",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "location": {
+                                        "home": {
+                                            "name": "New Baneshwor, Kathmandu",
+                                            "latitude": 27.691153232923103,
+                                            "longitude": 85.33177163310808
+                                        },
+                                        "work": {
+                                            "name": "Sanepa, Lalitpur",
+                                            "latitude": 27.687052088825897,
+                                            "longitude": 85.30439019937253
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "User Location Updated Successfully!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
                     },
                     "500": {
                         "description": "Internal Server Error",

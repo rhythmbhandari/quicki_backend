@@ -81,6 +81,20 @@ class UserService extends Service
             return null;
         }
     }
+
+
+    function update_location($userId, array $data)
+    {
+        try {
+        
+            $user= User::findOrFail($userId);
+            $updatedUser = $user->update($data);
+            
+            return $updatedUser;
+        } catch (Exception $e) {
+            return null;
+        }
+    }
    
     function uploadFile($file)
     {

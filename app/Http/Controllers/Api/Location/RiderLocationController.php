@@ -296,24 +296,38 @@ class RiderLocationController extends Controller
     *)
     **/
     function getAvailableRiders(Request $request)
-    {
+    {   
            //VALIDATIONS
            $validator = Validator::make($request->all(), [
     
             'origin_latitude' => 'required|numeric',
             'origin_longitude' => 'required|numeric',
-            'vehicle_type_id' =>  ['required', function ($attribute, $value, $fail) {
-                $vehicle_type = VehicleType::find($value);
-
-                if ( !$vehicle_type) {
-                    $fail('The vehicle type does not exist!');
-                }
+            'vehicle_type_id' =>  ['nullable','integer', function ($attribute, $value, $fail) {
+                if($value>0)
+                {
+                    $vehicle_type = VehicleType::find($value);
+                    if ( !$vehicle_type) {
+                        $fail('The vehicle type does not exist!');
+                    }
+                }else {$fail('The vehicle type does not exist!');}
             },],
         ]);
         if ($validator->fails()) {
             return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
         }
-        $available_riders = $this->rider_location->getNearbyAvailableRiders($request->origin_latitude,$request->origin_longitude,$request->vehicle_type_id);
+        $available_riders = [];
+      
+        if(isset($request->vehicle_type_id))
+        {  
+            $available_riders = 
+            $this->rider_location->getNearbyAvailableRiders($request->origin_latitude,$request->origin_longitude,$request->vehicle_type_id);
+        }
+        else{
+            $available_riders = 
+            $this->rider_location->getNearbyAvailableRiders($request->origin_latitude,$request->origin_longitude);
+        }
+
+      
         $response = ['message' => 'Success!',  "available_riders"=>$available_riders];
         return response($response, 200);
 

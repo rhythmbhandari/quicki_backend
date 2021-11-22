@@ -17,19 +17,19 @@ class OtpSeeder extends Seeder
     {
         Otp::create([
             'phone'=>'9816810976',
-            'code'=>'1111',
+            'code'=>'11111',
             'code_status'=>'pending',
         ]);
 
         Otp::create([
             'phone'=>'9862170927',
-            'code'=>'1111',
+            'code'=>'11111',
             'code_status'=>'pending',
         ]);
 
         Otp::create([
             'phone'=>'9869191572',
-            'code'=>'1111',
+            'code'=>'11111',
             'code_status'=>'pending',
         ]);
     }

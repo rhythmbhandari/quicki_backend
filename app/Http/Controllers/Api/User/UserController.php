@@ -231,6 +231,114 @@ class UserController extends Controller
 
 
 
+    /**
+    * @OA\Post(
+    *   path="/api/user/location/update",
+    *   tags={"Profile"},
+    *   summary="Update User Location",
+    *   security={{"bearerAuth":{}}},
+    *
+    *   @OA\RequestBody(
+    *      @OA\MediaType(
+    *          mediaType="application/json",
+    *         @OA\Schema(
+    *             
+    *             example={
+    *                   "location": {
+    *                        "home": {
+    *                               "name": "New Baneshwor, Kathmandu",
+    *                               "latitude": 27.691153232923103,
+    *                               "longitude": 85.33177163310808
+    *                           },
+    *                        "work": {
+    *                               "name": "Sanepa, Lalitpur",
+    *                               "latitude": 27.687052088825897,
+    *                               "longitude": 85.30439019937253
+    *                           }
+    *                   }
+    *              }
+    *         )
+    *     )
+    *   ),
+    *
+    *      @OA\Response(
+    *        response=201,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                   @OA\Schema(      
+    *                   example={
+    *                           "message":"User Location Updated Successfully!",
+    *                           
+    *                   }
+    *                 )
+    *           )
+    *      ),
+    *
+    *      @OA\Response(
+    *          response=422,
+    *          description="Validation Fail",
+    *             @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+    *      ),
+
+    *      @OA\Response(
+    *          response=500,
+    *          description="Internal Server Error",
+    *             @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+    *      ),
+    *)
+    **/
+    function update_location(Request $request)
+    {
+       // dd('validator', $request->all());
+        $user = Auth::user();
+        //VALIDATIONS
+        $validator = Validator::make($request->all(), [
+            
+            'location.home.name' => 'required_with:location.home.latitude,location.home.latitude|string|max:255',
+            'location.home.latitude' => 'required_with:location.home.longitude,location.home.name|numeric',
+            'location.home.longitude' => 'required_with:location.home.latitude,location.home.name|numeric',
+
+            'location.work.name' => 'required_with:location.work.latitude,location.work.latitude|string|max:255',
+            'location.work.latitude' => 'required_with:location.work.longitude,location.work.name|numeric',
+            'location.work.longitude' => 'required_with:location.work.latitude,location.work.name|numeric',
+
+        ],
+        [
+            'location.home.name.required' => 'Home address name is required!',
+            'location.home.latitude.required' => 'Home latitude is required!',
+            'location.home.longitude.required' => 'Home longitude is required!',
+
+            'location.work.name.required' => 'Work address name is required!',
+            'location.work.latitude.required' => 'Work address name is required!',
+            'location.work.longitude.required' => 'Work address name is required!',
+        ]
+        );
+        if ($validator->fails()) {
+            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
+        }
+
+        dd('validator', $request->all());
+
+        $updatedUserLocation = $this->user->update($user->id,$request->all());
+    
+        if($updatedUserLocation)
+        {
+            if ($request->hasFile('image')) {
+                $this->uploadFile($request, $updatedUserLocation);
+            }
+            $response = ['message' => 'User Location Updated Successful!'];
+            return response($response, 200);
+        }
+        return response("Internal Server Error!", 500);
+    
+    }
+
+
     function uploadFile(Request $request, $user)
     {
         $file = $request->file('image');

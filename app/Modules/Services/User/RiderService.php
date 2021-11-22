@@ -5,6 +5,7 @@ namespace App\Modules\Services\User;
 use Illuminate\Http\Request;
 use App\Modules\Services\Service;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 
 //services
@@ -37,6 +38,40 @@ class RiderService extends Service
 
     function getRider(){
         return $this->rider;
+    }
+
+    function getAllowedRidersQuery()
+    {
+        $allowed_rider = new Rider();
+        $allowed_riders = $allowed_rider->newQuery();
+        $allowed_riders = $allowed_riders->where('status','active');
+        $allowed_riders = $allowed_riders->whereNotNull('approved_at');
+        $allowed_riders = $allowed_rider->whereHas('vehicle',function (Builder $query) {
+            $query->whereRelation('vehicle_type','status','!=','in_active');
+        });
+        return $allowed_riders;
+    }
+    function getAllowedRiders()
+    {
+        $allowed_rider = new Rider();
+        $allowed_riders = $allowed_rider->newQuery();
+        $allowed_riders = $allowed_riders->where('status','active');
+        $allowed_riders = $allowed_riders->whereNotNull('approved_at');
+        $allowed_riders = $allowed_rider->whereHas('vehicle',function (Builder $query) {
+            $query->whereRelation('vehicle_type_id','status','!=','in_active');
+        })->get();
+        return $allowed_riders;
+    }
+    function getAllowedRidersIds()
+    {
+        $allowed_rider = new Rider();
+        $allowed_riders = $allowed_rider->newQuery();
+        $allowed_riders = $allowed_riders->where('status','active');
+        $allowed_riders = $allowed_riders->whereNotNull('approved_at');
+        $allowed_riders = $allowed_rider->whereHas('vehicle',function (Builder $query) {
+            $query->whereRelation('vehicle_type_id','status','!=','in_active');
+        })->pluck('id');
+        return $allowed_riders;
     }
 
     function create(array $data, $user=null)

@@ -48,6 +48,7 @@ class BookingController extends Controller
     *                  "passenger_number":2,
     *                  "vehicle_type_id":1,
     *                  "distance":12,
+    *                   "price": 160,
     *                  "duration":20,
     *                   "stoppage":{
     *                       {"name":"Sanepa, Lalitpur", "latitude":27.1234,"longitude":85.3434},
@@ -350,7 +351,6 @@ class BookingController extends Controller
     **/
     public function change_status(Request $request)
     {
-        Booking::findOrFail(10);
 
         //AUTHENTICATION CHECK
         $user = null;

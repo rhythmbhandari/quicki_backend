@@ -37,7 +37,7 @@ class Rider extends Model
 
     //Currently active or last active location of the rider
     public function rider_location(){
-        return $this->hasOne(Locations::class);
+        return $this->hasOne(RiderLocation::class);
     }
 
     //Bookings involving the rider
