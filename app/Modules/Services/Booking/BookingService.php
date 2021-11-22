@@ -275,7 +275,8 @@ class BookingService extends Service
         //PRICE AFTER SURGE
         $estimated_price['price_breakdown']['shift_rate'] = $shift_rate;    //Default::TO BE FETCHED from DB SHIFTS 
         $estimated_price['price_breakdown']['density_surge'] = $density_surge;
-        $estimated_price['price_breakdown']['shift_surge'] = $estimated_price['price_breakdown']['price_after_distance'] * $shift_rate ;
+        $estimated_price['price_breakdown']['shift_surge'] 
+        = ($estimated_price['price_breakdown']['price_after_distance'] * $shift_rate) - $estimated_price['price_breakdown']['price_after_distance'] ;
         $estimated_price['price_breakdown']['surge']  = $shift_surge + $density_surge;
         $estimated_price['price_breakdown']['price_after_surge']  =  $estimated_price['price_breakdown']['price_after_distance'] + $estimated_price['price_breakdown']['surge'] ;
 
