@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             RiderSeeder::class,
             RoleUserSeeder::class,
             VehicleTypeSeeder::class,
+            OtpSeeder::class,
         ]);
 
         

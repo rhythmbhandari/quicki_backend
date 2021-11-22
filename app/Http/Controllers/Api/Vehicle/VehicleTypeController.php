@@ -8,100 +8,81 @@ use App\Http\Controllers\Controller;
 
 class VehicleTypeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\VehicleType  $vehicleType
-     * @return \Illuminate\Http\Response
-     */
-    public function show(VehicleType $vehicleType)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\VehicleType  $vehicleType
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, VehicleType $vehicleType)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\VehicleType  $vehicleType
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(VehicleType $vehicleType)
-    {
-        //
-    }
+   
 
  /**
-     * @OA\Post(
-     *   path="/api/vehicle_type/get_all_data",
-     *   tags={"Auth"},
-     *   summary="VehicleTypeController",
-     *   @OA\RequestBody(
-     *      @OA\MediaType(
-     *         mediaType="multipart/form-data",
-     *         @OA\Schema(
-     *             example={
-     *                 "email": "admin@gmail.com",
-     *                 "phone": "9876543210",
-     *                 "first_name": "admin",
-     *                 "last_name": "user",
-     *                 "gender": "male",
-     *                 "password": "password",
-     *                 "password_confirmation": "password",
-     *                 "dob": "2000/01/01",
-     *                 "license": {
-     *                      "issue_date": "2018/01/01",
-     *                      "expire_date": "2018/01/01",
-     *                      "image": "file()",
-     *                  },
-     *                  "facebook_id" : "",
-     *                  "google_id" : ""
-     *              }
-     *         )
-     *     )
-     *   ),
-     *
-     *   @OA\Response(
-     *      response=200,
-     *       description="Success",
-     *      @OA\MediaType(
-     *           mediaType="application/json",
-     *      )
-     *   )
-     *)
-     **/
+    * @OA\Get(
+    *   path="/api/vehicle_type/get_all_data",
+    *   tags={"Vehicle"},
+    *   summary="Vehicle Types",
+    *
+    *   @OA\Response(
+    *      response=200,
+    *       description="Success",
+    *      @OA\MediaType(
+    *           mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example={
+    *                           "message": "Successful!",
+    *                           "vehicle_types": {
+    *                                 {
+    *                                   "id": 1,
+    *                                   "name": "bike",
+    *                                   "slug": "bike",
+    *                                   "image": null,
+    *                                   "price_km": 15,
+    *                                   "price_min": 5,
+    *                                   "base_fare": 50,
+    *                                   "commission": 15,
+    *                                   "capacity": "1",
+    *                                   "status": "active",
+    *                                   "deleted_at": null,
+    *                                   "created_at": "2021-11-17T07:38:22.000000Z",
+    *                                   "updated_at": "2021-11-17T07:38:22.000000Z",
+    *                                   "thumbnail_path": "assets/media/noimage.png",
+    *                                   "image_path": "assets/media/noimage.png"
+    *                                 },
+    *                                 {
+    *                                   "id": 2,
+    *                                   "name": "car",
+    *                                   "slug": "car",
+    *                                   "image": null,
+    *                                   "price_km": 40,
+    *                                   "price_min": 15,
+    *                                   "base_fare": 120,
+    *                                   "commission": 35,
+    *                                   "capacity": "3",
+    *                                   "status": "active",
+    *                                   "deleted_at": null,
+    *                                   "created_at": "2021-11-17T07:38:22.000000Z",
+    *                                   "updated_at": "2021-11-17T07:38:22.000000Z",
+    *                                   "thumbnail_path": "assets/media/noimage.png",
+    *                                   "image_path": "assets/media/noimage.png"
+    *                                 },
+    *                                 {
+    *                                   "id": 3,
+    *                                   "name": "city_safari",
+    *                                   "slug": "city-safari",
+    *                                   "image": null,
+    *                                   "price_km": 25,
+    *                                   "price_min": 10,
+    *                                   "base_fare": 80,
+    *                                   "commission": 25,
+    *                                   "capacity": "9",
+    *                                   "status": "active",
+    *                                   "deleted_at": null,
+    *                                   "created_at": "2021-11-17T07:38:22.000000Z",
+    *                                   "updated_at": "2021-11-17T07:38:22.000000Z",
+    *                                   "thumbnail_path": "assets/media/noimage.png",
+    *                                   "image_path": "assets/media/noimage.png"
+    *                                 }
+    *                           }
+    *                       }
+    *                 )
+    *           )
+    *       )
+    *)
+    **/
     public function get_all_data()
     {
         return response()->json(VehicleType::all()->toArray());

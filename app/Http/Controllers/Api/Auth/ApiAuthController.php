@@ -48,13 +48,14 @@ class ApiAuthController extends Controller
     *
     *   @OA\RequestBody(
     *      @OA\MediaType(
-    *         mediaType="multipart/form-data",
+    *          mediaType="application/json",
     *         @OA\Schema(
     *             
     *             example={
     *                 "first_name": "Monkey",
     *                 "middle_name": "D.",
     *                 "last_name": "Luffy",
+    *                 "username": "luffy",
     *                 "image": "file()",
     *                 "email": "luffy@gmail.com",
     *                 "phone": "9816810976",
@@ -70,14 +71,14 @@ class ApiAuthController extends Controller
     *   ),
     *
     *      @OA\Response(
-    *        response=200,
+    *        response=201,
     *        description="Success",
     *          @OA\MediaType(
     *               mediaType="application/json",
     *                   @OA\Schema(      
     *                   example={
-    *                           "message":"User Registration Successfull!",
-    *                           "token":"123sfsdr234sdfs",
+    *                           "message":"User Registration Successful!",
+    *                           "access_token":"123sfsdr234sdfs",
     *                           "user":"{created_user}",
     *                   }
     *                 )
@@ -108,6 +109,7 @@ class ApiAuthController extends Controller
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'username' => 'nullable|string|max:255|unique:users',
             'email' => 'nullable|string|email|max:255|unique:users',
             'password' => 'nullable|string|min:6|confirmed',
@@ -130,9 +132,9 @@ class ApiAuthController extends Controller
                 if ($request->hasFile('image')) {
                     $this->uploadFile($request, $createdUser, $this->user);
                 }
-                $token = $createdUser->createToken('Laravel Password Grant Client')->accessToken;
-                $response = ['message' => 'User Registration Successfull!', 'token' => $token, "user"=>$createdUser];
-                return response($response, 200);
+                $accessToken = $createdUser->createToken('Laravel Password Grant Client')->accessToken;
+                $response = ['message' => 'User Registration Successful!', 'access_token' => $accessToken, "user"=>$createdUser];
+                return response($response, 201);
             }
             return response("Internal Server Error!", 500);
         });
@@ -151,13 +153,14 @@ class ApiAuthController extends Controller
     *
     *   @OA\RequestBody(
     *      @OA\MediaType(
-    *         mediaType="multipart/form-data",
+    *          mediaType="application/json",
     *         @OA\Schema(
     *             
     *             example={
     *                  "first_name": "Monkey",
     *                  "middle_name": "D.",
     *                  "last_name": "Luffy",
+    *                 "username": "luffy",
     *                  "image": "file()",
     *                  "email": "luffy@gmail.com",
     *                  "phone": "9816810976",
@@ -199,8 +202,8 @@ class ApiAuthController extends Controller
     *               mediaType="application/json",
     *                @OA\Schema(      
     *                   example={
-    *                           "message":"Rider Registration Successfull!",
-    *                           "token":"123sfsdr234sdfs",
+    *                           "message":"Rider Registration Successful!",
+    *                           "access_token":"123sfsdr234sdfs",
     *                           "rider":"{created_rider}",
     *                   }
     *                 )
@@ -230,6 +233,7 @@ class ApiAuthController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'last_name' => 'required|string|max:255',
             'username' => 'nullable|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
@@ -280,8 +284,8 @@ class ApiAuthController extends Controller
                     $this->uploadFile($request, $createdRider->vehicle, $this->vehicle);
                 }
             
-                $token = $createdRider->user->createToken('Laravel Password Grant Client')->accessToken;
-                $response = ['message' => 'Rider Registration Successfull!', 'token' => $token, "rider"=>$createdRider, "user"=>$createdRider->user,];
+                $accessToken = $createdRider->user->createToken('Laravel Password Grant Client')->accessToken;
+                $response = ['message' => 'Rider Registration Successful!', 'access_token' => $accessToken, "rider"=>$createdRider, "user"=>$createdRider->user,];
                 return response($response, 200);
             }
             return response("Internal Server Error!", 500);
@@ -292,7 +296,7 @@ class ApiAuthController extends Controller
     }
 
 
-        /**
+    /**
     * @OA\Post(
     *   path="/api/sms/send",
     *   tags={"Send and Verify SMS/OTP"},
@@ -300,12 +304,11 @@ class ApiAuthController extends Controller
     *
     *   @OA\RequestBody(
     *      @OA\MediaType(
-    *         mediaType="multipart/form-data",
+    *          mediaType="application/json",
     *         @OA\Schema(
     *             
     *             example={
     *                  "phone": "9816810976",
-    *                  "user_role": "user",
     *               }
     *         )
     *     )
@@ -318,7 +321,7 @@ class ApiAuthController extends Controller
     *               mediaType="application/json",
     *                @OA\Schema(      
     *                   example={
-    *                           "message":"Otp sent successfully!",
+    *                           "message":"SMS sent successfully!",
     *                   }
     *                 )
     *           )
@@ -343,38 +346,32 @@ class ApiAuthController extends Controller
     public function send_otp(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'phone' =>  ['required', function ($attribute, $value, $fail) {
-                            $user = User::where('phone',$value)->first();
+            'phone' =>  ['required'],
 
-                            if ( !$user) {
-                                $fail('The user does not exist for this phone number.');
-                            }
-                        },],
-
-            'user_role' => ['nullable', function ($attribute, $value, $fail) {
-                            if ( !(
-                                $value == 'customer' || 
-                                $value == 'rider' 
-                            //  || $value == 'driver' 
-                            //  || $value == 'admin' 
-                            )) {
-                                $fail('The '.$attribute.' can only be one of customer or rider.');
-                            }
-                        },],
+            // 'user_role' => ['nullable', function ($attribute, $value, $fail) {
+            //                 if ( !(
+            //                     $value == 'customer' || 
+            //                     $value == 'rider' 
+            //                 //  || $value == 'driver' 
+            //                 //  || $value == 'admin' 
+            //                 )) {
+            //                     $fail('The '.$attribute.' can only be one of customer or rider.');
+            //                 }
+            //             },],
         ]);
 
         if ($validator->fails()) {
             return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
         }
 
-        $user = User::where('phone',$request->phone)->first();
-        $role_check = $this->user->hasRole($user, $request->user_role);
+        // $user = User::where('phone',$request->phone)->first();
+        // $role_check = $this->user->hasRole($user, $request->user_role);
 
-        if(!$role_check)
-        {
-            $response = ['message' => 'Forbidden Access!'];
-            return response($response, 403);
-        }
+        // if(!$role_check)
+        // {
+        //     $response = ['message' => 'Forbidden Access!'];
+        //     return response($response, 403);
+        // }
 
         $code = rand(10000, 99999); //generate random code
         $request['code'] = $code; //add code in $request body
@@ -398,7 +395,7 @@ class ApiAuthController extends Controller
     *
     *   @OA\RequestBody(
     *      @OA\MediaType(
-    *         mediaType="multipart/form-data",
+    *          mediaType="application/json",
     *         @OA\Schema(
     *             
     *             example={
@@ -416,8 +413,8 @@ class ApiAuthController extends Controller
     *               mediaType="application/json",
     *                @OA\Schema(      
     *                   example={
-    *                           "message":"User exits and verified!",
-    *                           "token":"abxad5aSDsdfsdfs",
+    *                           "message":"User exits and verified! Login Successful!",
+    *                           "access_token":"abxad5aSDsdfsdfs",
     *                           "user":"{user}",
     *                   }
     *                 )
@@ -425,11 +422,7 @@ class ApiAuthController extends Controller
     *      ),
     *       @OA\Response(
     *             response=401,
-    *             description="Unauthorized: User does not Exist!"
-    *         ),
-    *         @OA\Response(
-    *             response=403,
-    *             description="Forbidden Access!"
+    *             description="Otp verified but user does not exist!"
     *         ),
     *      @OA\Response(
     *          response=422,
@@ -454,13 +447,7 @@ class ApiAuthController extends Controller
     public function verify_user_otp(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'phone' =>  ['required', function ($attribute, $value, $fail) {
-                $user = User::where('phone',$value)->first();
-
-                if ( !$user) {
-                    $fail('The user does not exist for this phone number.');
-                }
-            },],
+            'phone' =>  ['required'],
             'code' => 'required',
         ]);
         if ($validator->fails()) {
@@ -475,10 +462,10 @@ class ApiAuthController extends Controller
             $user = User::where('phone', '=', $otp->phone)->first();
             if ($user) {
                 $accessToken = $user->createToken('authToken')->accessToken;
-                $response = ['message' => 'User exits and verified!', 'data' => $user, 'access_token' => $accessToken];
+                $response = ['message' => 'User exits and verified! Login Successful!', 'data' => $user, 'access_token' => $accessToken];
                 return response($response, 200);
             } else {
-                $response = ['message' => 'Unauthorized: User does not Exist!'];
+                $response = ['message' => 'Unauthorized: Otp verified but user does not exist!'];
                 return response($response, 401);
             }
         } else {
@@ -496,12 +483,12 @@ class ApiAuthController extends Controller
     *
     *   @OA\RequestBody(
     *      @OA\MediaType(
-    *         mediaType="multipart/form-data",
+    *          mediaType="application/json",
     *         @OA\Schema(
     *             
     *             example={
     *                  "phone": "9816810976",
-    *                   "otp": "223305",
+    *                   "code": "223305",
     *               }
     *         )
     *     )
@@ -514,8 +501,8 @@ class ApiAuthController extends Controller
     *               mediaType="application/json",
     *                @OA\Schema(      
     *                   example={
-    *                           "message":"Rider exits and verified!",
-    *                           "token":"abxad5aSDsdfsdfs",
+    *                           "message":"Rider exits and verified! Login Successful!",
+    *                           "access_token":"abxad5aSDsdfsdfs",
     *                           "Rider":"{rider}",
     *                   }
     *                 )
@@ -523,7 +510,7 @@ class ApiAuthController extends Controller
     *      ),
     *       @OA\Response(
     *             response=401,
-    *             description="Unauthorized: Rider does not Exist!"
+    *             description="Unauthorized: Otp verified but rider does not Exist!"
     *         ),
     *         @OA\Response(
     *             response=403,
@@ -552,17 +539,17 @@ class ApiAuthController extends Controller
     public function verify_rider_otp(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'phone' =>  ['required', function ($attribute, $value, $fail) {
-                $user = User::where('phone',$value)->first();
-
-                if ( !$user) {
-                    $fail('The user does not exist for this phone number.');
-                }
-            },],
+            'phone' =>  'required',
             'code' => 'required',
         ]);
+        if ($validator->fails()) {
+            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
+        }
+
 
         $phone = $request->phone;
+        // echo $phone;
+        // dd($phone);
         $otp = Otp::where('phone', $phone)->first();
 
         if ($request->code == $otp->code) {
@@ -573,14 +560,14 @@ class ApiAuthController extends Controller
                 {
                     $rider = $user->rider;
                     $accessToken = $user->createToken('authToken')->accessToken;
-                    $response = ['message' => 'Rider exits and verified!','user'=>$user, 'rider' => $rider, 'access_token' => $accessToken];
+                    $response = ['message' => 'Rider exits and verified! Login Successful!','user'=>$user, 'rider' => $rider, 'access_token' => $accessToken];
                     return response($response, 200);
                 }
                 $accessToken = $user->createToken('User Token!')->accessToken;
-                $response = ['message' => 'Forbidden Access: User exists but is not registered as a rider!','token'=>$accessToken,'user'=>$user];
+                $response = ['message' => 'Forbidden Access: User exists but is not registered as a rider!','access_token'=>$accessToken,'user'=>$user];
                 return response($response, 403);
             } else {
-                $response = ['message' => 'Unauthorized: Rider does not Exist!'];
+                $response = ['message' => 'Unauthorized: Otp verified but rider does not Exist!'];
                 return response($response, 401);
             }
         } else {
@@ -598,12 +585,12 @@ class ApiAuthController extends Controller
     * @OA\Post(
     *   path="/api/user/upgrade_to_rider",
     *   tags={"Register and Authentication"},
+    *   summary="Upgrade To Rider",
     *   security={{"bearerAuth":{}}},
-    *   summary="Register Rider",
     *
     *   @OA\RequestBody(
     *      @OA\MediaType(
-    *         mediaType="multipart/form-data",
+    *          mediaType="application/json",
     *         @OA\Schema(
     *             
     *             example={                     
@@ -639,8 +626,8 @@ class ApiAuthController extends Controller
     *               mediaType="application/json",
     *                @OA\Schema(      
     *                   example={
-    *                           "message":"Rider Registration Successfull!",
-    *                           "token":"123sfsdr234sdfs",
+    *                           "message":"Rider Registration Successful!",
+    *                           "access_token":"123sfsdr234sdfs",
     *                           "rider":"{created_rider}",
     *                   }
     *                 )
@@ -665,22 +652,21 @@ class ApiAuthController extends Controller
     **/
     public function upgrade_to_rider(Request $request)  //Authentication token required of user
     {
+        //AUTHENTICATION CHECK
         $user = null;
         try{
             $user = Auth::user();
         }
         catch(Exception $e)
         {
-            $response = ['message' => 'Unauthorized: User does not Exist!'];
+            $response = ['message' => 'Unauthorized: Login Required!'];
             return response($response, 401);
         }
         if(!$user)
         {
-            
-            $response = ['message' => 'Unauthorized: User does not Exist!'];
+            $response = ['message' => 'Unauthorized: Login Required!'];
             return response($response, 401);
         }
-
 
         $validator = Validator::make($request->all(), [
             //Rider's fields
@@ -723,9 +709,9 @@ class ApiAuthController extends Controller
                     $this->uploadFile($request, $createdRider->vehicle, $this->vehicle);
                 }
             
-                $token = $createdRider->user->createToken('Laravel Password Grant Client')->accessToken;
+                $accessToken = $createdRider->user->createToken('Laravel Password Grant Client')->accessToken;
               
-                $response = ['message' => 'Rider Registration Successfull!', 'token' => $token, "rider"=>$createdRider, "user"=>$createdRider->user,];
+                $response = ['message' => 'Rider Registration Successful!', 'tokaccess_tokenen' => $accessToken, "rider"=>$createdRider, "user"=>$createdRider->user,];
                 return response($response, 200);
             }
             return response("Internal Server Error!", 500);
@@ -736,6 +722,30 @@ class ApiAuthController extends Controller
 
 
 
+
+    /**
+    * @OA\Post(
+    *   path="/api/logout",
+    *   tags={"Logout"},
+    *   summary="Logout",
+    *   security={{"bearerAuth":{}}},
+    *
+    *   @OA\Response(
+    *      response=200,
+    *       description="Success",
+    *      @OA\MediaType(
+    *           mediaType="application/json",
+    *      )
+    *   )
+    *)
+    **/
+    public function logout(Request $request)
+    {
+        $token = $request->user()->token();
+        $token->revoke();
+        $response = ['message' => 'You have been successfully logged out!'];
+        return response($response, 200);
+    }
 
 
 
@@ -765,60 +775,7 @@ class ApiAuthController extends Controller
         {
             //do nothing
         }
-       
-       
-       /* if($model=='user')
-        {
-            $file = $request->file('image');
-            $fileName = $this->user->uploadFile($file);
-            if (!empty($user->image))
-                $this->user->__deleteImages($user);
-    
-            $data['image'] = $fileName;
-            $this->user->updateImage($user->id, $data);
-        }
-        else if($model == 'rider')
-        {
-            $file = $request->file('image');
-            $fileName = $this->user->uploadFile($file);
-            if (!empty($user->image))
-                $this->user->__deleteImages($user);
-    
-            $data['image'] = $fileName;
-            $this->user->updateImage($user->id, $data);
-        }
-        else if($model == 'vehicle_type')
-        {
-            $file = $request->file('image');
-            $fileName = $this->vehicle_type->uploadFile($file);
-            if (!empty($vehicle_type->image))
-                $this->vehicle_type->__deleteImages($vehicle_type);
-    
-            $data['image'] = $fileName;
-            $this->vehicle_type->updateImage($vehicle_type->id, $data);
-        }
-        else if($model == 'vehicle')
-        {
-            $file = $request->file('image');
-            $fileName = $this->vehicle->uploadFile($file);
-            if (!empty($vehicle->image))
-                $this->vehicle->__deleteImages($vehicle);
-    
-            $data['image'] = $fileName;
-            $this->vehicle->updateImage($vehicle->id, $data);
-        }
-        else if($model == 'document')
-        {
-            $file = $request->file('image');
-            $fileName = $this->user->uploadFile($file);
-            if (!empty($user->image))
-                $this->user->__deleteImages($user);
-    
-            $data['image'] = $fileName;
-            $this->user->updateImage($user->id, $data);
-        }
-        else{} */
-      
+            
        
     }
 
@@ -831,15 +788,15 @@ class ApiAuthController extends Controller
 
 
 
-    function test(Request $request)
-    {
-        //dd($request->all());
-        $user = User::find($request->id);
-        if($user)
-        {
-            dd($this->user->hasRole($user, $request->role));
-        }
+    // function test(Request $request)
+    // {
+    //     //dd($request->all());
+    //     $user = User::find($request->id);
+    //     if($user)
+    //     {
+    //         dd($this->user->hasRole($user, $request->role));
+    //     }
         
-    }
+    // }
 
 }

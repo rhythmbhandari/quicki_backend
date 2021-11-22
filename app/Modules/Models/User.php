@@ -16,10 +16,12 @@ use App\Modules\Models\Rider;
 use App\Modules\Models\Review;
 use App\Modules\Models\Role;
 use App\Modules\Models\Document;
+use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Traits\HasPermissions;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Sluggable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Sluggable, HasRoles, HasPermissions;
 
     protected $path = 'uploads/user';
 
@@ -74,7 +76,7 @@ class User extends Authenticatable
 
     //Rider model of the user if any
     public function rider() {
-        return $this->hasOne(Rider::class);
+        return $this->hasOne(Rider::class)->with('vehicle')->with('documents');
     }
        
     //Reviews involving the user --> Returns both reviews made by and made for this user

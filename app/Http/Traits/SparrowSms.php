@@ -8,13 +8,14 @@ trait SparrowSms {
 
     public function sendSms(Request $request)
     {
-        $message = "Self Drive Nepal Application. Your Verification Code is-" . $request->code;
+       // dd($request->all(),config('app.name'),config('app.sparrow_key'));
+        $message =  config('app.name') . " Application. Your Verification Code is-" . $request->code;
 
         $phone = $request->phone;
 
         $args = http_build_query(array(
             'token' => config('app.sparrow_key'),
-            'from'  => 'InfoSMS',
+            'from'  => "InfoSMS",
             'to'    => $phone,
             'text'  => $message
         ));
@@ -34,9 +35,11 @@ trait SparrowSms {
         curl_close($ch);
 
         if ($status_code == 200) {
-            return response([$response, 'msg' => 'SMS Sent Successfully']);
+            // return response([$response, 'msg' => 'SMS Sent Successfully']);
+            return response([ 'message' => 'SMS Sent Successfully', 'response'=>$response],200);
         } else {
-            return response([$response, 'error' => 'SMS could not be sent', 'status'=>$status_code]);
+            // return response([$response, 'error' => 'SMS could not be sent', 'status'=>$status_code]);
+            return response([$response, 'error' => 'SMS could not be sent', 'status'=>$status_code],$status_code);
         }
     }
 }

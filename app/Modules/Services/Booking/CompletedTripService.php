@@ -20,5 +20,20 @@ class CompletedTripService extends Service
     function getCompletedTrip(){
         return $this->completed_trip;
     }
+
+
+    function create(array $data)
+    {
+        try{
+            $createdCompltedTrip =  $this->completed_trip->create($data);
+            if($createdCompltedTrip)
+                return $createdCompltedTrip;
+            return NULL;
+        }
+        catch(Exception $e)
+        {
+            return NULL;
+        }
+    }
     
 }

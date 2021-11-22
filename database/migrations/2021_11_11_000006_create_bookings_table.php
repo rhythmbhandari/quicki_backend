@@ -28,23 +28,29 @@ class CreateBookingsTable extends Migration
             // $table->unsignedBigInteger('location_id')->nullable();
             // $table->foreign('location_id')->references('id')->on('user_locations');
             // $table->foreignId('vehicle_id')->constrained("vehicles")->cascadeOnUpdate()->nullOnDelete();
-
+            $table->json('stoppage')->nullable();
             
             $table->foreignId('user_id')->nullable()->constrained("users")->cascadeOnUpdate()->nullOnDelete();
-            $table->foreignId('rider_id')->nullable()->constrained("users")->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('vehicle_type_id')->nullable()->constrained("vehicle_types")->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('rider_id')->nullable()->constrained("riders")->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('location_id')->nullable()->constrained("locations")->cascadeOnUpdate()->nullOnDelete();
+
+            $table->timestamp('start_time')->nullable();
+            $table->timestamp('end_time')->nullable();
 
             $table->string('origin');
             $table->string('destination');
-            $table->string('distance');
-            $table->string('duration');
+            $table->double('distance');     //in meters
+            $table->double('duration');     //in seconds
             $table->integer('passenger_number')->nullable()->default(1);
-            $table->string('name')->nullable();
-            $table->string('phone_number')->nullable();
-            $table->integer('status')->default(null);
-            $table->integer('ride_status')->nullable()->default(null);
-            $table->float('price')->default(0);
-            $table->string('payment_type');
+            // $table->string('name')->nullable();
+            // $table->string('phone_number')->nullable();
+
+            $table->enum('status',['pending','accepted','running','completed','cancelled'])->default(null);
+            
+         
+            $table->double('price')->default(0);
+            $table->string('payment_type')->nullable()->default('CASH');
 
 
             $table->softDeletes();

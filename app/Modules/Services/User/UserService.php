@@ -22,6 +22,17 @@ class UserService extends Service
         return $this->user;
     }
 
+    function hasRole(User $user, $checkRole)
+    {
+        foreach($user->roles as $role){
+            if($role->name == $checkRole) 
+                return true;
+        }
+        return false;
+        
+    }
+
+
     function create(array $data)
     {
         //return response($data,200);
@@ -45,14 +56,30 @@ class UserService extends Service
         return null;
     }
 
-    function hasRole(User $user, $checkRole)
+
+    public function update($userId,array $data)
     {
-        foreach($user->roles as $role){
-            if($role->name == $checkRole) 
-                return true;
-        }
-        return false;
+        try {
         
+            $user= User::findOrFail($userId);
+            $old_email =  $user->email;
+            $updatedUser = $user->update($data);
+            
+            //case for email change
+            if( $old_email != $user->email)
+            {
+                $user = User::find($userId);
+                $user->email_verified_at = NULL;
+                $user->save();
+                return $user;
+            }
+            //TODO: case for phone number change
+
+            return $updatedUser;
+        } catch (Exception $e) {
+            //$this->logger->error($e->getMessage());
+            return null;
+        }
     }
    
     function uploadFile($file)

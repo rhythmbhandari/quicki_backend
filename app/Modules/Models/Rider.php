@@ -32,7 +32,7 @@ class Rider extends Model
 
     //Vehicle belonging to the rider
     public function vehicle(){
-        return $this->hasOne(Vehicle::class);
+        return $this->hasOne(Vehicle::class)->with('documents');
     }
 
     //Currently active or last active location of the rider
@@ -42,7 +42,12 @@ class Rider extends Model
 
     //Bookings involving the rider
     public function bookings(){
-        return $this->belongsToMany(Booking::class);
+        return $this->hasMany(Booking::class);
+    }
+
+    //CompletedTrips involving the rider
+       public function completed_trips(){
+        return $this->hasMany(CompletedTrips::class);
     }
 
     //Reviews involving the rider --> Returns both reviews made by and made for this rider
