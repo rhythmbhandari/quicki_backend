@@ -18,8 +18,8 @@ class CreateVehicleTypesTable extends Migration
             $table->string('name');
             $table->string('slug');
             $table->string('image')->nullable();
-            $table->double('price_km');
-            $table->double('price_min');
+            $table->double('price_per_km');
+            $table->double('price_per_min');
             $table->double('base_fare');
             $table->double('commission');
             $table->string('capacity');

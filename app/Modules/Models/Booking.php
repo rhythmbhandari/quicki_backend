@@ -17,8 +17,9 @@ class Booking extends Model
     protected $casts = ['stoppage'=>'array'];
 
     protected $fillable = [
-        'origin','destination','distance','duration','passenger_number', //'name','phone_number',
+        'origin','destination','distance','duration','price','passenger_number', //'name','phone_number',
         'user_id', 'status', 'rider_id', 'status', 'location_id', 'vehicle_type_id', 'stoppage',
+        'start_time','end_time',
         'updated_at','created_at','deleted_at'
     ];
 

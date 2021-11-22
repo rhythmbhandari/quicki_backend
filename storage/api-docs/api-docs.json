@@ -21,6 +21,7 @@
                                     "first_name": "Monkey",
                                     "middle_name": "D.",
                                     "last_name": "Luffy",
+                                    "username": "luffy",
                                     "image": "file()",
                                     "email": "luffy@gmail.com",
                                     "phone": "9816810976",
@@ -43,7 +44,7 @@
                                 "schema": {
                                     "example": {
                                         "message": "User Registration Successful!",
-                                        "token": "123sfsdr234sdfs",
+                                        "access_token": "123sfsdr234sdfs",
                                         "user": "{created_user}"
                                     }
                                 }
@@ -80,6 +81,7 @@
                                     "first_name": "Monkey",
                                     "middle_name": "D.",
                                     "last_name": "Luffy",
+                                    "username": "luffy",
                                     "image": "file()",
                                     "email": "luffy@gmail.com",
                                     "phone": "9816810976",
@@ -121,7 +123,7 @@
                                 "schema": {
                                     "example": {
                                         "message": "Rider Registration Successful!",
-                                        "token": "123sfsdr234sdfs",
+                                        "access_token": "123sfsdr234sdfs",
                                         "rider": "{created_rider}"
                                     }
                                 }
@@ -216,7 +218,7 @@
                                 "schema": {
                                     "example": {
                                         "message": "User exits and verified! Login Successful!",
-                                        "token": "abxad5aSDsdfsdfs",
+                                        "access_token": "abxad5aSDsdfsdfs",
                                         "user": "{user}"
                                     }
                                 }
@@ -271,7 +273,7 @@
                                 "schema": {
                                     "example": {
                                         "message": "Rider exits and verified! Login Successful!",
-                                        "token": "abxad5aSDsdfsdfs",
+                                        "access_token": "abxad5aSDsdfsdfs",
                                         "Rider": "{rider}"
                                     }
                                 }
@@ -346,7 +348,7 @@
                                 "schema": {
                                     "example": {
                                         "message": "Rider Registration Successful!",
-                                        "token": "123sfsdr234sdfs",
+                                        "access_token": "123sfsdr234sdfs",
                                         "rider": "{created_rider}"
                                     }
                                 }
@@ -444,41 +446,39 @@
                                     "example": {
                                         "message": "Booking Successful!",
                                         "booking": {
-                                            "message": "Booking Successful!",
-                                            "booking": {
-                                                "origin": "Patan, Lalitpur",
-                                                "destination": "Kirtipur, Kathmandu",
-                                                "passenger_number": 2,
-                                                "vehicle_type_id": 1,
-                                                "distance": 12,
-                                                "duration": 20,
-                                                "stoppage": [
-                                                    {
-                                                        "name": "Sanepa, Lalitpur",
-                                                        "latitude": 27.1234,
-                                                        "longitude": 85.3434
-                                                    },
-                                                    {
-                                                        "name": "New Baneshwor, Kathmandu",
-                                                        "latitude": 28.3454,
-                                                        "longitude": 87.1234
-                                                    }
-                                                ],
-                                                "user_id": 3,
-                                                "status": "pending",
-                                                "updated_at": "2021-11-17T06:46:13.000000Z",
-                                                "created_at": "2021-11-17T06:46:13.000000Z",
-                                                "id": 3,
-                                                "location_id": 3,
-                                                "location": {
-                                                    "latitude_origin": 85.123423,
-                                                    "longitude_origin": 27.123456,
-                                                    "latitude_destination": 86.12313,
-                                                    "longitude_destination": 27.234325,
-                                                    "updated_at": "2021-11-17T06:46:13.000000Z",
-                                                    "created_at": "2021-11-17T06:46:13.000000Z",
-                                                    "id": 3
+                                            "origin": "Sanepa, Lalitpur",
+                                            "destination": "New Baneshwor, Kathmandu",
+                                            "passenger_number": 2,
+                                            "vehicle_type_id": 1,
+                                            "distance": 12,
+                                            "duration": 20,
+                                            "price": 160,
+                                            "stoppage": [
+                                                {
+                                                    "name": "Sanepa, Lalitpur",
+                                                    "latitude": 27.1234,
+                                                    "longitude": 85.3434
+                                                },
+                                                {
+                                                    "name": "New Baneshwor, Kathmandu",
+                                                    "latitude": 28.3454,
+                                                    "longitude": 87.1234
                                                 }
+                                            ],
+                                            "user_id": 3,
+                                            "status": "pending",
+                                            "updated_at": "2021-11-21T07:42:14.000000Z",
+                                            "created_at": "2021-11-21T07:42:14.000000Z",
+                                            "id": 1,
+                                            "location_id": 1,
+                                            "location": {
+                                                "latitude_origin": 85.123423,
+                                                "longitude_origin": 27.123456,
+                                                "latitude_destination": 86.12313,
+                                                "longitude_destination": 27.234325,
+                                                "updated_at": "2021-11-21T07:42:14.000000Z",
+                                                "created_at": "2021-11-21T07:42:14.000000Z",
+                                                "id": 1
                                             }
                                         }
                                     }
@@ -766,6 +766,128 @@
                 ]
             }
         },
+        "/api/booking/estimated_price": {
+            "post": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Estimated Price (Takes => Distance in Km, Duration in seconds and Origin lat and lng values)  ",
+                "operationId": "886c513b2cdd18f95788d67e1c77e19d",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "origin_latitude": 27.68716909705845,
+                                    "origin_longitude": 85.3042190788061,
+                                    "distance": 20,
+                                    "duration": 300
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "estimated_price": [
+                                            {
+                                                "vehicle_type_id": 1,
+                                                "vehicle_type_name": "bike",
+                                                "shift": 1,
+                                                "price_breakdown": {
+                                                    "minimum_charge": 150,
+                                                    "price_per_km": 15,
+                                                    "price_after_distance": 300,
+                                                    "shift_rate": 1,
+                                                    "density_surge": 0,
+                                                    "shift_surge": 300,
+                                                    "surge": 0,
+                                                    "price_after_surge": 300,
+                                                    "app_charge_percent": 10,
+                                                    "app_charge": 30,
+                                                    "price_after_app_charge": 300,
+                                                    "price_per_min": 5,
+                                                    "duration_charge": 25,
+                                                    "price_after_duration": 325,
+                                                    "total_price": 325
+                                                }
+                                            },
+                                            {
+                                                "vehicle_type_id": 2,
+                                                "vehicle_type_name": "car",
+                                                "shift": 1,
+                                                "price_breakdown": {
+                                                    "minimum_charge": 150,
+                                                    "price_per_km": 40,
+                                                    "price_after_distance": 800,
+                                                    "shift_rate": 1,
+                                                    "density_surge": 0,
+                                                    "shift_surge": 800,
+                                                    "surge": 0,
+                                                    "price_after_surge": 800,
+                                                    "app_charge_percent": 10,
+                                                    "app_charge": 80,
+                                                    "price_after_app_charge": 800,
+                                                    "price_per_min": 15,
+                                                    "duration_charge": 75,
+                                                    "price_after_duration": 875,
+                                                    "total_price": 875
+                                                }
+                                            },
+                                            {
+                                                "vehicle_type_id": 3,
+                                                "vehicle_type_name": "city_safari",
+                                                "shift": 1,
+                                                "price_breakdown": {
+                                                    "minimum_charge": 150,
+                                                    "price_per_km": 25,
+                                                    "price_after_distance": 500,
+                                                    "shift_rate": 1,
+                                                    "density_surge": 0,
+                                                    "shift_surge": 500,
+                                                    "surge": 0,
+                                                    "price_after_surge": 500,
+                                                    "app_charge_percent": 10,
+                                                    "app_charge": 50,
+                                                    "price_after_app_charge": 500,
+                                                    "price_per_min": 10,
+                                                    "duration_charge": 50,
+                                                    "price_after_duration": 550,
+                                                    "total_price": 550
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/user/booking/history": {
             "get": {
                 "tags": [
@@ -920,6 +1042,479 @@
                 ]
             }
         },
+        "/api/document/create": {
+            "post": {
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Create Document",
+                "operationId": "71791a82dd42e4804551471c4285ecb3",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "documentable_type": "rider",
+                                    "documentable_id": "1",
+                                    "type": "license",
+                                    "document_number": "546352",
+                                    "issue_date": "2000/01/01",
+                                    "expiry_date": "2000/01/01",
+                                    "image": "file()"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Document created successfully!",
+                                        "document": {
+                                            "documentable_type": "rider",
+                                            "documentable_id": "1",
+                                            "type": "passport",
+                                            "document_number": "456457",
+                                            "issue_date": "2000\\/01\\/03",
+                                            "image": null,
+                                            "reason": "pending",
+                                            "updated_at": "2021-11-18T06:38:39.000000Z",
+                                            "created_at": "2021-11-18T06:38:39.000000Z",
+                                            "id": 2,
+                                            "thumbnail_path": "assets\\/media\\/noimage.png",
+                                            "image_path": "assets\\/media\\/noimage.png"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "404": {
+                        "description": "Documentable Model doesn't exist!"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/document/{document_id}/update": {
+            "post": {
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Update Document",
+                "operationId": "2c6643765a61d3203734a29fd7bff082",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "type": "license",
+                                    "document_number": "546352",
+                                    "issue_date": "2000/01/01",
+                                    "expiry_date": "2000/01/01",
+                                    "image": "file()"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Document updated Successfully!",
+                                        "document": {
+                                            "id": 2,
+                                            "documentable_type": "rider",
+                                            "documentable_id": 1,
+                                            "type": "citizenship",
+                                            "document_number": "456457",
+                                            "issue_date": "2000-01-03",
+                                            "expiry_date": null,
+                                            "verified_at": null,
+                                            "reason": "pending",
+                                            "image": null,
+                                            "deleted_at": null,
+                                            "created_at": "2021-11-18T06:38:39.000000Z",
+                                            "updated_at": "2021-11-18T06:43:32.000000Z",
+                                            "thumbnail_path": "assets\\/media\\/noimage.png",
+                                            "image_path": "assets\\/media\\/noimage.png"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "404": {
+                        "description": "Document Not Found!"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rider/online": {
+            "post": {
+                "tags": [
+                    "AVAILABLE AND ONLINE/OFFLINE RIDERS"
+                ],
+                "summary": "Rider Online",
+                "operationId": "5dbdc820766bad18749def4a562ef266",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "latitude": 27.687169,
+                                    "longitude": 85.304219
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Rider got Online Successfully!",
+                                        "updatedRiderLocation": {
+                                            "id": 1,
+                                            "longitude": 235345,
+                                            "latitude": 1324234,
+                                            "rider_id": 2,
+                                            "status": "active",
+                                            "created_at": "2021-11-18T08:32:18.000000Z",
+                                            "updated_at": "2021-11-18T09:47:00.000000Z",
+                                            "availability": "not_available"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "404": {
+                        "description": "Document Not Found!"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rider/offline": {
+            "post": {
+                "tags": [
+                    "AVAILABLE AND ONLINE/OFFLINE RIDERS"
+                ],
+                "summary": "Rider Offline",
+                "operationId": "2b16dbb9e0fadb70b941d54652092431",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "latitude": 27.687169,
+                                    "longitude": 85.304219
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Rider got Offline Successfully!",
+                                        "updatedRiderLocation": {
+                                            "id": 1,
+                                            "longitude": 235345,
+                                            "latitude": 1324234,
+                                            "rider_id": 2,
+                                            "status": "in_active",
+                                            "created_at": "2021-11-18T08:32:18.000000Z",
+                                            "updated_at": "2021-11-18T09:51:27.000000Z",
+                                            "availability": "not_available"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "404": {
+                        "description": "Document Not Found!"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/riders/available": {
+            "post": {
+                "tags": [
+                    "AVAILABLE AND ONLINE/OFFLINE RIDERS"
+                ],
+                "summary": "Available Riders",
+                "operationId": "28f04897c435130f58b89341e28e4e84",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "origin_latitude": 27.687169,
+                                    "origin_longitude": 85.304219,
+                                    "vehicle_type_id": 1
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "available_riders": [
+                                            {
+                                                "id": 2,
+                                                "user_id": 4,
+                                                "experience": 5,
+                                                "trained": "YES",
+                                                "status": "in_active",
+                                                "approved_at": null,
+                                                "deleted_at": null,
+                                                "last_deleted_by": null,
+                                                "last_updated_by": null,
+                                                "created_at": "2021-11-18T05:46:49.000000Z",
+                                                "updated_at": "2021-11-18T05:46:49.000000Z",
+                                                "user": {
+                                                    "id": 4,
+                                                    "slug": "nitesh-d-luffy",
+                                                    "first_name": "Nitesh",
+                                                    "middle_name": "D.",
+                                                    "last_name": "Manandhar",
+                                                    "image": null,
+                                                    "dob": "2000-01-01",
+                                                    "gender": null,
+                                                    "google_id": null,
+                                                    "facebook_id": null,
+                                                    "username": "nitesh",
+                                                    "phone": "9816810976",
+                                                    "email": "nitesh@gmail.com",
+                                                    "status": null,
+                                                    "email_verified_at": null,
+                                                    "last_logged_in": null,
+                                                    "no_of_logins": null,
+                                                    "avatar": null,
+                                                    "deleted_at": null,
+                                                    "last_updated_by": null,
+                                                    "last_deleted_by": null,
+                                                    "created_at": "2021-11-18T05:46:49.000000Z",
+                                                    "updated_at": "2021-11-18T05:50:51.000000Z",
+                                                    "name": "Nitesh D. Manandhar"
+                                                },
+                                                "vehicle": {
+                                                    "id": 1,
+                                                    "slug": "ba-99-pa-5544",
+                                                    "rider_id": 2,
+                                                    "vehicle_type_id": 1,
+                                                    "vehicle_number": "BA 99 PA 5544",
+                                                    "image": null,
+                                                    "make_year": "2016",
+                                                    "vehicle_color": "black",
+                                                    "brand": "TVS",
+                                                    "model": "Apache 160R",
+                                                    "status": "in_active",
+                                                    "deleted_at": null,
+                                                    "last_deleted_by": null,
+                                                    "last_updated_by": null,
+                                                    "created_at": "2021-11-18T05:46:49.000000Z",
+                                                    "updated_at": "2021-11-18T05:46:49.000000Z",
+                                                    "thumbnail_path": "assets\\/media\\/noimage.png",
+                                                    "image_path": "assets\\/media\\/noimage.png",
+                                                    "documents": []
+                                                },
+                                                "reviews": []
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "404": {
+                        "description": "Document Not Found!"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/review/create": {
+            "post": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Create Review",
+                "operationId": "c08c6afa37e70f5f2770f647f2eaed69",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "booking_id": 1,
+                                    "rate": 3,
+                                    "comment": "Ride was smooth!",
+                                    "reviewed_by_role": "customer"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Ride Review Successful!",
+                                        "review": {
+                                            "booking_id": 1,
+                                            "rate": 3,
+                                            "comment": "Ride was smooth!",
+                                            "reviewed_by_role": "customer",
+                                            "ride_date": "2021-11-17T07:42:19.000000Z",
+                                            "user_id": 3,
+                                            "rider_id": 1,
+                                            "updated_at": "2021-11-17T08:21:19.000000Z",
+                                            "created_at": "2021-11-17T08:21:19.000000Z",
+                                            "id": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access!"
+                    },
+                    "500": {
+                        "description": "Internal Server Error!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/rider/details": {
             "get": {
                 "tags": [
@@ -1029,6 +1624,93 @@
                 ]
             }
         },
+        "/api/rider/profile/update": {
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Update Rider Profile",
+                "operationId": "437f8ee0de76ffeebf211fb3de33baca",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "first_name": "Monkey",
+                                    "middle_name": "D.",
+                                    "last_name": "Luffy",
+                                    "image": "file()",
+                                    "email": "luffy@gmail.com",
+                                    "username": "luffy",
+                                    "dob": "2000/01/01",
+                                    "gender": "male"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "User Registration Successful!",
+                                        "user": {
+                                            "id": 4,
+                                            "slug": "gintama-d-luffy",
+                                            "first_name": "Gintama",
+                                            "middle_name": "D.",
+                                            "last_name": "Luffy",
+                                            "image": "file()",
+                                            "dob": "2000-01-01",
+                                            "gender": null,
+                                            "google_id": null,
+                                            "facebook_id": null,
+                                            "username": "luffy",
+                                            "phone": "9816810976",
+                                            "email": "gintama@gmail.com",
+                                            "status": null,
+                                            "email_verified_at": null,
+                                            "last_logged_in": null,
+                                            "no_of_logins": null,
+                                            "avatar": null,
+                                            "deleted_at": null,
+                                            "last_updated_by": null,
+                                            "last_deleted_by": null,
+                                            "created_at": "2021-11-16T08:09:03.000000Z",
+                                            "updated_at": "2021-11-16T08:09:03.000000Z",
+                                            "name": "Gintama D. Luffy"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/user/details": {
             "get": {
                 "tags": [
@@ -1086,16 +1768,81 @@
                 ]
             }
         },
-        "/api/vehicle_type/get_all_data": {
-            "get": {
+        "/api/user/profile/update": {
+            "post": {
                 "tags": [
-                    "Vehicle"
+                    "Profile"
                 ],
-                "summary": "VehicleTypeController",
-                "operationId": "6ecd07998d6d28060d2d886e0960ebfc",
+                "summary": "Update User Profile",
+                "operationId": "ba87c4b9b267961333e9a939ffb38008",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "first_name": "Monkey",
+                                    "middle_name": "D.",
+                                    "last_name": "Luffy",
+                                    "image": "file()",
+                                    "email": "luffy@gmail.com",
+                                    "username": "luffy",
+                                    "dob": "2000/01/01",
+                                    "gender": "male"
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "User Registration Successful!",
+                                        "user": {
+                                            "id": 4,
+                                            "slug": "gintama-d-luffy",
+                                            "first_name": "Gintama",
+                                            "middle_name": "D.",
+                                            "last_name": "Luffy",
+                                            "image": "file()",
+                                            "dob": "2000-01-01",
+                                            "gender": null,
+                                            "google_id": null,
+                                            "facebook_id": null,
+                                            "username": "luffy",
+                                            "phone": "9816810976",
+                                            "email": "gintama@gmail.com",
+                                            "status": null,
+                                            "email_verified_at": null,
+                                            "last_logged_in": null,
+                                            "no_of_logins": null,
+                                            "avatar": null,
+                                            "deleted_at": null,
+                                            "last_updated_by": null,
+                                            "last_deleted_by": null,
+                                            "created_at": "2021-11-16T08:09:03.000000Z",
+                                            "updated_at": "2021-11-16T08:09:03.000000Z",
+                                            "name": "Gintama D. Luffy"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {}
                         }
@@ -1106,6 +1853,82 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/vehicle_type/get_all_data": {
+            "get": {
+                "tags": [
+                    "Vehicle"
+                ],
+                "summary": "Vehicle Types",
+                "operationId": "6ecd07998d6d28060d2d886e0960ebfc",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Successful!",
+                                        "vehicle_types": [
+                                            {
+                                                "id": 1,
+                                                "name": "bike",
+                                                "slug": "bike",
+                                                "image": null,
+                                                "price_km": 15,
+                                                "price_min": 5,
+                                                "base_fare": 50,
+                                                "commission": 15,
+                                                "capacity": "1",
+                                                "status": "active",
+                                                "deleted_at": null,
+                                                "created_at": "2021-11-17T07:38:22.000000Z",
+                                                "updated_at": "2021-11-17T07:38:22.000000Z",
+                                                "thumbnail_path": "assets/media/noimage.png",
+                                                "image_path": "assets/media/noimage.png"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "car",
+                                                "slug": "car",
+                                                "image": null,
+                                                "price_km": 40,
+                                                "price_min": 15,
+                                                "base_fare": 120,
+                                                "commission": 35,
+                                                "capacity": "3",
+                                                "status": "active",
+                                                "deleted_at": null,
+                                                "created_at": "2021-11-17T07:38:22.000000Z",
+                                                "updated_at": "2021-11-17T07:38:22.000000Z",
+                                                "thumbnail_path": "assets/media/noimage.png",
+                                                "image_path": "assets/media/noimage.png"
+                                            },
+                                            {
+                                                "id": 3,
+                                                "name": "city_safari",
+                                                "slug": "city-safari",
+                                                "image": null,
+                                                "price_km": 25,
+                                                "price_min": 10,
+                                                "base_fare": 80,
+                                                "commission": 25,
+                                                "capacity": "9",
+                                                "status": "active",
+                                                "deleted_at": null,
+                                                "created_at": "2021-11-17T07:38:22.000000Z",
+                                                "updated_at": "2021-11-17T07:38:22.000000Z",
+                                                "thumbnail_path": "assets/media/noimage.png",
+                                                "image_path": "assets/media/noimage.png"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     },

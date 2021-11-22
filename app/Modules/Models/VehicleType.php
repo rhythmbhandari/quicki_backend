@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\Sluggable;
-
+use Carbon\Carbon;
 
 use App\Modules\Models\Vehicle;
 use App\Modules\Models\Shift;
@@ -30,8 +30,19 @@ class VehicleType extends Model
         'name','slug','price_km','price_min','image', 'base_fare','commission','capacity','status','created_at','updated_at','deleted_at'
     ];
     protected $appends = [
-         'thumbnail_path', 'image_path'
+         'thumbnail_path', 'image_path', 'price_per_km', 'price_per_min'
     ];
+
+    function getPricePerKmAttribute()
+    {
+        return $this->price_km;
+    }
+
+
+    function getPricePerMinAttribute()
+    {
+        return $this->price_min;
+    }
 
     function getImagePathAttribute()
     {

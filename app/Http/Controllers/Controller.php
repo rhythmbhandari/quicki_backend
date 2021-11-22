@@ -7,6 +7,10 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
+//models
+use App\Modules\Models\User;
+use App\Modules\Models\Role;
+use App\Modules\Models\Permission;
 class Controller extends BaseController
 {
     /**
@@ -26,4 +30,17 @@ class Controller extends BaseController
      *
      **/
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function test()
+    {
+      Role::findOrFail(7);
+        $roles = Role::all();
+      //  Permission::create(['name' => 'add userss','guard_name'=>'admin']);
+        $role = $roles[0]->givePermissionTo('add users');
+        $users = User::all();
+        $permissions = Permission::all();
+        return view('test',compact('roles','permissions','users'));
+
+    }
+
 }

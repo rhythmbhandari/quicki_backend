@@ -25,7 +25,7 @@ class CreateReviewsTable extends Migration
             $table->foreignId('rider_id')->nullable()->constrained("riders")->cascadeOnUpdate()->nullOnDelete();    
             $table->foreignId('user_id')->nullable()->constrained("users")->cascadeOnUpdate()->nullOnDelete();
 
-            $table->enum('reviewed_by_role',['user','rider']);
+            $table->enum('reviewed_by_role',['customer','rider']);
 
             $table->double('rate')->nullable();
             $table->date('ride_date')->nullable();

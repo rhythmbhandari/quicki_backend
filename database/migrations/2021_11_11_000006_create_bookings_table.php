@@ -35,6 +35,9 @@ class CreateBookingsTable extends Migration
             $table->foreignId('rider_id')->nullable()->constrained("riders")->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('location_id')->nullable()->constrained("locations")->cascadeOnUpdate()->nullOnDelete();
 
+            $table->timestamp('start_time')->nullable();
+            $table->timestamp('end_time')->nullable();
+
             $table->string('origin');
             $table->string('destination');
             $table->double('distance');     //in meters

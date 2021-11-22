@@ -20,7 +20,9 @@ class CreateDocumentsTable extends Migration
             $table->string('type')->nullable()->comment('bluebook, passport, license or citizenship');
             $table->string('document_number')->nullable();
             $table->date('issue_date')->nullable();
-            $table->date('expire_date')->nullable();
+            $table->date('expiry_date')->nullable();
+            $table->date('verified_at')->nullable();
+            $table->string('reason')->nullable()->comment('why not verified?')->default('pending');
             $table->string('image')->nullable();
 
             $table->softDeletes();
