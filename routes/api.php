@@ -90,6 +90,7 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   //---------------------------------------------------------------------------------------------------------
   $router->get('/user/details', [UserController::class, 'getDetails'])->name('user.details');
   $router->post('/user/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
+  $router->post('/user/location/update', [UserController::class, 'update_location'])->name('user.location.update');
 
 
   //---------------------------------------------------------------------------------------------------------

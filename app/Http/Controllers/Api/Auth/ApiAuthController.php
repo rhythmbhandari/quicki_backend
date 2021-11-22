@@ -64,7 +64,7 @@ class ApiAuthController extends Controller
     *                 "password_confirmation": "password",
     *                 "dob": "2000/01/01",
     *                  "facebook_id" : "",
-    *                  "google_id" : ""
+    *                  "google_id" : "",
     *              }
     *         )
     *     )
@@ -347,17 +347,6 @@ class ApiAuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'phone' =>  ['required'],
-
-            // 'user_role' => ['nullable', function ($attribute, $value, $fail) {
-            //                 if ( !(
-            //                     $value == 'customer' || 
-            //                     $value == 'rider' 
-            //                 //  || $value == 'driver' 
-            //                 //  || $value == 'admin' 
-            //                 )) {
-            //                     $fail('The '.$attribute.' can only be one of customer or rider.');
-            //                 }
-            //             },],
         ]);
 
         if ($validator->fails()) {
@@ -513,7 +502,7 @@ class ApiAuthController extends Controller
     *             description="Unauthorized: Otp verified but rider does not Exist!"
     *         ),
     *         @OA\Response(
-    *             response=403,
+    *             response=400,
     *             description="Forbidden Access: User exists but is not registered as a rider!"
     *         ),
     *      @OA\Response(
@@ -565,7 +554,7 @@ class ApiAuthController extends Controller
                 }
                 $accessToken = $user->createToken('User Token!')->accessToken;
                 $response = ['message' => 'Forbidden Access: User exists but is not registered as a rider!','access_token'=>$accessToken,'user'=>$user];
-                return response($response, 403);
+                return response($response, 400);
             } else {
                 $response = ['message' => 'Unauthorized: Otp verified but rider does not Exist!'];
                 return response($response, 401);
