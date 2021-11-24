@@ -402,9 +402,34 @@ class ApiAuthController extends Controller
     *               mediaType="application/json",
     *                @OA\Schema(      
     *                   example={
-    *                           "message":"User exits and verified! Login Successful!",
-    *                           "access_token":"abxad5aSDsdfsdfs",
-    *                           "user":"{user}",
+    *                     "message": "User exits and verified! Login Successful!",
+    *                     "data": {
+    *                       "id": 2,
+    *                       "slug": "sasuke-uchiha",
+    *                       "first_name": "Sasuke",
+    *                       "middle_name": "",
+    *                       "last_name": "Uchiha",
+    *                       "image": null,
+    *                       "dob": null,
+    *                       "gender": null,
+    *                       "google_id": null,
+    *                       "facebook_id": null,
+    *                       "username": "sasuke",
+    *                       "phone": "9869191572",
+    *                       "email": "sasuke@gmail.com",
+    *                       "status": null,
+    *                       "email_verified_at": null,
+    *                       "last_logged_in": null,
+    *                       "no_of_logins": null,
+    *                       "avatar": null,
+    *                       "deleted_at": null,
+    *                       "last_updated_by": null,
+    *                       "last_deleted_by": null,
+    *                       "created_at": "2021-11-22T05:49:34.000000Z",
+    *                       "updated_at": "2021-11-22T05:49:34.000000Z",
+    *                       "name": "Sasuke  Uchiha"
+    *                     },
+    *                     "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYTUxMDFkNDM4ODdiZDIwM2E4N2E2MTdkYWNiM2Y0MjI2ODBhYjllMmI0MzMyY2E3NWI1Nzk2M2Y0ZDZhNTIzODMxNmZmNmYyOTA3MDg1Y2YiLCJpYXQiOjE2Mzc3NDE1NDIuMTAwMjEzLCJuYmYiOjE2Mzc3NDE1NDIuMTAwMjIsImV4cCI6MTY2OTI3NzU0Mi4wODk3MTEsInN1YiI6IjIiLCJzY29wZXMiOltdfQ.kyW7XGw_jCLk_C-4IefPfu0FEgVXtYk9ti8HkO5A1KlqKK2BzcN50UiktnA1TgC2V4R8zNEt5X0OndCoQzaky-aEwOMtohFrVrkOkQRr6X59kUK3xmOahUd2Qajt4GgIFUXU-kMCPghA8ntt6kNtCKD_Zj7P8UVlQJ3lMkvWthK-gedZOrTbW-_ZYTBomcflnzltxU7DA4HAYNuQhzLLCLX1l2u14CY0eBNcJfhJnGzdGyqK_h0So5yp2prNOsgqXvT7hSzTv81otLWdMnvWrzRVHBdAtOnCfWJWhBte0Ny60d_UzroPMZkYw8XFc8DAN0Mipy9tzpoppZ04H1-nG9f2WILRvRYHlsSGTXXF8CIW5aT9xx0sufK3Ai5lkz2S1mnS42_smpAlDi_5NKT15uZvOmgf-yHt6VjHNJRWwdT_BVlBS3sEByqeQ_jZajnue2TFP0ITbs3XDvQmsLcVbTj4_79XDqhRJ6dYkcVHsRV8a6YLTtUM3XrpD9M9UGWKHNd-HbfPro6fZtmp8t82IzkbeIaKaB9nSTPjn0wAa25wvRBeygb4ylBZgYZCuBdXR8WOyabCrtzTQchRaE3e3Np2ykIELggLkVW2zWV2nwROr2GuAZpg1lbSunBglD1kE1l-OFyd5GjS4oHDoOKu9OFgwGo4daaHmj8swh7mvXY"
     *                   }
     *                 )
     *           )
@@ -491,9 +516,81 @@ class ApiAuthController extends Controller
     *               mediaType="application/json",
     *                @OA\Schema(      
     *                   example={
-    *                           "message":"Rider exits and verified! Login Successful!",
-    *                           "access_token":"abxad5aSDsdfsdfs",
-    *                           "Rider":"{rider}",
+    *                     "message": "Rider exits and verified! Login Successful!",
+    *                     "user": {
+    *                       "id": 2,
+    *                       "slug": "sasuke-uchiha",
+    *                       "first_name": "Sasuke",
+    *                       "middle_name": "",
+    *                       "last_name": "Uchiha",
+    *                       "image": null,
+    *                       "dob": null,
+    *                       "gender": null,
+    *                       "google_id": null,
+    *                       "facebook_id": null,
+    *                       "username": "sasuke",
+    *                       "phone": "9869191572",
+    *                       "email": "sasuke@gmail.com",
+    *                       "status": null,
+    *                       "email_verified_at": null,
+    *                       "last_logged_in": null,
+    *                       "no_of_logins": null,
+    *                       "avatar": null,
+    *                       "deleted_at": null,
+    *                       "last_updated_by": null,
+    *                       "last_deleted_by": null,
+    *                       "created_at": "2021-11-22T05:49:34.000000Z",
+    *                       "updated_at": "2021-11-22T05:49:34.000000Z",
+    *                       "name": "Sasuke  Uchiha",
+    *                       "roles": {
+    *                         {
+    *                           "id": 2,
+    *                           "slug": "rider",
+    *                           "name": "rider",
+    *                           "guard_name": "rider",
+    *                           "deleted_at": null,
+    *                           "created_at": "2021-11-22T05:49:34.000000Z",
+    *                           "updated_at": "2021-11-22T05:49:34.000000Z",
+    *                           "pivot": {
+    *                             "user_id": 2,
+    *                             "role_id": 2,
+    *                             "created_at": "2021-11-22T05:49:34.000000Z",
+    *                             "updated_at": "2021-11-22T05:49:34.000000Z"
+    *                           }
+    *                         },
+    *                         {
+    *                           "id": 3,
+    *                           "slug": "customer",
+    *                           "name": "customer",
+    *                           "guard_name": "customer",
+    *                           "deleted_at": null,
+    *                           "created_at": "2021-11-22T05:49:34.000000Z",
+    *                           "updated_at": "2021-11-22T05:49:34.000000Z",
+    *                           "pivot": {
+    *                             "user_id": 2,
+    *                             "role_id": 3,
+    *                             "created_at": "2021-11-22T05:49:34.000000Z",
+    *                             "updated_at": "2021-11-22T05:49:34.000000Z"
+    *                           }
+    *                         }
+    *                       },
+    *                       "rider": {
+    *                         "id": 1,
+    *                         "user_id": 2,
+    *                         "experience": 3,
+    *                         "trained": "YES",
+    *                         "status": "active",
+    *                         "approved_at": "2021-11-22 05:49:34",
+    *                         "deleted_at": null,
+    *                         "last_deleted_by": null,
+    *                         "last_updated_by": null,
+    *                         "created_at": "2021-11-22T05:49:34.000000Z",
+    *                         "updated_at": "2021-11-22T05:49:34.000000Z",
+    *                         "vehicle": null,
+    *                         "documents": {}
+    *                       }
+    *                     },
+    *                     "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNWU1NDM3Y2NlNGQxZjA5MzUyMzk5MjE4NDk1MDdjNDBkMzRjNzdkZjk1YzhjY2IyMTM3M2M2ZjdjOGVhOTU0MmNmOGU2MGQ1M2JjZTlhZTUiLCJpYXQiOjE2Mzc3NDE0MTYuNDU2MjU5LCJuYmYiOjE2Mzc3NDE0MTYuNDU2MjYzLCJleHAiOjE2NjkyNzc0MTYuNDQ5OTU2LCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.ZC6uwA-w5JZwygJnRE9hm8dWjEn0t-huweU_cgZnwI_aLqV4TR_-Pau5g9GN5znBXcsUT6wfZKK4BpHCtLAe3rkQpTwSlKOp9opx-E2Kl5ZesFG0lulnqlphN3bqkhpMwM9wlR6PPuQOXuLeGqWhvQM6xca9LD1YTHMQ80S9o3JVJ-gEEXdspyEfNs_xF7HK-oJ8ZLWqvmgE_5fSlZ5vWidun2W4c7gRfUFvXKyMxzc2D7hKhYtjIgmzY0NkWr3XM74tBH4g9nzuEZajhD3w8zo3jnUa-Wvkh2p9qWudDWdxyph1OKVoYfzfdEhcu2eEPYgdOs7BmSnT6wXXGqfHeNqkN6cIn4Pshi-hdI1WYvxVTImeseNbTgRIZhJUzdUrN4clRvAEpBSb2kqa5BDcO7iIMa3VTRgDj8EXFdyfhDIVaNuTbHSFJcNnJTN4sMLvYCmJJjtOdReCH9B4Ii1m4-2SMdbVFymLa1-oB4onCbL-AlwVVxTKTIbzzTOkJTS0ye4j1YhThYV1EHxRLA2944R3HrVcFixjt07JPZ2_j-YkEeNiVc_CBnXwKTCG84E9vfU47GC4sLTlnuZwipRzjBb2SQXY4w6zvSm0jjiBLmCOhpH8mbPhDgFXaLt5kWezCfa0QecpA3fTHY0TkDlI_fQQ9K0NrGstqEBueTPe5e8"
     *                   }
     *                 )
     *           )
@@ -548,7 +645,7 @@ class ApiAuthController extends Controller
             if ($user) {
                 if( $this->user->hasRole($user, 'rider'))
                 {
-                    //$rider = $user->rider;
+                    $rider = $user->rider;
                    // dd($rider);
                     $accessToken = $user->createToken('authToken')->accessToken;
                     $response = ['message' => 'Rider exits and verified! Login Successful!','user'=>$user,  'access_token' => $accessToken];
