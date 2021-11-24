@@ -66,7 +66,7 @@ class RiderLocationService extends Service
                                     //->whereRelation('vehicle','vehicle_type_id',$vehicle_type_id)
                                     //->with('rider_location')
                                     ->get();
-                dd("rider: ",$rider_locations);
+              //  dd("rider: ",$rider_locations);
 
             }
             else 
