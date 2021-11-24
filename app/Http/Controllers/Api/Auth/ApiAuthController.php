@@ -429,7 +429,7 @@ class ApiAuthController extends Controller
     *      ),
     *       @OA\Response(
     *         response=404,
-    *         description="No Record found!"
+    *         description="Incorrect Otp!"
     *      ),
     *)
     **/
@@ -446,7 +446,8 @@ class ApiAuthController extends Controller
         $phone = $request->phone;
         $otp = Otp::where('phone', $phone)->first();
 
-        if ($request->code == $otp->code) {
+      
+        if ($otp && $request->code == $otp->code) {
             $otp->update(['code_status' => 'verified']);
             $user = User::where('phone', '=', $otp->phone)->first();
             if ($user) {
@@ -458,7 +459,7 @@ class ApiAuthController extends Controller
                 return response($response, 401);
             }
         } else {
-            $response = ['message' => 'No Record found'];
+            $response = ['message' => 'Incorrect Otp!'];
             return response($response, 404);
         }
     }
@@ -521,7 +522,7 @@ class ApiAuthController extends Controller
     *      ),
     *       @OA\Response(
     *         response=404,
-    *         description="No Record found!"
+    *         description="Incorrect Otp!"
     *      ),
     *)
     **/
@@ -540,16 +541,17 @@ class ApiAuthController extends Controller
         // echo $phone;
         // dd($phone);
         $otp = Otp::where('phone', $phone)->first();
-
-        if ($request->code == $otp->code) {
+        //dd("OTP:",$otp);
+        if ($otp && $request->code == $otp->code) {
             $otp->update(['code_status' => 'verified']);
             $user = User::where('phone', '=', $otp->phone)->first();
             if ($user) {
                 if( $this->user->hasRole($user, 'rider'))
                 {
-                    $rider = $user->rider;
+                    //$rider = $user->rider;
+                   // dd($rider);
                     $accessToken = $user->createToken('authToken')->accessToken;
-                    $response = ['message' => 'Rider exits and verified! Login Successful!','user'=>$user, 'rider' => $rider, 'access_token' => $accessToken];
+                    $response = ['message' => 'Rider exits and verified! Login Successful!','user'=>$user,  'access_token' => $accessToken];
                     return response($response, 200);
                 }
                 $accessToken = $user->createToken('User Token!')->accessToken;
@@ -560,7 +562,7 @@ class ApiAuthController extends Controller
                 return response($response, 401);
             }
         } else {
-            $response = ['message' => 'No Record found'];
+            $response = ['message' => 'Incorrect Otp!'];
             return response($response, 404);
         }
     }
@@ -674,8 +676,8 @@ class ApiAuthController extends Controller
             'document.document_number' => 'required',
             'document.type' => 'required',
             'document.image' => 'required',
-            'document.issue_date' => 'required',
-            'document.expiry_date' => 'required',
+            'document.issue_date' => 'required|date',
+            'document.expiry_date' => 'required|date',
         ]);
         if ($validator->fails()) {
             return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
