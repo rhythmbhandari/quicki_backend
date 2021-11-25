@@ -25,6 +25,7 @@ class DocumentService extends Service
     {
         try {
             $data['reason'] = isset($data['reason'])?$data['reason']:"pending";
+            $data['documentable_id'] = intval($data['documentable_id']);
             $createdDocument = $this->document->create($data);
             if($createdDocument)
                 return $createdDocument;
@@ -43,7 +44,7 @@ class DocumentService extends Service
         
             $document= Document::findOrFail($documentId);
             $updatedDocument = $document->update($data);
-            return $updatedDocument;
+            return $document;
 
         } catch (Exception $e) {
             //$this->logger->error($e->getMessage());

@@ -1178,7 +1178,7 @@
                             "schema": {
                                 "example": {
                                     "documentable_type": "rider",
-                                    "documentable_id": "1",
+                                    "documentable_id": 1,
                                     "type": "license",
                                     "document_number": "546352",
                                     "issue_date": "2000/01/01",
@@ -1249,6 +1249,14 @@
                 ],
                 "summary": "Update Document",
                 "operationId": "2c6643765a61d3203734a29fd7bff082",
+                "parameters": [
+                    {
+                        "name": "document_id",
+                        "in": "path",
+                        "description": "Document ID",
+                        "required": true
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -1320,10 +1328,69 @@
                 ]
             }
         },
+        "/api/document/{document_id}/details": {
+            "get": {
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Get Document",
+                "operationId": "ae2d44cffa70588781d545942a0aa153",
+                "parameters": [
+                    {
+                        "name": "document_id",
+                        "in": "path",
+                        "description": "Document ID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "document": {
+                                            "id": 2,
+                                            "documentable_type": "rider",
+                                            "documentable_id": 1,
+                                            "type": "citizenship",
+                                            "document_number": "456457",
+                                            "issue_date": "2000-01-03",
+                                            "expiry_date": null,
+                                            "verified_at": null,
+                                            "reason": "pending",
+                                            "image": null,
+                                            "deleted_at": null,
+                                            "created_at": "2021-11-18T06:38:39.000000Z",
+                                            "updated_at": "2021-11-18T06:43:32.000000Z",
+                                            "thumbnail_path": "assets\\/media\\/noimage.png",
+                                            "image_path": "assets\\/media\\/noimage.png"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "404": {
+                        "description": "Document Not Found!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/rider/online": {
             "post": {
                 "tags": [
-                    "AVAILABLE AND ONLINE/OFFLINE RIDERS"
+                    "AVAILABLE AND ONLINE/OFFLINE RIDERS/USERS"
                 ],
                 "summary": "Rider Online",
                 "operationId": "5dbdc820766bad18749def4a562ef266",
@@ -1391,7 +1458,7 @@
         "/api/rider/offline": {
             "post": {
                 "tags": [
-                    "AVAILABLE AND ONLINE/OFFLINE RIDERS"
+                    "AVAILABLE AND ONLINE/OFFLINE RIDERS/USERS"
                 ],
                 "summary": "Rider Offline",
                 "operationId": "2b16dbb9e0fadb70b941d54652092431",
@@ -1459,7 +1526,7 @@
         "/api/riders/available": {
             "post": {
                 "tags": [
-                    "AVAILABLE AND ONLINE/OFFLINE RIDERS"
+                    "AVAILABLE AND ONLINE/OFFLINE RIDERS/USERS"
                 ],
                 "summary": "Available Riders",
                 "operationId": "28f04897c435130f58b89341e28e4e84",
@@ -1563,6 +1630,118 @@
                     },
                     "404": {
                         "description": "Document Not Found!"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/available": {
+            "get": {
+                "tags": [
+                    "AVAILABLE AND ONLINE/OFFLINE RIDERS/USERS"
+                ],
+                "summary": "Available Users/ Nearby Pending Bookings",
+                "operationId": "e0a575d64c708298132a464e189abbb2",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "available_riders": [
+                                            {
+                                                "id": 2,
+                                                "user_id": 4,
+                                                "experience": 5,
+                                                "trained": "YES",
+                                                "status": "in_active",
+                                                "approved_at": null,
+                                                "deleted_at": null,
+                                                "last_deleted_by": null,
+                                                "last_updated_by": null,
+                                                "created_at": "2021-11-18T05:46:49.000000Z",
+                                                "updated_at": "2021-11-18T05:46:49.000000Z",
+                                                "user": {
+                                                    "id": 4,
+                                                    "slug": "nitesh-d-luffy",
+                                                    "first_name": "Nitesh",
+                                                    "middle_name": "D.",
+                                                    "last_name": "Manandhar",
+                                                    "image": null,
+                                                    "dob": "2000-01-01",
+                                                    "gender": null,
+                                                    "google_id": null,
+                                                    "facebook_id": null,
+                                                    "username": "nitesh",
+                                                    "phone": "9816810976",
+                                                    "email": "nitesh@gmail.com",
+                                                    "status": null,
+                                                    "email_verified_at": null,
+                                                    "last_logged_in": null,
+                                                    "no_of_logins": null,
+                                                    "avatar": null,
+                                                    "deleted_at": null,
+                                                    "last_updated_by": null,
+                                                    "last_deleted_by": null,
+                                                    "created_at": "2021-11-18T05:46:49.000000Z",
+                                                    "updated_at": "2021-11-18T05:50:51.000000Z",
+                                                    "name": "Nitesh D. Manandhar"
+                                                },
+                                                "vehicle": {
+                                                    "id": 1,
+                                                    "slug": "ba-99-pa-5544",
+                                                    "rider_id": 2,
+                                                    "vehicle_type_id": 1,
+                                                    "vehicle_number": "BA 99 PA 5544",
+                                                    "image": null,
+                                                    "make_year": "2016",
+                                                    "vehicle_color": "black",
+                                                    "brand": "TVS",
+                                                    "model": "Apache 160R",
+                                                    "status": "in_active",
+                                                    "deleted_at": null,
+                                                    "last_deleted_by": null,
+                                                    "last_updated_by": null,
+                                                    "created_at": "2021-11-18T05:46:49.000000Z",
+                                                    "updated_at": "2021-11-18T05:46:49.000000Z",
+                                                    "thumbnail_path": "assets\\/media\\/noimage.png",
+                                                    "image_path": "assets\\/media\\/noimage.png",
+                                                    "documents": []
+                                                },
+                                                "reviews": []
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "404": {
+                        "description": "Document Not Found!"
+                    },
+                    "400": {
+                        "description": "You need to get online to view active user bookings!"
                     },
                     "500": {
                         "description": "Internal Server Error",
@@ -2265,6 +2444,233 @@
                         "content": {
                             "application/json": {}
                         }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/vehicle/create": {
+            "post": {
+                "tags": [
+                    "Vehicle"
+                ],
+                "summary": "Create Vehicle",
+                "operationId": "8832e7227f0a56353e0c324d6a0b2425",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "vehicle_type_id": 1,
+                                    "vehicle_number": "BA 12 PA 1234",
+                                    "image": "file()",
+                                    "make_year": "2009",
+                                    "brand": "Hero",
+                                    "model": "Splender"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Vehicle created successfully!",
+                                        "vehicle": {
+                                            "vehicle_type_id": 1,
+                                            "vehicle_number": "BA 12 PA 1234",
+                                            "image": null,
+                                            "make_year": "2009",
+                                            "brand": "Hero",
+                                            "model": "Splender",
+                                            "rider_id": 1,
+                                            "status": "active",
+                                            "slug": "ba-12-pa-1234",
+                                            "updated_at": "2021-11-25T19:53:03.000000Z",
+                                            "created_at": "2021-11-25T19:53:03.000000Z",
+                                            "id": 1,
+                                            "thumbnail_path": "assets/media/noimage.png",
+                                            "image_path": "assets/media/noimage.png"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/vehicle/{vehicle_id}/update": {
+            "post": {
+                "tags": [
+                    "Vehicle"
+                ],
+                "summary": "Update Vehicle",
+                "operationId": "8cc72eb75575dac368b7df4a7c43a11e",
+                "parameters": [
+                    {
+                        "name": "vehicle_id",
+                        "in": "path",
+                        "description": "Vehicle ID",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "vehicle_type_id": 1,
+                                    "vehicle_number": "BA 12 PA 1234",
+                                    "image": "file()",
+                                    "make_year": "2009",
+                                    "brand": "Hero",
+                                    "model": "Splender"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Vehicle updated Successfully!",
+                                        "vehicle": {
+                                            "id": 1,
+                                            "slug": "ba-12-pa-1234",
+                                            "rider_id": 1,
+                                            "vehicle_type_id": 1,
+                                            "vehicle_number": "BA 99 PA 1234",
+                                            "image": null,
+                                            "make_year": "2010",
+                                            "vehicle_color": null,
+                                            "brand": "HERO",
+                                            "model": "Splender",
+                                            "status": "active",
+                                            "deleted_at": null,
+                                            "last_deleted_by": null,
+                                            "last_updated_by": null,
+                                            "created_at": "2021-11-25T19:53:03.000000Z",
+                                            "updated_at": "2021-11-25T19:57:29.000000Z",
+                                            "thumbnail_path": "assets/media/noimage.png",
+                                            "image_path": "assets/media/noimage.png"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "404": {
+                        "description": "Vehicle Not Found!"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/vehicle/{vehicle_id}/details": {
+            "get": {
+                "tags": [
+                    "Vehicle"
+                ],
+                "summary": "Get Vehicle",
+                "operationId": "46727da03fa2803ed3dce63343b68337",
+                "parameters": [
+                    {
+                        "name": "vehicle_id",
+                        "in": "path",
+                        "description": "Vehicle ID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "Vehilce": {
+                                            "id": 1,
+                                            "slug": "ba-12-pa-1234",
+                                            "rider_id": 1,
+                                            "vehicle_type_id": 1,
+                                            "vehicle_number": "BA 12 PA 1234",
+                                            "image": null,
+                                            "make_year": "2009",
+                                            "vehicle_color": null,
+                                            "brand": "Hero",
+                                            "model": "Splender",
+                                            "status": "active",
+                                            "deleted_at": null,
+                                            "last_deleted_by": null,
+                                            "last_updated_by": null,
+                                            "created_at": "2021-11-25T19:53:03.000000Z",
+                                            "updated_at": "2021-11-25T19:53:03.000000Z",
+                                            "thumbnail_path": "assets/media/noimage.png",
+                                            "image_path": "assets/media/noimage.png"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "404": {
+                        "description": "Vehicle Not Found!"
                     }
                 },
                 "security": [

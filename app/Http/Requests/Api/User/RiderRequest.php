@@ -5,7 +5,7 @@ namespace App\Http\Requests\Api\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 use App\Rules\ValidateDoubleRule;
-
+use App\Modules\Models\VehicleType;
 
 class RiderRequest extends FormRequest
 {
@@ -46,7 +46,15 @@ class RiderRequest extends FormRequest
             'rider.trained' => 'nullable',
 
             //Vehicle's fields
-            'vehicle.vehicle_type_id' => 'required',
+            'vehicle.vehicle_type_id' =>  ['required','integer', function ($attribute, $value, $fail) {
+                if($value>0)
+                {
+                    $vehicle_type = VehicleType::find($value);
+                    if ( !$vehicle_type) {
+                        $fail('The vehicle type does not exist!');
+                    }
+                }else {$fail('The vehicle type does not exist!');}
+            },],
             'vehicle.vehicle_number' => 'required',
             'vehicle.make_year' => 'nullable',
             'vehicle.vehicle_color' => 'nullable',

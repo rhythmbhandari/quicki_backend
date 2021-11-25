@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api\User;
+namespace App\Http\Requests\Api\Location;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -30,12 +30,12 @@ class UpdateUserLocationRequest extends FormRequest
         return [
            
             'location.home.name' => 'required_with:location.home.latitude,location.home.latitude|string|max:255',
-            'location.home.latitude' => 'required_with:location.home.longitude,location.home.name|numeric',
-            'location.home.longitude' => 'required_with:location.home.latitude,location.home.name|numeric',
+            'location.home.latitude' => ['required_with:location.home.longitude,location.home.name', new ValidateDoubleRule() ],
+            'location.home.longitude' => ['required_with:location.home.latitude,location.home.name', new ValidateDoubleRule() ],
 
             'location.work.name' => 'required_with:location.work.latitude,location.work.latitude|string|max:255',
-            'location.work.latitude' => 'required_with:location.work.longitude,location.work.name|numeric',
-            'location.work.longitude' => 'required_with:location.work.latitude,location.work.name|numeric',
+            'location.work.latitude' => ['required_with:location.work.longitude,location.work.name',  new ValidateDoubleRule() ],
+            'location.work.longitude' => ['required_with:location.work.latitude,location.work.name',  new ValidateDoubleRule() ],
 
 
         ];
