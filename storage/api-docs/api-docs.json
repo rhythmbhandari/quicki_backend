@@ -227,6 +227,18 @@
                                             "image": null,
                                             "dob": null,
                                             "gender": null,
+                                            "location": {
+                                                "home": {
+                                                    "name": "Chapagaun, Kathmandu",
+                                                    "latitude": 27.691153232923103,
+                                                    "longitude": 86.33177163310808
+                                                },
+                                                "work": {
+                                                    "name": "Thapagaun, Lalitpur",
+                                                    "latitude": 28.687052088825897,
+                                                    "longitude": 85.30439019937253
+                                                }
+                                            },
                                             "google_id": null,
                                             "facebook_id": null,
                                             "username": "sasuke",
@@ -307,6 +319,18 @@
                                             "image": null,
                                             "dob": null,
                                             "gender": null,
+                                            "location": {
+                                                "home": {
+                                                    "name": "Chapagaun, Kathmandu",
+                                                    "latitude": 27.691153232923103,
+                                                    "longitude": 86.33177163310808
+                                                },
+                                                "work": {
+                                                    "name": "Thapagaun, Lalitpur",
+                                                    "latitude": 28.687052088825897,
+                                                    "longitude": 85.30439019937253
+                                                }
+                                            },
                                             "google_id": null,
                                             "facebook_id": null,
                                             "username": "sasuke",
@@ -594,7 +618,7 @@
                         "description": "Forbidden Access: Booking is off limits!"
                     },
                     "422": {
-                        "description": "Validation Fail",
+                        "description": "The given data was invalid!",
                         "content": {
                             "application/json": {}
                         }
@@ -706,7 +730,7 @@
                         "description": "Forbidden Access: Booking is off limits!"
                     },
                     "422": {
-                        "description": "Validation Fail",
+                        "description": "The given data was invalid!",
                         "content": {
                             "application/json": {}
                         }
@@ -736,49 +760,44 @@
                 "summary": "Active User Booking",
                 "operationId": "ba97d6130dcfa3ff629175b37b7d8e9d",
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Success",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "example": {
-                                        "message": "Booking Successful!",
+                                        "message": "Success!",
                                         "booking": {
-                                            "message": "Booking Successful!",
-                                            "booking": {
-                                                "origin": "Patan, Lalitpur",
-                                                "destination": "Kirtipur, Kathmandu",
-                                                "passenger_number": 2,
-                                                "vehicle_type_id": 1,
-                                                "distance": 12,
-                                                "duration": 20,
-                                                "stoppage": [
-                                                    {
-                                                        "name": "Sanepa, Lalitpur",
-                                                        "latitude": 27.1234,
-                                                        "longitude": 85.3434
-                                                    },
-                                                    {
-                                                        "name": "New Baneshwor, Kathmandu",
-                                                        "latitude": 28.3454,
-                                                        "longitude": 87.1234
-                                                    }
-                                                ],
-                                                "user_id": 3,
-                                                "updated_at": "2021-11-17T06:46:13.000000Z",
-                                                "created_at": "2021-11-17T06:46:13.000000Z",
-                                                "id": 3,
-                                                "location_id": 3,
-                                                "location": {
-                                                    "latitude_origin": 85.123423,
-                                                    "longitude_origin": 27.123456,
-                                                    "latitude_destination": 86.12313,
-                                                    "longitude_destination": 27.234325,
-                                                    "updated_at": "2021-11-17T06:46:13.000000Z",
-                                                    "created_at": "2021-11-17T06:46:13.000000Z",
-                                                    "id": 3
+                                            "id": 2,
+                                            "stoppage": [
+                                                {
+                                                    "name": "Sanepa, Lalitpur",
+                                                    "latitude": 27.1234,
+                                                    "longitude": 85.3434
+                                                },
+                                                {
+                                                    "name": "New Baneshwor, Kathmandu",
+                                                    "latitude": 28.3454,
+                                                    "longitude": 87.1234
                                                 }
-                                            }
+                                            ],
+                                            "user_id": 2,
+                                            "vehicle_type_id": 1,
+                                            "rider_id": null,
+                                            "location_id": 2,
+                                            "start_time": null,
+                                            "end_time": null,
+                                            "origin": "Sanepa, Lalitpur",
+                                            "destination": "New Baneshwor, Kathmandu",
+                                            "distance": 12,
+                                            "duration": 20,
+                                            "passenger_number": 2,
+                                            "status": "pending",
+                                            "price": 160,
+                                            "payment_type": "CASH",
+                                            "deleted_at": null,
+                                            "created_at": "2021-11-25T17:17:57.000000Z",
+                                            "updated_at": "2021-11-25T17:17:57.000000Z"
                                         }
                                     }
                                 }
@@ -787,6 +806,9 @@
                     },
                     "403": {
                         "description": "Forbidden Access!"
+                    },
+                    "404": {
+                        "description": "No active bookings found!"
                     }
                 },
                 "security": [
@@ -804,7 +826,7 @@
                 "summary": "Active Rider Booking",
                 "operationId": "f3f70d7a1226f9797658bdb951a170a6",
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Success",
                         "content": {
                             "application/json": {
@@ -855,6 +877,9 @@
                     },
                     "403": {
                         "description": "Forbidden Access!"
+                    },
+                    "404": {
+                        "description": "No active bookings found!"
                     }
                 },
                 "security": [
@@ -869,7 +894,7 @@
                 "tags": [
                     "Booking"
                 ],
-                "summary": "Estimated Price (Takes => Distance in Km, Duration in seconds and Origin lat and lng values)  ",
+                "summary": "Estimated Price (Takes => Distance in meters, Duration in seconds and Origin lat and lng values)  ",
                 "operationId": "886c513b2cdd18f95788d67e1c77e19d",
                 "requestBody": {
                     "content": {
@@ -878,7 +903,7 @@
                                 "example": {
                                     "origin_latitude": 27.68716909705845,
                                     "origin_longitude": 85.3042190788061,
-                                    "distance": 20,
+                                    "distance": 2000,
                                     "duration": 300
                                 }
                             }
@@ -967,7 +992,7 @@
                         }
                     },
                     "422": {
-                        "description": "Validation Fail",
+                        "description": "The given data was invalid!",
                         "content": {
                             "application/json": {}
                         }
@@ -1619,7 +1644,6 @@
                     "Details"
                 ],
                 "summary": "Rider Details",
-                "operationId": "f565deb5e30886584e5e25c01b8f7715",
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -1637,6 +1661,135 @@
                                             "image": "file()",
                                             "dob": "2000-01-01",
                                             "gender": null,
+                                            "google_id": null,
+                                            "facebook_id": null,
+                                            "username": null,
+                                            "phone": "9816810976",
+                                            "email": "gintama@gmail.com",
+                                            "status": null,
+                                            "email_verified_at": null,
+                                            "last_logged_in": null,
+                                            "no_of_logins": null,
+                                            "avatar": null,
+                                            "deleted_at": null,
+                                            "last_updated_by": null,
+                                            "last_deleted_by": null,
+                                            "created_at": "2021-11-16T08:09:03.000000Z",
+                                            "updated_at": "2021-11-16T08:09:03.000000Z",
+                                            "name": "Gintama D. Luffy",
+                                            "rider": {
+                                                "id": 2,
+                                                "user_id": 4,
+                                                "experience": 5,
+                                                "trained": "YES",
+                                                "status": "in_active",
+                                                "approved_at": null,
+                                                "deleted_at": null,
+                                                "last_deleted_by": null,
+                                                "last_updated_by": null,
+                                                "created_at": "2021-11-16T08:09:03.000000Z",
+                                                "updated_at": "2021-11-16T08:09:03.000000Z",
+                                                "vehicle": {
+                                                    "id": 1,
+                                                    "slug": "ba-99-pa-5544",
+                                                    "rider_id": 2,
+                                                    "vehicle_type_id": 1,
+                                                    "vehicle_number": "BA 99 PA 5544",
+                                                    "image": null,
+                                                    "make_year": "2016",
+                                                    "vehicle_color": "black",
+                                                    "brand": "CF MOTO",
+                                                    "model": "NK 250",
+                                                    "status": "in_active",
+                                                    "deleted_at": null,
+                                                    "last_deleted_by": null,
+                                                    "last_updated_by": null,
+                                                    "created_at": "2021-11-16T08:09:03.000000Z",
+                                                    "updated_at": "2021-11-16T08:09:03.000000Z",
+                                                    "thumbnail_path": "assets/media/noimage.png",
+                                                    "image_path": "assets/media/noimage.png",
+                                                    "documents": []
+                                                },
+                                                "documents": [
+                                                    {
+                                                        "id": 1,
+                                                        "documentable_type": "App\\\\Modules\\\\Models\\\\Rider",
+                                                        "documentable_id": 2,
+                                                        "type": "license",
+                                                        "document_number": "L12345345234",
+                                                        "issue_date": "2018-01-01",
+                                                        "expire_date": null,
+                                                        "image": "file()",
+                                                        "deleted_at": null,
+                                                        "created_at": "2021-11-16T08:09:03.000000Z",
+                                                        "updated_at": "2021-11-16T08:09:03.000000Z",
+                                                        "thumbnail_path": "uploads/document/license/thumb/file()",
+                                                        "image_path": "uploads/document/license/file()"
+                                                    }
+                                                ]
+                                            },
+                                            "documents": []
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rider/{rider_id}/details": {
+            "get": {
+                "tags": [
+                    "Details"
+                ],
+                "summary": "Rider Details",
+                "operationId": "232b57126647312318ae4fb54b16c8ff",
+                "parameters": [
+                    {
+                        "name": "rider_id",
+                        "in": "path",
+                        "description": "Rider ID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "user": {
+                                            "id": 4,
+                                            "slug": "gintama-d-luffy",
+                                            "first_name": "Gintama",
+                                            "middle_name": "D.",
+                                            "last_name": "Luffy",
+                                            "image": "file()",
+                                            "dob": "2000-01-01",
+                                            "gender": null,
+                                            "location": {
+                                                "home": {
+                                                    "name": "Chapagaun, Kathmandu",
+                                                    "latitude": 27.691153232923103,
+                                                    "longitude": 86.33177163310808
+                                                },
+                                                "work": {
+                                                    "name": "Thapagaun, Lalitpur",
+                                                    "latitude": 28.687052088825897,
+                                                    "longitude": 85.30439019937253
+                                                }
+                                            },
                                             "google_id": null,
                                             "facebook_id": null,
                                             "username": null,
@@ -1713,6 +1866,9 @@
                     },
                     "403": {
                         "description": "Forbidden Access!"
+                    },
+                    "404": {
+                        "description": "User Not Found!"
                     }
                 },
                 "security": [
@@ -1764,6 +1920,18 @@
                                             "image": "file()",
                                             "dob": "2000-01-01",
                                             "gender": null,
+                                            "location": {
+                                                "home": {
+                                                    "name": "Chapagaun, Kathmandu",
+                                                    "latitude": 27.691153232923103,
+                                                    "longitude": 86.33177163310808
+                                                },
+                                                "work": {
+                                                    "name": "Thapagaun, Lalitpur",
+                                                    "latitude": 28.687052088825897,
+                                                    "longitude": 85.30439019937253
+                                                }
+                                            },
                                             "google_id": null,
                                             "facebook_id": null,
                                             "username": "luffy",
@@ -1815,7 +1983,6 @@
                     "Details"
                 ],
                 "summary": "User Details",
-                "operationId": "e06fa66e89b9f4ad3aad62aa32fc2cc2",
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -1857,6 +2024,86 @@
                     },
                     "403": {
                         "description": "Forbidden Access!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/{user_id}/details": {
+            "get": {
+                "tags": [
+                    "Details"
+                ],
+                "summary": "User Details",
+                "operationId": "1c9e48fc2cb484840b974dff3fc8f3b4",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "user": {
+                                            "id": 4,
+                                            "slug": "gintama-d-luffy",
+                                            "first_name": "Gintama",
+                                            "middle_name": "D.",
+                                            "last_name": "Luffy",
+                                            "image": "file()",
+                                            "dob": "2000-01-01",
+                                            "gender": null,
+                                            "location": {
+                                                "home": {
+                                                    "name": "Chapagaun, Kathmandu",
+                                                    "latitude": 27.691153232923103,
+                                                    "longitude": 86.33177163310808
+                                                },
+                                                "work": {
+                                                    "name": "Thapagaun, Lalitpur",
+                                                    "latitude": 28.687052088825897,
+                                                    "longitude": 85.30439019937253
+                                                }
+                                            },
+                                            "google_id": null,
+                                            "facebook_id": null,
+                                            "username": null,
+                                            "phone": "9816810976",
+                                            "email": "gintama@gmail.com",
+                                            "status": null,
+                                            "email_verified_at": null,
+                                            "last_logged_in": null,
+                                            "no_of_logins": null,
+                                            "avatar": null,
+                                            "deleted_at": null,
+                                            "last_updated_by": null,
+                                            "last_deleted_by": null,
+                                            "created_at": "2021-11-16T08:09:03.000000Z",
+                                            "updated_at": "2021-11-16T08:09:03.000000Z",
+                                            "name": "Gintama D. Luffy"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access!"
+                    },
+                    "404": {
+                        "description": "User Not Found!"
                     }
                 },
                 "security": [
@@ -1908,6 +2155,18 @@
                                             "image": "file()",
                                             "dob": "2000-01-01",
                                             "gender": null,
+                                            "location": {
+                                                "home": {
+                                                    "name": "Chapagaun, Kathmandu",
+                                                    "latitude": 27.691153232923103,
+                                                    "longitude": 86.33177163310808
+                                                },
+                                                "work": {
+                                                    "name": "Thapagaun, Lalitpur",
+                                                    "latitude": 28.687052088825897,
+                                                    "longitude": 85.30439019937253
+                                                }
+                                            },
                                             "google_id": null,
                                             "facebook_id": null,
                                             "username": "luffy",

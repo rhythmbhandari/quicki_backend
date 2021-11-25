@@ -89,6 +89,7 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   //  USER ROUTES
   //---------------------------------------------------------------------------------------------------------
   $router->get('/user/details', [UserController::class, 'getDetails'])->name('user.details');
+  $router->get('/user/{user_id}/details', [UserController::class, 'getDetails'])->name('user.specific.details');
   $router->post('/user/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
   $router->post('/user/location/update', [UserController::class, 'update_location'])->name('user.location.update');
 
@@ -97,6 +98,7 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   //  RIDER ROUTES
   //---------------------------------------------------------------------------------------------------------
   $router->get('/rider/details', [RiderController::class, 'getDetails'])->name('rider.details');
+  $router->get('/rider/{rider_id}/details', [RiderController::class, 'getDetails'])->name('rider.specific.details');
   $router->post('/rider/profile/update', [RiderController::class, 'updateProfile'])->name('rider.profile.update');
 
 

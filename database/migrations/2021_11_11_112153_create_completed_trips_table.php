@@ -15,16 +15,7 @@ class CreateCompletedTripsTable extends Migration
     {
         Schema::create('completed_trips', function (Blueprint $table) {
             $table->id();
-            
-            // $table->unsignedBigInteger('user_id');
-            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            // $table->unsignedBigInteger('rider_id')->nullable();
-            // $table->foreign('rider_id')->references('id')->on('users')->onDelete('cascade');
-            // $table->unsignedBigInteger('location_id');
-            // $table->foreign('location_id')->references('id')->on('user_locations')->onDelete('cascade');
-            // $table->unsignedBigInteger('book_id');
-            // $table->foreign('book_id')->references('id')->on('booking')->onDelete('cascade');
-
+       
             
             $table->foreignId('user_id')->nullable()->constrained("users")->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('rider_id')->nullable()->constrained("riders")->cascadeOnUpdate()->nullOnDelete();
@@ -37,12 +28,16 @@ class CreateCompletedTripsTable extends Migration
             $table->string('origin');
             $table->string('destination');
             $table->json('stoppage')->nullable();
-            $table->string('distance')->nullable();
-            $table->string('duration')->nullable();
+            $table->integer('distance')->nullable();
+            $table->integer('duration')->nullable();
             $table->integer('passenger_number')->nullable()->default(1);
             $table->string('profile_img_user')->nullable();
             $table->string('profile_img_rider')->nullable();
             $table->enum('status',['completed','cancelled']);
+
+            
+            $table->integer('price')->default(0);
+            $table->string('payment_type')->nullable()->default('CASH');
 
            // $table->string('cancelled_by')->nullable();
             $table->string('cancelled_by_type')->nullable()->comment('customer or rider');    //customer or rider

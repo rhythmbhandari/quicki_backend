@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
+
+
+//requests
+use App\Http\Requests\Api\User\RiderProfileRequest;
+
 //services
 use App\Modules\Services\User\UserService;
 use App\Modules\Services\User\RiderService;
@@ -100,6 +105,129 @@ class RiderController extends Controller
     *                       "updated_at": "2021-11-16T08:09:03.000000Z",
     *                       "thumbnail_path": "assets/media/noimage.png",
     *                       "image_path": "assets/media/noimage.png",
+    *                       "documents": {}
+    *                     },
+    *                     "documents": {
+    *                       {
+    *                         "id": 1,
+    *                         "documentable_type": "App\\Modules\\Models\\Rider",
+    *                         "documentable_id": 2,
+    *                         "type": "license",
+    *                         "document_number": "L12345345234",
+    *                         "issue_date": "2018-01-01",
+    *                         "expire_date": null,
+    *                         "image": "file()",
+    *                         "deleted_at": null,
+    *                         "created_at": "2021-11-16T08:09:03.000000Z",
+    *                         "updated_at": "2021-11-16T08:09:03.000000Z",
+    *                         "thumbnail_path": "uploads/document/license/thumb/file()",
+    *                         "image_path": "uploads/document/license/file()"
+    *                       }
+    *                     }
+    *                   },
+    *                   "documents": {}
+    *                 }
+    *             }             
+    *           )
+    *      )
+    *   ),
+    *   @OA\Response(
+    *      response=403,
+    *       description="Forbidden Access!",
+    *   )
+    *)
+    **/
+
+
+    /**
+    * @OA\Get(
+    *   path="/api/rider/{rider_id}/details",
+    *   tags={"Details"},
+    *   summary="Rider Details",
+    *   security={{"bearerAuth":{}}},
+    *      @OA\Parameter(
+    *         name="rider_id",
+    *         in="path",
+    *         description="Rider ID",
+    *         required=true,
+    *      ),
+    *
+    *   @OA\Response(
+    *      response=200,
+    *       description="Success",
+    *      @OA\MediaType(
+    *           mediaType="application/json",
+    *           @OA\Schema(      
+    *             example=	{
+    *               "message": "Success!",
+    *               "user": {
+    *                   "id": 4,
+    *                   "slug": "gintama-d-luffy",
+    *                   "first_name": "Gintama",
+    *                   "middle_name": "D.",
+    *                   "last_name": "Luffy",
+    *                   "image": "file()",
+    *                   "dob": "2000-01-01",
+    *                   "gender": null,
+    *                   "location": {
+    *                     "home": {
+    *                       "name": "Chapagaun, Kathmandu",
+    *                       "latitude": 27.691153232923103,
+    *                       "longitude": 86.33177163310808
+    *                     },
+    *                     "work": {
+    *                       "name": "Thapagaun, Lalitpur",
+    *                       "latitude": 28.687052088825897,
+    *                       "longitude": 85.30439019937253
+    *                     }
+    *                   },
+    *                   "google_id": null,
+    *                   "facebook_id": null,
+    *                   "username": null,
+    *                   "phone": "9816810976",
+    *                   "email": "gintama@gmail.com",
+    *                   "status": null,
+    *                   "email_verified_at": null,
+    *                   "last_logged_in": null,
+    *                   "no_of_logins": null,
+    *                   "avatar": null,
+    *                   "deleted_at": null,
+    *                   "last_updated_by": null,
+    *                   "last_deleted_by": null,
+    *                   "created_at": "2021-11-16T08:09:03.000000Z",
+    *                   "updated_at": "2021-11-16T08:09:03.000000Z",
+    *                   "name": "Gintama D. Luffy",
+    *                   "rider": {
+    *                     "id": 2,
+    *                     "user_id": 4,
+    *                     "experience": 5,
+    *                     "trained": "YES",
+    *                     "status": "in_active",
+    *                     "approved_at": null,
+    *                     "deleted_at": null,
+    *                     "last_deleted_by": null,
+    *                     "last_updated_by": null,
+    *                     "created_at": "2021-11-16T08:09:03.000000Z",
+    *                     "updated_at": "2021-11-16T08:09:03.000000Z",
+    *                     "vehicle": {
+    *                       "id": 1,
+    *                       "slug": "ba-99-pa-5544",
+    *                       "rider_id": 2,
+    *                       "vehicle_type_id": 1,
+    *                       "vehicle_number": "BA 99 PA 5544",
+    *                       "image": null,
+    *                       "make_year": "2016",
+    *                       "vehicle_color": "black",
+    *                       "brand": "CF MOTO",
+    *                       "model": "NK 250",
+    *                       "status": "in_active",
+    *                       "deleted_at": null,
+    *                       "last_deleted_by": null,
+    *                       "last_updated_by": null,
+    *                       "created_at": "2021-11-16T08:09:03.000000Z",
+    *                       "updated_at": "2021-11-16T08:09:03.000000Z",
+    *                       "thumbnail_path": "assets/media/noimage.png",
+    *                       "image_path": "assets/media/noimage.png",
     *                       "documents": "[]"
     *                     },
     *                     "documents": {
@@ -129,11 +257,31 @@ class RiderController extends Controller
     *   @OA\Response(
     *      response=403,
     *       description="Forbidden Access!",
+    *   ),
+    *   @OA\Response(
+    *      response=404,
+    *       description="User Not Found!",
     *   )
     *)
     **/
-    public function getDetails(){
-        $user = Auth::user();
+    public function getDetails($rider_id=null)
+    {
+
+        // $user = ($rider_id != null) ? Rider::findOrFail($rider_id)->user : Auth::user();
+
+        $user = null;
+        if($rider_id == null)
+            $user = Auth::user();
+        else{
+            $rider = Rider::find($rider_id);
+            if($rider) $user = $rider->user;
+            else {
+                $response = ['message' => 'User not found!'];
+                return response($response, 404);
+            }
+        }
+
+        //$user = Auth::user();
        
         //ROLE CHECK FOR RIDER
         if( ! $this->user_service->hasRole($user, 'rider') )
@@ -193,6 +341,18 @@ class RiderController extends Controller
     *                                 "image": "file()",
     *                                 "dob": "2000-01-01",
     *                                 "gender": null,
+    *                                 "location": {
+    *                                      "home": {
+    *                                        "name": "Chapagaun, Kathmandu",
+    *                                        "latitude": 27.691153232923103,
+    *                                        "longitude": 86.33177163310808
+    *                                      },
+    *                                      "work": {
+    *                                        "name": "Thapagaun, Lalitpur",
+    *                                        "latitude": 28.687052088825897,
+    *                                        "longitude": 85.30439019937253
+    *                                      }
+    *                                    },
     *                                 "google_id": null,
     *                                 "facebook_id": null,
     *                                 "username": "luffy",
@@ -236,28 +396,9 @@ class RiderController extends Controller
     *      ),
     *)
     **/
-    public function updateProfile(Request $request)
+    public function updateProfile(RiderProfileRequest $request)
     {
         $user = Auth::user();
-
-        //VALIDATIONS
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|max:255',
-            'middle_name' => 'nullable|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-            'username' => 'nullable|string|max:255|unique:users,username,'.$user->id,
-            'email' => 'nullable|string|email|max:255|unique:users,email,'.$user->id,
-            'dob' => 'nullable',
-            'gender' => 'nullable',
-            //'password' => 'nullable|string|min:6|confirmed',
-           // 'phone' => 'nullable|string|min:10|unique:users,phone,'.$user->id,
-          //  'google_id' => 'nullable|unique:users',
-          //  'facebook_id' => 'nullable|unique:users'
-        ]);
-        if ($validator->fails()) {
-            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
-        }
 
         //ROLE CHECK FOR RIDER
         if( ! $this->user_service->hasRole($user, 'rider') )
@@ -276,7 +417,7 @@ class RiderController extends Controller
                 if ($request->hasFile('image')) {
                     $this->uploadFile($request, $updatedUser);
                 }
-                $response = ['message' => 'User Profile Updated Successful!',  "user"=>Auth::user()];
+                $response = ['message' => 'User Profile Updated Successful!',  "user"=>$updatedUser];
                 return response($response, 200);
             }
             return response("Internal Server Error!", 500);

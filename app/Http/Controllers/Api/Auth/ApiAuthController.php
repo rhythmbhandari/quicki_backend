@@ -11,6 +11,12 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+
+//requests
+use App\Http\Requests\Api\User\UserRequest;
+use App\Http\Requests\Api\User\RiderRequest;
+use App\Http\Requests\Api\User\UserToRiderRequest;
+
 //services
 use App\Modules\Services\User\UserService;
 use App\Modules\Services\User\RiderService;
@@ -102,27 +108,9 @@ class ApiAuthController extends Controller
     *      ),
     *)
     **/
-    public function register(Request $request)
+    public function register(UserRequest $request)
     {
 
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|max:255',
-            'middle_name' => 'nullable|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-            'username' => 'nullable|string|max:255|unique:users',
-            'email' => 'nullable|string|email|max:255|unique:users',
-            'password' => 'nullable|string|min:6|confirmed',
-            'phone' => 'required|string|min:10|unique:users',
-            'dob' => 'nullable',
-            'gender' => 'nullable',
-            'google_id' => 'nullable|unique:users',
-            'facebook_id' => 'nullable|unique:users'
-        ]);
-        if ($validator->fails()) {
-            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
-        }
-       // dd("USER DATA:",$request->all());
         return DB::transaction(function () use ($request)
         {
             $createdUser = $this->user->create($request->all());
@@ -226,46 +214,9 @@ class ApiAuthController extends Controller
     *      ),
     *)
     **/
-    public function rider_register(Request $request)
+    public function rider_register(RiderRequest $request)
     {
 
-       // dd("RIDER DATA:",$request->all());
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|max:255',
-            'middle_name' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-            'last_name' => 'required|string|max:255',
-            'username' => 'nullable|string|max:255|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'nullable|string|min:6|confirmed',
-            'phone' => 'required|string|min:10|unique:users',
-            'dob' => 'nullable',
-            'gender' => 'nullable',
-            'google_id' => 'nullable',
-            'facebook_id' => 'nullable',
-
-            //Rider's fields
-            'rider.experience' => 'required',
-            'rider.trained' => 'nullable',
-
-            //Vehicle's fields
-            'vehicle.vehicle_type_id' => 'required',
-            'vehicle.vehicle_number' => 'required',
-            'vehicle.make_year' => 'nullable',
-            'vehicle.vehicle_color' => 'nullable',
-            'vehicle.brand' => 'nullable',
-            'vehicle.model' => 'nullable',
-
-            //Document's fields
-            'document.document_number' => 'required',
-            'document.type' => 'required',
-            'document.image' => 'required',
-            'document.issue_date' => 'required',
-            'document.expiry_date' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
-        }
 
         //dd("RIDER DATA:",$request->all(), $request->all()['document']);
         return DB::transaction(function () use ($request)
@@ -353,15 +304,6 @@ class ApiAuthController extends Controller
             return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
         }
 
-        // $user = User::where('phone',$request->phone)->first();
-        // $role_check = $this->user->hasRole($user, $request->user_role);
-
-        // if(!$role_check)
-        // {
-        //     $response = ['message' => 'Forbidden Access!'];
-        //     return response($response, 403);
-        // }
-
         $code = rand(10000, 99999); //generate random code
         $request['code'] = $code; //add code in $request body
         $request['phone'] = $request->phone;
@@ -412,6 +354,18 @@ class ApiAuthController extends Controller
     *                       "image": null,
     *                       "dob": null,
     *                       "gender": null,
+    *                        "location": {
+    *                             "home": {
+    *                               "name": "Chapagaun, Kathmandu",
+    *                               "latitude": 27.691153232923103,
+    *                               "longitude": 86.33177163310808
+    *                             },
+    *                             "work": {
+    *                               "name": "Thapagaun, Lalitpur",
+    *                               "latitude": 28.687052088825897,
+    *                               "longitude": 85.30439019937253
+    *                             }
+    *                           },
     *                       "google_id": null,
     *                       "facebook_id": null,
     *                       "username": "sasuke",
@@ -526,6 +480,18 @@ class ApiAuthController extends Controller
     *                       "image": null,
     *                       "dob": null,
     *                       "gender": null,
+    *                       "location": {
+    *                              "home": {
+    *                                "name": "Chapagaun, Kathmandu",
+    *                                "latitude": 27.691153232923103,
+    *                                "longitude": 86.33177163310808
+    *                              },
+    *                              "work": {
+    *                                "name": "Thapagaun, Lalitpur",
+    *                                "latitude": 28.687052088825897,
+    *                                "longitude": 85.30439019937253
+    *                              }
+    *                            },
     *                       "google_id": null,
     *                       "facebook_id": null,
     *                       "username": "sasuke",
@@ -738,47 +704,11 @@ class ApiAuthController extends Controller
     *      ),
     *)
     **/
-    public function upgrade_to_rider(Request $request)  //Authentication token required of user
+    public function upgrade_to_rider(UserToRider $request)  //Authentication token required of user
     {
-        //AUTHENTICATION CHECK
-        $user = null;
-        try{
-            $user = Auth::user();
-        }
-        catch(Exception $e)
-        {
-            $response = ['message' => 'Unauthorized: Login Required!'];
-            return response($response, 401);
-        }
-        if(!$user)
-        {
-            $response = ['message' => 'Unauthorized: Login Required!'];
-            return response($response, 401);
-        }
-
-        $validator = Validator::make($request->all(), [
-            //Rider's fields
-            'rider.experience' => 'required',
-            'rider.trained' => 'nullable',
-
-            //Vehicle's fields
-            'vehicle.vehicle_type_id' => 'required',
-            'vehicle.vehicle_number' => 'required',
-            'vehicle.make_year' => 'nullable',
-            'vehicle.vehicle_color' => 'nullable',
-            'vehicle.brand' => 'nullable',
-            'vehicle.model' => 'nullable',
-
-            //Document's fields
-            'document.document_number' => 'required',
-            'document.type' => 'required',
-            'document.image' => 'required',
-            'document.issue_date' => 'required|date',
-            'document.expiry_date' => 'required|date',
-        ]);
-        if ($validator->fails()) {
-            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
-        }
+        
+        $user = Auth::user();
+    
 
         //dd("RIDER DATA:",$request->all(), $request->all()['document']);
         return DB::transaction(function () use ($request, $user)
@@ -836,18 +766,6 @@ class ApiAuthController extends Controller
     }
 
 
-
-
-    // function uploadFile(Request $request, $user)
-    // {
-    //     $file = $request->file('image');
-    //     $fileName = $this->user->uploadFile($file);
-    //     if (!empty($user->image))
-    //         $this->user->__deleteImages($user);
-
-    //     $data['image'] = $fileName;
-    //     $this->user->updateImage($user->id, $data);
-    // }
     function uploadFile(Request $request, $model_object, $service=null)
     {
         try{

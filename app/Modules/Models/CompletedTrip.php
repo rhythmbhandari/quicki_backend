@@ -21,6 +21,7 @@ class CompletedTrip extends Model
     protected $fillable = ([
         'origin','destination','location_id','profile_img_user','profile_img_rider','status', 'distance','duration','stoppage',
         'user_id','rider_id','booking_id','cancelled_by_type', 'cancelled_by_id' ,'cancel_message', 'start_time','end_time',
+        'price','payment_type',
         'deleted_at','created_at','updated_at'
     ]);
 

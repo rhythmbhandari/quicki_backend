@@ -7,6 +7,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Throwable;
+
+//requests
+use App\Http\Requests\Api\Booking\BookingRequest;
+use App\Http\Requests\Api\Booking\EstimatedPriceRequest;
+use App\Http\Requests\Api\Booking\BookingStatusRequest;
 
 //services
 use App\Modules\Services\Booking\BookingService;
@@ -127,7 +133,7 @@ class BookingController extends Controller
     *         ),
     *      @OA\Response(
     *          response=422,
-    *          description="Validation Fail",
+    *          description="The given data was invalid!",
     *             @OA\MediaType(
      *              mediaType="application/json",
      *          )
@@ -151,23 +157,11 @@ class BookingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BookingRequest $request)
     {
-        //AUTHENTICATION CHECK
-        $user = null;
-        try{
-            $user = Auth::user();
-        }
-        catch(Exception $e)
-        {
-            $response = ['message' => 'Unauthorized: Login Required!'];
-            return response($response, 401);
-        }
-        if(!$user)
-        {
-            $response = ['message' => 'Unauthorized: Login Required!'];
-            return response($response, 401);
-        }
+       
+        $user = Auth::user();
+
 
         //CHECK IF USER HAVE EXISTING ACTIVE BOOKINGS
         $active_bookings = Booking::where('user_id',$user->id)->where(function($query){
@@ -180,35 +174,6 @@ class BookingController extends Controller
         {
             $response = ['message' => 'You already have existing active bookings!'];
             return response($response, 400);
-        }
-
-        //VALIDATIONS
-        $validator = Validator::make($request->all(), [
-           
-            'origin' => 'required|string|max:255',
-            'destination' => 'required|string|max:255',
-            'vehicle_type_id' =>  ['required', function ($attribute, $value, $fail) {
-                $vehicle_type = VehicleType::find($value);
-
-                if ( !$vehicle_type) {
-                    $fail('The vehicle type does not exist!');
-                }
-            },],
-            'distance' => 'required|numeric',
-            'duration' => 'required|numeric',
-            'price' => 'required|numeric',
-            'passenger_number' => 'nullable|integer',
-            
-            //Location
-            'location.latitude_origin'=>'required|numeric',
-            'location.longitude_origin'=>'required|numeric',
-            'location.latitude_destination'=>'required|numeric',
-            'location.longitude_destination'=>'required|numeric',
-
-           
-        ]);
-        if ($validator->fails()) {
-            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
         }
 
 
@@ -331,7 +296,7 @@ class BookingController extends Controller
     *         ),
     *      @OA\Response(
     *          response=422,
-    *          description="Validation Fail",
+    *          description="The given data was invalid!",
     *             @OA\MediaType(
      *              mediaType="application/json",
      *          )
@@ -349,7 +314,7 @@ class BookingController extends Controller
     *      ),
     *)
     **/
-    public function change_status(Request $request)
+    public function change_status(BookingStatusRequest $request)
     {
 
         //AUTHENTICATION CHECK
@@ -369,42 +334,7 @@ class BookingController extends Controller
         }
        // dd($request->all());
 
-        //VALIDATIONS
-        $validator = Validator::make($request->all(), [
-            'booking_id'=> ['required', function ($attribute, $value, $fail) {
-                $booking = Booking::find($value);
-                if ( !$booking) {
-                    $fail('Booking not found!');
-                }
-            },],
-            'new_status'=>'required|string',
-            'optional_data.rider_id'  => 
-                        ['nullable', function ($attribute, $value, $fail) {
-                            $rider = Rider::find($value);
-                            if ( !$rider) {
-                                $fail('Rider not found!');
-                            }
-                        },],
-            'optional_data.cancelled_by_id'  => 
-                        ['nullable', function ($attribute, $value, $fail) {
-                            $user = User::find($value);
-                            if ( !$user) {
-                                $fail('User not found!');
-                            }
-                        },],
-            'optional_data.cancelled_by_type'  =>  
-                        ['nullable', function ($attribute, $value, $fail) {
-                            if ( !($value=="customer" || $value=="rider")) {
-                                $fail('The booking can only be cancelled by "customer" or "rider"!');
-                            }
-                        },],
-            'optional_data.cancel_message'  => 'nullable|string',
-
-            
-        ]);
-        if ($validator->fails()) {
-            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
-        }
+     
 
         //UPDATE STATUS
         return DB::transaction(function () use ($request, $user)
@@ -445,50 +375,45 @@ class BookingController extends Controller
     *   security={{"bearerAuth":{}}},
     *
    *      @OA\Response(
-    *        response=201,
+    *        response=200,
     *        description="Success",
     *          @OA\MediaType(
     *               mediaType="application/json",
     *                @OA\Schema(      
     *                   example={
-    *                           "message":"Booking Successful!",
-    *                           "booking":{
-    *                             "message": "Booking Successful!",
-    *                             "booking": {
-    *                               "origin": "Patan, Lalitpur",
-    *                               "destination": "Kirtipur, Kathmandu",
-    *                               "passenger_number": 2,
-    *                               "vehicle_type_id": 1,
-    *                               "distance": 12,
-    *                               "duration": 20,
-    *                               "stoppage": {
-    *                                 {
-    *                                   "name": "Sanepa, Lalitpur",
-    *                                   "latitude": 27.1234,
-    *                                   "longitude": 85.3434
-    *                                 },
-    *                                 {
-    *                                   "name": "New Baneshwor, Kathmandu",
-    *                                   "latitude": 28.3454,
-    *                                   "longitude": 87.1234
-    *                                 }
-    *                               },
-    *                               "user_id": 3,
-    *                               "updated_at": "2021-11-17T06:46:13.000000Z",
-    *                               "created_at": "2021-11-17T06:46:13.000000Z",
-    *                               "id": 3,
-    *                               "location_id": 3,
-    *                               "location": {
-    *                                 "latitude_origin": 85.123423,
-    *                                 "longitude_origin": 27.123456,
-    *                                 "latitude_destination": 86.12313,
-    *                                 "longitude_destination": 27.234325,
-    *                                 "updated_at": "2021-11-17T06:46:13.000000Z",
-    *                                 "created_at": "2021-11-17T06:46:13.000000Z",
-    *                                 "id": 3
-    *                               }
-    *                             }
-    *                           },
+    *                     "message": "Success!",
+    *                     "booking": {
+    *                       "id": 2,
+    *                       "stoppage": {
+    *                         {
+    *                           "name": "Sanepa, Lalitpur",
+    *                           "latitude": 27.1234,
+    *                           "longitude": 85.3434
+    *                         },
+    *                         {
+    *                           "name": "New Baneshwor, Kathmandu",
+    *                           "latitude": 28.3454,
+    *                           "longitude": 87.1234
+    *                         }
+    *                       },
+    *                       "user_id": 2,
+    *                       "vehicle_type_id": 1,
+    *                       "rider_id": null,
+    *                       "location_id": 2,
+    *                       "start_time": null,
+    *                       "end_time": null,
+    *                       "origin": "Sanepa, Lalitpur",
+    *                       "destination": "New Baneshwor, Kathmandu",
+    *                       "distance": 12,
+    *                       "duration": 20,
+    *                       "passenger_number": 2,
+    *                       "status": "pending",
+    *                       "price": 160,
+    *                       "payment_type": "CASH",
+    *                       "deleted_at": null,
+    *                       "created_at": "2021-11-25T17:17:57.000000Z",
+    *                       "updated_at": "2021-11-25T17:17:57.000000Z"
+    *                     }
     *                   }
     *                 )
     *           )
@@ -496,6 +421,10 @@ class BookingController extends Controller
     *   @OA\Response(
     *      response=403,
     *       description="Forbidden Access!",
+    *   ),
+    *   @OA\Response(
+    *      response=404,
+    *       description="No active bookings found!",
     *   )
     *)
     **/
@@ -510,7 +439,16 @@ class BookingController extends Controller
             return response($response, 403);
         }
 
-        return $this->booking->active_user_booking($user->id);
+        $booking =  $this->booking->active_user_booking($user->id);
+        if($booking)
+        {
+            $response = ['message' => 'Success!', "booking"=>$booking];
+            return response($response, 200);
+        }
+        else{
+            $response = ['message' => 'No active bookings found!'];
+            return response($response, 404);
+        }
     }
 
     /**
@@ -521,7 +459,7 @@ class BookingController extends Controller
     *   security={{"bearerAuth":{}}},
     *
    *      @OA\Response(
-    *        response=201,
+    *        response=200,
     *        description="Success",
     *          @OA\MediaType(
     *               mediaType="application/json",
@@ -572,6 +510,10 @@ class BookingController extends Controller
     *   @OA\Response(
     *      response=403,
     *       description="Forbidden Access!",
+    *   ),
+    *   @OA\Response(
+    *      response=404,
+    *       description="No active bookings found!",
     *   )
     *)
     **/
@@ -586,7 +528,16 @@ class BookingController extends Controller
             return response($response, 403);
         }
 
-        return $this->booking->active_rider_booking($user->rider->id);
+        $booking = $this->booking->active_rider_booking($user->rider->id);
+        if($booking)
+        {
+            $response = ['message' => 'Success!', "booking"=>$booking];
+            return response($response, 200);
+        }
+        else{
+            $response = ['message' => 'No active bookings found!'];
+            return response($response, 404);
+        }
     }
 
 
@@ -594,7 +545,7 @@ class BookingController extends Controller
     * @OA\Post(
     *   path="/api/booking/estimated_price",
     *   tags={"Booking"},
-    *   summary="Estimated Price (Takes => Distance in Km, Duration in seconds and Origin lat and lng values)  ",
+    *   summary="Estimated Price (Takes => Distance in meters, Duration in seconds and Origin lat and lng values)  ",
     *   security={{"bearerAuth":{}}},
     *    @OA\RequestBody(
     *      @OA\MediaType(
@@ -603,7 +554,7 @@ class BookingController extends Controller
     *             example={
     *                 "origin_latitude":27.68716909705845, 
     *                 "origin_longitude":85.3042190788061,
-    *                 "distance":20,
+    *                 "distance":2000,
     *                  "duration":300,
     *               }
     *         )
@@ -621,33 +572,23 @@ class BookingController extends Controller
     *   ),
     *      @OA\Response(
     *          response=422,
-    *          description="Validation Fail",
+    *          description="The given data was invalid!",
     *             @OA\MediaType(
      *           mediaType="application/json",
      *      )
     *      ),
-        *      @OA\Response(
+    *      @OA\Response(
     *          response=500,
     *          description="Internal Server Error",
     *             @OA\MediaType(
-     *           mediaType="application/json",
-     *      )
+    *           mediaType="application/json",
+    *      )
     *      ),
     *)
     **/
-    public function getEstimatedPrice(Request $request)
+    public function getEstimatedPrice(EstimatedPriceRequest $request)
     {
-        //VALIDATIONS
-        $validator = Validator::make($request->all(), [
-    
-            'origin_latitude' => 'required|numeric',
-            'origin_longitude' => 'required|numeric',
-            'distance' => 'required|numeric',
-            'duration' => 'required|numeric',
-        ]);
-        if ($validator->fails()) {
-            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
-        }
+       
         try{
             $estimated_price = $this->booking->get_estimated_price($request->all());
             if($estimated_price)

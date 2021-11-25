@@ -87,7 +87,7 @@ class RiderService extends Service
             //dd($createdUser, 'creating rider user');
             if($createdUser)
             {
-                $data['rider']['user_id'] = $createdUser->id;
+                $data['rider']['user_id'] = intval($createdUser->id);
                 $data['rider']['status'] = isset($data['rider']['status'])?$data['rider']['status']:'in_active';
                 //CREATE RIDER
                 $createdRider = $this->rider->create($data['rider']);
@@ -96,13 +96,13 @@ class RiderService extends Service
                     $createdRider->user->roles()->attach(2);
 
                     //CREATE DOCUMENT
-                    $data['document']['documentable_id'] = $createdRider->id;
+                    $data['document']['documentable_id'] = intval($createdRider->id);
                     $data['document']['documentable_type'] = 'App\Modules\Models\Rider';
                     $createdDocument = $this->document_service->create($data['document']);
                     $createdRider->latest_document =  $createdDocument;
 
                     //CREATE VEHICLE
-                    $data['vehicle']['rider_id'] = $createdRider->id;
+                    $data['vehicle']['rider_id'] = intval($createdRider->id);
                     $createdVehicle = $this->vehicle_service->create($data['vehicle']);
                     $createdRider->vehicle =  $createdVehicle;
 
