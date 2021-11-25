@@ -24,7 +24,10 @@ class VehicleService extends Service
     {
         try {
             
-            $data['status'] = isset($data['status'])?$data['status']:'in_active';
+            $data['status'] = isset($data['status'])?$data['status']:'active';
+
+            $data['rider_id'] = intval($data['rider_id']);
+            $data['vehicle_type_id'] = intval($data['vehicle_type_id']);
 
             //CREATE VEHICLE
             $createdVehicle =  $this->vehicle->create($data);
@@ -39,33 +42,53 @@ class VehicleService extends Service
     }
 
 
+
+
+    public function update($vehicleId,array $data)
+    {
+        try {
+            if(isset($data['vehicle_type_id']))  $data['vehicle_type_id'] = intval($data['vehicle_type_id']);
+            if(isset($data['rider_id']))  $data['rider_id'] = intval($data['rider_id']);
+        
+            $vehicle= Vehicle::findOrFail($vehicleId);
+            $updatedVehicle = $vehicle->update($data);
+            return $vehicle;
+
+        } catch (Exception $e) {
+            //$this->logger->error($e->getMessage());
+            return null;
+        }
+    }
+ 
+
+
     function uploadFile($file)
     {
         if (!empty($file)) {
-            $this->uploadPath = 'uploads/document';
+            $this->uploadPath = 'uploads/vehicle';
             return $fileName = $this->uploadFromAjax($file);
         }
     }
 
-    public function __deleteImages($document)
+    public function __deleteImages($vehicle)
     {
         try {
-            if (is_file($document->image_path))
-                unlink($document->image_path);
+            if (is_file($vehicle->image_path))
+                unlink($vehicle->image_path);
 
-            if (is_file($document->thumbnail_path))
-                unlink($document->thumbnail_path);
+            if (is_file($vehicle->thumbnail_path))
+                unlink($vehicle->thumbnail_path);
         } catch (Exception $e) {
         }
     }
 
-    public function updateImage($documentId, array $data)
+    public function updateImage($vehicleId, array $data)
     {
         try {
-            $document = $this->document->find($documentId);
-            $document = $document->update($data);
+            $vehicle = $this->vehicle->find($vehicleId);
+            $vehicle = $vehicle->update($data);
 
-            return $document;
+            return $vehicle;
         } catch (Exception $e) {
             //$this->logger->error($e->getMessage());
             return false;

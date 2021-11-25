@@ -88,6 +88,14 @@ class UserService extends Service
         try {
         
             $user= User::findOrFail($userId);
+
+            //Cast co-ordinates to double
+            $data['location']['home']['latitude'] = floatval($data['location']['home']['latitude'] );
+            $data['location']['home']['longitude'] = floatval($data['location']['home']['longitude'] );
+            $data['location']['work']['latitude'] = floatval($data['location']['work']['latitude'] );
+            $data['location']['work']['longitude'] = floatval($data['location']['work']['longitude'] );
+            // dd($data);
+
             $updatedUser = $user->update($data);
             
             return $updatedUser;

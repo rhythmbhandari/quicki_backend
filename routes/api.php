@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\Booking\BookingController;
 use App\Http\Controllers\Api\Booking\CompletedTripController;
 use App\Http\Controllers\Api\Review\ReviewController;
 use App\Http\Controllers\Api\Document\DocumentController;
+use App\Http\Controllers\Api\Vehicle\VehicleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,9 +79,10 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->post('/booking/estimated_price', [BookingController::class, 'getEstimatedPrice'])->name('booking.estimated_price');
 
   //---------------------------------------------------------------------------------------------------------
-  //  AVAILABLE AND ONLINE/OFFLINE RIDERS
+  //  AVAILABLE AND ONLINE/OFFLINE RIDERS/USERS
   //---------------------------------------------------------------------------------------------------------
   $router->post('/riders/available', [RiderLocationController::class, 'getAvailableRiders'])->name('rider.available');
+  $router->get('/users/available', [RiderLocationController::class, 'getAvailableUsers'])->name('users.available');
   $router->post('/rider/online', [RiderLocationController::class, 'getRiderOnline'])->name('rider.online');
   $router->post('/rider/offline', [RiderLocationController::class, 'getRiderOffline'])->name('rider.online');
 
@@ -108,8 +110,15 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   //---------------------------------------------------------------------------------------------------------
   $router->post('/document/create', [DocumentController::class, 'store'])->name('document.create');
   $router->post('/document/{document_id}/update', [DocumentController::class, 'update'])->name('document.update');
+  $router->get('/document/{document_id}/details', [DocumentController::class, 'getDocument'])->name('document.details');
 
 
+  //---------------------------------------------------------------------------------------------------------
+  //  VEHICLE
+  //---------------------------------------------------------------------------------------------------------
+  $router->post('/vehicle/create', [VehicleController::class, 'store'])->name('vehicle.create');
+  $router->post('/vehicle/{vehicle_id}/update', [VehicleController::class, 'update'])->name('vehicle.update');
+  $router->get('/vehicle/{vehicle_id}/details', [VehicleController::class, 'getVehicle'])->name('vehicle.details');
 
 
   //---------------------------------------------------------------------------------------------------------

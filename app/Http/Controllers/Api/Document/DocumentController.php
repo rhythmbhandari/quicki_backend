@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 
 //requests
 use App\Http\Requests\Api\Document\DocumentRequest;
-use App\Http\Requests\Api\Document\DocumentUpdateRequest;
+use App\Http\Requests\Api\Document\UpdateDocumentRequest;
 
 //services
 use App\Modules\Services\User\UserService;
@@ -52,7 +52,7 @@ class DocumentController extends Controller
     *             
     *             example={
     *                  "documentable_type":"rider",
-    *                  "documentable_id":"1",
+    *                  "documentable_id":1,
     *                  "type":"license",
     *                  "document_number":"546352",
     *                  "issue_date":"2000/01/01",
@@ -100,30 +100,29 @@ class DocumentController extends Controller
     **/
     function store(DocumentRequest $request)
     {
-        //VALIDATIONS
-        $validator = Validator::make($request->all(), [
-           
-        ]);
-        if ($validator->fails()) {
-            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
-        }
+     
 
         $documentable = null;
         //Return 404 response if the documentable model doesn't exist
         if($request->documentable_type == "rider")
         {
-            $documentable = Rider::findOrFail($request->documentable_id);
+            $documentable = Rider::find($request->documentable_id);
         }
         else if($request->documentable_type == "vehicle")
         {
-            $documentable = Vehicle::findOrFail($request->documentable_id);
+            $documentable = Vehicle::find($request->documentable_id);
         }
         else if($request->documentable_type == "customer" || $request->documentable_type == "user")
         {
-            $documentable = User::findOrFail($request->documentable_id);
+            $documentable = User::find($request->documentable_id);
         }
         else{}
 
+        if(!$documentable)
+        {
+            $response = ['message' => $request->documentable_type.' Model does not exist!'];
+            return response($response, 404);
+        }
         
         //CREATE DOCUMENT
         return DB::transaction(function () use ($request)
@@ -151,6 +150,13 @@ class DocumentController extends Controller
     *   tags={"Document"},
     *   summary="Update Document",
     *   security={{"bearerAuth":{}}},
+    *
+    *         @OA\Parameter(
+    *         name="document_id",
+    *         in="path",
+    *         description="Document ID",
+    *         required=true,
+    *      ),
     *
     *   @OA\RequestBody(
     *      @OA\MediaType(
@@ -203,11 +209,16 @@ class DocumentController extends Controller
     *      ),
     *)
     **/
-    function update(DocumentUpdateRequest $request, $document_id)
+    function update(UpdateDocumentRequest $request, $document_id)
     {
         //dd($request, $document_id);
-        $document = Document::findOrFail($document_id);
+        $document = Document::find($document_id);
 
+        if(!$document)
+        {
+            $response = ['message' => 'Document Not Found!'];
+            return response($response, 404);
+        }
    
     
         //ROLE CHECK FOR RIDER
@@ -228,7 +239,7 @@ class DocumentController extends Controller
                 if ($request->hasFile('image')) {
                     $this->uploadFile($request, $updatedDocument);
                 }
-                $response = ['message' => 'Document updated Successfully!',  "document"=>Document::findOrFail($document_id)];
+                $response = ['message' => 'Document updated Successfully!',  "document"=>$updatedDocument];
                 return response($response, 200);
             }
             return response("Internal Server Error!", 500);
@@ -238,8 +249,62 @@ class DocumentController extends Controller
     }
 
 
+    /**
+    * @OA\Get(
+    *   path="/api/document/{document_id}/details",
+    *   tags={"Document"},
+    *   summary="Get Document",
+    *   security={{"bearerAuth":{}}},
+    *
+    *         @OA\Parameter(
+    *         name="document_id",
+    *         in="path",
+    *         description="Document ID",
+    *         required=true,
+    *      ),
+    *
+    *
+    *      @OA\Response(
+    *        response=200,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                   @OA\Schema(      
+    *                   example={"message":"Success!","document":{"id":2,"documentable_type":"rider","documentable_id":1,"type":"citizenship","document_number":"456457","issue_date":"2000-01-03","expiry_date":null,"verified_at":null,"reason":"pending","image":null,"deleted_at":null,"created_at":"2021-11-18T06:38:39.000000Z","updated_at":"2021-11-18T06:43:32.000000Z","thumbnail_path":"assets\/media\/noimage.png","image_path":"assets\/media\/noimage.png"}}
+    *                 )
+    *           )
+    *      ),
+    *
+     *      @OA\Response(
+    *          response=403,
+    *          description="Forbidden Access",
+    *      ),
+     *      @OA\Response(
+    *          response=404,
+    *          description="Document Not Found!",
+    *      ),
 
-    //Image for user 
+    *)
+    **/
+    function getDocument($document_id)
+    {
+        $document = Document::find($document_id);
+
+        if(!$document)
+        {
+            $response = ['message' => 'Document Not Found!'];
+            return response($response, 404);
+        }
+        else {
+            $response = ['message' => 'Success!',  "document"=>$document];
+            return response($response, 200);
+        }
+   
+    }
+
+
+
+    //Image for document 
     function uploadFile(Request $request, $document)
     {
         $file = $request->file('image');

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 //requests
 use App\Http\Requests\Api\User\UserProfileRequest;
-use App\Http\Requests\Api\User\UpdateUserLocationRequest;
+use App\Http\Requests\Api\Location\UpdateUserLocationRequest;
 
 //services
 use App\Modules\Services\User\UserService;
@@ -380,11 +380,11 @@ class UserController extends Controller
        // dd('validator', $request->all());
         $user = Auth::user();
      
-
        // dd('validator', $request->all());
 
-        $updatedUserLocation = $this->user->update($user->id,$request->all());
-    
+      //
+        $updatedUserLocation = $this->user->update_location($user->id,$request->all());
+       
         if($updatedUserLocation)
         {
             if ($request->hasFile('image')) {
