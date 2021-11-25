@@ -46,7 +46,30 @@ class BookingService extends Service
             //default status = pending
             
             $data['status'] = isset($data['status'])?$data['status']:'pending';
+
+            //Parse the possible string values of latitudes and longitudes to double/float
+            $data['location']['latitude_origin'] = floatval( $data['location']['latitude_origin'] );
+            $data['location']['longitude_origin'] = floatval( $data['location']['longitude_origin'] );
+            $data['location']['latitude_destination'] = floatval( $data['location']['latitude_destination'] );
+            $data['location']['longitude_destination'] = floatval( $data['location']['longitude_destination'] );
+
+            if(isset($data['stoppage']) && count($data['stoppage'])>0 )
+            {
+                for($i=0; $i < count($data['stoppage']); $i++ )
+                {
+                    $data['stoppage'][$i]['latitude'] = floatval( $data['stoppage'][$i]['latitude'] );
+                }
+            }
+
+            //parse distance and duration to integer
+            $data['distance'] = intval( $data['distance'] );
+            $data['duration'] = intval( $data['duration'] );
+
+           // dd("booking data", $data);
+
+
             $createdBooking = $this->booking->create($data);
+
             if($createdBooking)
             {
                 //CREATE LOCATION
@@ -73,7 +96,7 @@ class BookingService extends Service
     {
        // dd("DATA: ",$data['optional_data']);
         try{
-            $booking_id = $data['booking_id'];
+            $booking_id = intval($data['booking_id']);
             $new_status = $data['new_status'];
 
             $booking = Booking::findOrFail($booking_id);
@@ -83,7 +106,7 @@ class BookingService extends Service
             {    
                 if($new_status == "accepted")
                 {
-                    $booking->rider_id = $data['optional_data']['rider_id'];
+                    $booking->rider_id = intval($data['optional_data']['rider_id']);
                     if($booking->save())
                         return $booking;
                 }
@@ -107,7 +130,7 @@ class BookingService extends Service
 
                     //CREATE COMPLTED TRIP RECORD for COMPLETED STATUS
                     $cancelled_trip_data = $booking->toArray();
-                    $cancelled_trip_data['booking_id'] = $booking->id;
+                    $cancelled_trip_data['booking_id'] = intval($booking->id);
                     // $data['profile_img_rider'] = "";
                     // $data['profile_img_user'] = "";
                     $booking->createdCompletedTrip = $this->completed_trip_service->create($cancelled_trip_data);
@@ -127,12 +150,12 @@ class BookingService extends Service
 
                     //CREATE COMPLTED TRIP RECORD for CANCELLED STATUS
                     $cancelled_trip_data = $booking->toArray();
-                    $cancelled_trip_data['booking_id'] = $booking->id;
+                    $cancelled_trip_data['booking_id'] = intval($booking->id);
                    // $data['profile_img_rider'] = "";
                    // $data['profile_img_user'] = "";
                    
                     $cancelled_trip_data['cancelled_by_id'] = 
-                    isset($data['optional_data']['cancelled_by_id']) ? $data['optional_data']['cancelled_by_id'] : Auth::user()->id ;
+                    isset($data['optional_data']['cancelled_by_id']) ? intval($data['optional_data']['cancelled_by_id']) : intval(Auth::user()->id) ;
                     $cancelled_trip_data['cancelled_by_type'] =
                     isset($data['optional_data']['cancelled_by_type']) ? $data['optional_data']['cancelled_by_type'] : "customer";
                     $cancelled_trip_data['cancel_message'] = 
@@ -164,7 +187,7 @@ class BookingService extends Service
         }
         catch(Exception $e)
         {
-            return NULL;
+            return null;
         }
     }
 
@@ -180,7 +203,7 @@ class BookingService extends Service
         }
         catch(Exception $e)
         {
-            return NULL;
+            return null;
         }
     }
     
@@ -207,6 +230,8 @@ class BookingService extends Service
 
     public function calculateEstimatedPrice($origin_latitude, $origin_longitude, $vehicle_type_id, $distance, $duration)
     {
+        $distance = $distance/1000 ;        //convert the distance in meters to kilometers
+
         $estimated_price = [];
         $vehicle_type = VehicleType::find($vehicle_type_id);
        
@@ -246,21 +271,16 @@ class BookingService extends Service
         $currentTime = Carbon::now();
         // $shift = 
         $shifts = Shift::where('vehicle_type_id',$vehicle_type_id)->where('status','active')->get();
-        // ->filter(function($shift) {
-        //         $startTime = Carbon::createFromFormat('H', $shift->time_from);
-        //         $endTime = Carbon::createFromFormat('H',  $shift->time_to);
-        //         if($currentTime->between($startTime, $endTime, true))   return true;
-        //         else return false;
-        //     })->first();
+    
         $shift = $shifts->filter(function($shift) {
                     $startTime = Carbon::createFromFormat('H', $shift->time_from);
                     $endTime = Carbon::createFromFormat('H',  $shift->time_to);
                     if($currentTime->between($startTime, $endTime, true))   return true;
                     else return false;
-                }); //->first();
-        //dd($shift);
+                }); 
+        
         $shift_rate = isset($shift->rate)?$shift->rate:1;
-        // $shift_surge = $total_price * $shift_rate/100 ;
+       
 
         $estimated_price['vehicle_type_id'] = $vehicle_type->id;
         $estimated_price['vehicle_type_name'] = $vehicle_type->name;
@@ -293,6 +313,8 @@ class BookingService extends Service
         $estimated_price['price_breakdown']['total_price'] = 
         ($estimated_price['price_breakdown']['price_after_duration'] < $estimated_price['price_breakdown']['minimum_charge'])
         ? $estimated_price['price_breakdown']['minimum_charge'] : $estimated_price['price_breakdown']['price_after_duration'];
+
+        $estimated_price['price_breakdown']['total_price'] = round( $estimated_price['price_breakdown']['total_price']);
 
         return $estimated_price;
     }

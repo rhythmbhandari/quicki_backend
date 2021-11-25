@@ -40,16 +40,15 @@ class CreateBookingsTable extends Migration
 
             $table->string('origin');
             $table->string('destination');
-            $table->double('distance');     //in meters
-            $table->double('duration');     //in seconds
+            $table->integer('distance');     //in meters
+            $table->integer('duration');     //in seconds
             $table->integer('passenger_number')->nullable()->default(1);
-            // $table->string('name')->nullable();
-            // $table->string('phone_number')->nullable();
+
 
             $table->enum('status',['pending','accepted','running','completed','cancelled'])->default(null);
             
          
-            $table->double('price')->default(0);
+            $table->integer('price')->default(0);
             $table->string('payment_type')->nullable()->default('CASH');
 
 

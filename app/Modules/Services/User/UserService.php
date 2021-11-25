@@ -75,7 +75,7 @@ class UserService extends Service
             }
             //TODO: case for phone number change
 
-            return $updatedUser;
+            return $user;
         } catch (Exception $e) {
             //$this->logger->error($e->getMessage());
             return null;

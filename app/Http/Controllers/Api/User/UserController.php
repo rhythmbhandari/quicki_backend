@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
+//requests
+use App\Http\Requests\Api\User\UserProfileRequest;
+use App\Http\Requests\Api\User\UpdateUserLocationRequest;
+
 //services
 use App\Modules\Services\User\UserService;
 
@@ -77,8 +81,96 @@ class UserController extends Controller
     *   )
     *)
     **/
-    public function getDetails(){
-        $user = Auth::user();
+        /**
+    * @OA\Get(
+    *   path="/api/user/{user_id}/details",
+    *   tags={"Details"},
+    *   summary="User Details",
+    *   security={{"bearerAuth":{}}},
+    *
+    *      @OA\Parameter(
+    *         name="user_id",
+    *         in="path",
+    *         description="User ID",
+    *         required=true,
+    *      ),
+    * 
+    *   @OA\Response(
+    *      response=200,
+    *       description="Success",
+    *      @OA\MediaType(
+    *           mediaType="application/json",
+    *           @OA\Schema(      
+    *             example=
+    *             {
+    *               "message": "Success!",
+    *               "user": {
+    *                 "id": 4,
+    *                 "slug": "gintama-d-luffy",
+    *                 "first_name": "Gintama",
+    *                 "middle_name": "D.",
+    *                 "last_name": "Luffy",
+    *                 "image": "file()",
+    *                 "dob": "2000-01-01",
+    *                 "gender": null,
+    *                "location": {
+    *                     "home": {
+    *                       "name": "Chapagaun, Kathmandu",
+    *                       "latitude": 27.691153232923103,
+    *                       "longitude": 86.33177163310808
+    *                     },
+    *                     "work": {
+    *                       "name": "Thapagaun, Lalitpur",
+    *                       "latitude": 28.687052088825897,
+    *                       "longitude": 85.30439019937253
+    *                     }
+    *                   },
+    *                 "google_id": null,
+    *                 "facebook_id": null,
+    *                 "username": null,
+    *                 "phone": "9816810976",
+    *                 "email": "gintama@gmail.com",
+    *                 "status": null,
+    *                 "email_verified_at": null,
+    *                 "last_logged_in": null,
+    *                 "no_of_logins": null,
+    *                 "avatar": null,
+    *                 "deleted_at": null,
+    *                 "last_updated_by": null,
+    *                 "last_deleted_by": null,
+    *                 "created_at": "2021-11-16T08:09:03.000000Z",
+    *                 "updated_at": "2021-11-16T08:09:03.000000Z",
+    *                 "name": "Gintama D. Luffy"
+    *               }
+    *             }
+    *           )
+    *      )
+    *   ),
+    *   @OA\Response(
+    *      response=403,
+    *       description="Forbidden Access!",
+    *   ),
+    *   @OA\Response(
+    *      response=404,
+    *       description="User Not Found!",
+    *   )
+    *)
+    **/
+    public function getDetails($user_id=null)
+    {        
+        // $user = ($user_id != null) ? User::findOrFail($user_id) : Auth::user();
+
+        $user = null;
+        if($user_id == null)
+            $user = Auth::user();
+        else{
+            $user = User::find($user_id);
+            if(!$user)  {
+                $response = ['message' => 'User not found!'];
+                return response($response, 404);
+            }
+        }
+
 
         //ROLE CHECK FOR CUSTOMER
         // if( ! $this->user->hasRole($user, 'customer') )
@@ -136,6 +228,18 @@ class UserController extends Controller
     *                                 "image": "file()",
     *                                 "dob": "2000-01-01",
     *                                 "gender": null,
+    *                                  "location": {
+    *                                       "home": {
+    *                                         "name": "Chapagaun, Kathmandu",
+    *                                         "latitude": 27.691153232923103,
+    *                                         "longitude": 86.33177163310808
+    *                                       },
+    *                                       "work": {
+    *                                         "name": "Thapagaun, Lalitpur",
+    *                                         "latitude": 28.687052088825897,
+    *                                         "longitude": 85.30439019937253
+    *                                       }
+    *                                     },
     *                                 "google_id": null,
     *                                 "facebook_id": null,
     *                                 "username": "luffy",
@@ -179,30 +283,9 @@ class UserController extends Controller
     *      ),
     *)
     **/
-    public function updateProfile(Request $request)
+    public function updateProfile(UserProfileRequest $request)
     {
         $user = Auth::user();
-
-        //VALIDATIONS
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|max:255',
-            'middle_name' => 'nullable|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-            'username' => 'nullable|string|max:255|unique:users,username,'.$user->id,
-            'email' => 'nullable|string|email|max:255|unique:users,email,'.$user->id,
-            'dob' => 'nullable',
-            'gender' => 'nullable',
-            //'password' => 'nullable|string|min:6|confirmed',
-           // 'phone' => 'nullable|string|min:10|unique:users,phone,'.$user->id,
-          //  'dob' => 'nullable',
-          //  'gender' => 'nullable',
-          //  'google_id' => 'nullable|unique:users',
-          //  'facebook_id' => 'nullable|unique:users'
-        ]);
-        if ($validator->fails()) {
-            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
-        }
 
         //ROLE CHECK FOR CUSTOMER
         if( ! $this->user->hasRole($user, 'customer') )
@@ -221,7 +304,7 @@ class UserController extends Controller
                 if ($request->hasFile('image')) {
                     $this->uploadFile($request, $updatedUser);
                 }
-                $response = ['message' => 'User Profile Updated Successful!',  "user"=>Auth::user()];
+                $response = ['message' => 'User Profile Updated Successful!',  "user"=>$updatedUser];
                 return response($response, 200);
             }
             return response("Internal Server Error!", 500);
@@ -292,37 +375,13 @@ class UserController extends Controller
     *      ),
     *)
     **/
-    function update_location(Request $request)
+    function update_location(UpdateUserLocationRequest $request)
     {
        // dd('validator', $request->all());
         $user = Auth::user();
-        //VALIDATIONS
-        $validator = Validator::make($request->all(), [
-            
-            'location.home.name' => 'required_with:location.home.latitude,location.home.latitude|string|max:255',
-            'location.home.latitude' => 'required_with:location.home.longitude,location.home.name|numeric',
-            'location.home.longitude' => 'required_with:location.home.latitude,location.home.name|numeric',
+     
 
-            'location.work.name' => 'required_with:location.work.latitude,location.work.latitude|string|max:255',
-            'location.work.latitude' => 'required_with:location.work.longitude,location.work.name|numeric',
-            'location.work.longitude' => 'required_with:location.work.latitude,location.work.name|numeric',
-
-        ],
-        [
-            'location.home.name.required' => 'Home address name is required!',
-            'location.home.latitude.required' => 'Home latitude is required!',
-            'location.home.longitude.required' => 'Home longitude is required!',
-
-            'location.work.name.required' => 'Work address name is required!',
-            'location.work.latitude.required' => 'Work address name is required!',
-            'location.work.longitude.required' => 'Work address name is required!',
-        ]
-        );
-        if ($validator->fails()) {
-            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
-        }
-
-        dd('validator', $request->all());
+       // dd('validator', $request->all());
 
         $updatedUserLocation = $this->user->update($user->id,$request->all());
     

@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
+//requests
+use App\Http\Requests\Api\Document\DocumentRequest;
+use App\Http\Requests\Api\Document\DocumentUpdateRequest;
 
 //services
 use App\Modules\Services\User\UserService;
@@ -95,34 +98,11 @@ class DocumentController extends Controller
     *      ),
     *)
     **/
-    function store(Request $request)
+    function store(DocumentRequest $request)
     {
         //VALIDATIONS
         $validator = Validator::make($request->all(), [
-            'documentable_type' => //allowed
-                ['required', function ($attribute, $value, $fail) {
-                            if($value == "rider")
-                            {
-                               $value = "App\Modules\Models\Rider";
-                            }
-                            else if($value == "vehicle")
-                            {
-                                $value = "App\Modules\Models\Vehicle";
-                            }
-                            else if($value == "customer" || $value == "user")
-                            {
-                                $value = "App\Modules\Models\User";
-                            }
-                            else{
-                                $fail('Invalid value given for the documentable type! Acceptable values  are user, rider, vehicle or customer!');
-                            }
-                        },],
-            'documentable_id' => 'required|integer', 
-            'type' => 'required|string|max:255',        //bluebook, license, passport, citizenship, etc
-            'document_number' => 'required|string|max:255',
-            'issue_date' => 'nullable|date|max:255',
-            'expiry_date' => 'nullable|date|max:255',
-            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+           
         ]);
         if ($validator->fails()) {
             return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
@@ -223,22 +203,12 @@ class DocumentController extends Controller
     *      ),
     *)
     **/
-    function update(Request $request, $document_id)
+    function update(DocumentUpdateRequest $request, $document_id)
     {
         //dd($request, $document_id);
         $document = Document::findOrFail($document_id);
 
-        //VALIDATIONS
-        $validator = Validator::make($request->all(), [
-            'type' => 'required|string|max:255',        //bluebook, license, passport, citizenship, etc
-            'document_number' => 'required|string|max:255',
-            'issue_date' => 'required|date|max:255',
-            'expiry_date' => 'required|date|max:255',
-            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-        ]);
-        if ($validator->fails()) {
-            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
-        }
+   
     
         //ROLE CHECK FOR RIDER
         // if( ! $this->user_service->hasRole($user, 'rider') )
