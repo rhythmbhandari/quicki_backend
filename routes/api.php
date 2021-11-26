@@ -119,6 +119,7 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->post('/vehicle/create', [VehicleController::class, 'store'])->name('vehicle.create');
   $router->post('/vehicle/{vehicle_id}/update', [VehicleController::class, 'update'])->name('vehicle.update');
   $router->get('/vehicle/{vehicle_id}/details', [VehicleController::class, 'getVehicle'])->name('vehicle.details');
+  $router->get('/rider/vehicle_details', [VehicleController::class, function(){return response(['a'=>'b'],500);}])->name('rider.vehicle.details');
 
 
   //---------------------------------------------------------------------------------------------------------

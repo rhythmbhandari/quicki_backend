@@ -64,6 +64,10 @@ class BookingService extends Service
             //parse distance and duration to integer
             $data['distance'] = intval( $data['distance'] );
             $data['duration'] = intval( $data['duration'] );
+            $data['price'] = intval( $data['price'] );
+            $data['location_id'] =intval( $data['location_id'] );
+            $data['user_id'] =intval( $data['user_id'] );
+            $data['rider_id'] = isset($data['rider_id']) ? intval( $data['rider_id'] ) : null  ;
 
            // dd("booking data", $data);
 
@@ -182,7 +186,7 @@ class BookingService extends Service
                 $query->where('status','pending')
                 ->orWhere('status','accepted')
                 ->orWhere('status','running');
-            })->first();
+            })->with('location')->first();
             return $booking;
         }
         catch(Exception $e)
@@ -198,7 +202,7 @@ class BookingService extends Service
             $booking = $this->booking->where('rider_id',$riderId)->where(function($query){
                 $query->where('status','accepted')
                 ->orWhere('status','running');
-            })->first();
+            })->with('location')->first();
             return $booking;
         }
         catch(Exception $e)
