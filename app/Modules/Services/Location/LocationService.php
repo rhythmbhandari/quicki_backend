@@ -24,6 +24,12 @@ class LocationService extends Service
     function create(array $data)
     {
         try{
+            $data['latitude_origin'] = floatval($data['latitude_origin']);
+            $data['longitude_origin'] = floatval($data['longitude_origin']);
+
+            $data['latitude_destination'] = floatval($data['latitude_destination']);
+            $data['longitude_destination'] = floatval($data['longitude_destination']);
+
             $createdLocation = $this->location->create($data);
             if($createdLocation)
             {
