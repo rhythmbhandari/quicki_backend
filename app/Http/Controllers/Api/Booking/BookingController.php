@@ -310,7 +310,7 @@ class BookingController extends Controller
     *      ),
     *       @OA\Response(
     *         response=404,
-    *         description="No Record found!"
+    *         description="No Active booking found!"
     *      ),
     *)
     **/
@@ -334,11 +334,22 @@ class BookingController extends Controller
         }
        // dd($request->all());
 
+       $booking = Booking::find($request->booking_id);
+       if($booking)
+       {
+           if($booking->status == "completed" || $booking->status == "cancelled")
+           {
+            $response = ['message' => 'No active booking found!'];
+            return response($response, 404);
+           }
+       }
      
 
         //UPDATE STATUS
         return DB::transaction(function () use ($request, $user)
         {
+
+
             $updatedBooking = $this->booking->update_status($request->all());
             if($updatedBooking)
             {
@@ -561,8 +572,8 @@ class BookingController extends Controller
     *         mediaType="application/json",
     *         @OA\Schema(
     *             example={
-    *                 "origin_latitude":27.68716909705845, 
-    *                 "origin_longitude":85.3042190788061,
+    *                 "origin_latitude":27.68716904, 
+    *                 "origin_longitude":85.3042161,
     *                 "distance":2000,
     *                  "duration":300,
     *               }

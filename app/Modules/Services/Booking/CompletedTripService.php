@@ -28,11 +28,18 @@ class CompletedTripService extends Service
             $data['user_id'] = intval($data['user_id']);
             $data['rider_id'] = ( isset($data['rider_id']) && !empty($data['rider_id']) ) ? intval($data['rider_id']) : null  ;
             $data['booking_id'] = intval($data['booking_id']);
-            $data['location_id'] = intval($data['user_id']);
+            $data['location_id'] = intval($data['location_id']);
             $data['passenger_number'] =   ( isset($data['passenger_number']) && !empty($data['passenger_number']) ) ?  intval($data['passenger_number']) : null;
             $data['distance'] = intval($data['distance']);
             $data['duration'] = intval($data['duration']);
-            $data['cancelled_by_id'] =  ( isset($data['cancelled_by_id']) && !empty($data['cancelled_by_id']) ) ? intval($data['cancelled_by_id']) : null;
+            // $data['cancelled_by_id'] =  ( isset($data['cancelled_by_id']) && !empty($data['cancelled_by_id']) ) ? intval($data['cancelled_by_id']) : null;
+           
+            $data['optional_data']['cancelled_by_id'] = isset($data['optional_data']['cancelled_by_id']) ? intval($data['optional_data']['cancelled_by_id']) : null ;
+            
+            $data['optional_data']['cancelled_by_type'] = isset($data['optional_data']['cancelled_by_type']) ? $data['optional_data']['cancelled_by_type'] : "customer";
+           
+            $data['optional_data']['cancel_message'] = isset($data['optional_data']['cancel_message']) ? $data['optional_data']['cancel_message'] : "" ;
+            
             $createdCompltedTrip =  $this->completed_trip->create($data);
             if($createdCompltedTrip)
                 return $createdCompltedTrip;
