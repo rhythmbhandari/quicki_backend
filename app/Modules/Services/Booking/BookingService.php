@@ -135,13 +135,13 @@ class BookingService extends Service
                     //CREATE COMPLTED TRIP RECORD for COMPLETED STATUS
                     $cancelled_trip_data = $booking->toArray();
                     $cancelled_trip_data['booking_id'] = intval($booking->id);
-                    // $data['profile_img_rider'] = "";
-                    // $data['profile_img_user'] = "";
+                    
                     $booking->createdCompletedTrip = $this->completed_trip_service->create($cancelled_trip_data);
                     return $booking;
                 }
                 else if($new_status == "cancelled")
                 {
+                  
                     if(!$booking->start_time)
                     {
                         $booking->start_time = Carbon::now();
@@ -155,15 +155,23 @@ class BookingService extends Service
                     //CREATE COMPLTED TRIP RECORD for CANCELLED STATUS
                     $cancelled_trip_data = $booking->toArray();
                     $cancelled_trip_data['booking_id'] = intval($booking->id);
-                   // $data['profile_img_rider'] = "";
-                   // $data['profile_img_user'] = "";
+                    
+
+                    // $cancelled_trip_data['rider_id'] = isset($cancelled_trip_data['rider_id']) ? intval($cancelled_trip_data['rider_id']) : null;
+                    // $cancelled_trip_data['location_id'] = isset($cancelled_trip_data['location_id']) ? intval($cancelled_trip_data['location_id']) : null;
+                    // $cancelled_trip_data['price'] = isset($cancelled_trip_data['price']) ? intval($cancelled_trip_data['price']) : null;
+                    // $cancelled_trip_data['distance'] = isset($cancelled_trip_data['distance']) ? intval($cancelled_trip_data['distance']) : null;
+                    // $cancelled_trip_data['duration'] = isset($cancelled_trip_data['duration']) ? intval($cancelled_trip_data['duration']) : null;
                    
-                    $cancelled_trip_data['cancelled_by_id'] = 
-                    isset($data['optional_data']['cancelled_by_id']) ? intval($data['optional_data']['cancelled_by_id']) : intval(Auth::user()->id) ;
-                    $cancelled_trip_data['cancelled_by_type'] =
-                    isset($data['optional_data']['cancelled_by_type']) ? $data['optional_data']['cancelled_by_type'] : "customer";
-                    $cancelled_trip_data['cancel_message'] = 
-                    isset($data['optional_data']['cancel_message']) ? $data['optional_data']['cancel_message'] : "" ;
+                    // $cancelled_trip_data['cancelled_by_id'] = 
+                    // isset($data['optional_data']['cancelled_by_id']) ? intval($data['optional_data']['cancelled_by_id']) : intval(Auth::user()->id) ;
+                    // $cancelled_trip_data['cancelled_by_type'] =
+                    // isset($data['optional_data']['cancelled_by_type']) ? $data['optional_data']['cancelled_by_type'] : "customer";
+                    // $cancelled_trip_data['cancel_message'] = 
+                    // isset($data['optional_data']['cancel_message']) ? $data['optional_data']['cancel_message'] : "" ;
+
+                    
+                    // dd("cancelled",$cancelled_trip_data);
 
                     $booking->createdCompletedTrip = $this->completed_trip_service->create($cancelled_trip_data);
                     return $booking;
