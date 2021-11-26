@@ -65,7 +65,7 @@ class BookingService extends Service
             $data['distance'] = intval( $data['distance'] );
             $data['duration'] = intval( $data['duration'] );
             $data['price'] = intval( $data['price'] );
-            $data['location_id'] =intval( $data['location_id'] );
+           // $data['location_id'] =intval( $data['location_id'] );
             $data['user_id'] =intval( $data['user_id'] );
             $data['rider_id'] = isset($data['rider_id']) ? intval( $data['rider_id'] ) : null  ;
 
@@ -80,7 +80,7 @@ class BookingService extends Service
                 $createdLocation = $this->location_service->create($data['location']);
                 if($createdLocation)
                 {   
-                    $createdBooking->location_id = $createdLocation->id;
+                    $createdBooking->location_id = intval($createdLocation->id);
                     $createdBooking->save();
                     $createdBooking->location = $createdLocation;
                     return $createdBooking;
