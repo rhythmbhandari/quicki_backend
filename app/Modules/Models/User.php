@@ -42,10 +42,28 @@ class User extends Authenticatable
      */
     protected $fillable = [ 'first_name', 'middle_name','last_name',   'email', 'username', 'password', 'slug', 'status',
     'image','phone','email_verified_at','no_of_logins','last_logged_in','avatar','dob',
-    'google_id','facebook_id', 'location','location',
+    'google_id','facebook_id', 'location','location','image',
     'created_at','updated_at','deleted_at', 'last_updated_by','last_deleted_by'
     ];
-    protected $appends = [  'name',  ];
+    protected $appends = [  'name',   'thumbnail_path', 'image_path' ];
+
+
+    function getImagePathAttribute()
+    {
+        if ($this->image)
+            return $this->path . '/' . $this->type . '/' . $this->image;
+        else
+            return 'assets/media/noimage.png';
+    }
+
+    function getThumbnailPathAttribute()
+    {
+        if ($this->image)
+            return $this->path . '/' . $this->type . '/thumb/' . $this->image;
+        else
+            return 'assets/media/noimage.png';
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.

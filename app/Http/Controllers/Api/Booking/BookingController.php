@@ -383,12 +383,12 @@ class BookingController extends Controller
     *                   example={
     *                     "message": "Success!",
     *                     "booking": {
-    *                       "id": 2,
+    *                       "id": 1,
     *                       "stoppage": {
     *                         {
     *                           "name": "Sanepa, Lalitpur",
     *                           "latitude": 27.1234,
-    *                           "longitude": 85.3434
+    *                           "longitude": "85.3434"
     *                         },
     *                         {
     *                           "name": "New Baneshwor, Kathmandu",
@@ -396,10 +396,10 @@ class BookingController extends Controller
     *                           "longitude": 87.1234
     *                         }
     *                       },
-    *                       "user_id": 2,
+    *                       "user_id": 3,
     *                       "vehicle_type_id": 1,
     *                       "rider_id": null,
-    *                       "location_id": 2,
+    *                       "location_id": 1,
     *                       "start_time": null,
     *                       "end_time": null,
     *                       "origin": "Sanepa, Lalitpur",
@@ -411,8 +411,17 @@ class BookingController extends Controller
     *                       "price": 160,
     *                       "payment_type": "CASH",
     *                       "deleted_at": null,
-    *                       "created_at": "2021-11-25T17:17:57.000000Z",
-    *                       "updated_at": "2021-11-25T17:17:57.000000Z"
+    *                       "created_at": "2021-11-25T19:07:34.000000Z",
+    *                       "updated_at": "2021-11-25T19:07:34.000000Z",
+    *                       "location": {
+    *                         "id": 1,
+    *                         "longitude_origin": 27.123456,
+    *                         "latitude_origin": 85.123423,
+    *                         "longitude_destination": 27.234325,
+    *                         "latitude_destination": 86.12313,
+    *                         "created_at": "2021-11-25T19:07:34.000000Z",
+    *                         "updated_at": "2021-11-25T19:07:34.000000Z"
+    *                       }
     *                     }
     *                   }
     *                 )
