@@ -12,6 +12,14 @@ class Location extends Model
 {
     use HasFactory;
 
+
+    protected $casts = [
+        'latitude_origin' => 'float',
+        'longitude_origin' => 'float',
+        'longitude_destination' => 'float',
+        'latitude_destination' => 'float',
+    ];
+
      /**
      * The attributes that are mass assignable.
      *

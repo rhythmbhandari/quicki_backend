@@ -12,6 +12,13 @@ class Shift extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'vehicle_type_id' => 'integer',
+        'rate' => 'float',
+        'time_from' => 'integer',
+        'time_to' => 'integer',
+    ];
+
     protected $fillable = ([
         'vehicle_type_id', 'title', 'rate', 'time_from', 'time_to', 'status'
     ]);

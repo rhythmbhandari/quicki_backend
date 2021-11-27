@@ -15,6 +15,13 @@ class RiderLocation extends Model
 
     protected $TIME_DIFFERENCE = 60;
 
+    protected $casts = [
+        'longitude' => 'float',
+        'latitude' => 'float',
+        'rider_id' => 'integer',
+    ];
+
+
     protected $fillable = ([
         'longitude','latitude','rider_id','status',
         'created_at','updated_at'

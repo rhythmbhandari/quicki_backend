@@ -19,6 +19,9 @@ class Rider extends Model
     use HasFactory, SoftDeletes;
     protected $path = 'uploads/rider';
 
+    protected $casts = [
+        'user_id' => 'integer',
+    ];
 
     protected $fillable = [  'user_id','experience', 'trained','status', 
     'approved_at', 'created_at','deleted_at','updated_at','last_updated_by','last_deleted_by' ];

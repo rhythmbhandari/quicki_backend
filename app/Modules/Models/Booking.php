@@ -14,7 +14,19 @@ class Booking extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $casts = ['stoppage'=>'array'];
+    protected $casts = [
+        'stoppage'=>'array', 
+        'stoppage.latitude' => 'float',
+        'stoppage.longitude' => 'float',
+        'user_id'=>'integer', 
+        'rider_id'=>'integer',
+        'vehicle_type_id'=>'integer',
+        'location_id'=>'integer',
+        'passenger_number'=>'integer',
+        'distance'=>'integer',
+        'duration'=>'integer',
+        'price'=>'integer'
+    ];
 
     protected $fillable = [
         'origin','destination','distance','duration','price','passenger_number', //'name','phone_number',

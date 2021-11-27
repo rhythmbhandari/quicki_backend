@@ -26,6 +26,11 @@ class Vehicle extends Model
         ];
     }
 
+    protected $casts = [
+        'vehicle_type_id' => 'integer',
+        'rider_id' => 'integer'
+    ];
+
      /**
      * The attributes that are mass assignable.
      *

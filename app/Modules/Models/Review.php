@@ -14,6 +14,13 @@ class Review extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $casts = [
+        'booking_id' => 'integer',
+        'rider_id' => 'integer',
+        'user_id' => 'integer',
+        'rate' => 'integer'
+    ];
+
     protected $fillable = [
         'booking_id','rider_id','user_id', 'reviewed_by_role',   'rate','ride_date','comment',
         'deleted_at', 'created_at', 'updated_at'
