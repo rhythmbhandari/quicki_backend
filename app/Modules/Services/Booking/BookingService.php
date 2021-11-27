@@ -58,6 +58,7 @@ class BookingService extends Service
                 for($i=0; $i < count($data['stoppage']); $i++ )
                 {
                     $data['stoppage'][$i]['latitude'] = floatval( $data['stoppage'][$i]['latitude'] );
+                    $data['stoppage'][$i]['longitude'] = floatval( $data['stoppage'][$i]['longitude'] );
                 }
             }
 

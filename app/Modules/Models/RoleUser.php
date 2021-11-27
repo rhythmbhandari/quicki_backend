@@ -13,6 +13,10 @@ class RoleUser extends Model
 {
     use HasFactory;    
     protected $table = 'role_user';
+    protected $casts = [
+        'role_id' => 'integer',
+        'user_id' => 'integer'
+    ];
 
     protected $fillable = ['user_id', 'role_id',  'created_at','updated_at'];
     protected $appends = [];

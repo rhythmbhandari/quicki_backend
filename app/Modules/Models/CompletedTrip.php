@@ -16,7 +16,15 @@ class CompletedTrip extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $casts = ['stoppage'=>'array'];
+    protected $casts = [
+        'stoppage'=>'array',
+        'location_id'=>'integer',
+        'user_id'=>'integer',
+        'rider_id'=>'integer',
+        'booking_id'=>'integer',
+        'cancelled_by_id'=>'integer',
+        'price'=>'integer',
+    ];
     
     protected $fillable = ([
         'origin','destination','location_id','profile_img_user','profile_img_rider','status', 'distance','duration','stoppage',

@@ -12,6 +12,10 @@ class Document extends Model
 
     protected $path = 'uploads/document';
 
+    protected $casts = [
+        'documentable_id' => 'integer'
+    ];
+
     protected $fillable = ([
         'documentable_id', 'documentable_type', 'document_number', 'type', 'issue_date', 'expire_date', 'image', 
         'verified_at','reason',

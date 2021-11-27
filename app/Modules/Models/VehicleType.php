@@ -25,6 +25,13 @@ class VehicleType extends Model
             ]
         ];
     }
+    protected $casts = [
+        'price_km' => 'integer',
+        'price_,om' => 'float',
+        'base_fare' => 'integer',
+        'commission' => 'integer',
+        'capacity' => 'integer',
+    ];
     
     protected $fillable = [ 
         'name','slug','price_km','price_min','image', 'base_fare','commission','capacity','status','created_at','updated_at','deleted_at'
