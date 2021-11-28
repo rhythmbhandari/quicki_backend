@@ -312,6 +312,7 @@ class RiderLocationController extends Controller
         $response = ['message' => 'Success!',  "available_riders"=>$available_riders];
         return response($response, 200);
 
+        return response("Internal Server Error!", 500);
     }
 
 
@@ -455,11 +456,82 @@ class RiderLocationController extends Controller
         $response = ['message' => 'Success!',  "available_riders"=>$available_riders];
         return response($response, 200);
 
+        return response("Internal Server Error!", 500);
     }
 
 
 
 
+
+
+
+
+
+
+
+    /**
+    * @OA\Get(
+    *   path="/api/rider/{rider_id}/location",
+    *   tags={"Details"},
+    *   summary="Get Rider's Location  ",
+    *   security={{"bearerAuth":{}}},
+    *      @OA\Parameter(
+    *         name="rider_id",
+    *         in="path",
+    *         description="Rider ID",
+    *         required=true,
+    *      ),
+    *   @OA\Response(
+    *      response=200,
+    *       description="Success",
+    *      @OA\MediaType(
+    *           mediaType="application/json",
+    *               @OA\Schema(
+    *                   example={}
+    *
+    *               )
+    *      )
+    *   ),
+    *      @OA\Response(
+    *          response=404,
+    *          description="Rider could not be located at the moment!",
+    *      ),
+    *      @OA\Response(
+    *          response=500,
+    *          description="Internal Server Error",
+    *             @OA\MediaType(
+    *           mediaType="application/json",
+    *      )
+    *      ),
+    *)
+    **/
+    public function getRiderLocation($rider_id)
+    {
+
+        $rider = Rider::find($rider_id);
+
+        if(!$rider)
+        {
+            $response = ['message' => 'Rider could not be located at the moment!'];
+            return response($response, 404);
+        }
+
+        if(isset($rider->rider_location))
+        {
+            $rider_location = $rider->rider_location;
+
+            $response = ['message' => 'Success!',  "rider_location"=>$rider_location];
+            return response($response, 200);
+        }
+        else{
+            $response = ['message' => 'Rider could not be located at the moment!'];
+            return response($response, 404);
+        }
+        
+
+
+        return response("Internal Server Error!", 500);
+    }
 
     
 
