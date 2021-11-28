@@ -144,8 +144,6 @@ class RiderController extends Controller
     *   )
     *)
     **/
-
-
     /**
     * @OA\Get(
     *   path="/api/rider/{rider_id}/details",
