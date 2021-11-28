@@ -21,7 +21,7 @@ class CreateLocationsTable extends Migration
 
             $table->double('longitude_destination');
             $table->double('latitude_destination');
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

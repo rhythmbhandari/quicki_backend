@@ -23,7 +23,7 @@ class Rider extends Model
         'user_id' => 'integer',
     ];
 
-    protected $fillable = [  'user_id','experience', 'trained','status', 
+    protected $fillable = [  'user_id','experience', 'trained','status',  'device_token',
     'approved_at', 'created_at','deleted_at','updated_at','last_updated_by','last_deleted_by' ];
 
     protected $appends = [  ];

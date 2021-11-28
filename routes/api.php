@@ -39,15 +39,15 @@ Route::group(['as' => 'api.', ], function ($router) {
   $router->post('/rider/register', [ApiAuthController::class, 'rider_register'])->name('rider.register'); //stores the rider data 
   $router->post('/rider/login', [ApiAuthController::class, 'rider_login'])->name('rider.login');         //logins the rider
 
+  $router->post('/social/login', [ApiAuthController::class, 'social_login'])->name('social.login');         //social login
+
   $router->post('/sms/send',[ApiAuthController::class, 'send_otp'])->name('sms.send');   //Sends SMS to the provided number
   $router->post('/sms/verify_user',[ApiAuthController::class, 'verify_user_otp'])->name('sms.verify_user');   //Sends SMS to the provided number
   $router->post('/sms/verify_rider',[ApiAuthController::class, 'verify_rider_otp'])->name('sms.verify_rider');   //Sends SMS to the provided number
   //Route::post('/social/login', [ApiAuthController::class, 'socialLogin'])->name('socialLogin.api');
   //Route::post('/verify-customer', [ApiAuthController::class, 'verifyCutomerAttributes'])->name('verifyCustomer.api');
 
-  //---------------------------------------------------------------------------------------------------------
-  //  REGISTER/AUTHENTICATION and SMS/OTP VERIFICATION ROUTES
-  //---------------------------------------------------------------------------------------------------------
+
   $router->get('/vehicle_type/get_all_data', [VehicleTypeController::class, 'get_all_data'])->name('vehicle_type.get_all_data');
     
  
