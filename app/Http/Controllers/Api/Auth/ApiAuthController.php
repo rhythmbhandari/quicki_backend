@@ -746,10 +746,10 @@ class ApiAuthController extends Controller
                 if ($request->hasFile('vehicle.image')) {
                     $this->uploadFile($request, $createdRider->vehicle, $this->vehicle);
                 }
-            
+                $rider = $user->rider;
                 $accessToken = $createdRider->user->createToken('Laravel Password Grant Client')->accessToken;
               
-                $response = ['message' => 'Rider Registration Successful!', 'tokaccess_tokenen' => $accessToken, "rider"=>$createdRider, "user"=>$createdRider->user,];
+                $response = ['message' => 'Rider Registration Successful!', 'tokaccess_tokenen' => $accessToken, "user"=>$createdRider->user,];
                 return response($response, 200);
             }
             return response("Internal Server Error!", 500);
