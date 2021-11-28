@@ -20,6 +20,7 @@ class CreateOtpsTable extends Migration
             $table->string('code');
             $table->string('code_status')->default('pending');
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

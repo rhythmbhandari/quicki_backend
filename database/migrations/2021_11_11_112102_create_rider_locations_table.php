@@ -25,6 +25,7 @@ class CreateRiderLocationsTable extends Migration
             $table->foreignId('rider_id')->nullable()->constrained("riders")->cascadeOnUpdate()->cascadeOnDelete();
             $table->enum('status',['active', 'in_active'])->nullable();
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

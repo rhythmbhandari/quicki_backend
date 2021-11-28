@@ -35,6 +35,9 @@ class CreateRidersTable extends Migration
             $table->enum('status', ['active', 'in_active']);
             $table->timestamp('approved_at')->nullable();
 
+            
+            $table->string('device_token')->nullable();
+
             $table->softDeletes();
             $table->timestamp('last_deleted_by')->nullable();
             $table->timestamp('last_updated_by')->nullable();

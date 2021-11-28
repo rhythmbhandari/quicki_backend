@@ -41,6 +41,13 @@ class RiderController extends Controller
     *   summary="Rider Details",
     *   security={{"bearerAuth":{}}},
     *
+    *   @OA\Parameter(
+    *      name="device_token",
+    *      in="header",
+    *      @OA\Schema(
+    *           type="string"
+    *      )
+    *   ),
     *   @OA\Response(
     *      response=200,
     *       description="Success",
@@ -271,10 +278,29 @@ class RiderController extends Controller
 
         $user = null;
         if($rider_id == null)
+        {
             $user = Auth::user();
+            //ROLE CHECK FOR RIDER
+            if( ! $this->user_service->hasRole($user, 'rider') )
+            {
+                $response = ['message' => 'Forbidden Access!'];
+                return response($response, 403);
+            }
+            $rider = $user->rider;
+            $rider->device_token = $request->header('device_token');
+            $rider->save();
+        }
         else{
             $rider = Rider::find($rider_id);
-            if($rider) $user = $rider->user;
+            if($rider) {    
+                $user = $rider->user; 
+                //ROLE CHECK FOR RIDER
+                if( ! $this->user_service->hasRole($user, 'rider') )
+                {
+                    $response = ['message' => 'Forbidden Access!'];
+                    return response($response, 403);
+                }
+            }
             else {
                 $response = ['message' => 'User not found!'];
                 return response($response, 404);
@@ -283,13 +309,7 @@ class RiderController extends Controller
 
         //$user = Auth::user();
        
-        //ROLE CHECK FOR RIDER
-        if( ! $this->user_service->hasRole($user, 'rider') )
-        {
-            $response = ['message' => 'Forbidden Access!'];
-            return response($response, 403);
-        }
-        
+    
         $user = User::where('id',$user->id)->with('rider')->with('documents')->first();
 
         $response = ['message' => 'Success!',  "user"=>$user];

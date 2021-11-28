@@ -35,7 +35,14 @@ class UserController extends Controller
     *   tags={"Details"},
     *   summary="User Details",
     *   security={{"bearerAuth":{}}},
-    *
+    *   
+    *   @OA\Parameter(
+    *      name="device_token",
+    *      in="header",
+    *      @OA\Schema(
+    *           type="string"
+    *      )
+    *   ),
     *   @OA\Response(
     *      response=200,
     *       description="Success",
@@ -162,7 +169,11 @@ class UserController extends Controller
 
         $user = null;
         if($user_id == null)
+        {
             $user = Auth::user();
+            $user->device_token = $request->header('device_token');
+            $user->save();
+        }
         else{
             $user = User::find($user_id);
             if(!$user)  {

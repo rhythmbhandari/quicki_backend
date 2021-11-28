@@ -132,7 +132,6 @@ class ApiAuthController extends Controller
 
 
 
-
         /**
     * @OA\Post(
     *   path="/api/rider/register",
@@ -493,8 +492,8 @@ class ApiAuthController extends Controller
     *                             },
     *                             "work": {
     *                               "name": "Sanepa, Lalitpur",
-    *                               "latitude": 27.687052088825897,
-    *                               "longitude": 85.30439019937253
+    *                               "latitude": 27.68707,
+    *                               "longitude": 85.307253
     *                             }
     *                           },
     *                           "status": null,
@@ -700,10 +699,114 @@ class ApiAuthController extends Controller
     *               mediaType="application/json",
     *                @OA\Schema(      
     *                   example={
-    *                           "message":"Rider Registration Successful!",
-    *                           "access_token":"123sfsdr234sdfs",
-    *                           "rider":"{created_rider}",
-    *                   }
+    *                         "message": "Rider registration success! Login Successful!",
+    *                         "user": {
+    *                           "id": 2,
+    *                           "slug": "sasuke-uchiha",
+    *                           "first_name": "Sasuke",
+    *                           "middle_name": "",
+    *                           "last_name": "Uchiha",
+    *                           "image": null,
+    *                           "dob": null,
+    *                           "gender": null,
+    *                           "google_id": null,
+    *                           "facebook_id": null,
+    *                           "username": "sasuke",
+    *                           "phone": "9816810976",
+    *                           "email": "sasuke@gmail.com",
+    *                           "location": {
+    *                             "home": {
+    *                               "name": "New Baneshwor, Kathmandu",
+    *                               "latitude": 27.691153232,
+    *                               "longitude": 85.33177163
+    *                             },
+    *                             "work": {
+    *                               "name": "Sanepa, Lalitpur",
+    *                               "latitude": 27.687052088825897,
+    *                               "longitude": 85.30439019937253
+    *                             }
+    *                           },
+    *                           "status": null,
+    *                           "email_verified_at": null,
+    *                           "last_logged_in": null,
+    *                           "no_of_logins": null,
+    *                           "avatar": null,
+    *                           "deleted_at": null,
+    *                           "last_updated_by": null,
+    *                           "last_deleted_by": null,
+    *                           "created_at": "2021-11-25T18:01:44.000000Z",
+    *                           "updated_at": "2021-11-25T18:16:46.000000Z",
+    *                           "name": "Sasuke  Uchiha",
+    *                           "roles": {
+    *                             {
+    *                               "id": 2,
+    *                               "slug": "rider",
+    *                               "name": "rider",
+    *                               "guard_name": "rider",
+    *                               "deleted_at": null,
+    *                               "created_at": "2021-11-25T18:01:43.000000Z",
+    *                               "updated_at": "2021-11-25T18:01:43.000000Z",
+    *                               "pivot": {
+    *                                 "user_id": 2,
+    *                                 "role_id": 2,
+    *                                 "created_at": "2021-11-25T18:01:44.000000Z",
+    *                                 "updated_at": "2021-11-25T18:01:44.000000Z"
+    *                               }
+    *                             },
+    *                             {
+    *                               "id": 3,
+    *                               "slug": "customer",
+    *                               "name": "customer",
+    *                               "guard_name": "customer",
+    *                               "deleted_at": null,
+    *                               "created_at": "2021-11-25T18:01:43.000000Z",
+    *                               "updated_at": "2021-11-25T18:01:43.000000Z",
+    *                               "pivot": {
+    *                                 "user_id": 2,
+    *                                 "role_id": 3,
+    *                                 "created_at": "2021-11-25T18:01:44.000000Z",
+    *                                 "updated_at": "2021-11-25T18:01:44.000000Z"
+    *                               }
+    *                             }
+    *                           },
+    *                           "rider": {
+    *                             "id": 1,
+    *                             "user_id": 2,
+    *                             "experience": 3,
+    *                             "trained": "YES",
+    *                             "status": "active",
+    *                             "approved_at": "2021-11-25 18:01:44",
+    *                             "deleted_at": null,
+    *                             "last_deleted_by": null,
+    *                             "last_updated_by": null,
+    *                             "created_at": "2021-11-25T18:01:44.000000Z",
+    *                             "updated_at": "2021-11-25T18:01:44.000000Z",
+    *                             "vehicle": {
+    *                               "id": 1,
+    *                               "slug": "ba-12-pa-1234",
+    *                               "rider_id": 1,
+    *                               "vehicle_type_id": 1,
+    *                               "vehicle_number": "BA 99 PA 1234",
+    *                               "image": null,
+    *                               "make_year": "2010",
+    *                               "vehicle_color": null,
+    *                               "brand": "HERO",
+    *                               "model": "Splender",
+    *                               "status": "active",
+    *                               "deleted_at": null,
+    *                               "last_deleted_by": null,
+    *                               "last_updated_by": null,
+    *                               "created_at": "2021-11-25T19:53:03.000000Z",
+    *                               "updated_at": "2021-11-25T19:57:29.000000Z",
+    *                               "thumbnail_path": "assets/media/noimage.png",
+    *                               "image_path": "assets/media/noimage.png",
+    *                               "documents": {}
+    *                             },
+    *                             "documents": {}
+    *                           }
+    *                         },
+    *                         "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjhkZTBmMWVkMmM2MDY0MzA3MWU0ZWI2ZjQ4MDQ5N2Q5ZjQ5OWUxNjdkODg2OGM0NDY4ZmJhZmZhZTc3Y2I1YWEwYmU2ZDA4NGI5MWU2MzYiLCJpYXQiOjE2Mzc5MDU5OTEuMTg5NDYzLCJuYmYiOjE2Mzc5MDU5OTEuMTg5NDY2LCJleHAiOjE2Njk0NDE5OTEuMTg0NzQxLCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.FmqOq7ZZ0llQKKrLCuDmhgWGo5FGgQBg0RW7H7aQ7Va0YjwhQ25b-FzHg3WyHH8n_eezgQak0YYidWm05vw4o2RrPUeEgG9jVdx7wwV7_UolALxp5OiMRJ6NTryRhMHLBTmTeXm7cYY3vHWvvugmlogeqJ4ZQY91q-OmwzSff58uUZAphiO1i9nETXtWoU7NmmLGqeHPePRcIEUcQqQynHu1EzOcZTdmLKfvH7jKyr_IiTq_TMS9100MNa0jgJnHED10_8MQro646ju-qk7LkGKSGj6b7nCmXZN7SGVn3fkMisE-2Y6MU9vQEdW4dum-q2UFndoAOnLAZLqxizZRK-YAPuLs6v60_ciV08BoBytTSgQMSo1ooWw1HCisbcgvNXttSQBGVMbgtCxPjS-pkvaPipiYsas4voOv6QZ7KtX6Y_yb5XOx1L4y6zsgTCLLYEk00YLYxk3_ILueaDl8VwzgBtLqXw2pFPqlOcCJ7QP0pv0LbJqpHzBpkvgsdpZ31PSVkEnfc4pZP5qRmEDvRYGZnc79QBGQ2BofGggaVJwJ07djFNPqLle6FMogjimDlkTFWgBtDB-TPyt8Dg6CqsGbRmKREnYtRoiUlHghwHwZD0yaW_cZbrvIRjKPDRiOFZycpWFPu_gWWMWC_9uNk6kDm1zsuOXZe83-n31Uf1w"
+    *                       }
     *                 )
     *           )
     *      ),
@@ -711,6 +814,13 @@ class ApiAuthController extends Controller
     *      @OA\Response(
     *          response=422,
     *          description="Validation Fail",
+    *             @OA\MediaType(
+     *           mediaType="application/json",
+     *          )
+    *      ),
+    *      @OA\Response(
+    *          response=403,
+    *          description="Forbidden Access! You are already registered as a rider!",
     *             @OA\MediaType(
      *           mediaType="application/json",
      *          )
@@ -728,6 +838,13 @@ class ApiAuthController extends Controller
     {
         
         $user = Auth::user();
+        
+        //ROLE CHECK FOR ALREADY RIDER
+        if( $this->user_service->hasRole($user, 'rider') )
+        {
+            $response = ['message' => 'Forbidden Access! You are already registered as a rider!'];
+            return response($response, 403);
+        }
     
 
         //dd("RIDER DATA:",$request->all(), $request->all()['document']);
@@ -749,7 +866,7 @@ class ApiAuthController extends Controller
                 $rider = $user->rider;
                 $accessToken = $createdRider->user->createToken('Laravel Password Grant Client')->accessToken;
               
-                $response = ['message' => 'Rider Registration Successful!', 'tokaccess_tokenen' => $accessToken, "user"=>$createdRider->user,];
+                $response = ['message' => 'Rider registration success! Login Successful!', 'access_token' => $accessToken, "user"=>$createdRider->user,];
                 return response($response, 200);
             }
             return response("Internal Server Error!", 500);
@@ -758,6 +875,109 @@ class ApiAuthController extends Controller
 
     }
 
+    /**
+    * @OA\Post(
+    *   path="/api/social/login",
+    *   tags={"Register and Authentication"},
+    *   summary="Login with google/facebook ID",
+    *
+    *   @OA\RequestBody(
+    *      @OA\MediaType(
+    *          mediaType="application/json",
+    *         @OA\Schema(
+    *             
+    *             example={
+    *                  "social_id": "amit.karn.982@facebook.com",
+    *                   "social_type": "facebook",
+    *                   "login_type": "customer"
+    *               }
+    *         )
+    *     )
+    *   ),
+    *
+    *   @OA\Response(
+    *      response=404,
+    *       description="Login Failed! User not Found!",
+    *      @OA\MediaType(
+    *           mediaType="application/json",
+    *       )
+    *      ),
+    *   @OA\Response(
+    *      response=422,
+    *       description="Validation Fail!",
+    *      @OA\MediaType(
+    *           mediaType="application/json",
+    *      )
+    *   ),
+    *   @OA\Response(
+    *      response=200,
+    *       description="Login Successful!",
+    *      @OA\MediaType(
+    *           mediaType="application/json",
+    *      )
+    *   ),
+    *      @OA\Response(
+    *          response=500,
+    *          description="Internal Server Error",
+    *             @OA\MediaType(
+    *              mediaType="application/json",
+    *          )
+    *      ),
+    *)
+    **/
+    public function social_login(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'social_id' =>  ['required'],
+            'social_type' => ['required','in:google,facebook'],
+            'login_type' => ['required','in:customer,rider']
+        ]);
+        if ($validator->fails()) {
+            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
+        }
+
+        $user = null;
+
+        if($request->social_type == "facebook")
+        {
+            $user = User::where('facebook_id',$request->social_id)->first();
+        }
+        else{
+            $user = User::where('google_id',$request->social_id)->first();
+        }
+
+        if(!$user)
+        {  
+            $response = ['message' => 'Login Failed! User not Found!'];
+            return response($response, 404);
+        }
+        
+
+        if($request->login_type == "rider")
+        {
+            //ROLE CHECK FOR RIDER
+            if( ! $this->user_service->hasRole($user, 'rider') )
+            {
+                $response = ['message' => 'Forbidden Access! You are already registered as a rider!'];
+                return response($response, 403);
+            }
+            $rider = $user->rider;
+            // dd($rider);
+            $accessToken = $user->createToken('authToken')->accessToken;
+            $response = ['message' => 'Rider exits and verified! Login Successful!','user'=>$user,  'access_token' => $accessToken];
+            return response($response, 200);
+
+        }
+        else {
+            $accessToken = $user->createToken('authToken')->accessToken;
+            $response = ['message' => 'Login Successful!','user'=>$user,  'access_token' => $accessToken];
+            return response($response, 200);
+        }
+
+
+
+        return response("Internal Server Error!", 500);
+    }
 
 
 

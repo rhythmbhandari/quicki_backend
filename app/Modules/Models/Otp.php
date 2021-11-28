@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Otp extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = ([
-        'phone', 'code', 'code_status'
+        'phone', 'code', 'code_status', 'deleted_at'
     ]);
 
 

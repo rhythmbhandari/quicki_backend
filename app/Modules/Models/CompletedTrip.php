@@ -16,6 +16,7 @@ class CompletedTrip extends Model
 {
     use HasFactory, SoftDeletes;
 
+
     protected $casts = [
         'stoppage'=>'array',
         'location_id'=>'integer',

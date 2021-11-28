@@ -26,6 +26,8 @@ class RiderLocationService extends Service
     function getAllAvailableRiders()
     {
         $rider_locations = RiderLocation::where('status','active')->get();
+        return $rider_locations;
+        /*
         $available_riders = [];
         foreach($rider_locations as $rider_location)
         {
@@ -36,6 +38,7 @@ class RiderLocationService extends Service
             }
         }
         return $available_riders;
+        */
     }
 
     /**
@@ -43,6 +46,11 @@ class RiderLocationService extends Service
      */
     function getNearbyAvailableRiders($origin_lat, $origin_lng, $vehicle_type_id = null,  $radius = null)
     {
+
+        $rider_locations = RiderLocation::where('status','active')->get();
+        return $rider_locations;
+
+
         try{
             try{
                 if($radius==null)
@@ -59,26 +67,19 @@ class RiderLocationService extends Service
             }
             $rider_locations = [];  
             if( $vehicle_type_id != null)
-            {   //dd($vehicle_type_id);
-               // $rider_locations = RiderLocation::where('status','active')->get();
+            {  
                $rider_locations = $this->rider_service->getAllowedRidersQuery()
-                                   // ->whereRelation('rider_location','status','!=','in_active')
-                                    //->whereRelation('vehicle','vehicle_type_id',$vehicle_type_id)
-                                    //->with('rider_location')
-                                    ->get();
-              //  dd("rider: ",$rider_locations);
-
+                                    ->get(); 
             }
             else 
             {
-               // $rider_locations = RiderLocation::whereRelation('vehicle','vehicle_type_id',$vehicle_type_id)->where('status','active')->get();
-                //$rider_locations = $this->rider_service->getAllowedRidersQuery->whereRelation('rider_location','status','!=','in_active')->with('rider_location')->get();
                 $rider_locations = $this->rider_service->getAllowedRidersQuery()
                                     ->whereRelation('rider_location','status','!=','in_active')
                                     ->with('rider_location')
                                     ->get();
             }
                
+            return $rider_locations;
            // dd($rider_locations);
             
             $nearby_available_riders = [];

@@ -54,6 +54,8 @@ class CreateUsersTable extends Migration
             $table->integer('no_of_logins')->nullable();
             $table->string('avatar')->nullable();
 
+            $table->string('device_token')->nullable();
+
             $table->softDeletes();
             $table->bigInteger('last_updated_by')->nullable();
             $table->bigInteger('last_deleted_by')->nullable();

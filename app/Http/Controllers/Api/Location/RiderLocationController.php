@@ -249,7 +249,22 @@ class RiderLocationController extends Controller
     *          @OA\MediaType(
     *               mediaType="application/json",
     *                   @OA\Schema(      
-    *                   example={"message":"Success!","available_riders":{{"id":2,"user_id":4,"experience":5,"trained":"YES","status":"in_active","approved_at":null,"deleted_at":null,"last_deleted_by":null,"last_updated_by":null,"created_at":"2021-11-18T05:46:49.000000Z","updated_at":"2021-11-18T05:46:49.000000Z","user":{"id":4,"slug":"nitesh-d-luffy","first_name":"Nitesh","middle_name":"D.","last_name":"Manandhar","image":null,"dob":"2000-01-01","gender":null,"google_id":null,"facebook_id":null,"username":"nitesh","phone":"9816810976","email":"nitesh@gmail.com","status":null,"email_verified_at":null,"last_logged_in":null,"no_of_logins":null,"avatar":null,"deleted_at":null,"last_updated_by":null,"last_deleted_by":null,"created_at":"2021-11-18T05:46:49.000000Z","updated_at":"2021-11-18T05:50:51.000000Z","name":"Nitesh D. Manandhar"},"vehicle":{"id":1,"slug":"ba-99-pa-5544","rider_id":2,"vehicle_type_id":1,"vehicle_number":"BA 99 PA 5544","image":null,"make_year":"2016","vehicle_color":"black","brand":"TVS","model":"Apache 160R","status":"in_active","deleted_at":null,"last_deleted_by":null,"last_updated_by":null,"created_at":"2021-11-18T05:46:49.000000Z","updated_at":"2021-11-18T05:46:49.000000Z","thumbnail_path":"assets\/media\/noimage.png","image_path":"assets\/media\/noimage.png","documents":{}},"reviews":{}}}}
+    *                   example={
+    *                     "message": "Success!",
+    *                     "available_riders": {
+    *                       {
+    *                         "id": 1,
+    *                         "longitude": 85.304219,
+    *                         "latitude": 27.687169,
+    *                         "rider_id": 1,
+    *                         "status": "active",
+    *                         "deleted_at": null,
+    *                         "created_at": "2021-11-25T19:11:04.000000Z",
+    *                         "updated_at": "2021-11-26T06:12:56.000000Z",
+    *                         "availability": "available"
+    *                       }
+    *                     }
+    *                   }  
     *                 )
     *           )
     *      ),
@@ -318,7 +333,53 @@ class RiderLocationController extends Controller
     *          @OA\MediaType(
     *               mediaType="application/json",
     *                   @OA\Schema(      
-    *                   example={"message":"Success!","available_riders":{{"id":2,"user_id":4,"experience":5,"trained":"YES","status":"in_active","approved_at":null,"deleted_at":null,"last_deleted_by":null,"last_updated_by":null,"created_at":"2021-11-18T05:46:49.000000Z","updated_at":"2021-11-18T05:46:49.000000Z","user":{"id":4,"slug":"nitesh-d-luffy","first_name":"Nitesh","middle_name":"D.","last_name":"Manandhar","image":null,"dob":"2000-01-01","gender":null,"google_id":null,"facebook_id":null,"username":"nitesh","phone":"9816810976","email":"nitesh@gmail.com","status":null,"email_verified_at":null,"last_logged_in":null,"no_of_logins":null,"avatar":null,"deleted_at":null,"last_updated_by":null,"last_deleted_by":null,"created_at":"2021-11-18T05:46:49.000000Z","updated_at":"2021-11-18T05:50:51.000000Z","name":"Nitesh D. Manandhar"},"vehicle":{"id":1,"slug":"ba-99-pa-5544","rider_id":2,"vehicle_type_id":1,"vehicle_number":"BA 99 PA 5544","image":null,"make_year":"2016","vehicle_color":"black","brand":"TVS","model":"Apache 160R","status":"in_active","deleted_at":null,"last_deleted_by":null,"last_updated_by":null,"created_at":"2021-11-18T05:46:49.000000Z","updated_at":"2021-11-18T05:46:49.000000Z","thumbnail_path":"assets\/media\/noimage.png","image_path":"assets\/media\/noimage.png","documents":{}},"reviews":{}}}}
+    *                   example=
+    *                   {
+    *                     "message": "Success!",
+    *                     "available_users": {
+    *                       {
+    *                         "id": 10,
+    *                         "stoppage": {
+    *                           {
+    *                             "name": "Sanepa, Lalitpur",
+    *                             "latitude": 27.1234,
+    *                             "longitude": 85.3434
+    *                           },
+    *                           {
+    *                             "name": "New Baneshwor, Kathmandu",
+    *                             "latitude": 28.3454,
+    *                             "longitude": 87.1234
+    *                           }
+    *                         },
+    *                         "user_id": 5,
+    *                         "vehicle_type_id": 1,
+    *                         "rider_id": null,
+    *                         "location_id": 10,
+    *                         "start_time": null,
+    *                         "end_time": null,
+    *                         "origin": "Sanepa, Lalitpur",
+    *                         "destination": "New Baneshwor, Kathmandu",
+    *                         "distance": 12,
+    *                         "duration": 20,
+    *                         "passenger_number": 2,
+    *                         "status": "pending",
+    *                         "price": 160,
+    *                         "payment_type": "CASH",
+    *                         "deleted_at": null,
+    *                         "created_at": "2021-11-27T20:02:56.000000Z",
+    *                         "updated_at": "2021-11-27T20:02:56.000000Z",
+    *                         "location": {
+    *                           "id": 10,
+    *                           "longitude_origin": 27.123456,
+    *                           "latitude_origin": 85.123423,
+    *                           "longitude_destination": 27.234325,
+    *                           "latitude_destination": 86.12313,
+    *                           "created_at": "2021-11-27T20:02:56.000000Z",
+    *                           "updated_at": "2021-11-27T20:02:56.000000Z"
+    *                         }
+    *                       }
+    *                     }
+    *                   }  
     *                 )
     *           )
     *      ),
@@ -333,10 +394,6 @@ class RiderLocationController extends Controller
      *      @OA\Response(
     *          response=403,
     *          description="Forbidden Access",
-    *      ),
-     *      @OA\Response(
-    *          response=404,
-    *          description="Document Not Found!",
     *      ),
     *      @OA\Response(
     *          response=400,
@@ -362,14 +419,7 @@ class RiderLocationController extends Controller
             return response($response, 403);
         }
 
-        /***********FOR NOW TEMPORARYY CODE */
-        $available_users = Booking::where('status','pending')->with('location')->get();
-      
-        $response = ['message' => 'Success!',  "available_users"=>$available_users];
-        return response($response, 200);
 
-
-        dd("END");
 
         //Check if the rider is online or not
         $rider_location = RiderLocation::where('rider_id',$user->rider->id)->first();
@@ -377,6 +427,15 @@ class RiderLocationController extends Controller
             $response = ['message' => 'You need to get online to view active user bookings!'];
             return response($response, 400);
         }
+
+        /***********FOR NOW TEMPORARYY CODE */
+        $available_users = Booking::where('status','pending')->with('location')->get();
+
+        $response = ['message' => 'Success!',  "available_users"=>$available_users];
+        return response($response, 200);
+
+
+        dd("END");
 
         dd('assa');
 
