@@ -102,6 +102,7 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->get('/rider/details', [RiderController::class, 'getDetails'])->name('rider.details');
   $router->get('/rider/{rider_id}/details', [RiderController::class, 'getDetails'])->name('rider.specific.details');
   $router->post('/rider/profile/update', [RiderController::class, 'updateProfile'])->name('rider.profile.update');
+  $router->get('/rider/{rider_id}/location', [RiderLocationController::class, 'getRiderLocation'])->name('rider.specific.location');
 
 
   

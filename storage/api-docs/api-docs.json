@@ -1871,6 +1871,49 @@
                 ]
             }
         },
+        "/api/rider/{rider_id}/location": {
+            "get": {
+                "tags": [
+                    "Details"
+                ],
+                "summary": "Get Rider's Location  ",
+                "operationId": "83006ec78a2c7850f8ba98523f5942b1",
+                "parameters": [
+                    {
+                        "name": "rider_id",
+                        "in": "path",
+                        "description": "Rider ID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": []
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Rider not found!"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/review/create": {
             "post": {
                 "tags": [
