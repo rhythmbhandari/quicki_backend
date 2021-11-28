@@ -21,6 +21,7 @@ use App\Modules\Services\User\UserService;
 use App\Modules\Models\Rider;
 use App\Modules\Models\RiderLocation;
 use App\Modules\Models\VehicleType;
+use App\Modules\Models\Booking;
 
 class RiderLocationController extends Controller
 {
@@ -360,6 +361,15 @@ class RiderLocationController extends Controller
             $response = ['message' => 'Forbidden Access!'];
             return response($response, 403);
         }
+
+        /***********FOR NOW TEMPORARYY CODE */
+        $available_users = Booking::where('status','pending')->with('location')->get();
+      
+        $response = ['message' => 'Success!',  "available_users"=>$available_users];
+        return response($response, 200);
+
+
+        dd("END");
 
         //Check if the rider is online or not
         $rider_location = RiderLocation::where('rider_id',$user->rider->id)->first();
