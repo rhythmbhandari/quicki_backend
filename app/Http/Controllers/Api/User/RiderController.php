@@ -271,7 +271,7 @@ class RiderController extends Controller
     *   )
     *)
     **/
-    public function getDetails($rider_id=null)
+    public function getDetails(Request $request,$rider_id=null)
     {
 
         // $user = ($rider_id != null) ? Rider::findOrFail($rider_id)->user : Auth::user();
