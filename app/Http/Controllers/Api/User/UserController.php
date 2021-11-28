@@ -163,7 +163,7 @@ class UserController extends Controller
     *   )
     *)
     **/
-    public function getDetails($user_id=null)
+    public function getDetails(Request $request, $user_id=null)
     {        
         // $user = ($user_id != null) ? User::findOrFail($user_id) : Auth::user();
 
