@@ -32,5 +32,18 @@ class OtpSeeder extends Seeder
             'code'=>'11111',
             'code_status'=>'pending',
         ]);
+
+        Otp::create([
+            'phone'=>'9801030838',
+            'code'=>'11111',
+            'code_status'=>'pending',
+        ]);
+
+        Otp::create([
+            'phone'=>'9801030839',
+            'code'=>'11111',
+            'code_status'=>'pending',
+        ]);
+
     }
 }

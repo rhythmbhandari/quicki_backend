@@ -331,7 +331,7 @@ class ApiAuthController extends Controller
     *             
     *             example={
     *                  "phone": "9816810976",
-    *                   "code": "223305",
+    *                   "code": "11111",
     *               }
     *         )
     *     )
@@ -457,7 +457,7 @@ class ApiAuthController extends Controller
     *             
     *             example={
     *                  "phone": "9816810976",
-    *                   "code": "223305",
+    *                   "code": "11111",
     *               }
     *         )
     *     )
@@ -669,7 +669,7 @@ class ApiAuthController extends Controller
     *             
     *             example={                     
     *                 "rider":{
-    *                     "experience":"5",
+    *                     "experience":5,
     *                     "trained":"YES",
     *                 },
     *                 "document": {
@@ -680,7 +680,7 @@ class ApiAuthController extends Controller
     *                        "image": "file()",
     *                  },
     *                 "vehicle": {
-    *                         "vehicle_type_id":"1",
+    *                         "vehicle_type_id":1,
     *                         "vehicle_number":"BA 99 PA 5544",
     *                         "brand":"TVS",
     *                         "model":"Apache 160R",
@@ -724,7 +724,7 @@ class ApiAuthController extends Controller
     *      ),
     *)
     **/
-    public function upgrade_to_rider(UserToRider $request)  //Authentication token required of user
+    public function upgrade_to_rider(UserToRiderRequest $request)  //Authentication token required of user
     {
         
         $user = Auth::user();
