@@ -18,10 +18,10 @@ class RiderRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
-        return true;
-    }
+    // public function authorize()
+    // {
+    //     return true;
+    // }
 
 
     protected function failedValidation(Validator $validator)
@@ -36,6 +36,7 @@ class RiderRequest extends FormRequest
      */
     public function rules()
     {
+        dd("data",$this->all());
         return [
            
             'first_name' => 'required|string|max:255',
