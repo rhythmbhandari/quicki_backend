@@ -18,6 +18,7 @@ class CreateVehicleTypesTable extends Migration
             $table->string('name');
             $table->string('slug');
             $table->string('image')->nullable();
+            $table->double('surge_rate')->nullable()->comment('SURGE RATE applied either for either density or shift surge!');
             $table->double('price_km');
             $table->double('price_min');
             $table->double('base_fare');

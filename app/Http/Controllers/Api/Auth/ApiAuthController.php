@@ -35,10 +35,11 @@ class ApiAuthController extends Controller
 
     use SparrowSms;
 
-    protected $user, $rider, $vehicle, $vehicle_type, $document;
+    protected $user, $rider, $vehicle, $vehicle_type, $document, $user_service;
 
     public function __construct(UserService $user, RiderService $rider, VehicleService $vehicle, VehicleTypeService $vehicle_type, DocumentService $document )
     {
+        $this->user_service = $user;
         $this->user = $user;
         $this->rider = $rider;
         $this->vehicle = $vehicle;
