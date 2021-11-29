@@ -29,8 +29,10 @@ class ReviewService extends Service
         try{
             $booking = Booking::find($data['booking_id']);
             $data['ride_date'] = isset($data['ride_date']) ? $data['ride_date'] : $booking->updated_at ;
-            $data['user_id'] = isset($data['user_id']) ? $data['user_id'] : $booking->user_id ;
-            $data['rider_id'] = isset($data['rider_id']) ? $data['rider_id'] : $booking->rider_id ;
+            $data['user_id'] = isset($data['user_id']) ? intval($data['user_id']) : $booking->user_id ;
+            $data['rider_id'] = isset($data['rider_id']) ? intval($data['rider_id']) : $booking->rider_id ;
+            $data['booking_id'] = intval($booking->id);
+            $data['rate']   = isset($data['rate']) ? intval($data['rate']) : 3 ;
             //default status = pending
             
             $createdReview = $this->review->create($data);

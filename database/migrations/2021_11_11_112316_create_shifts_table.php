@@ -18,7 +18,7 @@ class CreateShiftsTable extends Migration
 
             $table->string('title');
             
-            $table->double('rate')->nullable();
+            // $table->double('rate')->nullable();
             $table->integer('time_from')->nullable();
             $table->integer('time_to')->nullable();
 

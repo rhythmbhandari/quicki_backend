@@ -47,7 +47,12 @@ class RiderLocationService extends Service
     function getNearbyAvailableRiders($origin_lat, $origin_lng, $vehicle_type_id = null,  $radius = null)
     {
 
-        $rider_locations = RiderLocation::where('status','active')->get();
+        $rider_locations = RiderLocation::whereStatus('active')->get();
+        // if($rider_locations)
+        // {
+        //     dd("adsads", $rider_locations, $rider_locations->count());
+        // }
+        // dd($rider_locations);
         return $rider_locations;
 
 

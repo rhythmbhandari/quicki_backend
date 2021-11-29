@@ -257,9 +257,10 @@ class BookingService extends Service
 
 
         //TO BE CALCULATED
-        $density_surge = 0;
+        $density_surge = false;
+        $shift_surge = false;
         $total_surge = 0;
-        $shift_surge = 0;
+        $surge_rate = 1;
         
         //DEDUCTING DENSITY SURGE
         //1 rider for 3 pending bookings ; for >1:4, the surge applies::TO BE FETCHED from DB SETTINGS 
@@ -267,18 +268,24 @@ class BookingService extends Service
         //The density surge applies only if the current pending bookings is >= this value::TO BE FETCHED from DB SETTINGS 
         $threshold_pending_booking = 3; 
         $nearbyRiders = $this->get_available_riders_within_radius($origin_latitude, $origin_longitude,$vehicle_type->id);
-        $nearbyRiders = ($nearbyRiders > 0) ? $nearbyRiders : 1;
+        //dd($nearbyRiders->count(), gettype($nearbyRiders));
+        $nearbyRiders = ($nearbyRiders->count() > 0) ? $nearbyRiders : 1;
         $nearbyPendingBookings = $this->get_nearby_pending_bookings($origin_latitude, $origin_longitude,$vehicle_type->id);
-        $nearbyPendingBookings = ($nearbyPendingBookings > 0) ? $nearbyPendingBookings : 1;
+       // dd($nearbyPendingBookings, gettype($nearbyPendingBookings), count($nearbyPendingBookings));
+        $nearbyPendingBookings = ( count($nearbyPendingBookings) > 0) ? $nearbyPendingBookings : 1;
         
         $current_density = 1;
         if(!$nearbyRiders || !$nearbyRiders) 
             $current_density = 1;
         else
-            $current_density = count($nearbyRiders)/count($nearbyPendingBookings); 
+            $current_density = $nearbyRiders/$nearbyPendingBookings; 
 
         if( ($current_density < $permissable_density ) &&  ($current_pending_booking >= $threshold_pending_booking  )  )
-            $density_surge = 30;    //CONSTANT TO BE FETCHED from DB SETTINGS 
+        {
+           //$density_surge = 30;    //CONSTANT TO BE FETCHED from DB SETTINGS 
+           $density_surge = true;
+        }
+           
         
         //DEDUCTING SHIFT SURGE
         $currentTime = Carbon::now();
@@ -291,8 +298,19 @@ class BookingService extends Service
                     if($currentTime->between($startTime, $endTime, true))   return true;
                     else return false;
                 }); 
+
+        if($shift)
+            $shift_surge = true;
+
+
+        if($shift_surge || $density_surge)
+        {
+            $surge_rate = VehicleType::find($vehicle_type_id)->surge_rate  ;
+            $surge_rate = ($surge_rate>0)?$surge_rate:1;
+        }
         
-        $shift_rate = isset($shift->rate)?$shift->rate:1;
+        
+        //$shift_rate = isset($shift->rate)?$shift->rate:1;
        
 
         $estimated_price['vehicle_type_id'] = $vehicle_type->id;
@@ -306,16 +324,22 @@ class BookingService extends Service
         $estimated_price['price_breakdown']['price_after_distance']  = ($vehicle_type->price_per_km * $distance);
         
         //PRICE AFTER SURGE
-        $estimated_price['price_breakdown']['shift_rate'] = $shift_rate;    //Default::TO BE FETCHED from DB SHIFTS 
-        $estimated_price['price_breakdown']['density_surge'] = $density_surge;
-        $estimated_price['price_breakdown']['shift_surge'] 
-        = ($estimated_price['price_breakdown']['price_after_distance'] * $shift_rate) - $estimated_price['price_breakdown']['price_after_distance'] ;
-        $estimated_price['price_breakdown']['surge']  = $shift_surge + $density_surge;
-        $estimated_price['price_breakdown']['price_after_surge']  =  $estimated_price['price_breakdown']['price_after_distance'] + $estimated_price['price_breakdown']['surge'] ;
+        //$estimated_price['price_breakdown']['shift_rate'] = $shift_rate;    //Default::TO BE FETCHED from DB SHIFTS 
+       // $estimated_price['price_breakdown']['density_surge'] = $density_surge;
+       // $estimated_price['price_breakdown']['shift_surge'] 
+      //  = ($estimated_price['price_breakdown']['price_after_distance'] * $shift_rate) - $estimated_price['price_breakdown']['price_after_distance'] ;
+        //$estimated_price['price_breakdown']['surge']  = $shift_surge + $density_surge;
+      //  $estimated_price['price_breakdown']['price_after_surge']  =  $estimated_price['price_breakdown']['price_after_distance'] + $estimated_price['price_breakdown']['surge'] ;
+
+        $estimated_price['price_breakdown']['surge_rate']  =  $surge_rate;
+        $estimated_price['price_breakdown']['surge']  = ( $surge_rate * $estimated_price['price_breakdown']['price_after_distance'] ) - $estimated_price['price_breakdown']['price_after_distance'];
+        $estimated_price['price_breakdown']['price_after_surge'] = ( $surge_rate * $estimated_price['price_breakdown']['price_after_distance'] );
+    
+
 
         //PRICE AFTER APP CHARGE
-        $estimated_price['price_breakdown']['app_charge_percent'] = 10;   //Default::TO BE FETCHED from DB SETTINGS 
-        $estimated_price['price_breakdown']['app_charge'] =  $estimated_price['price_breakdown']['app_charge_percent']/100 * $estimated_price['price_breakdown']['price_after_surge'];
+        $estimated_price['price_breakdown']['app_charge_percent'] = 10.0;   //Default::TO BE FETCHED from DB SETTINGS 
+        $estimated_price['price_breakdown']['app_charge'] = floatval(number_format(( $estimated_price['price_breakdown']['app_charge_percent']/100.0 * $estimated_price['price_breakdown']['price_after_surge']),2))  ;
         $estimated_price['price_breakdown']['price_after_app_charge']  =  $estimated_price['price_breakdown']['price_after_surge'] + $estimated_price['price_breakdown']['surge'] ;
 
         //PRICE AFTER DURATION CHARGE
@@ -339,7 +363,7 @@ class BookingService extends Service
      */
     public function get_available_riders_within_radius($origin_latitude, $origin_longitude, $vehicle_type_id,$radius=null)
     {
-        $radius_distance = 5; //Radius in kilometers within origin center::To be fetched from DB SETTINGS
+        $radius = !empty( config('settings.scan_radius') ) ? floatval( config('settings.scan_radius') ) : 5.0;//Radius in kilometers within origin center::To be fetched from DB SETTINGS
         return $this->rider_location_service->getNearbyAvailableRiders($origin_latitude, $origin_longitude, $vehicle_type_id);
     }
     

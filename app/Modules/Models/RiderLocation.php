@@ -13,7 +13,7 @@ class RiderLocation extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $TIME_DIFFERENCE = 60;
+    protected $TIME_DIFFERENCE = 600;
 
     protected $casts = [
         'longitude' => 'float',

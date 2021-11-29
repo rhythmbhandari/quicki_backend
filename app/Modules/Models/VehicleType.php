@@ -31,10 +31,14 @@ class VehicleType extends Model
         'base_fare' => 'integer',
         'commission' => 'integer',
         'capacity' => 'integer',
+        'surge_rate'=>'float',
     ];
+
+    //Here, rate is surge rate applies when booking falls either in density or shift surge criterion
     
     protected $fillable = [ 
-        'name','slug','price_km','price_min','image', 'base_fare','commission','capacity','status','created_at','updated_at','deleted_at'
+        'name','slug','price_km','price_min','image', 'base_fare','commission','capacity','status','surge_rate',
+        'created_at','updated_at','deleted_at'
     ];
     protected $appends = [
          'thumbnail_path', 'image_path', 'price_per_km', 'price_per_min'
