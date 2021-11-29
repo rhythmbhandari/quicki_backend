@@ -269,10 +269,10 @@ class BookingService extends Service
         $threshold_pending_booking = 3; 
         $nearbyRiders = $this->get_available_riders_within_radius($origin_latitude, $origin_longitude,$vehicle_type->id);
         //dd($nearbyRiders->count(), gettype($nearbyRiders));
-        $nearbyRiders = ($nearbyRiders->count() > 0) ? $nearbyRiders : 1;
+        $nearbyRiders = ($nearbyRiders->count() > 0) ? $nearbyRiders->count() : 1;
         $nearbyPendingBookings = $this->get_nearby_pending_bookings($origin_latitude, $origin_longitude,$vehicle_type->id);
        // dd($nearbyPendingBookings, gettype($nearbyPendingBookings), count($nearbyPendingBookings));
-        $nearbyPendingBookings = ( count($nearbyPendingBookings) > 0) ? $nearbyPendingBookings : 1;
+        $nearbyPendingBookings = ( count($nearbyPendingBookings) > 0) ? count($nearbyPendingBookings) : 1;
         
         $current_density = 1;
         if(!$nearbyRiders || !$nearbyRiders) 
