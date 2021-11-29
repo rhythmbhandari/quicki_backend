@@ -27,7 +27,7 @@ class VehicleType extends Model
     }
     protected $casts = [
         'price_km' => 'integer',
-        'price_,om' => 'float',
+        'price_min' => 'float',
         'base_fare' => 'integer',
         'commission' => 'integer',
         'capacity' => 'integer',

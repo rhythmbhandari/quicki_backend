@@ -42,55 +42,7 @@ class CompletedTripController extends Controller
     *      @OA\MediaType(
     *           mediaType="application/json",
     *                @OA\Schema(      
-    *                   example={
-    *                           "message":"Success!",
-    *                           "completed_trips": {
-    *                                 {
-    *                                 "id": 1,
-    *                                 "user_id": 3,
-    *                                 "rider_id": 1,
-    *                                 "booking_id": 1,
-    *                                 "location_id": 1,
-    *                                 "origin": "Sanepa, Lalitpur",
-    *                                 "destination": "New Baneshwor, Kathmandu",
-    *                                 "distance": null,
-    *                                 "duration": null,
-    *                                 "passenger_number": 1,
-    *                                 "profile_img_user": null,
-    *                                 "profile_img_rider": null,
-    *                                 "status": "completed",
-    *                                 "cancelled_by_type": null,
-    *                                 "cancelled_by_id": null,
-    *                                 "cancel_message": null,
-    *                                 "deleted_at": null,
-    *                                 "created_at": "2021-11-16T12:31:03.000000Z",
-    *                                 "updated_at": "2021-11-16T12:46:58.000000Z",
-    *                                 "location": {
-    *                                   "id": 1,
-    *                                   "longitude_origin": 27.123456,
-    *                                   "latitude_origin": 85.123423,
-    *                                   "longitude_destination": 27.234325,
-    *                                   "latitude_destination": 86.12313,
-    *                                   "created_at": "2021-11-16T12:31:03.000000Z",
-    *                                   "updated_at": "2021-11-16T12:31:03.000000Z"
-    *                                 },
-    *                                 "rider": {
-    *                                   "id": 1,
-    *                                   "user_id": 2,
-    *                                   "experience": 3,
-    *                                   "trained": "YES",
-    *                                   "status": "active",
-    *                                   "approved_at": "2021-11-16 12:18:06",
-    *                                   "deleted_at": null,
-    *                                   "last_deleted_by": null,
-    *                                   "last_updated_by": null,
-    *                                   "created_at": "2021-11-16T12:18:06.000000Z",
-    *                                   "updated_at": "2021-11-16T12:18:06.000000Z",
-    *                                   "vehicle": null
-    *                                 }
-    *                               },
-    *                           }
-    *                   }
+    *                   example={"message":"Success!","completed_trips":{"current_page":1,"data":{{"id":13,"user_id":2,"rider_id":null,"booking_id":2,"location_id":2,"start_time":"2021-11-27 16:36:23","end_time":"2021-11-27 16:36:23","origin":"Sanepa, Lalitpur","destination":"New Baneshwor, Kathmandu","stoppage":{{"name":"Sanepa, Lalitpur","latitude":27.1234,"longitude":85.3434},{"name":"New Baneshwor, Kathmandu","latitude":28.3454,"longitude":"87.1234"}},"distance":12,"duration":20,"passenger_number":1,"profile_img_user":null,"profile_img_rider":null,"status":"cancelled","price":160,"payment_type":"CASH","cancelled_by_type":null,"cancelled_by_id":null,"cancel_message":null,"deleted_at":null,"created_at":"2021-11-26T01:04:14.000000Z","updated_at":"2021-11-27T10:51:23.000000Z","location":{"id":2,"longitude_origin":27.123456,"latitude_origin":85.123423,"longitude_destination":27.234325,"latitude_destination":86.12313,"deleted_at":null,"created_at":"2021-11-26T01:04:14.000000Z","updated_at":"2021-11-26T01:04:14.000000Z"},"rider":null}},"first_page_url":"http:\/\/127.0.0.1:8000\/api\/user\/booking\/history?page=1","from":1,"last_page":1,"last_page_url":"http:\/\/127.0.0.1:8000\/api\/user\/booking\/history?page=1","links":{{"url":null,"label":"« Previous","active":false},{"url":"http:\/\/127.0.0.1:8000\/api\/user\/booking\/history?page=1","label":"1","active":true},{"url":null,"label":"Next »","active":false}},"next_page_url":null,"path":"http:\/\/127.0.0.1:8000\/api\/user\/booking\/history","per_page":5,"prev_page_url":null,"to":1,"total":1}}
     *                 )
     *      )
     *   ),
@@ -102,6 +54,7 @@ class CompletedTripController extends Controller
     **/
     public function getUserTrips()
     {
+        //dd("completed trips user");
         $user = Auth::user();
 
         //ROLE CHECK FOR CUSTOMER
@@ -113,7 +66,7 @@ class CompletedTripController extends Controller
           
 
         //Fetch booking history/ completed trips
-        $completed_trips = CompletedTrip::where('user_id',$user->id)->with('location')->with('rider')->get();
+        $completed_trips = CompletedTrip::where('user_id',$user->id)->with('location')->with('rider')->paginate(5);
 
         $response = ['message' => 'Success!',  "completed_trips"=>$completed_trips];
         return response($response, 200);
@@ -133,55 +86,7 @@ class CompletedTripController extends Controller
     *      @OA\MediaType(
     *           mediaType="application/json",
     *                @OA\Schema(      
-    *                   example={
-    *                           "message":"Success!",
-    *                           "completed_trips": {
-    *                                 {
-    *                                 "id": 1,
-    *                                 "user_id": 3,
-    *                                 "rider_id": 1,
-    *                                 "booking_id": 1,
-    *                                 "location_id": 1,
-    *                                 "origin": "Sanepa, Lalitpur",
-    *                                 "destination": "New Baneshwor, Kathmandu",
-    *                                 "distance": null,
-    *                                 "duration": null,
-    *                                 "passenger_number": 1,
-    *                                 "profile_img_user": null,
-    *                                 "profile_img_rider": null,
-    *                                 "status": "completed",
-    *                                 "cancelled_by_type": null,
-    *                                 "cancelled_by_id": null,
-    *                                 "cancel_message": null,
-    *                                 "deleted_at": null,
-    *                                 "created_at": "2021-11-16T12:31:03.000000Z",
-    *                                 "updated_at": "2021-11-16T12:46:58.000000Z",
-    *                                 "location": {
-    *                                   "id": 1,
-    *                                   "longitude_origin": 27.123456,
-    *                                   "latitude_origin": 85.123423,
-    *                                   "longitude_destination": 27.234325,
-    *                                   "latitude_destination": 86.12313,
-    *                                   "created_at": "2021-11-16T12:31:03.000000Z",
-    *                                   "updated_at": "2021-11-16T12:31:03.000000Z"
-    *                                 },
-    *                                 "rider": {
-    *                                   "id": 1,
-    *                                   "user_id": 2,
-    *                                   "experience": 3,
-    *                                   "trained": "YES",
-    *                                   "status": "active",
-    *                                   "approved_at": "2021-11-16 12:18:06",
-    *                                   "deleted_at": null,
-    *                                   "last_deleted_by": null,
-    *                                   "last_updated_by": null,
-    *                                   "created_at": "2021-11-16T12:18:06.000000Z",
-    *                                   "updated_at": "2021-11-16T12:18:06.000000Z",
-    *                                   "vehicle": null
-    *                                 }
-    *                               },
-    *                           }
-    *                   }
+    *                   example={"message":"Success!","completed_trips":{"current_page":1,"data":{{"id":13,"user_id":2,"rider_id":null,"booking_id":2,"location_id":2,"start_time":"2021-11-27 16:36:23","end_time":"2021-11-27 16:36:23","origin":"Sanepa, Lalitpur","destination":"New Baneshwor, Kathmandu","stoppage":{{"name":"Sanepa, Lalitpur","latitude":27.1234,"longitude":85.3434},{"name":"New Baneshwor, Kathmandu","latitude":28.3454,"longitude":"87.1234"}},"distance":12,"duration":20,"passenger_number":1,"profile_img_user":null,"profile_img_rider":null,"status":"cancelled","price":160,"payment_type":"CASH","cancelled_by_type":null,"cancelled_by_id":null,"cancel_message":null,"deleted_at":null,"created_at":"2021-11-26T01:04:14.000000Z","updated_at":"2021-11-27T10:51:23.000000Z","location":{"id":2,"longitude_origin":27.123456,"latitude_origin":85.123423,"longitude_destination":27.234325,"latitude_destination":86.12313,"deleted_at":null,"created_at":"2021-11-26T01:04:14.000000Z","updated_at":"2021-11-26T01:04:14.000000Z"},"user":{"id":2,"slug":"sasuke-uchiha","first_name":"Sasuke","middle_name":"","last_name":"Uchiha","image":null,"dob":null,"gender":null,"google_id":null,"facebook_id":"amit@facebook.com","username":"sasuke","phone":"9816810976","email":"sasuke@gmail.com","location":{"home":{"name":"New Baneshwor, Kathmandu","latitude":27.691153232923103,"longitude":85.33177163310808},"work":{"name":"Sanepa, Lalitpur","latitude":27.687052088825897,"longitude":85.30439019937253}},"status":null,"email_verified_at":null,"last_logged_in":null,"no_of_logins":null,"avatar":null,"device_token":null,"deleted_at":null,"last_updated_by":null,"last_deleted_by":null,"created_at":"2021-11-25T12:16:44.000000Z","updated_at":"2021-11-25T12:31:46.000000Z","name":"Sasuke Uchiha","thumbnail_path":"assets\/media\/user_placeholder.png","image_path":"assets\/media\/user_placeholder.png"}}},"first_page_url":"http:\/\/127.0.0.1:8000\/api\/rider\/booking\/history?page=1","from":1,"last_page":1,"last_page_url":"http:\/\/127.0.0.1:8000\/api\/rider\/booking\/history?page=1","links":{{"url":null,"label":"« Previous","active":false},{"url":"http:\/\/127.0.0.1:8000\/api\/rider\/booking\/history?page=1","label":"1","active":true},{"url":null,"label":"Next »","active":false}},"next_page_url":null,"path":"http:\/\/127.0.0.1:8000\/api\/rider\/booking\/history","per_page":5,"prev_page_url":null,"to":1,"total":1}}
     *                 )
     *      )
     *   ),
@@ -204,7 +109,7 @@ class CompletedTripController extends Controller
           
 
         //Fetch booking history/ completed trips
-        $completed_trips = CompletedTrip::where('user_id',$user->id)->with('location')->with('user')->get();
+        $completed_trips = CompletedTrip::where('user_id',$user->id)->with('location')->with('user')->paginate(5);
 
         $response = ['message' => 'Success!',  "completed_trips"=>$completed_trips];
         return response($response, 200);
