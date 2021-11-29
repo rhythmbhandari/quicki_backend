@@ -318,7 +318,7 @@ class BookingService extends Service
         $estimated_price['shift'] = isset($shift->title)?$shift->title:1;
         $estimated_price['price_breakdown'] = [];
         //Provided
-        $estimated_price['price_breakdown']['minimum_charge'] = 150;
+        $estimated_price['price_breakdown']['minimum_charge'] = intval($vehicle_type->base_fair);
         //PRICE AFTER DISTANCE
         $estimated_price['price_breakdown']['price_per_km'] = $vehicle_type->price_per_km;
         $estimated_price['price_breakdown']['price_after_distance']  = ($vehicle_type->price_per_km * $distance);
