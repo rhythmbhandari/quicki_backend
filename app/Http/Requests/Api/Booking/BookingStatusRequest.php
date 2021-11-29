@@ -5,6 +5,10 @@ namespace App\Http\Requests\Api\Booking;
 use Illuminate\Foundation\Http\FormRequest;
 // use App\Rules\ValidateDoubleRule;
 
+
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+
 //models
 use App\Modules\Models\Booking;
 use App\Modules\Models\User;
@@ -20,6 +24,11 @@ class BookingStatusRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 
     /**

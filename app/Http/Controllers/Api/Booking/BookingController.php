@@ -159,7 +159,7 @@ class BookingController extends Controller
      */
     public function store(BookingRequest $request)
     {
-       
+        
         $user = Auth::user();
 
 

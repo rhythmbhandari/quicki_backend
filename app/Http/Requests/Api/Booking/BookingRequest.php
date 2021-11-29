@@ -3,7 +3,11 @@
 namespace App\Http\Requests\Api\Booking;
 
 use Illuminate\Foundation\Http\FormRequest;
+// use Illuminate\Support\Facades\Validator;
 use App\Rules\ValidateDoubleRule;
+
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 //models
 use App\Modules\Models\VehicleType;
@@ -20,6 +24,11 @@ class BookingRequest extends FormRequest
         return true;
     }
 
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -27,6 +36,8 @@ class BookingRequest extends FormRequest
      */
     public function rules()
     {
+
+
         return [
            
             'origin' => 'required|string|max:255',

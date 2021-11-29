@@ -4,6 +4,10 @@ namespace App\Http\Requests\Api\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+
 use App\Rules\ValidateDoubleRule;
 
 
@@ -17,6 +21,12 @@ class UserRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 
     /**
