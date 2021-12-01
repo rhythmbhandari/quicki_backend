@@ -77,10 +77,14 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->get('/rider/booking/history', [CompletedTripController::class, 'getRiderTrips'])->name('rider.booking.history');
   $router->post('/review/create', [ReviewController::class, 'store'])->name('review.store');
 
-  $router->get('/{user_type}/total_distance', [ReviewController::class, 'store'])->name('booking.total_distance');
-  $router->get('/{user_type}/total_trips', [ReviewController::class, 'store'])->name('booking.total_trips');
+  $router->get('/{user_type}/total_distance', [CompletedTripController::class, 'getTotalDistance'])->name('completed_trip.total_distance');
+  $router->get('/{user_type}/total_trips', [CompletedTripController::class, 'getTotalTrips'])->name('completed_trip.total_trips');
 
   $router->post('/booking/estimated_price', [BookingController::class, 'getEstimatedPrice'])->name('booking.estimated_price');
+
+  
+  $router->get('/user/vehicle_type/{vehicle_type_id}/booking/{booking_status}/history', [CompletedTripController::class, 'getUserVehicleTypeBookingHistory'])->name('user.booking.vehicle_type_history');
+  $router->get('/rider/vehicle_type/{vehicle_type_id}/booking/{booking_status}/history', [CompletedTripController::class, 'getRiderVehicleTypeBookingHistory'])->name('rider.booking.vehicle_type_history');
 
   //---------------------------------------------------------------------------------------------------------
   //  AVAILABLE AND ONLINE/OFFLINE RIDERS/USERS
