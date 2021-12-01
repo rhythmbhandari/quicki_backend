@@ -41,14 +41,15 @@ class RiderProfileRequest extends FormRequest
         $user = Auth::user();
         return [
            
-            'first_name' => 'required|string|max:255',
+            'first_name' => 'nullable|string|max:255',
             'middle_name' => 'nullable|string|max:255',
-            'last_name' => 'required|string|max:255',
+            'last_name' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'username' => 'nullable|string|max:255|unique:users,username,'.$user->id,
             'email' => 'nullable|string|email|max:255|unique:users,email,'.$user->id,
             'dob' => 'nullable',
             'gender' => 'nullable',
+            'social_image_url'=>'nullable|url',
 
         ];
     }

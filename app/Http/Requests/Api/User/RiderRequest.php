@@ -36,7 +36,7 @@ class RiderRequest extends FormRequest
      */
     public function rules()
     {
-        dd("data",$this->all());
+       // dd("data",$this->all());
         return [
            
             'first_name' => 'required|string|max:255',
@@ -51,6 +51,7 @@ class RiderRequest extends FormRequest
             'gender' => 'nullable',
             'google_id' => 'nullable',
             'facebook_id' => 'nullable',
+            'social_image_url'=>'nullable',
 
             //Rider's fields
             'rider.experience' => 'required',
@@ -75,7 +76,7 @@ class RiderRequest extends FormRequest
             //Document's fields
             'document.document_number' => 'required',
             'document.type' => 'required',
-            'document.image' => 'required',
+            'document.image' => 'nullable',
             'document.issue_date' => 'required',
             'document.expiry_date' => 'required',
 

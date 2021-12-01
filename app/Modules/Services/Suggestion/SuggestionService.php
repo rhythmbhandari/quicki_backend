@@ -24,6 +24,10 @@ class SuggestionService extends Service
     }
 
 
+    function getAllSuggestions(){
+        return Suggestion::all();
+    }
+
     function getReviewbyUserSuggestion()
     {
         return Suggestion::where('type','review_by_user')->get();

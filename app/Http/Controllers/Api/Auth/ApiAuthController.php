@@ -11,6 +11,11 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Throwable;
+use Intervention\Image\Facades\Image;
+
 
 //requests
 use App\Http\Requests\Api\User\UserRequest;
@@ -72,6 +77,7 @@ class ApiAuthController extends Controller
     *                 "dob": "2000/01/01",
     *                  "facebook_id" : "",
     *                  "google_id" : "",
+    *                 "social_image_url":"https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
     *              }
     *         )
     *     )
@@ -121,6 +127,15 @@ class ApiAuthController extends Controller
                 if ($request->hasFile('image')) {
                     $this->uploadFile($request, $createdUser, $this->user);
                 }
+                else if (isset($request->social_image_url) && !is_null($request->social_image_url)) {
+                   
+                    $url = $request->social_image_url;
+                    $this->user->uploadSocialImage($createdUser, $url);
+
+                } else {
+                    //$fileNameToStore1 = 'no-image.png';
+                }
+
                 $accessToken = $createdUser->createToken('Laravel Password Grant Client')->accessToken;
                 $response = ['message' => 'User Registration Successful!', 'access_token' => $accessToken, "user"=>$createdUser];
                 return response($response, 201);
@@ -157,7 +172,8 @@ class ApiAuthController extends Controller
     *                  "password_confirmation": "password",
     *                  "dob": "2000/01/01",
     *                   "facebook_id" : "",
-    *                   "google_id" : "",                       
+    *                   "google_id" : "",    
+    *                 "social_image_url":"https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",                   
     *                 "rider":{
     *                     "experience":"5",
     *                     "trained":"YES",
@@ -227,7 +243,17 @@ class ApiAuthController extends Controller
             {
                 if ($request->hasFile('image')) {
                     $this->uploadFile($request, $createdRider->user, $this->user);
+                } 
+                else if (isset($request->social_image_url) && !is_null($request->social_image_url)) {
+                   
+                    $url = $request->social_image_url;
+                    $this->user->uploadSocialImage($createdRider->user, $url);
+
+                } else {
+                    //$fileNameToStore1 = 'no-image.png';
                 }
+
+
                 if ($request->hasFile('document.image')) {
                     $this->uploadFile($request, $createdRider->latest_document, $this->document);
                 }
@@ -246,6 +272,8 @@ class ApiAuthController extends Controller
       
     }
 
+
+  
 
     /**
     * @OA\Post(
@@ -376,6 +404,7 @@ class ApiAuthController extends Controller
     *                       "last_logged_in": null,
     *                       "no_of_logins": null,
     *                       "avatar": null,
+    *                 "social_image_url":"https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
     *                       "deleted_at": null,
     *                       "last_updated_by": null,
     *                       "last_deleted_by": null,
@@ -563,6 +592,7 @@ class ApiAuthController extends Controller
     *                               "vehicle_color": null,
     *                               "brand": "HERO",
     *                               "model": "Splender",
+    *                 "social_image_url":"https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
     *                               "status": "active",
     *                               "deleted_at": null,
     *                               "last_deleted_by": null,
@@ -793,6 +823,7 @@ class ApiAuthController extends Controller
     *                               "vehicle_color": null,
     *                               "brand": "HERO",
     *                               "model": "Splender",
+    *                               "social_image_url":"https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
     *                               "status": "active",
     *                               "deleted_at": null,
     *                               "last_deleted_by": null,
@@ -858,6 +889,15 @@ class ApiAuthController extends Controller
                 if ($request->hasFile('image')) {
                     $this->uploadFile($request, $createdRider->user, $this->user);
                 }
+                else if (isset($request->social_image_url) && !is_null($request->social_image_url)) {
+                   
+                    $url = $request->social_image_url;
+                    $this->user->uploadSocialImage($createdRider->user, $url);
+
+                } else {
+                    //$fileNameToStore1 = 'no-image.png';
+                }
+
                 if ($request->hasFile('document.image')) {
                     $this->uploadFile($request, $createdRider->latest_document, $this->document);
                 }
@@ -1009,8 +1049,8 @@ class ApiAuthController extends Controller
 
     function uploadFile(Request $request, $model_object, $service=null)
     {
-        try{
-            $file = $request->file('image');
+        try{ 
+            $file = $request->file('image'); //dd('uploadFileAPICONTROLLER',$file, $request->image);
             $fileName = $service->uploadFile($file);
             if (!empty($model_object->image))
                 $service->__deleteImages($model_object);

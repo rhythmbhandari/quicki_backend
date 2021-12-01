@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Booking\CompletedTripController;
 use App\Http\Controllers\Api\Review\ReviewController;
 use App\Http\Controllers\Api\Document\DocumentController;
 use App\Http\Controllers\Api\Vehicle\VehicleController;
+use App\Http\Controllers\Api\Suggestion\SuggestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +77,9 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->get('/rider/booking/history', [CompletedTripController::class, 'getRiderTrips'])->name('rider.booking.history');
   $router->post('/review/create', [ReviewController::class, 'store'])->name('review.store');
 
+  $router->get('/{user_type}/total_distance', [ReviewController::class, 'store'])->name('booking.total_distance');
+  $router->get('/{user_type}/total_trips', [ReviewController::class, 'store'])->name('booking.total_trips');
+
   $router->post('/booking/estimated_price', [BookingController::class, 'getEstimatedPrice'])->name('booking.estimated_price');
 
   //---------------------------------------------------------------------------------------------------------
@@ -124,11 +128,19 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
 
 
   //---------------------------------------------------------------------------------------------------------
+  //  SUGGESTION
+  //---------------------------------------------------------------------------------------------------------
+  $router->get('/suggestion/{suggestion_type}/', [SuggestionController::class, 'getSuggestions'])->name('suggestion.suggestions');
+
+
+
+  //---------------------------------------------------------------------------------------------------------
   //  AUTH ROUTES
   //---------------------------------------------------------------------------------------------------------
   $router->post('/logout', [ApiAuthController::class, 'logout'])->name('logout');
 
   
+
 
 
   

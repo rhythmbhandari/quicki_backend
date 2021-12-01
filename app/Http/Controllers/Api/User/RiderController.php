@@ -196,6 +196,7 @@ class RiderController extends Controller
     *                   "last_logged_in": null,
     *                   "no_of_logins": null,
     *                   "avatar": null,
+    *                   "social_image_url":"https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
     *                   "deleted_at": null,
     *                   "last_updated_by": null,
     *                   "last_deleted_by": null,
@@ -337,6 +338,7 @@ class RiderController extends Controller
     *                 "username": "luffy",
     *                 "dob": "2000/01/01",
     *                 "gender": "male",
+    *                 "social_image_url":"https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
     *              }
     *         )
     *     )
@@ -381,6 +383,7 @@ class RiderController extends Controller
     *                                 "last_logged_in": null,
     *                                 "no_of_logins": null,
     *                                 "avatar": null,
+    *                                 "social_image_url":"https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
     *                                 "deleted_at": null,
     *                                 "last_updated_by": null,
     *                                 "last_deleted_by": null,
@@ -435,6 +438,15 @@ class RiderController extends Controller
                 if ($request->hasFile('image')) {
                     $this->uploadFile($request, $updatedUser);
                 }
+                else if (isset($request->social_image_url) && !is_null($request->social_image_url)) {
+                   
+                    $url = $request->social_image_url;
+                    $this->user->uploadSocialImage($updatedUser, $url);
+
+                } else {
+                    //$fileNameToStore1 = 'no-image.png';
+                }
+
                 $response = ['message' => 'User Profile Updated Successful!',  "user"=>$updatedUser];
                 return response($response, 200);
             }

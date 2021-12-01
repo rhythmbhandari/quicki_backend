@@ -57,6 +57,7 @@ abstract class Service
             $newFileName = sprintf("%s.%s", sha1($fileName . time()), $file_type);
             try {
                 $image = $file->move($destination, $newFileName);
+               
                 if (substr($file->getClientMimeType(), 0, 5) == 'image')
                     $this->createThumb($image, $width, $height);
                 return $image->getFilename();
