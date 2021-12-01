@@ -1801,6 +1801,92 @@
                 ]
             }
         },
+        "/api/{user_type}/total_distance": {
+            "get": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Total distance of completed bookings of User/Rider ",
+                "operationId": "46859e32630ac2460fd655623508f0d6",
+                "parameters": [
+                    {
+                        "name": "user_type",
+                        "in": "path",
+                        "description": "User Type [Accepted Values: 'customer', or 'rider']",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "total_distance": 0
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Invalid User Type! Select one from 'customer' or 'rider'!"
+                    },
+                    "500": {
+                        "description": "Somehing went wrong! Internal Server Error!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/{user_type}/total_trips": {
+            "get": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Total completed bookings of User/Rider ",
+                "operationId": "4f221d6ee347ee9367f7751487039b9d",
+                "parameters": [
+                    {
+                        "name": "user_type",
+                        "in": "path",
+                        "description": "User Type [Accepted Values: 'customer', or 'rider']",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "total_trips": 0
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Invalid User Type! Select one from 'customer' or 'rider'!"
+                    },
+                    "500": {
+                        "description": "Somehing went wrong! Internal Server Error!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/document/create": {
             "post": {
                 "tags": [

@@ -277,7 +277,43 @@ class CompletedTripController extends Controller
 
 
 
-
+    /**
+    * @OA\Get(
+    *   path="/api/{user_type}/total_distance",
+    *   tags={"Booking"},
+    *   summary="Total distance of completed bookings of User/Rider ",
+    *   security={{"bearerAuth":{}}},
+    *
+    *      @OA\Parameter(
+    *         name="user_type",
+    *         in="path",
+    *         description="User Type [Accepted Values: 'customer', or 'rider']",
+    *         required=true,
+    *      ),
+    *
+    *   @OA\Response(
+    *      response=200,
+    *       description="Success",
+    *      @OA\MediaType(
+    *           mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example={
+    *                     "message": "Success!",
+    *                     "total_distance": 0
+    *                   }
+    *                 )
+    *      )
+    *   ),
+    *   @OA\Response(
+    *      response=422,
+    *       description="Invalid User Type! Select one from 'customer' or 'rider'!"
+    *   ),
+    *   @OA\Response(
+    *      response=500,
+    *       description="Somehing went wrong! Internal Server Error!"
+    *   )
+    *)
+    **/
     public function getTotalDistance($user_type)
     {
         //Validate User Type
@@ -286,16 +322,60 @@ class CompletedTripController extends Controller
             $response = ['message' => 'Invalid User Type! Select one from "customer" or "rider"!'];
             return response($response, 422);
         }
+
         $user = Auth::user();
         $total_distance = 0;
 
-        $total_distance = CompletedTrip::where('user_id',$user->id)->where('status','completed')->sum('distance');
-        
+        if($user_type == 'customer')
+            $total_distance = CompletedTrip::where('user_id',$user->id)->where('status','completed')->sum('distance');
+        else
+            $total_distance = CompletedTrip::where('rider_id',$user->rider->id)->where('status','completed')->sum('distance');
 
+        $response = ['message' => 'Success!', 'total_distance'=>$total_distance ];
+        return response($response, 200);
+
+        $response = ['Somehing went wrong! Internal Server Error!' ];
+        return response($response, 500);
 
     }
 
-
+    /**
+    * @OA\Get(
+    *   path="/api/{user_type}/total_trips",
+    *   tags={"Booking"},
+    *   summary="Total completed bookings of User/Rider ",
+    *   security={{"bearerAuth":{}}},
+    *
+    *      @OA\Parameter(
+    *         name="user_type",
+    *         in="path",
+    *         description="User Type [Accepted Values: 'customer', or 'rider']",
+    *         required=true,
+    *      ),
+    *
+    *   @OA\Response(
+    *      response=200,
+    *       description="Success",
+    *      @OA\MediaType(
+    *           mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example={
+    *                     "message": "Success!",
+    *                     "total_trips": 0
+    *                   }
+    *                 )
+    *      )
+    *   ),
+    *   @OA\Response(
+    *      response=422,
+    *       description="Invalid User Type! Select one from 'customer' or 'rider'!"
+    *   ),
+    *   @OA\Response(
+    *      response=500,
+    *       description="Somehing went wrong! Internal Server Error!"
+    *   )
+    *)
+    **/
     public function getTotalTrips($user_type)
     {
           //Validate User Type
@@ -304,6 +384,19 @@ class CompletedTripController extends Controller
               $response = ['message' => 'Invalid User Type! Select one from "customer" or "rider"!'];
               return response($response, 422);
           }
+
+          $user = Auth::user();
+          $total_trips = 0;
+          if($user_type == 'customer')
+            $total_trips = CompletedTrip::where('user_id',$user->id)->where('status','completed')->count();
+          else 
+            $total_trips = CompletedTrip::where('rider_id',$user->rider->id)->where('status','completed')->count();
+          $response = ['message' => 'Success!', 'total_trips'=>$total_trips ];
+          return response($response, 200);
+  
+          $response = ['Somehing went wrong! Internal Server Error!' ];
+          return response($response, 500);
+
     }
 
 
