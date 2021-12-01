@@ -17,7 +17,7 @@ class Document extends Model
     ];
 
     protected $fillable = ([
-        'documentable_id', 'documentable_type', 'document_number', 'type', 'issue_date', 'expire_date', 'image', 
+        'documentable_id', 'documentable_type', 'document_number', 'type', 'issue_date', 'expiry_date', 'image', 
         'verified_at','reason',
         'created_at', 'updated_at' ,'deleted_at'
     ]);
