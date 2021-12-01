@@ -280,9 +280,31 @@ class CompletedTripController extends Controller
 
     public function getTotalDistance($user_type)
     {
-        $allowed_user_types = Roles::pluck('name')->toArray();
+        //Validate User Type
+        if( !in_array($user_type, ['customer','rider']  ) )
+        {
+            $response = ['message' => 'Invalid User Type! Select one from "customer" or "rider"!'];
+            return response($response, 422);
+        }
+        $user = Auth::user();
+        $total_distance = 0;
+
+        $total_distance = CompletedTrip::where('user_id',$user->id)->where('status','completed')->sum('distance');
+        
+
+
     }
 
+
+    public function getTotalTrips($user_type)
+    {
+          //Validate User Type
+          if( !in_array($user_type, ['customer','rider']  ) )
+          {
+              $response = ['message' => 'Invalid User Type! Select one from "customer" or "rider"!'];
+              return response($response, 422);
+          }
+    }
 
 
 
