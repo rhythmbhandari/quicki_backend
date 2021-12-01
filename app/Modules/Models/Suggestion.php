@@ -21,5 +21,25 @@ class Suggestion extends Model
         ];
     }
 
+    protected $fillable = ['text','slug','image',  'type','category'];
+
+    protected $appends = [   'thumbnail_path', 'image_path' ];
+
+    function getImagePathAttribute()
+    {
+        if ($this->image)
+            return $this->path . '/' . $this->type . '/' . $this->image;
+        else
+            return 'assets/media/noimage.png';
+    }
+
+    function getThumbnailPathAttribute()
+    {
+        if ($this->image)
+            return $this->path . '/' . $this->type . '/thumb/' . $this->image;
+        else
+            return 'assets/media/noimage.png';
+    }
+
 
 }

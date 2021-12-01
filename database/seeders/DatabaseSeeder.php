@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             RoleUserSeeder::class,
             VehicleTypeSeeder::class,
             OtpSeeder::class,
+            SuggestionSeeder::class,
         ]);
 
         

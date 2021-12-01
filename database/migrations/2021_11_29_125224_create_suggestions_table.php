@@ -19,7 +19,7 @@ class CreateSuggestionsTable extends Migration
 
             $table->string('text');
 
-            $table->string('icon')->nullable();
+            $table->string('image')->nullable();
 
             $table->string('type')->nullable()
             ->comment('Suggestion type. For ex: booking_cancel_by_rider, booking_cancel_by_user, review_by_rider, review_by_user.');

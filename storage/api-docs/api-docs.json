@@ -30,7 +30,8 @@
                                     "password_confirmation": "password",
                                     "dob": "2000/01/01",
                                     "facebook_id": "",
-                                    "google_id": ""
+                                    "google_id": "",
+                                    "social_image_url": "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
                                 }
                             }
                         }
@@ -91,6 +92,7 @@
                                     "dob": "2000/01/01",
                                     "facebook_id": "",
                                     "google_id": "",
+                                    "social_image_url": "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
                                     "rider": {
                                         "experience": "5",
                                         "trained": "YES"
@@ -249,6 +251,7 @@
                                             "last_logged_in": null,
                                             "no_of_logins": null,
                                             "avatar": null,
+                                            "social_image_url": "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
                                             "deleted_at": null,
                                             "last_updated_by": null,
                                             "last_deleted_by": null,
@@ -402,6 +405,7 @@
                                                     "vehicle_color": null,
                                                     "brand": "HERO",
                                                     "model": "Splender",
+                                                    "social_image_url": "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
                                                     "status": "active",
                                                     "deleted_at": null,
                                                     "last_deleted_by": null,
@@ -581,6 +585,7 @@
                                                     "vehicle_color": null,
                                                     "brand": "HERO",
                                                     "model": "Splender",
+                                                    "social_image_url": "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
                                                     "status": "active",
                                                     "deleted_at": null,
                                                     "last_deleted_by": null,
@@ -2082,6 +2087,179 @@
                 ]
             }
         },
+        "/api/suggestion/{suggestion_type}": {
+            "get": {
+                "tags": [
+                    "Suggestions"
+                ],
+                "summary": "Get Suggestions for specified type/cases",
+                "operationId": "914b5ca649c6559c9a9ea2ce6927d74b",
+                "parameters": [
+                    {
+                        "name": "suggestion_type",
+                        "in": "path",
+                        "description": "Suggestion Type => ['review_by_user','review_by_rider','booking_cancel_by_rider','booking_cancel_by_user', 'all']",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "suggestions": [
+                                            {
+                                                "id": 1,
+                                                "slug": null,
+                                                "text": "Great Ride!",
+                                                "image": null,
+                                                "type": "review_by_user",
+                                                "category": "positive_review",
+                                                "created_at": "2021-11-30T11:54:56.000000Z",
+                                                "updated_at": "2021-11-30T11:54:56.000000Z",
+                                                "thumbnail_path": "assets/media/noimage.png",
+                                                "image_path": "assets/media/noimage.png"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "slug": null,
+                                                "text": "Smooth Ride!",
+                                                "image": null,
+                                                "type": "review_by_user",
+                                                "category": "positive_review",
+                                                "created_at": "2021-11-30T11:54:56.000000Z",
+                                                "updated_at": "2021-11-30T11:54:56.000000Z",
+                                                "thumbnail_path": "assets/media/noimage.png",
+                                                "image_path": "assets/media/noimage.png"
+                                            },
+                                            {
+                                                "id": 3,
+                                                "slug": null,
+                                                "text": "Trash Vehicle!",
+                                                "image": null,
+                                                "type": "review_by_user",
+                                                "category": "negative_review",
+                                                "created_at": "2021-11-30T11:54:56.000000Z",
+                                                "updated_at": "2021-11-30T11:54:56.000000Z",
+                                                "thumbnail_path": "assets/media/noimage.png",
+                                                "image_path": "assets/media/noimage.png"
+                                            },
+                                            {
+                                                "id": 4,
+                                                "slug": null,
+                                                "text": "Great Ride!",
+                                                "image": null,
+                                                "type": "review_by_user",
+                                                "category": "positive_review",
+                                                "created_at": "2021-11-30T11:55:19.000000Z",
+                                                "updated_at": "2021-11-30T11:55:19.000000Z",
+                                                "thumbnail_path": "assets/media/noimage.png",
+                                                "image_path": "assets/media/noimage.png"
+                                            },
+                                            {
+                                                "id": 5,
+                                                "slug": null,
+                                                "text": "Smooth Ride!",
+                                                "image": null,
+                                                "type": "review_by_user",
+                                                "category": "positive_review",
+                                                "created_at": "2021-11-30T11:55:19.000000Z",
+                                                "updated_at": "2021-11-30T11:55:19.000000Z",
+                                                "thumbnail_path": "assets/media/noimage.png",
+                                                "image_path": "assets/media/noimage.png"
+                                            },
+                                            {
+                                                "id": 6,
+                                                "slug": null,
+                                                "text": "Trash Vehicle!",
+                                                "image": null,
+                                                "type": "review_by_user",
+                                                "category": "negative_review",
+                                                "created_at": "2021-11-30T11:55:19.000000Z",
+                                                "updated_at": "2021-11-30T11:55:19.000000Z",
+                                                "thumbnail_path": "assets/media/noimage.png",
+                                                "image_path": "assets/media/noimage.png"
+                                            },
+                                            {
+                                                "id": 7,
+                                                "slug": null,
+                                                "text": "Drunk Customer!",
+                                                "image": null,
+                                                "type": "review_by_rider",
+                                                "category": "negative_review",
+                                                "created_at": "2021-11-30T11:55:19.000000Z",
+                                                "updated_at": "2021-11-30T11:55:19.000000Z",
+                                                "thumbnail_path": "assets/media/noimage.png",
+                                                "image_path": "assets/media/noimage.png"
+                                            },
+                                            {
+                                                "id": 8,
+                                                "slug": null,
+                                                "text": "Great Customer!",
+                                                "image": null,
+                                                "type": "review_by_rider",
+                                                "category": "positive_review",
+                                                "created_at": "2021-11-30T11:55:19.000000Z",
+                                                "updated_at": "2021-11-30T11:55:19.000000Z",
+                                                "thumbnail_path": "assets/media/noimage.png",
+                                                "image_path": "assets/media/noimage.png"
+                                            },
+                                            {
+                                                "id": 9,
+                                                "slug": null,
+                                                "text": "Good Customer!",
+                                                "image": null,
+                                                "type": "review_by_rider",
+                                                "category": "positive_review",
+                                                "created_at": "2021-11-30T11:55:19.000000Z",
+                                                "updated_at": "2021-11-30T11:55:19.000000Z",
+                                                "thumbnail_path": "assets/media/noimage.png",
+                                                "image_path": "assets/media/noimage.png"
+                                            },
+                                            {
+                                                "id": 10,
+                                                "slug": null,
+                                                "text": "Rider was too Late!",
+                                                "image": null,
+                                                "type": "booking_cancel_by_user",
+                                                "category": "",
+                                                "created_at": "2021-11-30T11:55:19.000000Z",
+                                                "updated_at": "2021-11-30T11:55:19.000000Z",
+                                                "thumbnail_path": "assets/media/noimage.png",
+                                                "image_path": "assets/media/noimage.png"
+                                            },
+                                            {
+                                                "id": 11,
+                                                "slug": null,
+                                                "text": "Customer was unreachable!",
+                                                "image": null,
+                                                "type": "booking_cancel_by_rider",
+                                                "category": "",
+                                                "created_at": "2021-11-30T11:55:19.000000Z",
+                                                "updated_at": "2021-11-30T11:55:19.000000Z",
+                                                "thumbnail_path": "assets/media/noimage.png",
+                                                "image_path": "assets/media/noimage.png"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/rider/details": {
             "get": {
                 "tags": [
@@ -2253,6 +2431,7 @@
                                             "last_logged_in": null,
                                             "no_of_logins": null,
                                             "avatar": null,
+                                            "social_image_url": "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
                                             "deleted_at": null,
                                             "last_updated_by": null,
                                             "last_deleted_by": null,
@@ -2350,7 +2529,8 @@
                                     "email": "luffy@gmail.com",
                                     "username": "luffy",
                                     "dob": "2000/01/01",
-                                    "gender": "male"
+                                    "gender": "male",
+                                    "social_image_url": "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
                                 }
                             }
                         }
@@ -2395,6 +2575,7 @@
                                             "last_logged_in": null,
                                             "no_of_logins": null,
                                             "avatar": null,
+                                            "social_image_url": "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
                                             "deleted_at": null,
                                             "last_updated_by": null,
                                             "last_deleted_by": null,
@@ -2549,6 +2730,7 @@
                                             "last_logged_in": null,
                                             "no_of_logins": null,
                                             "avatar": null,
+                                            "social_image_url": "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
                                             "deleted_at": null,
                                             "last_updated_by": null,
                                             "last_deleted_by": null,
@@ -2594,7 +2776,8 @@
                                     "email": "luffy@gmail.com",
                                     "username": "luffy",
                                     "dob": "2000/01/01",
-                                    "gender": "male"
+                                    "gender": "male",
+                                    "social_image_url": "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
                                 }
                             }
                         }
@@ -2639,6 +2822,7 @@
                                             "last_logged_in": null,
                                             "no_of_logins": null,
                                             "avatar": null,
+                                            "social_image_url": "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
                                             "deleted_at": null,
                                             "last_updated_by": null,
                                             "last_deleted_by": null,

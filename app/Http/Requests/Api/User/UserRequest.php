@@ -49,7 +49,8 @@ class UserRequest extends FormRequest
             'dob' => 'nullable',
             'gender' => 'nullable',
             'google_id' => 'nullable|unique:users',
-            'facebook_id' => 'nullable|unique:users'
+            'facebook_id' => 'nullable|unique:users',
+            'social_image_url'=>'nullable|url',
 
         ];
     }

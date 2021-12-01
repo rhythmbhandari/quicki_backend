@@ -15,51 +15,51 @@ class SuggestionSeeder extends Seeder
     public function run()
     {
         Suggestion::create([
-            'suggestion'=>'Great Ride!',
+            'text'=>'Great Ride!',
             'type'=>'review_by_user',
             'category'=>'positive_review',
         ]);
 
         Suggestion::create([
-            'suggestion'=>'Smooth Ride!',
+            'text'=>'Smooth Ride!',
             'type'=>'review_by_user',
             'category'=>'positive_review',
         ]);
 
 
         Suggestion::create([
-            'suggestion'=>'Trash Vehicle!',
+            'text'=>'Trash Vehicle!',
             'type'=>'review_by_user',
             'category'=>'negative_review',
         ]);
 
         Suggestion::create([
-            'suggestion'=>'Drunk Customer!',
+            'text'=>'Drunk Customer!',
             'type'=>'review_by_rider',
             'category'=>'negative_review',
         ]);
         
         Suggestion::create([
-            'suggestion'=>'Great Customer!',
+            'text'=>'Great Customer!',
             'type'=>'review_by_rider',
             'category'=>'positive_review',
         ]);
 
         Suggestion::create([
-            'suggestion'=>'Good Customer!',
+            'text'=>'Good Customer!',
             'type'=>'review_by_rider',
             'category'=>'positive_review',
         ]);
 
 
         Suggestion::create([
-            'suggestion'=>'Rider was too Late!',
+            'text'=>'Rider was too Late!',
             'type'=>'booking_cancel_by_user',
             'category'=>'',
         ]);
 
         Suggestion::create([
-            'suggestion'=>'Customer was unreachable!',
+            'text'=>'Customer was unreachable!',
             'type'=>'booking_cancel_by_rider',
             'category'=>'',
         ]);
