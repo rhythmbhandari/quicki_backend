@@ -75,7 +75,6 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->get('/rider/booking/active', [BookingController::class, 'getActiveRiderBooking'])->name('rider.booking.active');
   $router->get('/user/booking/history', [CompletedTripController::class, 'getUserTrips'])->name('user.booking.history');
   $router->get('/rider/booking/history', [CompletedTripController::class, 'getRiderTrips'])->name('rider.booking.history');
-  $router->post('/review/create', [ReviewController::class, 'store'])->name('review.store');
 
   $router->get('/{user_type}/total_distance', [CompletedTripController::class, 'getTotalDistance'])->name('completed_trip.total_distance');
   $router->get('/{user_type}/total_trips', [CompletedTripController::class, 'getTotalTrips'])->name('completed_trip.total_trips');
@@ -94,6 +93,15 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->post('/rider/online', [RiderLocationController::class, 'getRiderOnline'])->name('rider.online');
   $router->post('/rider/offline', [RiderLocationController::class, 'getRiderOffline'])->name('rider.online');
 
+
+
+  
+  //---------------------------------------------------------------------------------------------------------
+  //  REVIEWS
+  //---------------------------------------------------------------------------------------------------------
+  $router->post('/review/create', [ReviewController::class, 'store'])->name('review.store');
+  $router->get('/user/{user_id}/reviews', [ReviewController::class, 'getUserReviews'])->name('review.user.reviews');
+  $router->get('/rider/{rider_id}/reviews', [ReviewController::class, 'getRiderReviews'])->name('review.rider.reviews');
 
   //---------------------------------------------------------------------------------------------------------
   //  USER ROUTES

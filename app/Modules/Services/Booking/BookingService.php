@@ -7,7 +7,7 @@ use App\Modules\Services\Service;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
-
+use Throwable;
 
 //services
 use App\Modules\Services\Location\LocationService;
@@ -134,10 +134,24 @@ class BookingService extends Service
                     $booking->save();
 
                     //CREATE COMPLTED TRIP RECORD for COMPLETED STATUS
-                    $cancelled_trip_data = $booking->toArray();
-                    $cancelled_trip_data['booking_id'] = intval($booking->id);
+                    $completed_trip_data = $booking->toArray();
+                    $completed_trip_data['booking_id'] = intval($booking->id);
                     
-                    $booking->createdCompletedTrip = $this->completed_trip_service->create($cancelled_trip_data);
+
+                    
+                    //RECALCULATE THE BOOKING PRICE WITH UPDATED DURATION
+                    $new_duration = $this->getTimeDiffInSeconds($booking->start_time, $booking->end_time);
+                    $completed_trip_data['duration'] = $new_duration;
+                    $final_price = 0;
+                    $final_price = $this->calculate_final_price(
+                                                    $booking->vehicle_type_id,
+                                                    $booking->price,  
+                                                    $booking->duration, 
+                                                    $new_duration
+                                                );
+                    $completed_trip_data['price'] = $final_price;
+
+                    $booking->createdCompletedTrip = $this->completed_trip_service->create($completed_trip_data);
                     return $booking;
                 }
                 else if($new_status == "cancelled")
@@ -153,26 +167,11 @@ class BookingService extends Service
                     }
                     $booking->save();
 
+
                     //CREATE COMPLTED TRIP RECORD for CANCELLED STATUS
                     $cancelled_trip_data = $booking->toArray();
                     $cancelled_trip_data['booking_id'] = intval($booking->id);
                     
-
-                    // $cancelled_trip_data['rider_id'] = isset($cancelled_trip_data['rider_id']) ? intval($cancelled_trip_data['rider_id']) : null;
-                    // $cancelled_trip_data['location_id'] = isset($cancelled_trip_data['location_id']) ? intval($cancelled_trip_data['location_id']) : null;
-                    // $cancelled_trip_data['price'] = isset($cancelled_trip_data['price']) ? intval($cancelled_trip_data['price']) : null;
-                    // $cancelled_trip_data['distance'] = isset($cancelled_trip_data['distance']) ? intval($cancelled_trip_data['distance']) : null;
-                    // $cancelled_trip_data['duration'] = isset($cancelled_trip_data['duration']) ? intval($cancelled_trip_data['duration']) : null;
-                   
-                    // $cancelled_trip_data['cancelled_by_id'] = 
-                    // isset($data['optional_data']['cancelled_by_id']) ? intval($data['optional_data']['cancelled_by_id']) : intval(Auth::user()->id) ;
-                    // $cancelled_trip_data['cancelled_by_type'] =
-                    // isset($data['optional_data']['cancelled_by_type']) ? $data['optional_data']['cancelled_by_type'] : "customer";
-                    // $cancelled_trip_data['cancel_message'] = 
-                    // isset($data['optional_data']['cancel_message']) ? $data['optional_data']['cancel_message'] : "" ;
-
-                    
-                    // dd("cancelled",$cancelled_trip_data);
 
                     $booking->createdCompletedTrip = $this->completed_trip_service->create($cancelled_trip_data);
                     return $booking;
@@ -186,6 +185,22 @@ class BookingService extends Service
         }
     }
 
+
+    public function getTimeDiffInSeconds($start, $end   )
+    {
+        try{
+            $start = Carbon::parse($start);
+            $end = Carbon::parse($end);
+            $duration = intval($end->diffInSeconds($start))  ;
+
+            return $duration;
+        }
+        catch(Throwable $e)
+        {
+            return 1;
+        }
+       
+    }
 
 
     public function active_user_booking($userId)
@@ -324,13 +339,6 @@ class BookingService extends Service
         $estimated_price['price_breakdown']['price_after_distance']  = ($vehicle_type->price_per_km * $distance);
         
         //PRICE AFTER SURGE
-        //$estimated_price['price_breakdown']['shift_rate'] = $shift_rate;    //Default::TO BE FETCHED from DB SHIFTS 
-       // $estimated_price['price_breakdown']['density_surge'] = $density_surge;
-       // $estimated_price['price_breakdown']['shift_surge'] 
-      //  = ($estimated_price['price_breakdown']['price_after_distance'] * $shift_rate) - $estimated_price['price_breakdown']['price_after_distance'] ;
-        //$estimated_price['price_breakdown']['surge']  = $shift_surge + $density_surge;
-      //  $estimated_price['price_breakdown']['price_after_surge']  =  $estimated_price['price_breakdown']['price_after_distance'] + $estimated_price['price_breakdown']['surge'] ;
-
         $estimated_price['price_breakdown']['surge_rate']  =  $surge_rate;
         $estimated_price['price_breakdown']['surge']  = ( $surge_rate * $estimated_price['price_breakdown']['price_after_distance'] ) - $estimated_price['price_breakdown']['price_after_distance'];
         $estimated_price['price_breakdown']['price_after_surge'] = ( $surge_rate * $estimated_price['price_breakdown']['price_after_distance'] );
@@ -356,6 +364,29 @@ class BookingService extends Service
         return $estimated_price;
     }
 
+    public function calculate_final_price( $vehicle_type_id, $old_estimated_price, $old_duration, $new_duration=600)  //minimum 10 minutes duration in seconds
+    {   
+        try{
+            $price_per_min = VehicleType::find($vehicle_type_id)->price_per_min;
+
+            //Remove the old duration's price from the total price
+            $old_duration_charge = $price_per_min * $old_duration/60;
+            $new_total_price = $old_estimated_price - $old_duration_charge;
+
+            //Add new duration price to new total price
+            $new_duration_charge = $price_per_min * $new_duration/60;
+            $new_total_price = $new_total_price + $new_duration_charge;
+
+            return round( $new_total_price);
+
+        }
+        catch(Throwable $e)
+        {
+            //dd($e);
+            return $old_estimated_price;
+        }
+
+    }
 
 
     /**

@@ -46,7 +46,7 @@ class BookingStatusRequest extends FormRequest
                     $fail('Booking not found!');
                 }
             },],
-            'new_status'=>'required|string',
+            'new_status'=>'required|string|in:accepted,running,completed,cancelled',
             'optional_data.rider_id'  => 
                         ['nullable', function ($attribute, $value, $fail) {
                             $rider = Rider::find($value);

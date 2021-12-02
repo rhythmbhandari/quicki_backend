@@ -10,6 +10,7 @@ use App\Modules\Models\Rider;
 use App\Modules\Models\User;
 use App\Modules\Models\Location;
 use App\Modules\Models\CompletedTrip;
+use App\Modules\Models\BookingPayment;
 class Booking extends Model
 {
     use HasFactory, SoftDeletes;
@@ -49,5 +50,8 @@ class Booking extends Model
     public function completed_trip() {
         return $this->hasOne(CompletedTrip::class);
     }
+
+
+
 
 }

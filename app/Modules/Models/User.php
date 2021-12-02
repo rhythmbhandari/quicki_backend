@@ -18,6 +18,7 @@ use App\Modules\Models\Role;
 use App\Modules\Models\Document;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Traits\HasPermissions;
+use App\Modules\Models\Transaction;
 
 class User extends Authenticatable
 {
@@ -110,5 +111,22 @@ class User extends Authenticatable
     {
         return $this->morphMany(Document::class, 'documentable');
     }
+
+    /**
+     * Returns the transactions that are received by this user.
+     */
+    public function received_transactions()
+    {
+        return $this->hasMany(Transaction::class, 'debtor_id');
+    }
+
+     /**
+     * Returns the transactions that are paid by this user.
+     */
+    public function paid_transactions()
+    {
+        return $this->hasMany(Transaction::class, 'creditor_id');
+    }
+
 
 }

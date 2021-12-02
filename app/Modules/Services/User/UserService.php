@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\File;
 use Throwable;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 
 use App\Modules\Models\User;
 
@@ -109,7 +110,7 @@ class UserService extends Service
     }
    
     function uploadFile($file)
-    {    dd('reached',!empty($file), $file);
+    {   // dd('reached',!empty($file), $file);
         if (!empty($file)) { //dd('uploadFile', $file);
             $this->uploadPath = 'uploads/user';
             return $fileName = $this->uploadFromAjax($file);
@@ -145,11 +146,12 @@ class UserService extends Service
 
     public function uploadSocialImage($user, $url)
     {
-        try{
+        $this->uploadPath = 'uploads/user';
+       try{
             
             if (!is_dir('uploads'))  mkdir('uploads');
-            $upload_path = 'uploads/user';
-            $thumb_path = 'uploads/user/thumb';
+            $upload_path = 'uploads\user';
+            $thumb_path = 'uploads\user\thumb';
             if (!is_dir( $upload_path ))  mkdir( $upload_path ); 
             if (!is_dir($thumb_path)) mkdir($thumb_path); 
 
@@ -157,16 +159,19 @@ class UserService extends Service
 
             $path_info = pathinfo($url);                                            //Break the url into paths and base names
             $fileNameToStore = sha1($path_info['basename']) . time() . ".webp";      //the name of the image file to be stored temporarily
-            $file_path = public_path('uploads\user\\' . $fileNameToStore );          //path for storing the image file content to the temporary directo
-            $file_thumb_path = public_path('uploads\user\thumb\\' . $fileNameToStore );  
+            $file_path = public_path( $upload_path .'\\'. $fileNameToStore );          //path for storing the image file content to the temporary directo
+            $file_thumb_path = public_path( $thumb_path .'\\'. $fileNameToStore );  
+           // dd($file_path, $file_thumb_path);
             $contents = file_get_contents($url);                                    //get image file content from the url
             $contents = imagecreatefromstring( $contents );
             
             //Save the new image to server/drive
             $img = Image::make($contents);
+            //$img_save = Storage::disk('public')->putFile($upload_path, $img);
             $img_save = $img->save($file_path);
             $img->fit(320, 320);             //NEW THUMBNAIL CREATION
             $thumb_save = $img->save($file_thumb_path);
+            //$thumb_save  = Storage::disk('public')->putFile($thumb_path, $img);
 
             if($img_save && $thumb_save)
             {
@@ -187,8 +192,8 @@ class UserService extends Service
         catch(Throwable $e)
         {
             //log ... social image couldn't be uploaded
-            //dd("ERROR While Uploading social image! => ",$e);
-        }
+           // dd("ERROR While Uploading social image! => ",$e);
+        } 
     }
 
 

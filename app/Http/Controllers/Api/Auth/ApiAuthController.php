@@ -70,6 +70,7 @@ class ApiAuthController extends Controller
     *                 "username": "luffy",
     *                 "image": "file()",
     *                 "email": "luffy@gmail.com",
+    *                "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
     *                 "phone": "9816810976",
     *                 "gender": "male",
     *                 "password": "password",
@@ -166,6 +167,7 @@ class ApiAuthController extends Controller
     *                 "username": "luffy",
     *                  "image": "file()",
     *                  "email": "luffy@gmail.com",
+    *                   "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
     *                  "phone": "9816810976",
     *                  "gender": "male",
     *                  "password": "password",
@@ -399,6 +401,7 @@ class ApiAuthController extends Controller
     *                       "username": "sasuke",
     *                       "phone": "9869191572",
     *                       "email": "sasuke@gmail.com",
+    *                        "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
     *                       "status": null,
     *                       "email_verified_at": null,
     *                       "last_logged_in": null,
@@ -514,6 +517,7 @@ class ApiAuthController extends Controller
     *                           "username": "sasuke",
     *                           "phone": "9816810976",
     *                           "email": "sasuke@gmail.com",
+    *                            "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
     *                           "location": {
     *                             "home": {
     *                               "name": "New Baneshwor, Kathmandu",
@@ -745,6 +749,7 @@ class ApiAuthController extends Controller
     *                           "username": "sasuke",
     *                           "phone": "9816810976",
     *                           "email": "sasuke@gmail.com",
+    *                            "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
     *                           "location": {
     *                             "home": {
     *                               "name": "New Baneshwor, Kathmandu",

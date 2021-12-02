@@ -11,6 +11,7 @@ use App\Modules\Models\Booking;
 use App\Modules\Models\Rider;
 use App\Modules\Models\User;
 use App\Modules\Models\Location;
+use App\Modules\Models\Payment;
 
 class CompletedTrip extends Model
 {
@@ -45,6 +46,14 @@ class CompletedTrip extends Model
     }
     public function booking(){
         return $this->belongsTo(Booking::class);//,'book_id');
+    }
+
+
+    /**
+     * Returns the associated booking payment.
+     */
+    public function payment(){
+        return $this->hasOne(Payment::class);
     }
 
 }

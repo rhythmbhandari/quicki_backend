@@ -50,6 +50,7 @@ class RiderProfileRequest extends FormRequest
             'dob' => 'nullable',
             'gender' => 'nullable',
             'social_image_url'=>'nullable|url',
+            'emergency_contacts'=>'nullable'
 
         ];
     }
