@@ -121,7 +121,7 @@ class ApiAuthController extends Controller
 
         return DB::transaction(function () use ($request)
         {
-            $createdUser = $this->user->create($request->all());
+            $createdUser = $this->user->create($request->except('image'));
 
             if($createdUser)
             {
@@ -136,7 +136,7 @@ class ApiAuthController extends Controller
                 } else {
                     //$fileNameToStore1 = 'no-image.png';
                 }
-
+                $createdUser = User::find($createdUser->id);
                 $accessToken = $createdUser->createToken('Laravel Password Grant Client')->accessToken;
                 $response = ['message' => 'User Registration Successful!', 'access_token' => $accessToken, "user"=>$createdUser];
                 return response($response, 201);
@@ -208,10 +208,94 @@ class ApiAuthController extends Controller
     *               mediaType="application/json",
     *                @OA\Schema(      
     *                   example={
-    *                           "message":"Rider Registration Successful!",
-    *                           "access_token":"123sfsdr234sdfs",
-    *                           "rider":"{created_rider}",
-    *                   }
+    *                           "message": "Rider Registration Successful!",
+    *                           "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZTVkZWVjMjkzMjQ5YmQ5YmE0MzYwODJhY2UwYjI3MmEwNTMwM2E1NTQzYzY5MTI1ZmQzMjgyZjZhOGRhNTA5YzZhZDczYzg1Yjk2ZTY1Y2EiLCJpYXQiOjE2Mzg0NDMzMjYuOTU3MDg3LCJuYmYiOjE2Mzg0NDMzMjYuOTU3MDk1LCJleHAiOjE2Njk5NzkzMjYuOTUxNzc5LCJzdWIiOiI1NCIsInNjb3BlcyI6W119.Az9lZZbqXZLGWwj3IW5-3RF7uIBn6B9IRxbZsO-sPmH0Z13g3BV8IgCyBm4icdf8e7E1DPSPpRm_XnhZ6zgqvTO7yCSlrmA2M5TqJ86fGpOx67SSIO_8az6XsKJRbvN7mKkCpt2viHnwpZDYZOC9AwC3zuXmFiBuaraDLO4GfN4qIJxYZ3OH37Fa4gD8_F47WV1V89O6ueEGTLxBcpvpFshfy5OqfTVTJ79rWrKgR9c2QgO_u547lXrGKWJkOius3GOAaL-2qlsFRhdkkhfrvxkMeRXMCD8lr_VbCm6UOLRBBFpMKDUQp4VTAyuYUnVM0QewR57hpRr8CbdQ49RQ5x60G-6XIoilE4mbhSkZmYSWNngqm9e20KsisAUU-Df74iFqpj_RsPDinWNWYJI87_PWwBGTbsvYBRe5lyiMFKm7T-n2v5rnDOC2GtGsvYc2FQTp6NeUUZeAK3aQ4TmSOu7cOlznstt6CpK64icnzfEAIUWsTD8_Jye0A2lMCRGtlFOuXCvgybs4fbJNX_AzCm-o-sv2Gszo_8Uv47y2SgJS-pU5Uy1uQkb0btzBgdpHMDcB-yCTxRJ7AVsNNnvzWEZtzuECV9_vuGAJhZLfWtInJmWLgULP0MCo37h99tGjvJ8e7_-VUo4DCt2qWNPVUFhaZJAOrnQuxygG8kljRto",
+    *                           "user": {
+    *                               "id": 54,
+    *                               "slug": "monkey-d-lussssffy",
+    *                               "first_name": "Monkey",
+    *                               "middle_name": "D.",
+    *                               "last_name": "Lussssffy",
+    *                               "image": "3715c95fddeb91f6aae323d5db57615610ae7b35.webp",
+    *                               "dob": "2000-01-01",
+    *                               "gender": null,
+    *                               "google_id": null,
+    *                               "facebook_id": null,
+    *                               "social_image_url": "https://lh3.googleusercontent.com/a-/AOh14GjtusXo_7H_oYKbYI-y82mlZfaGyB8LR8ML0bPj=s96-c",
+    *                               "username": "lusfssssssddfy",
+    *                               "phone": "9811632833412s0976",
+    *                               "email": "lusfesessdsdssfy@gmail.com",
+    *                               "emergency_contacts": null,
+    *                               "status": null,
+    *                               "email_verified_at": null,
+    *                               "last_logged_in": null,
+    *                               "no_of_logins": null,
+    *                               "avatar": null,
+    *                               "device_token": null,
+    *                               "deleted_at": null,
+    *                               "last_updated_by": null,
+    *                               "last_deleted_by": null,
+    *                               "created_at": "2021-12-02T11:08:46.000000Z",
+    *                               "updated_at": "2021-12-02T11:08:46.000000Z",
+    *                               "name": "Monkey D. Lussssffy",
+    *                               "thumbnail_path": "uploads/user//thumb/3715c95fddeb91f6aae323d5db57615610ae7b35.webp",
+    *                               "image_path": "uploads/user//3715c95fddeb91f6aae323d5db57615610ae7b35.webp",
+    *                               "rider": {
+    *                                   "id": 36,
+    *                                   "user_id": 54,
+    *                                   "experience": 5,
+    *                                   "trained": "YES",
+    *                                   "status": "in_active",
+    *                                   "approved_at": null,
+    *                                   "device_token": null,
+    *                                   "deleted_at": null,
+    *                                   "last_deleted_by": null,
+    *                                   "last_updated_by": null,
+    *                                   "created_at": "2021-12-02T11:08:46.000000Z",
+    *                                   "updated_at": "2021-12-02T11:08:46.000000Z",
+    *                                   "vehicle": {
+    *                                       "id": 35,
+    *                                       "slug": "ba-99-pa-5544-20",
+    *                                       "rider_id": 36,
+    *                                       "vehicle_type_id": 1,
+    *                                       "vehicle_number": "BA 99 PA 5544",
+    *                                       "image": null,
+    *                                       "make_year": "2016",
+    *                                       "vehicle_color": "black",
+    *                                       "brand": "TVS",
+    *                                       "model": "Apache 160R",
+    *                                       "status": "active",
+    *                                       "deleted_at": null,
+    *                                       "last_deleted_by": null,
+    *                                       "last_updated_by": null,
+    *                                       "created_at": "2021-12-02T11:08:46.000000Z",
+    *                                       "updated_at": "2021-12-02T11:08:46.000000Z",
+    *                                       "thumbnail_path": "assets/media/noimage.png",
+    *                                       "image_path": "assets/media/noimage.png",
+    *                                       "documents": {}
+    *                                   },
+    *                                   "documents": {
+    *                                       {
+    *                                           "id": 35,
+    *                                           "documentable_type": "App\\Modules\\Models\\Rider",
+    *                                           "documentable_id": 36,
+    *                                           "type": "license",
+    *                                           "document_number": "L12345345234",
+    *                                           "issue_date": "2018-01-01",
+    *                                           "expiry_date": "2018-01-01",
+    *                                           "verified_at": null,
+    *                                           "reason": "pending",
+    *                                           "image": null,
+    *                                           "deleted_at": null,
+    *                                           "created_at": "2021-12-02T11:08:46.000000Z",
+    *                                           "updated_at": "2021-12-02T11:08:46.000000Z",
+    *                                           "thumbnail_path": "assets/media/noimage.png",
+    *                                           "image_path": "assets/media/noimage.png"
+    *                                       }
+    *                                   }
+    *                               }
+    *                           }
+    *                       }
     *                 )
     *           )
     *      ),
@@ -239,7 +323,7 @@ class ApiAuthController extends Controller
         //dd("RIDER DATA:",$request->all(), $request->all()['document']);
         return DB::transaction(function () use ($request)
         {
-            $createdRider = $this->rider->create($request->all());
+            $createdRider = $this->rider->create($request->except('image','document.image','vehicle.image'));
 
             if($createdRider)
             {
@@ -262,9 +346,15 @@ class ApiAuthController extends Controller
                 if ($request->hasFile('vehicle.image')) {
                     $this->uploadFile($request, $createdRider->vehicle, $this->vehicle);
                 }
+                
+                /// $accessToken = $createdRider->user->createToken('Laravel Password Grant Client')->accessToken;
+                //$response = ['message' => 'Rider Registration Successful!', 'access_token' => $accessToken, "rider"=>$createdRider, "user"=>$createdRider->user,];
+               
             
-                $accessToken = $createdRider->user->createToken('Laravel Password Grant Client')->accessToken;
-                $response = ['message' => 'Rider Registration Successful!', 'access_token' => $accessToken, "rider"=>$createdRider, "user"=>$createdRider->user,];
+                $createdUser = User::where('id',$createdRider->user->id)->with('rider','rider.documents','rider.vehicle')->first();
+
+                $accessToken = $createdUser->createToken('Laravel Password Grant Client')->accessToken;
+                $response = ['message' => 'Rider Registration Successful!', 'access_token' => $accessToken, "user"=>$createdUser,];
                 return response($response, 200);
             }
             return response("Internal Server Error!", 500);
