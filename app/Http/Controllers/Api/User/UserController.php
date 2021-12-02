@@ -66,7 +66,7 @@ class UserController extends Controller
     *                 "username": null,
     *                 "phone": "9816810976",
     *                 "email": "gintama@gmail.com",
-    *                 "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
+    *                 "emergency_contacts":{"9816810976","987654321","981122345"},
     *                 "status": null,
     *                 "email_verified_at": null,
     *                 "last_logged_in": null,
@@ -138,7 +138,7 @@ class UserController extends Controller
     *                 "username": null,
     *                 "phone": "9816810976",
     *                 "email": "gintama@gmail.com",
-    *                  "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
+    *                  "emergency_contacts":{"9816810976","987654321","981122345"},
     *                 "status": null,
     *                 "email_verified_at": null,
     *                 "last_logged_in": null,
@@ -260,7 +260,7 @@ class UserController extends Controller
     *                                 "username": "luffy",
     *                                 "phone": "9816810976",
     *                                 "email": "gintama@gmail.com",
-    *                               "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
+    *                               "emergency_contacts": {"9816810976","987654321","981122345"},
     *                                 "status": null,
     *                                 "email_verified_at": null,
     *                                 "last_logged_in": null,
@@ -314,7 +314,7 @@ class UserController extends Controller
         //UPDATE USER
         return DB::transaction(function () use ($request,$user)
         {
-            $updatedUser = $this->user->update($user->id,$request->all());
+            $updatedUser = $this->user->update($user->id,$request->except('username'));
     
             if($updatedUser)
             {
@@ -391,7 +391,7 @@ class UserController extends Controller
      *           mediaType="application/json",
      *      )
     *      ),
-
+    *
     *      @OA\Response(
     *          response=500,
     *          description="Internal Server Error",
@@ -422,6 +422,183 @@ class UserController extends Controller
         return response("Internal Server Error!", 500);
     
     }
+
+
+ /**
+    * @OA\Get(
+    *   path="/api/user/emergency_contacts",
+    *   tags={"Emergency Contacts"},
+    *   summary="Get Emergency Contacts of Authenticated User",
+    *   security={{"bearerAuth":{}}},
+    *
+    *
+    *      @OA\Response(
+    *        response=200,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example={
+    *                     "message": "Success!",
+    *                     "emergency_contacts": {
+    *                       "9816810976",
+    *                       "987654321",
+    *                       "981122345"
+    *                     }
+    *                   }
+    *                 )
+    *           )
+    *      ),
+    *)
+    **/
+    public function getEmergencyContacts()
+    {
+        $user = Auth::user();
+
+        $emergency_contacts = $user->emergency_contacts;
+        $response = ['message' => 'Success!', 'emergency_contacts'=>$emergency_contacts];
+        return response($response, 200);
+
+    }
+
+
+
+     /**
+    * @OA\Get(
+    *   path="/api/user/{user_id}/emergency_contacts",
+    *   tags={"Emergency Contacts"},
+    *   summary="Get Emergency Contacts of Specified User",
+    *   security={{"bearerAuth":{}}},
+    *
+    *      @OA\Parameter(
+    *         name="user_id",
+    *         in="path",
+    *         description="User ID",
+    *         required=true,
+    *      ),
+    *
+    *      @OA\Response(
+    *        response=200,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example={
+    *                     "message": "Success!",
+    *                     "emergency_contacts": {
+    *                       "9816810976",
+    *                       "987654321",
+    *                       "981122345"
+    *                     }
+    *                   }
+    *                 )
+    *           )
+    *      ),
+        *
+    *      @OA\Response(
+    *          response=422,
+    *          description="User not found!",
+    *             @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+    *      ),
+    *
+    *)
+    **/
+    public function getUserEmergencyContacts($user_id)
+    {
+        $user = User::find($user_id);
+        if(!$user)
+        {
+            $response = ['message' => 'User not found!'];
+            return response($response, 422);
+        }
+
+        $emergency_contacts = $user->emergency_contacts;
+        $response = ['message' => 'Success!', 'emergency_contacts'=>$emergency_contacts];
+        return response($response, 200);
+
+    }
+
+
+     /**
+    * @OA\Post(
+    *   path="/api/user/emergency_contacts/update",
+    *   tags={"Emergency Contacts"},
+    *   summary="Update Authenticated user's emergency contacts",
+    *   security={{"bearerAuth":{}}},
+    *
+    *    @OA\RequestBody(
+    *      @OA\MediaType(
+    *          mediaType="application/json",
+    *         @OA\Schema(
+    *             
+    *             example={
+    *                   "emergency_contacts": {
+    *                        "9816810976","123456","1234555"
+    *                   }
+    *              }
+    *         )
+    *     )
+    *   ),
+    *      @OA\Response(
+    *        response=200,
+    *        description="Emergency Contacts Updated Successfully!",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example={
+    *                     "message": "Success!",
+    *                     "emergency_contacts": {
+    *                       "9816810976",
+    *                       "987654321",
+    *                       "981122345"
+    *                     }
+    *                   }
+    *                 )
+    *           )
+    *      ),
+    *      @OA\Response(
+    *          response=422,
+    *          description="Validation Error!",
+    *             @OA\MediaType(
+    *           mediaType="application/json",
+    *      )
+    *      ),
+    *
+    *      @OA\Response(
+    *          response=500,
+    *          description="Something went wrong! Internal Server Error!",
+    *             @OA\MediaType(
+    *              mediaType="application/json",
+    *          )
+    *      ),
+    *)
+    **/
+    public function updateEmergencyContacts(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'emergency_contacts'=>'required'
+        ]);
+        if ($validator->fails()) {
+            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
+        }
+
+        $user = Auth::user();
+        $user->emergency_contacts = $request['emergency_contacts'];
+        $updated = $user->save();
+
+        if($updated)
+        {
+            $emergency_contacts = Auth::user()->emergency_contacts;
+            $response = ['message' => 'Emergency Contacts Updated Successfully!', 'emergency_contacts'=>$emergency_contacts];
+            return response($response, 200);
+        }
+      
+        $response = ['message' => 'Something went wrong! Internal Server Error!'];
+        return response($response, 500);
+    }
+
 
 
     function uploadFile(Request $request, $user)

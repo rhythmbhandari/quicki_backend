@@ -24,7 +24,11 @@
                                     "username": "luffy",
                                     "image": "file()",
                                     "email": "luffy@gmail.com",
-                                    "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
+                                    "emergency_contacts": [
+                                        "9816810976",
+                                        "987654321",
+                                        "981122345"
+                                    ],
                                     "phone": "9816810976",
                                     "gender": "male",
                                     "password": "password",
@@ -47,7 +51,45 @@
                                     "example": {
                                         "message": "User Registration Successful!",
                                         "access_token": "123sfsdr234sdfs",
-                                        "user": "{created_user}"
+                                        "user": {
+                                            "message": "User Registration Successful!",
+                                            "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMjFiNDAxNzM2ZWIwZGQwYmYxM2M2MGI1NDM3OWZlMGI0OGRjNjllMTJlZDJhMWNjODc5MjVlMDhiMWI3YzYwZjRlNTg4MDkxYTcxZWI0OTQiLCJpYXQiOjE2Mzg0NDg0NjMuNDg1Mjg3LCJuYmYiOjE2Mzg0NDg0NjMuNDg1MjksImV4cCI6MTY2OTk4NDQ2My40ODE3NDQsInN1YiI6IjU2Iiwic2NvcGVzIjpbXX0.P1DOm1Zxgcs9hvrbEAmI6zUNorSlSzRY5EGdgFxOkENVvHeCRUJvcr9HugEFEJYoDM-ryVgDbjDR5c-L0xNMRMhzPRfokCULoSnInjElCDCJ0xUl0WnXZ5q6mpkz6hW-nwF4E5VHav0mD75pUrHWiffDVYfy8mYzjw2CK3-wTSjH6e1rLHYcl5XZOaCam5BB3BbjsNuNOvegtfHpYnILmxNV7NNv_sXkPopV4eckZY3j_CvvhJuxSPQgYPMLb9OFUIHyanEChIHvZ1hTAG5W8ktlEuS_XFxUfNdATWyJblemzz_lbqGlxSDZRhSpDkXLrKOWhQ67aUgVqWevLVWFwwPl0VFXk6-_VNpf3TlZ0g_GWiHeyP0uTneDo5R9KpwGBAPt1bkgblVFCP1HFw2w6AaesEcgBklfs4bF3O9PHEIDTX0uv79o_bwh745TbS3bXn39nGgYY0WYGgBxGbRN3vqlv7ON8CSNZotnu18JbuADeM0dYlTICh6Pcl-kt6mZAT1eqWycx4Pyzf4oawJviJp81P9c_pvH4HCLNoeRHn-Qpy27Gsj8mHJK3udWQ8twwGxCyktoEZNSPynJz2J8KVQffgpVLG1dpIJ3F0QTPg_ou2_VQCr0xr6mqD_iwO4z4qyCuoXiSGLG4Kzq_JMRtMEUTSrf-hNd_EUMCd9H2K0",
+                                            "user": {
+                                                "id": 56,
+                                                "slug": "monkey-d-luffy-22",
+                                                "first_name": "Monkey",
+                                                "middle_name": "D.",
+                                                "last_name": "Luffy",
+                                                "image": "4f232ddc57a1b5a7f10b6616de6227493e9560ba.webp",
+                                                "dob": "2000-01-01",
+                                                "gender": null,
+                                                "google_id": null,
+                                                "facebook_id": null,
+                                                "social_image_url": "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+                                                "username": "monke_@4083",
+                                                "phone": "981681019761",
+                                                "email": "luffyaa@gmail.com",
+                                                "emergency_contacts": [
+                                                    "9816810976",
+                                                    "987654321",
+                                                    "981122345"
+                                                ],
+                                                "status": null,
+                                                "email_verified_at": null,
+                                                "last_logged_in": null,
+                                                "no_of_logins": null,
+                                                "avatar": null,
+                                                "device_token": null,
+                                                "deleted_at": null,
+                                                "last_updated_by": null,
+                                                "last_deleted_by": null,
+                                                "created_at": "2021-12-02T12:34:22.000000Z",
+                                                "updated_at": "2021-12-02T12:34:23.000000Z",
+                                                "name": "Monkey D. Luffy",
+                                                "thumbnail_path": "uploads/user//thumb/4f232ddc57a1b5a7f10b6616de6227493e9560ba.webp",
+                                                "image_path": "uploads/user//4f232ddc57a1b5a7f10b6616de6227493e9560ba.webp"
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -86,7 +128,11 @@
                                     "username": "luffy",
                                     "image": "file()",
                                     "email": "luffy@gmail.com",
-                                    "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
+                                    "emergency_contacts": [
+                                        "9816810976",
+                                        "987654321",
+                                        "981122345"
+                                    ],
                                     "phone": "9816810976",
                                     "gender": "male",
                                     "password": "password",
@@ -127,8 +173,96 @@
                                 "schema": {
                                     "example": {
                                         "message": "Rider Registration Successful!",
-                                        "access_token": "123sfsdr234sdfs",
-                                        "rider": "{created_rider}"
+                                        "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZTVkZWVjMjkzMjQ5YmQ5YmE0MzYwODJhY2UwYjI3MmEwNTMwM2E1NTQzYzY5MTI1ZmQzMjgyZjZhOGRhNTA5YzZhZDczYzg1Yjk2ZTY1Y2EiLCJpYXQiOjE2Mzg0NDMzMjYuOTU3MDg3LCJuYmYiOjE2Mzg0NDMzMjYuOTU3MDk1LCJleHAiOjE2Njk5NzkzMjYuOTUxNzc5LCJzdWIiOiI1NCIsInNjb3BlcyI6W119.Az9lZZbqXZLGWwj3IW5-3RF7uIBn6B9IRxbZsO-sPmH0Z13g3BV8IgCyBm4icdf8e7E1DPSPpRm_XnhZ6zgqvTO7yCSlrmA2M5TqJ86fGpOx67SSIO_8az6XsKJRbvN7mKkCpt2viHnwpZDYZOC9AwC3zuXmFiBuaraDLO4GfN4qIJxYZ3OH37Fa4gD8_F47WV1V89O6ueEGTLxBcpvpFshfy5OqfTVTJ79rWrKgR9c2QgO_u547lXrGKWJkOius3GOAaL-2qlsFRhdkkhfrvxkMeRXMCD8lr_VbCm6UOLRBBFpMKDUQp4VTAyuYUnVM0QewR57hpRr8CbdQ49RQ5x60G-6XIoilE4mbhSkZmYSWNngqm9e20KsisAUU-Df74iFqpj_RsPDinWNWYJI87_PWwBGTbsvYBRe5lyiMFKm7T-n2v5rnDOC2GtGsvYc2FQTp6NeUUZeAK3aQ4TmSOu7cOlznstt6CpK64icnzfEAIUWsTD8_Jye0A2lMCRGtlFOuXCvgybs4fbJNX_AzCm-o-sv2Gszo_8Uv47y2SgJS-pU5Uy1uQkb0btzBgdpHMDcB-yCTxRJ7AVsNNnvzWEZtzuECV9_vuGAJhZLfWtInJmWLgULP0MCo37h99tGjvJ8e7_-VUo4DCt2qWNPVUFhaZJAOrnQuxygG8kljRto",
+                                        "user": {
+                                            "id": 54,
+                                            "slug": "monkey-d-lussssffy",
+                                            "first_name": "Monkey",
+                                            "middle_name": "D.",
+                                            "last_name": "Lussssffy",
+                                            "image": "3715c95fddeb91f6aae323d5db57615610ae7b35.webp",
+                                            "dob": "2000-01-01",
+                                            "gender": null,
+                                            "google_id": null,
+                                            "facebook_id": null,
+                                            "social_image_url": "https://lh3.googleusercontent.com/a-/AOh14GjtusXo_7H_oYKbYI-y82mlZfaGyB8LR8ML0bPj=s96-c",
+                                            "username": "lusfssssssddfy",
+                                            "phone": "9811632833412s0976",
+                                            "email": "lusfesessdsdssfy@gmail.com",
+                                            "emergency_contacts": [
+                                                "9816810976",
+                                                "987654321",
+                                                "981122345"
+                                            ],
+                                            "status": null,
+                                            "email_verified_at": null,
+                                            "last_logged_in": null,
+                                            "no_of_logins": null,
+                                            "avatar": null,
+                                            "device_token": null,
+                                            "deleted_at": null,
+                                            "last_updated_by": null,
+                                            "last_deleted_by": null,
+                                            "created_at": "2021-12-02T11:08:46.000000Z",
+                                            "updated_at": "2021-12-02T11:08:46.000000Z",
+                                            "name": "Monkey D. Lussssffy",
+                                            "thumbnail_path": "uploads/user//thumb/3715c95fddeb91f6aae323d5db57615610ae7b35.webp",
+                                            "image_path": "uploads/user//3715c95fddeb91f6aae323d5db57615610ae7b35.webp",
+                                            "rider": {
+                                                "id": 36,
+                                                "user_id": 54,
+                                                "experience": 5,
+                                                "trained": "YES",
+                                                "status": "in_active",
+                                                "approved_at": null,
+                                                "device_token": null,
+                                                "deleted_at": null,
+                                                "last_deleted_by": null,
+                                                "last_updated_by": null,
+                                                "created_at": "2021-12-02T11:08:46.000000Z",
+                                                "updated_at": "2021-12-02T11:08:46.000000Z",
+                                                "vehicle": {
+                                                    "id": 35,
+                                                    "slug": "ba-99-pa-5544-20",
+                                                    "rider_id": 36,
+                                                    "vehicle_type_id": 1,
+                                                    "vehicle_number": "BA 99 PA 5544",
+                                                    "image": null,
+                                                    "make_year": "2016",
+                                                    "vehicle_color": "black",
+                                                    "brand": "TVS",
+                                                    "model": "Apache 160R",
+                                                    "status": "active",
+                                                    "deleted_at": null,
+                                                    "last_deleted_by": null,
+                                                    "last_updated_by": null,
+                                                    "created_at": "2021-12-02T11:08:46.000000Z",
+                                                    "updated_at": "2021-12-02T11:08:46.000000Z",
+                                                    "thumbnail_path": "assets/media/noimage.png",
+                                                    "image_path": "assets/media/noimage.png",
+                                                    "documents": []
+                                                },
+                                                "documents": [
+                                                    {
+                                                        "id": 35,
+                                                        "documentable_type": "App\\\\Modules\\\\Models\\\\Rider",
+                                                        "documentable_id": 36,
+                                                        "type": "license",
+                                                        "document_number": "L12345345234",
+                                                        "issue_date": "2018-01-01",
+                                                        "expiry_date": "2018-01-01",
+                                                        "verified_at": null,
+                                                        "reason": "pending",
+                                                        "image": null,
+                                                        "deleted_at": null,
+                                                        "created_at": "2021-12-02T11:08:46.000000Z",
+                                                        "updated_at": "2021-12-02T11:08:46.000000Z",
+                                                        "thumbnail_path": "assets/media/noimage.png",
+                                                        "image_path": "assets/media/noimage.png"
+                                                    }
+                                                ]
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -248,7 +382,11 @@
                                             "username": "sasuke",
                                             "phone": "9869191572",
                                             "email": "sasuke@gmail.com",
-                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
+                                            "emergency_contacts": [
+                                                "9816810976",
+                                                "987654321",
+                                                "981122345"
+                                            ],
                                             "status": null,
                                             "email_verified_at": null,
                                             "last_logged_in": null,
@@ -330,7 +468,11 @@
                                             "username": "sasuke",
                                             "phone": "9816810976",
                                             "email": "sasuke@gmail.com",
-                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
+                                            "emergency_contacts": [
+                                                "9816810976",
+                                                "987654321",
+                                                "981122345"
+                                            ],
                                             "location": {
                                                 "home": {
                                                     "name": "New Baneshwor, Kathmandu",
@@ -511,7 +653,11 @@
                                             "username": "sasuke",
                                             "phone": "9816810976",
                                             "email": "sasuke@gmail.com",
-                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
+                                            "emergency_contacts": [
+                                                "9816810976",
+                                                "987654321",
+                                                "981122345"
+                                            ],
                                             "location": {
                                                 "home": {
                                                     "name": "New Baneshwor, Kathmandu",
@@ -931,6 +1077,86 @@
                     },
                     "404": {
                         "description": "No Active booking found!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/booking/{booking_id}": {
+            "get": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Get Booking from ID",
+                "operationId": "a12bb2f7cd97d942ed58faa4488f32db",
+                "parameters": [
+                    {
+                        "name": "booking_id",
+                        "in": "path",
+                        "description": "Booking ID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "booking": {
+                                            "id": 1,
+                                            "stoppage": [
+                                                {
+                                                    "name": "Sanepa, Lalitpur",
+                                                    "latitude": 27.1234,
+                                                    "longitude": "85.3434"
+                                                },
+                                                {
+                                                    "name": "New Baneshwor, Kathmandu",
+                                                    "latitude": 28.3454,
+                                                    "longitude": 87.1234
+                                                }
+                                            ],
+                                            "user_id": 3,
+                                            "vehicle_type_id": 1,
+                                            "rider_id": null,
+                                            "location_id": 1,
+                                            "start_time": null,
+                                            "end_time": null,
+                                            "origin": "Sanepa, Lalitpur",
+                                            "destination": "New Baneshwor, Kathmandu",
+                                            "distance": 12,
+                                            "duration": 20,
+                                            "passenger_number": 2,
+                                            "status": "pending",
+                                            "price": 160,
+                                            "payment_type": "CASH",
+                                            "deleted_at": null,
+                                            "created_at": "2021-11-25T19:07:34.000000Z",
+                                            "updated_at": "2021-11-25T19:07:34.000000Z",
+                                            "location": {
+                                                "id": 1,
+                                                "longitude_origin": 27.123456,
+                                                "latitude_origin": 85.123423,
+                                                "longitude_destination": 27.234325,
+                                                "latitude_destination": 86.12313,
+                                                "created_at": "2021-11-25T19:07:34.000000Z",
+                                                "updated_at": "2021-11-25T19:07:34.000000Z"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Booking Not Found!"
                     }
                 },
                 "security": [
@@ -3199,7 +3425,11 @@
                                             "username": null,
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
-                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
+                                            "emergency_contacts": [
+                                                "9816810976",
+                                                "987654321",
+                                                "981122345"
+                                            ],
                                             "status": null,
                                             "email_verified_at": null,
                                             "last_logged_in": null,
@@ -3277,7 +3507,11 @@
                                             "username": null,
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
-                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
+                                            "emergency_contacts": [
+                                                "9816810976",
+                                                "987654321",
+                                                "981122345"
+                                            ],
                                             "status": null,
                                             "email_verified_at": null,
                                             "last_logged_in": null,
@@ -3370,7 +3604,11 @@
                                             "username": "luffy",
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
-                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
+                                            "emergency_contacts": [
+                                                "9816810976",
+                                                "987654321",
+                                                "981122345"
+                                            ],
                                             "status": null,
                                             "email_verified_at": null,
                                             "last_logged_in": null,
@@ -3462,6 +3700,146 @@
                     },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/emergency_contacts": {
+            "get": {
+                "tags": [
+                    "Emergency Contacts"
+                ],
+                "summary": "Get Emergency Contacts of Authenticated User",
+                "operationId": "d9a639e1bb05bf5b55b7a154ab8a7947",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "emergency_contacts": [
+                                            "9816810976",
+                                            "987654321",
+                                            "981122345"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/{user_id}/emergency_contacts": {
+            "get": {
+                "tags": [
+                    "Emergency Contacts"
+                ],
+                "summary": "Get Emergency Contacts of Specified User",
+                "operationId": "2cc90b566289245633d044dc48e16331",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "emergency_contacts": [
+                                            "9816810976",
+                                            "987654321",
+                                            "981122345"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "User not found!",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/emergency_contacts/update": {
+            "post": {
+                "tags": [
+                    "Emergency Contacts"
+                ],
+                "summary": "Update Authenticated user's emergency contacts",
+                "operationId": "8c83725b982e82fc8db2c047a04e7a0c",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "emergency_contacts": [
+                                        "9816810976",
+                                        "123456",
+                                        "1234555"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Emergency Contacts Updated Successfully!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "emergency_contacts": [
+                                            "9816810976",
+                                            "987654321",
+                                            "981122345"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error!",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong! Internal Server Error!",
                         "content": {
                             "application/json": {}
                         }

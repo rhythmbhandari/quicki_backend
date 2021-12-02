@@ -44,7 +44,7 @@ class UserProfileRequest extends FormRequest
             'middle_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-            'username' => 'nullable|string|max:255|unique:users,username,'.$user->id,
+            // 'username' => 'nullable|string|max:255|unique:users,username,'.$user->id,
             'email' => 'nullable|string|email|max:255|unique:users,email,'.$user->id,
             'emergency_contacts'=>'nullable',
             'dob' => 'nullable',

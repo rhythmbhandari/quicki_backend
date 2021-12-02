@@ -435,7 +435,7 @@ class RiderController extends Controller
         //UPDATE USER
         return DB::transaction(function () use ($request,$user)
         {
-            $updatedUser = $this->user_service->update($user->id,$request->all());
+            $updatedUser = $this->user_service->update($user->id,$request->except('username'));
     
             if($updatedUser)
             {

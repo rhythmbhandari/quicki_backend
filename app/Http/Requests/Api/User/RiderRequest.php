@@ -43,7 +43,7 @@ class RiderRequest extends FormRequest
             'middle_name' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'last_name' => 'required|string|max:255',
-            'username' => 'nullable|string|max:255|unique:users',
+            // 'username' => 'nullable|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'emergency_contacts'=>'nullable',
             'password' => 'nullable|string|min:6|confirmed',
