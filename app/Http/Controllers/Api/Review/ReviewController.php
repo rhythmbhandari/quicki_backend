@@ -15,6 +15,11 @@ use App\Modules\Services\User\UserService;
 //models
 use App\Modules\Models\Review;
 use App\Modules\Models\Booking;
+use App\Modules\Models\User;
+use App\Modules\Models\Rider;
+
+//requests
+use App\Http\Requests\Api\Review\ReviewRequest;
 
 class ReviewController extends Controller
 {
@@ -29,10 +34,10 @@ class ReviewController extends Controller
 
 
 
-        /**
+    /**
     * @OA\Post(
     *   path="/api/review/create",
-    *   tags={"Booking"},
+    *   tags={"Reviews"},
     *   summary="Create Review",
     *   security={{"bearerAuth":{}}},
     *
@@ -81,11 +86,11 @@ class ReviewController extends Controller
     *   ),
         *   @OA\Response(
     *      response=500,
-    *       description="Internal Server Error!",
+    *       description="Something went wrong! Internal Server Error!",
     *   )
     *)
     **/
-    public function store(Request $request)
+    public function store(ReviewRequest $request)
     {
         //AUTHENTICATION CHECK
         $user = null;
@@ -103,32 +108,7 @@ class ReviewController extends Controller
             return response($response, 401);
         }
 
-        //VALIDATIONS
-        $validator = Validator::make($request->all(), [
-    
-            'rate' => 'required|numeric',
-            'comment' => 'required|string',
-            'reviewed_by_role' =>  ['required', function ($attribute, $value, $fail) {
-                if ( ! ($value=="customer" || $value=="rider")  ) {
-                    $fail('The review can only be made by either the customer or the rider!');
-                }
-            },],
-            'booking_id' =>  ['required', function ($attribute, $value, $fail) {
-                $booking = Booking::find($value);
-                if ( ! $booking  ) {
-                    $fail('No booking found for the given id!');
-                }
-                // Check if booking status is completed/cancelled (optional)
-                else if( ! ($booking->status == "completed" || $booking->status == "cancelled" ) )
-                {
-                    $fail('Review cannot be created as the booking is still active!');
-                }
-                else{}
-            },],
-        ]);
-        if ($validator->fails()) {
-            return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
-        }
+       
 
         //ROLE CHECK FOR CUSTOMER
         if( $request->reviewed_by_role=="customer" && !$this->user_service->hasRole($user, 'customer') )
@@ -152,10 +132,172 @@ class ReviewController extends Controller
                 $response = ['message' => 'Ride Review Successful!',  "review"=>$createdReview,];
                 return response($response, 201);
             }
-            return response("Internal Server Error!", 500);
+            return response("Something went wrong! Internal Server Error!", 500);
         });
 
 
+    }
+
+
+    /**
+    * @OA\Get(
+    *   path="/api/user/{user_id}/reviews",
+    *   tags={"Reviews"},
+    *   summary="Get reviews made by and made on this user",
+    *   security={{"bearerAuth":{}}},
+    *
+    *      @OA\Parameter(
+    *         name="user_id",
+    *         in="path",
+    *         description="User ID  [Accepted values: Valid User's ID.]",
+    *         required=true,
+    *      ),
+    *
+    *   @OA\Response(
+    *        response=201,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example={
+    *                     "message": "Success!",
+    *                     "data": {
+    *                       "average_rating": 3,
+    *                       "reviews": {
+    *                         {
+    *                           "id": 1,
+    *                           "booking_id": 1,
+    *                           "rider_id": null,
+    *                           "user_id": 3,
+    *                           "reviewed_by_role": "rider",
+    *                           "rate": 3,
+    *                           "ride_date": "2021-12-01",
+    *                           "comment": "Ride was smooth!",
+    *                           "deleted_at": null,
+    *                           "created_at": "2021-12-01T08:28:47.000000Z",
+    *                           "updated_at": "2021-12-01T08:28:47.000000Z"
+    *                         }
+    *                       }
+    *                     }
+    *                   }
+    *                 )
+    *           )
+    *      ),
+    *   @OA\Response(
+    *      response=422,
+    *       description="User not found!",
+    *   ),
+        *   @OA\Response(
+    *      response=500,
+    *       description="Something went wrong! Internal Server Error!",
+    *   )
+    *)
+    **/
+    public function getUserReviews($user_id)
+    {
+        //Validate User Exists
+        $user = User::find($user_id);
+        if(!$user)
+        {
+            $response = ['message' => 'User not found!',];
+            return response($response, 422);
+        }
+
+        //Get average rating and all reviews for the user
+        $result = [];
+        $result['average_rating'] = 0;
+        $result['reviews'] = [];
+
+        $result['average_rating'] = intval(Review::where('user_id',$user->id)->where('reviewed_by_role','!=','customer')->avg('rate') )  ;
+        $result['reviews'] = Review::where('user_id',$user->id)->where('reviewed_by_role','!=','customer')->get();
+
+        $response = ['message' => 'Success!', 'data'=>$result];
+        return response($response, 200);
+
+
+        return response("Something went wrong! Internal Server Error!", 500);
+    }
+
+
+    
+
+ /**
+    * @OA\Get(
+    *   path="/api/rider/{rider_id}/reviews",
+    *   tags={"Reviews"},
+    *   summary="Get reviews made by and made on this rider",
+    *   security={{"bearerAuth":{}}},
+    *
+    *      @OA\Parameter(
+    *         name="rider_id",
+    *         in="path",
+    *         description="Rider ID  [Accepted values: Valid Rider's ID.]",
+    *         required=true,
+    *      ),
+    *
+    *   @OA\Response(
+    *        response=201,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example={
+    *                     "message": "Success!",
+    *                     "data": {
+    *                       "average_rating": 3,
+    *                       "reviews": {
+    *                         {
+    *                           "id": 1,
+    *                           "booking_id": 1,
+    *                           "rider_id": null,
+    *                           "user_id": 3,
+    *                           "reviewed_by_role": "customer",
+    *                           "rate": 3,
+    *                           "ride_date": "2021-12-01",
+    *                           "comment": "Ride was smooth!",
+    *                           "deleted_at": null,
+    *                           "created_at": "2021-12-01T08:28:47.000000Z",
+    *                           "updated_at": "2021-12-01T08:28:47.000000Z"
+    *                         }
+    *                       }
+    *                     }
+    *                   }
+    *                 )
+    *           )
+    *      ),
+    *   @OA\Response(
+    *      response=422,
+    *       description="User not found!",
+    *   ),
+        *   @OA\Response(
+    *      response=500,
+    *       description="Something went wrong! Internal Server Error!",
+    *   )
+    *)
+    **/
+    public function getRiderReviews($rider_id)
+    {
+        //Validate User Exists
+        $rider = Rider::find($rider_id);
+        if(!$rider)
+        {
+            $response = ['message' => 'Rider not found!',];
+            return response($response, 422);
+        }
+
+        //Get average rating and all reviews for the rider
+        $result = [];
+        $result['average_rating'] = 0;
+        $result['reviews'] = [];
+
+        $result['average_rating'] =   intval(Review::where('rider_id',$rider->id)->where('reviewed_by_role','!=','rider')->avg('rate'))  ;
+        $result['reviews'] = Review::where('rider_id',$rider->id)->where('reviewed_by_role','!=','rider')->get();
+
+        $response = ['message' => 'Success!', 'data'=>$result];
+        return response($response, 200);
+
+
+        return response("Something went wrong! Internal Server Error!", 500);
     }
 
 

@@ -24,6 +24,7 @@
                                     "username": "luffy",
                                     "image": "file()",
                                     "email": "luffy@gmail.com",
+                                    "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
                                     "phone": "9816810976",
                                     "gender": "male",
                                     "password": "password",
@@ -85,6 +86,7 @@
                                     "username": "luffy",
                                     "image": "file()",
                                     "email": "luffy@gmail.com",
+                                    "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
                                     "phone": "9816810976",
                                     "gender": "male",
                                     "password": "password",
@@ -246,6 +248,7 @@
                                             "username": "sasuke",
                                             "phone": "9869191572",
                                             "email": "sasuke@gmail.com",
+                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
                                             "status": null,
                                             "email_verified_at": null,
                                             "last_logged_in": null,
@@ -327,6 +330,7 @@
                                             "username": "sasuke",
                                             "phone": "9816810976",
                                             "email": "sasuke@gmail.com",
+                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
                                             "location": {
                                                 "home": {
                                                     "name": "New Baneshwor, Kathmandu",
@@ -507,6 +511,7 @@
                                             "username": "sasuke",
                                             "phone": "9816810976",
                                             "email": "sasuke@gmail.com",
+                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
                                             "location": {
                                                 "home": {
                                                     "name": "New Baneshwor, Kathmandu",
@@ -2452,7 +2457,7 @@
         "/api/review/create": {
             "post": {
                 "tags": [
-                    "Booking"
+                    "Reviews"
                 ],
                 "summary": "Create Review",
                 "operationId": "c08c6afa37e70f5f2770f647f2eaed69",
@@ -2499,7 +2504,127 @@
                         "description": "Forbidden Access!"
                     },
                     "500": {
-                        "description": "Internal Server Error!"
+                        "description": "Something went wrong! Internal Server Error!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/{user_id}/reviews": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Get reviews made by and made on this user",
+                "operationId": "f84c1b246300e93f7feea17c6f99398a",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "User ID  [Accepted values: Valid User's ID.]",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "data": {
+                                            "average_rating": 3,
+                                            "reviews": [
+                                                {
+                                                    "id": 1,
+                                                    "booking_id": 1,
+                                                    "rider_id": null,
+                                                    "user_id": 3,
+                                                    "reviewed_by_role": "rider",
+                                                    "rate": 3,
+                                                    "ride_date": "2021-12-01",
+                                                    "comment": "Ride was smooth!",
+                                                    "deleted_at": null,
+                                                    "created_at": "2021-12-01T08:28:47.000000Z",
+                                                    "updated_at": "2021-12-01T08:28:47.000000Z"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "User not found!"
+                    },
+                    "500": {
+                        "description": "Something went wrong! Internal Server Error!"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rider/{rider_id}/reviews": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Get reviews made by and made on this rider",
+                "operationId": "c4a38159fb4187f322c58c81b14deed6",
+                "parameters": [
+                    {
+                        "name": "rider_id",
+                        "in": "path",
+                        "description": "Rider ID  [Accepted values: Valid Rider's ID.]",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "data": {
+                                            "average_rating": 3,
+                                            "reviews": [
+                                                {
+                                                    "id": 1,
+                                                    "booking_id": 1,
+                                                    "rider_id": null,
+                                                    "user_id": 3,
+                                                    "reviewed_by_role": "customer",
+                                                    "rate": 3,
+                                                    "ride_date": "2021-12-01",
+                                                    "comment": "Ride was smooth!",
+                                                    "deleted_at": null,
+                                                    "created_at": "2021-12-01T08:28:47.000000Z",
+                                                    "updated_at": "2021-12-01T08:28:47.000000Z"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "User not found!"
+                    },
+                    "500": {
+                        "description": "Something went wrong! Internal Server Error!"
                     }
                 },
                 "security": [
@@ -2719,6 +2844,7 @@
                                             "username": null,
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
+                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
                                             "status": null,
                                             "email_verified_at": null,
                                             "last_logged_in": null,
@@ -2848,6 +2974,7 @@
                                             "username": null,
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
+                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
                                             "status": null,
                                             "email_verified_at": null,
                                             "last_logged_in": null,
@@ -2949,6 +3076,7 @@
                                     "last_name": "Luffy",
                                     "image": "file()",
                                     "email": "luffy@gmail.com",
+                                    "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
                                     "username": "luffy",
                                     "dob": "2000/01/01",
                                     "gender": "male",
@@ -2992,6 +3120,7 @@
                                             "username": "luffy",
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
+                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
                                             "status": null,
                                             "email_verified_at": null,
                                             "last_logged_in": null,
@@ -3070,6 +3199,7 @@
                                             "username": null,
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
+                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
                                             "status": null,
                                             "email_verified_at": null,
                                             "last_logged_in": null,
@@ -3147,6 +3277,7 @@
                                             "username": null,
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
+                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
                                             "status": null,
                                             "email_verified_at": null,
                                             "last_logged_in": null,
@@ -3239,6 +3370,7 @@
                                             "username": "luffy",
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
+                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
                                             "status": null,
                                             "email_verified_at": null,
                                             "last_logged_in": null,

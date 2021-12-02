@@ -18,10 +18,10 @@ class RiderRequest extends FormRequest
      *
      * @return bool
      */
-    // public function authorize()
-    // {
-    //     return true;
-    // }
+    public function authorize()
+    {
+        return true;
+    }
 
 
     protected function failedValidation(Validator $validator)
@@ -45,6 +45,7 @@ class RiderRequest extends FormRequest
             'last_name' => 'required|string|max:255',
             'username' => 'nullable|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
+            'emergency_contacts'=>'nullable',
             'password' => 'nullable|string|min:6|confirmed',
             'phone' => 'required|string|min:10|unique:users',
             'dob' => 'nullable',

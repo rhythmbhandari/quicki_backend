@@ -44,6 +44,7 @@ class UserRequest extends FormRequest
             'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'username' => 'nullable|string|max:255|unique:users',
             'email' => 'nullable|string|email|max:255|unique:users',
+            'emergency_contacts'=>'nullable',
             'password' => 'nullable|string|min:6|confirmed',
             'phone' => 'required|string|min:10|unique:users',
             'dob' => 'nullable',

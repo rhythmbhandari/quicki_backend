@@ -22,7 +22,7 @@ class CreateVehicleTypesTable extends Migration
             $table->double('price_km');
             $table->double('price_min');
             $table->double('base_fare');
-            $table->double('commission');
+            $table->double('commission')->comment('In Percent!');
             $table->string('capacity');
             $table->enum('status',['active','in_active']);
 
