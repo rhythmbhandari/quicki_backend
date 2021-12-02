@@ -71,6 +71,7 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   //---------------------------------------------------------------------------------------------------------
   $router->post('/booking/create', [BookingController::class, 'store'])->name('booking.store');
   $router->post('/booking/change_status', [BookingController::class, 'change_status'])->name('booking.change_status');
+  $router->get('/booking/{booking_id}', [BookingController::class, 'getBooking'])->name('user.booking.show');         ///TO BE 
   $router->get('/user/booking/active', [BookingController::class, 'getActiveUserBooking'])->name('user.booking.active');
   $router->get('/rider/booking/active', [BookingController::class, 'getActiveRiderBooking'])->name('rider.booking.active');
   $router->get('/user/booking/history', [CompletedTripController::class, 'getUserTrips'])->name('user.booking.history');
@@ -112,6 +113,7 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->post('/user/location/update', [UserController::class, 'update_location'])->name('user.location.update');
 
 
+
   //---------------------------------------------------------------------------------------------------------
   //  RIDER ROUTES
   //---------------------------------------------------------------------------------------------------------
@@ -121,7 +123,14 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->get('/rider/{rider_id}/location', [RiderLocationController::class, 'getRiderLocation'])->name('rider.specific.location');
 
 
-  
+  //---------------------------------------------------------------------------------------------------------
+  //  EMERGENCY CONTACTS
+  //---------------------------------------------------------------------------------------------------------
+  $router->get('/user/emergency_contacts',[UserController::class, 'getEmergencyContacts'])->name('user.emergency_contacts.show');
+  $router->get('/user/{user_id}/emergency_contacts',[UserController::class, 'getUserEmergencyContacts'])->name('user.emergency_contacts.get');
+  $router->post('/user/emergency_contacts/update',[UserController::class, 'updateEmergencyContacts'])->name('user.emergency_contacts.update');
+
+
   //---------------------------------------------------------------------------------------------------------
   //  DOCUMENT
   //---------------------------------------------------------------------------------------------------------
@@ -157,26 +166,26 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
 
   
  
-  $router->post('/edit/profile', [ApiAuthController::class, 'editProfile'])->name('edit.profile');
-  $router->get('/show/profile', [ApiAuthController::class, 'showProfile'])->name('show.profile');
-  $router->post('/forgot-password', [ApiAuthController::class, 'forgotPassword'])->name('forgot.password');
+  // $router->post('/edit/profile', [ApiAuthController::class, 'editProfile'])->name('edit.profile');
+  // $router->get('/show/profile', [ApiAuthController::class, 'showProfile'])->name('show.profile');
+  // $router->post('/forgot-password', [ApiAuthController::class, 'forgotPassword'])->name('forgot.password');
 
-  $router->get('/auth_test', [VehicleTypeController::class, 'get_all_data'])->name('auth_test');
+  // $router->get('/auth_test', [VehicleTypeController::class, 'get_all_data'])->name('auth_test');
 
 
     
     //Booking
     // $router->post('/booking/create', [BookingController::class, 'bookingCreate'])->name('booking.create');
-    $router->get('/booking/list', [BookingController::class, 'bookingStatusList'])->name('booking.list');
-    $router->get('/booking/list/upcoming', [BookingController::class, 'bookingUpcomingList'])->name('booking.list');
-    $router->get('/booking/list/completed', [BookingController::class, 'bookingCompletedList'])->name('booking.list');
-    $router->get('/booking/list/cancelled', [BookingController::class, 'bookingCancelledList'])->name('booking.list');
-    $router->get('/booking/detail/{id}', [BookingController::class, 'bookingDetail'])->name('booking.detail');
-    $router->post('/booking/change_status/start', [BookingController::class, 'changeBookingStatusToStart'])->name('booking.status.start');
-    $router->post('/booking/change_status/cancel', [BookingController::class, 'changeBookingStatusToCancel'])->name('booking.status.cancel');
-    $router->post('/booking/sos/create', [BookingController::class, 'createSos'])->name('booking.sos.create');
-    $router->get('/booking/sos/{id}', [BookingController::class, 'getSos'])->name('booking.sos.get');
-    $router->get('/booking/extra_drivers/{id}', [BookingController::class, 'getExtraDrivers'])->name('booking.extraDrivers.get');
-    $router->post('/booking/extend', [BookingController::class, 'bookingExtend'])->name('booking.extend');
+    // $router->get('/booking/list', [BookingController::class, 'bookingStatusList'])->name('booking.list');
+    // $router->get('/booking/list/upcoming', [BookingController::class, 'bookingUpcomingList'])->name('booking.list');
+    // $router->get('/booking/list/completed', [BookingController::class, 'bookingCompletedList'])->name('booking.list');
+    // $router->get('/booking/list/cancelled', [BookingController::class, 'bookingCancelledList'])->name('booking.list');
+    // $router->get('/booking/detail/{id}', [BookingController::class, 'bookingDetail'])->name('booking.detail');
+    // $router->post('/booking/change_status/start', [BookingController::class, 'changeBookingStatusToStart'])->name('booking.status.start');
+    // $router->post('/booking/change_status/cancel', [BookingController::class, 'changeBookingStatusToCancel'])->name('booking.status.cancel');
+    // $router->post('/booking/sos/create', [BookingController::class, 'createSos'])->name('booking.sos.create');
+    // $router->get('/booking/sos/{id}', [BookingController::class, 'getSos'])->name('booking.sos.get');
+    // $router->get('/booking/extra_drivers/{id}', [BookingController::class, 'getExtraDrivers'])->name('booking.extraDrivers.get');
+    // $router->post('/booking/extend', [BookingController::class, 'bookingExtend'])->name('booking.extend');
 
 });

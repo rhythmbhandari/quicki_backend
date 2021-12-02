@@ -70,7 +70,7 @@ class ApiAuthController extends Controller
     *                 "username": "luffy",
     *                 "image": "file()",
     *                 "email": "luffy@gmail.com",
-    *                "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
+    *                "emergency_contacts": {"9816810976","987654321","981122345"},
     *                 "phone": "9816810976",
     *                 "gender": "male",
     *                 "password": "password",
@@ -93,7 +93,45 @@ class ApiAuthController extends Controller
     *                   example={
     *                           "message":"User Registration Successful!",
     *                           "access_token":"123sfsdr234sdfs",
-    *                           "user":"{created_user}",
+    *                           "user":{
+    *                                 "message": "User Registration Successful!",
+    *                                 "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMjFiNDAxNzM2ZWIwZGQwYmYxM2M2MGI1NDM3OWZlMGI0OGRjNjllMTJlZDJhMWNjODc5MjVlMDhiMWI3YzYwZjRlNTg4MDkxYTcxZWI0OTQiLCJpYXQiOjE2Mzg0NDg0NjMuNDg1Mjg3LCJuYmYiOjE2Mzg0NDg0NjMuNDg1MjksImV4cCI6MTY2OTk4NDQ2My40ODE3NDQsInN1YiI6IjU2Iiwic2NvcGVzIjpbXX0.P1DOm1Zxgcs9hvrbEAmI6zUNorSlSzRY5EGdgFxOkENVvHeCRUJvcr9HugEFEJYoDM-ryVgDbjDR5c-L0xNMRMhzPRfokCULoSnInjElCDCJ0xUl0WnXZ5q6mpkz6hW-nwF4E5VHav0mD75pUrHWiffDVYfy8mYzjw2CK3-wTSjH6e1rLHYcl5XZOaCam5BB3BbjsNuNOvegtfHpYnILmxNV7NNv_sXkPopV4eckZY3j_CvvhJuxSPQgYPMLb9OFUIHyanEChIHvZ1hTAG5W8ktlEuS_XFxUfNdATWyJblemzz_lbqGlxSDZRhSpDkXLrKOWhQ67aUgVqWevLVWFwwPl0VFXk6-_VNpf3TlZ0g_GWiHeyP0uTneDo5R9KpwGBAPt1bkgblVFCP1HFw2w6AaesEcgBklfs4bF3O9PHEIDTX0uv79o_bwh745TbS3bXn39nGgYY0WYGgBxGbRN3vqlv7ON8CSNZotnu18JbuADeM0dYlTICh6Pcl-kt6mZAT1eqWycx4Pyzf4oawJviJp81P9c_pvH4HCLNoeRHn-Qpy27Gsj8mHJK3udWQ8twwGxCyktoEZNSPynJz2J8KVQffgpVLG1dpIJ3F0QTPg_ou2_VQCr0xr6mqD_iwO4z4qyCuoXiSGLG4Kzq_JMRtMEUTSrf-hNd_EUMCd9H2K0",
+    *                                 "user": {
+    *                                   "id": 56,
+    *                                   "slug": "monkey-d-luffy-22",
+    *                                   "first_name": "Monkey",
+    *                                   "middle_name": "D.",
+    *                                   "last_name": "Luffy",
+    *                                   "image": "4f232ddc57a1b5a7f10b6616de6227493e9560ba.webp",
+    *                                   "dob": "2000-01-01",
+    *                                   "gender": null,
+    *                                   "google_id": null,
+    *                                   "facebook_id": null,
+    *                                   "social_image_url": "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+    *                                   "username": "monke_@4083",
+    *                                   "phone": "981681019761",
+    *                                   "email": "luffyaa@gmail.com",
+    *                                   "emergency_contacts": {
+    *                                     "9816810976",
+    *                                     "987654321",
+    *                                     "981122345"
+    *                                   },
+    *                                   "status": null,
+    *                                   "email_verified_at": null,
+    *                                   "last_logged_in": null,
+    *                                   "no_of_logins": null,
+    *                                   "avatar": null,
+    *                                   "device_token": null,
+    *                                   "deleted_at": null,
+    *                                   "last_updated_by": null,
+    *                                   "last_deleted_by": null,
+    *                                   "created_at": "2021-12-02T12:34:22.000000Z",
+    *                                   "updated_at": "2021-12-02T12:34:23.000000Z",
+    *                                   "name": "Monkey D. Luffy",
+    *                                   "thumbnail_path": "uploads/user//thumb/4f232ddc57a1b5a7f10b6616de6227493e9560ba.webp",
+    *                                   "image_path": "uploads/user//4f232ddc57a1b5a7f10b6616de6227493e9560ba.webp"
+    *                                 }
+    *                               }
     *                   }
     *                 )
     *           )
@@ -121,7 +159,7 @@ class ApiAuthController extends Controller
 
         return DB::transaction(function () use ($request)
         {
-            $createdUser = $this->user->create($request->except('image'));
+            $createdUser = $this->user->create($request->except('image','username'));
 
             if($createdUser)
             {
@@ -142,7 +180,7 @@ class ApiAuthController extends Controller
                 return response($response, 201);
             }
             return response("Internal Server Error!", 500);
-        });
+        },3);
 
       
     }
@@ -167,7 +205,7 @@ class ApiAuthController extends Controller
     *                 "username": "luffy",
     *                  "image": "file()",
     *                  "email": "luffy@gmail.com",
-    *                   "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
+    *                   "emergency_contacts": {"9816810976","987654321","981122345"},
     *                  "phone": "9816810976",
     *                  "gender": "male",
     *                  "password": "password",
@@ -225,7 +263,7 @@ class ApiAuthController extends Controller
     *                               "username": "lusfssssssddfy",
     *                               "phone": "9811632833412s0976",
     *                               "email": "lusfesessdsdssfy@gmail.com",
-    *                               "emergency_contacts": null,
+    *                               "emergency_contacts": {"9816810976","987654321","981122345"},
     *                               "status": null,
     *                               "email_verified_at": null,
     *                               "last_logged_in": null,
@@ -323,7 +361,7 @@ class ApiAuthController extends Controller
         //dd("RIDER DATA:",$request->all(), $request->all()['document']);
         return DB::transaction(function () use ($request)
         {
-            $createdRider = $this->rider->create($request->except('image','document.image','vehicle.image'));
+            $createdRider = $this->rider->create($request->except('image','document.image','vehicle.image','username'));
 
             if($createdRider)
             {
@@ -358,7 +396,7 @@ class ApiAuthController extends Controller
                 return response($response, 200);
             }
             return response("Internal Server Error!", 500);
-        });
+        },3);
 
        
       
@@ -491,7 +529,7 @@ class ApiAuthController extends Controller
     *                       "username": "sasuke",
     *                       "phone": "9869191572",
     *                       "email": "sasuke@gmail.com",
-    *                        "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
+    *                        "emergency_contacts": {"9816810976","987654321","981122345"},
     *                       "status": null,
     *                       "email_verified_at": null,
     *                       "last_logged_in": null,
@@ -607,7 +645,7 @@ class ApiAuthController extends Controller
     *                           "username": "sasuke",
     *                           "phone": "9816810976",
     *                           "email": "sasuke@gmail.com",
-    *                            "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
+    *                            "emergency_contacts": {"9816810976","987654321","981122345"},
     *                           "location": {
     *                             "home": {
     *                               "name": "New Baneshwor, Kathmandu",
@@ -839,7 +877,7 @@ class ApiAuthController extends Controller
     *                           "username": "sasuke",
     *                           "phone": "9816810976",
     *                           "email": "sasuke@gmail.com",
-    *                            "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
+    *                            "emergency_contacts": {"9816810976","987654321","981122345"},
     *                           "location": {
     *                             "home": {
     *                               "name": "New Baneshwor, Kathmandu",

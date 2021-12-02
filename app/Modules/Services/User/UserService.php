@@ -46,6 +46,8 @@ class UserService extends Service
             if (!isset($data['password'])) $data['password'] = Hash::make('password');
             else $data['password'] =  Hash::make($data['password']);
             
+            $data['username'] =  $this->generate_random_username($data['first_name']);
+            // dd($data['first_name'],$data['username']);
             $createdUser = $this->user->create($data);
             if($createdUser){
                 //dd("created user", $createdUser);
@@ -61,6 +63,23 @@ class UserService extends Service
         return null;
     }
 
+
+    function generate_random_username($name) {
+     
+        $username =substr(str_replace(' ','',strtolower($name)), 0, 5);
+        
+        $rand = substr(md5(microtime()),rand(0,26),5);
+
+
+        $seed = str_split('@0123456789'); // and any other characters
+        shuffle($seed); 
+        $rand = '';
+        foreach (array_rand($seed, 5) as $k) $rand .= $seed[$k];
+
+
+        return $username.'_'.$rand;
+    }
+        
 
     public function update($userId,array $data)
     {

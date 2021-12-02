@@ -378,6 +378,93 @@ class BookingController extends Controller
     }
 
 
+ /**
+    * @OA\Get(
+    *   path="/api/booking/{booking_id}",
+    *   tags={"Booking"},
+    *   summary="Get Booking from ID",
+    *   security={{"bearerAuth":{}}},
+    *
+    *      @OA\Parameter(
+    *         name="booking_id",
+    *         in="path",
+    *         description="Booking ID",
+    *         required=true,
+    *      ),
+    *
+    *      @OA\Response(
+    *        response=200,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example={
+    *                     "message": "Success!",
+    *                     "booking": {
+    *                       "id": 1,
+    *                       "stoppage": {
+    *                         {
+    *                           "name": "Sanepa, Lalitpur",
+    *                           "latitude": 27.1234,
+    *                           "longitude": "85.3434"
+    *                         },
+    *                         {
+    *                           "name": "New Baneshwor, Kathmandu",
+    *                           "latitude": 28.3454,
+    *                           "longitude": 87.1234
+    *                         }
+    *                       },
+    *                       "user_id": 3,
+    *                       "vehicle_type_id": 1,
+    *                       "rider_id": null,
+    *                       "location_id": 1,
+    *                       "start_time": null,
+    *                       "end_time": null,
+    *                       "origin": "Sanepa, Lalitpur",
+    *                       "destination": "New Baneshwor, Kathmandu",
+    *                       "distance": 12,
+    *                       "duration": 20,
+    *                       "passenger_number": 2,
+    *                       "status": "pending",
+    *                       "price": 160,
+    *                       "payment_type": "CASH",
+    *                       "deleted_at": null,
+    *                       "created_at": "2021-11-25T19:07:34.000000Z",
+    *                       "updated_at": "2021-11-25T19:07:34.000000Z",
+    *                       "location": {
+    *                         "id": 1,
+    *                         "longitude_origin": 27.123456,
+    *                         "latitude_origin": 85.123423,
+    *                         "longitude_destination": 27.234325,
+    *                         "latitude_destination": 86.12313,
+    *                         "created_at": "2021-11-25T19:07:34.000000Z",
+    *                         "updated_at": "2021-11-25T19:07:34.000000Z"
+    *                       }
+    *                     }
+    *                   }
+    *                 )
+    *           )
+    *      ),
+    *   @OA\Response(
+    *      response=404,
+    *       description="Booking Not Found!",
+    *   )
+    *)
+    **/
+    public function getBooking($booking_id)
+    {
+        $booking = Booking::find($booking_id);
+        if($booking) {
+            $response = ['message' => 'Success!', 'booking'=>$booking];
+            return response($response, 200);
+        }
+        else{
+            $response = ['message' => 'Booking Not Found!'];
+            return response($response, 404);
+        }
+    }
+
+
     /**
     * @OA\Get(
     *   path="/api/user/booking/active",
