@@ -39,7 +39,7 @@ class UserService extends Service
 
 
     function create(array $data)
-    {
+    {  // dd($data);
         //return response($data,200);
         try {
             
@@ -51,7 +51,7 @@ class UserService extends Service
                 //dd("created user", $createdUser);
                 $createdUser->roles()->attach([3]);
 
-                $createdUser->roles = $createdUser->roles();
+               // $createdUser->roles = $createdUser->roles();
                return $createdUser;
             }
             else return NULL;
@@ -160,7 +160,7 @@ class UserService extends Service
             $old_image_file = $user->image;
 
             $path_info = pathinfo($url);                                            //Break the url into paths and base names
-            $fileNameToStore = sha1($path_info['basename']) . time() . ".webp";      //the name of the image file to be stored temporarily
+            $fileNameToStore = sha1($path_info['basename']. time() ) . ".webp";      //the name of the image file to be stored temporarily
            // $file_path = public_path( $upload_path .'\\'. $fileNameToStore );          //path for storing the image file content to the temporary directo
            // $file_thumb_path = public_path( $thumb_path .'\\'. $fileNameToStore );  
 
@@ -201,8 +201,9 @@ class UserService extends Service
             {
                 //Save file name in user model
                 $user->image = $fileNameToStore;
-                $user->save();
-                
+               // dd($user->toArray());  
+               
+                $user->save();  
                 //Remove old image and thumbnail
                 if($old_image_file)
                 {
