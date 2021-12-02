@@ -150,28 +150,52 @@ class UserService extends Service
        try{
             
             if (!is_dir('uploads'))  mkdir('uploads');
-            $upload_path = 'uploads\user';
-            $thumb_path = 'uploads\user\thumb';
+            $upload_path = 'uploads/user';
+            $thumb_path = 'uploads/user/thumb';
+            $temp_path = 'uploads/temp';
             if (!is_dir( $upload_path ))  mkdir( $upload_path ); 
             if (!is_dir($thumb_path)) mkdir($thumb_path); 
+            if (!is_dir($temp_path)) mkdir($temp_path); 
 
             $old_image_file = $user->image;
 
             $path_info = pathinfo($url);                                            //Break the url into paths and base names
             $fileNameToStore = sha1($path_info['basename']) . time() . ".webp";      //the name of the image file to be stored temporarily
-            $file_path = public_path( $upload_path .'\\'. $fileNameToStore );          //path for storing the image file content to the temporary directo
-            $file_thumb_path = public_path( $thumb_path .'\\'. $fileNameToStore );  
+           // $file_path = public_path( $upload_path .'\\'. $fileNameToStore );          //path for storing the image file content to the temporary directo
+           // $file_thumb_path = public_path( $thumb_path .'\\'. $fileNameToStore );  
+
+           $file_path = public_path() .'/'. $upload_path .'/'. $fileNameToStore;
+           $file_thumb_path = public_path() .'/'. $thumb_path .'/'. $fileNameToStore;
+           $file_temp_path = public_path() .'/'. $temp_path .'/'. $fileNameToStore;
+
            // dd($file_path, $file_thumb_path);
             $contents = file_get_contents($url);                                    //get image file content from the url
-            $contents = imagecreatefromstring( $contents );
+            //$contents = imagecreatefromstring( $contents );
+            //dd($file_path, $file_thumb_path);
+            $temp_file_save = file_put_contents($file_temp_path, $contents);
+            $img_save = copy($file_temp_path, $file_path);
+            $thumb_save = copy($file_temp_path, $file_thumb_path);
+            unlink($file_temp_path);
+            // $img_save = file_put_contents($file_path, $contents);
+            // $thumb_save = file_put_contents($file_thumb_path, $contents);
             
             //Save the new image to server/drive
-            $img = Image::make($contents);
-            //$img_save = Storage::disk('public')->putFile($upload_path, $img);
-            $img_save = $img->save($file_path);
-            $img->fit(320, 320);             //NEW THUMBNAIL CREATION
-            $thumb_save = $img->save($file_thumb_path);
-            //$thumb_save  = Storage::disk('public')->putFile($thumb_path, $img);
+           // $img = Image::make($contents);
+           // $img_save = Storage::disk('public')->putFile($file_path, $img);
+           // $img_save = $img->save($file_path);
+             //Put file with own name
+            //Storage::put($fileNameToStore, $img);
+            //Move file to your location 
+           // $img_save  = Storage::move($fileNameToStore, $upload_path .'/'. $fileNameToStore);
+
+
+            //$img->fit(320, 320);             //NEW THUMBNAIL CREATION
+            //$thumb_save = $img->save($file_thumb_path);
+            //$thumb_save  = Storage::disk('public')->putFile($file_thumb_path, $img);
+           // Storage::put($fileNameToStore, $img);
+            //Move file to your location 
+            //$thumb_save  = Storage::move($fileNameToStore, $thumb_path .'/' . $fileNameToStore);
+
 
             if($img_save && $thumb_save)
             {
@@ -192,7 +216,7 @@ class UserService extends Service
         catch(Throwable $e)
         {
             //log ... social image couldn't be uploaded
-           // dd("ERROR While Uploading social image! => ",$e);
+            dd("ERROR While Uploading social image! => ",$e);
         } 
     }
 
