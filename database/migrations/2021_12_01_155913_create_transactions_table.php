@@ -27,6 +27,7 @@ class CreateTransactionsTable extends Migration
             $table->enum('payment_mode',['online','offline'])->default('offline');
             $table->string('payment_gateway_type')->nullable()->comment('Esewa or Khalti');
             $table->string('payment_gateway_user_id')->nullable()->comment('For Esewa, it might be the creditor\' mobile number!');
+            $table->string('payment_gateway_transaction_id')->nullable()->comment('');
             $table->string('payment_gateway_transaction_amount')->nullable()->comment('Amount transferred via payment gateway!');
 
             $table->softDeletes();

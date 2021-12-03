@@ -28,7 +28,7 @@ class Suggestion extends Model
     function getImagePathAttribute()
     {
         if ($this->image)
-            return $this->path . '/' . $this->type . '/' . $this->image;
+            return $this->path .  '/' . $this->image;
         else
             return 'assets/media/noimage.png';
     }
@@ -36,7 +36,7 @@ class Suggestion extends Model
     function getThumbnailPathAttribute()
     {
         if ($this->image)
-            return $this->path . '/' . $this->type . '/thumb/' . $this->image;
+            return $this->path .  '/thumb/' . $this->image;
         else
             return 'assets/media/noimage.png';
     }
