@@ -314,7 +314,7 @@ class UserController extends Controller
         //UPDATE USER
         return DB::transaction(function () use ($request,$user)
         {
-            $updatedUser = $this->user->update($user->id,$request->except('username'));
+            $updatedUser = $this->user->update($user->id,$request->except('username','image'));
     
             if($updatedUser)
             {
@@ -324,13 +324,13 @@ class UserController extends Controller
                 else if (isset($request->social_image_url) && !is_null($request->social_image_url)) {
                    
                     $url = $request->social_image_url;
-                    $this->user->uploadSocialImage($updatedUser, $url);
+                    $this->user_service->uploadSocialImage($updatedUser, $url);
 
                 } else {
                     //$fileNameToStore1 = 'no-image.png';
                 }
 
-                $response = ['message' => 'User Profile Updated Successful!',  "user"=>$updatedUser];
+                $response = ['message' => 'User Profile Updated Successful!',  "user"=>User::find($updatedUser->id)];
                 return response($response, 200);
             }
             return response("Internal Server Error!", 500);

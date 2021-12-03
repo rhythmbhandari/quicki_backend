@@ -52,6 +52,7 @@ class CompletedTripService extends Service
                 $payment_data = [];
                 $payment_data['completed_trip_id'] = $createdCompltedTrip->id;
                 //DEDUCE ADMIN's COMMISSION FOR THE TRIP
+               // dd($createdCompltedTrip->booking->vehicle_type->commission);
                 $commission_percent = $createdCompltedTrip->booking->vehicle_type->commission;
                 
                 $payment_data['commission_amount'] = round( $createdCompltedTrip->price * $commission_percent/100 ) ;
