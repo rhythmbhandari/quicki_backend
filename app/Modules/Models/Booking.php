@@ -10,6 +10,7 @@ use App\Modules\Models\Rider;
 use App\Modules\Models\User;
 use App\Modules\Models\Location;
 use App\Modules\Models\CompletedTrip;
+use App\Modules\Models\VehicleType;
 use App\Modules\Models\BookingPayment;
 class Booking extends Model
 {
@@ -52,6 +53,9 @@ class Booking extends Model
     }
 
 
-
+    public function vehicle_type()
+    {
+        return $this->belongsTo(VehicleType::class);
+    }
 
 }
