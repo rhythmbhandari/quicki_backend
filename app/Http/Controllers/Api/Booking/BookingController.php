@@ -453,7 +453,7 @@ class BookingController extends Controller
     **/
     public function getBooking($booking_id)
     {
-        $booking = Booking::find($booking_id);
+        $booking = Booking::where('id',$booking_id)->with('location')->first();
         if($booking) {
             $response = ['message' => 'Success!', 'booking'=>$booking];
             return response($response, 200);
