@@ -3,18 +3,16 @@
 namespace App\Modules\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Spatie\Permission\Traits\HasPermissions;
-
-use App\Modules\Models\User;
-use App\Modules\Models\Permission;
+use Illuminate\Database\Eloquent\Model;
 
 
 class Role extends Model
-{   
-     use SoftDeletes, Sluggable, HasPermissions;
+{
+    use HasFactory;
+    use SoftDeletes, Sluggable, HasPermissions;
 
     protected $path = 'uploads/role';
 
@@ -27,21 +25,22 @@ class Role extends Model
         ];
     }
 
-    protected $fillable = [ 'name', 'slug','created_at','updated_at','deleted_at' ];
-    protected $appends = [  ];
+    protected $fillable = ['name', 'slug', 'created_at', 'updated_at', 'deleted_at'];
+    protected $appends = [];
 
     /**
      * Returns the users having this role.
      */
-    public function users(){
+    public function users()
+    {
         // return $this->hasMany(UserRole::class);
         return $this->belongsToMany(User::class);
     }
 
 
-    // public function permissions(){
-    //     // return $this->hasMany(UserRole::class);
-    //     return $this->belongsToMany(Permission::class);
-    // }
-
+    public function permissions()
+    {
+        // return $this->hasMany(UserRole::class);
+        return $this->belongsToMany(Permission::class, 'role_has_permissions');
+    }
 }

@@ -8,10 +8,14 @@ use App\Http\Controllers\Controller;
 
 class VehicleTypeController extends Controller
 {
-   
+
 
     public function get_all_data()
     {
         return response()->json(VehicleType::all()->toArray());
     }
+
+    // public function vehicleTypeAjax() {
+    //     return
+    // }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Modules\Models\Permission;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -22,8 +23,8 @@ class DatabaseSeeder extends Seeder
             VehicleTypeSeeder::class,
             OtpSeeder::class,
             SuggestionSeeder::class,
+            PermissionSeeder::class,
+            RoleHasPermissions::class
         ]);
-
-        
     }
 }

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Modules\Models\RoleUser;
+use App\Modules\Models\User;
 
 class RoleUserSeeder extends Seeder
 {
@@ -14,29 +14,33 @@ class RoleUserSeeder extends Seeder
      */
     public function run()
     {
-        RoleUser::create([
-            'user_id'=>'1',
-            'role_id'=>'1',
-        ]);
-        RoleUser::create([
-            'user_id'=>'1',
-            'role_id'=>'3',
-        ]);
-        RoleUser::create([
-            'user_id'=>'2',
-            'role_id'=>'2',
-        ]);
-        RoleUser::create([
-            'user_id'=>'2',
-            'role_id'=>'3',
-        ]);
-        RoleUser::create([
-            'user_id'=>'3',
-            'role_id'=>'3',
-        ]);
-        RoleUser::create([
-            'user_id'=>'4',
-            'role_id'=>'3',
-        ]);
+        User::find(1)->assignRole('admin');
+        User::find(2)->assignRole('customer');
+        User::find(2)->assignRole('rider');
+        User::find(3)->assignRole('customer');
+        // RoleUser::create([
+        //     'user_id'=>'1',
+        //     'role_id'=>'1',
+        // ]);
+        // RoleUser::create([
+        //     'user_id'=>'1',
+        //     'role_id'=>'3',
+        // ]);
+        // RoleUser::create([
+        //     'user_id'=>'2',
+        //     'role_id'=>'2',
+        // ]);
+        // RoleUser::create([
+        //     'user_id'=>'2',
+        //     'role_id'=>'3',
+        // ]);
+        // RoleUser::create([
+        //     'user_id'=>'3',
+        //     'role_id'=>'3',
+        // ]);
+        // RoleUser::create([
+        //     'user_id'=>'4',
+        //     'role_id'=>'3',
+        // ]);
     }
 }

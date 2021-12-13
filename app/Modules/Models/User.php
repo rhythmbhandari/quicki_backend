@@ -40,12 +40,13 @@ class User extends Authenticatable
      *
      * @var string[]
      */
-    protected $fillable = [ 'first_name', 'middle_name','last_name',   'email', 'username', 'password', 'slug', 'status',
-    'image','phone','email_verified_at','no_of_logins','last_logged_in','avatar','dob','emergency_contacts',
-    'google_id','facebook_id', 'image', 'device_token', 'social_image_url', 'location',
-    'created_at','updated_at','deleted_at', 'last_updated_by','last_deleted_by'
+    protected $fillable = [
+        'first_name', 'middle_name', 'last_name',   'email', 'username', 'password', 'slug', 'status',
+        'image', 'phone', 'email_verified_at', 'no_of_logins', 'last_logged_in', 'avatar', 'dob', 'emergency_contacts',
+        'google_id', 'facebook_id', 'image', 'device_token', 'social_image_url', 'location',
+        'created_at', 'updated_at', 'deleted_at', 'last_updated_by', 'last_deleted_by'
     ];
-    protected $appends = [  'name',   'thumbnail_path', 'image_path' ];
+    protected $appends = ['name',   'thumbnail_path', 'image_path'];
 
 
     function getImagePathAttribute()
@@ -70,7 +71,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $hidden = [  'password', 'remember_token', ];
+    protected $hidden = ['password', 'remember_token',];
 
     /**
      * The attributes that should be cast.
@@ -78,30 +79,33 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',  'emergency_contacts'=>'array', 'location'=>'array'
+        'email_verified_at' => 'datetime',  'emergency_contacts' => 'array', 'location' => 'array'
     ];
 
     public function getNameAttribute()
     {
-        return ucwords($this->first_name.' '.$this->middle_name.' '.$this->last_name);
+        return ucwords($this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name);
     }
 
 
     /**
      * Returns the users having this role.
      */
-    public function roles(){
+    public function roles()
+    {
         return $this->belongsToMany(Role::class)->withTimeStamps();
     }
 
     //Rider model of the user if any
-    public function rider() {
+    public function rider()
+    {
         return $this->hasOne(Rider::class)->with('vehicle')->with('documents');
     }
-       
+
     //Reviews involving the user --> Returns both reviews made by and made for this user
-    public function reviews(){
-    return $this->hasMany(Review::class);
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 
     /**
@@ -120,13 +124,11 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class, 'debtor_id');
     }
 
-     /**
+    /**
      * Returns the transactions that are paid by this user.
      */
     public function paid_transactions()
     {
         return $this->hasMany(Transaction::class, 'creditor_id');
     }
-
-
 }

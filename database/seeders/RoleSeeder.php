@@ -17,35 +17,22 @@ class RoleSeeder extends Seeder
     {
         //1
         Role::create([
-            'name'=>'admin',
-            'guard_name'=>'admin',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'name' => 'admin',
         ]);
 
         //2
         Role::create([
-            'name'=>'rider',
-            'guard_name'=>'rider',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'name' => 'rider',
         ]);
 
         //3
         Role::create([
-            'name'=>'customer',
-            'guard_name'=>'customer',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'name' => 'customer',
         ]);
 
         //4
         Role::create([
-            'name'=>'driver',
-            'guard_name'=>'driver',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'name' => 'driver',
         ]);
-
     }
 }

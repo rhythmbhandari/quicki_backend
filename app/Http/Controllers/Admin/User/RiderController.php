@@ -45,7 +45,27 @@ class RiderController extends Controller
         return response($response, 200);
     }
 
+    function riderAjax(Request $request){
+        // dd($request->all());
 
+        $query = Rider::select('id', 'first_name')
+            ->when($request->q, function($query) use ($request) {
+                $q = $request->q;
+                $query = $query->where('name', 'LIKE', "%".$q."%");
+                return $query;
+            })->where('status','active')->simplePaginate(10);
+            $results = array();
+            foreach ($query as $object) {
+                array_push($results, [
+                    'id' => $object['id'],
+                    'text' => $object['name']
+                ]);
+            }
+            $pagination = [
+                'more' => !is_null($query->toArray()['next_page_url'])
+            ];
+            return compact('results', 'pagination');
+    }
 
    
     public function updateProfile(Request $request)

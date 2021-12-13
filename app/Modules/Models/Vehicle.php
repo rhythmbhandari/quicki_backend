@@ -31,18 +31,19 @@ class Vehicle extends Model
         'rider_id' => 'integer'
     ];
 
-     /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
-    protected $fillable = [ 'slug', 'rider_id', 'vehicle_type_id', 'image',
-    'vehicle_number', 'make_year', 'vehicle_color', 'brand','model','status', 
-    'created_at','updated_at','deleted_at', 'last_updated_by','last_deleted_by'
+    protected $fillable = [
+        'slug', 'rider_id', 'vehicle_type_id', 'image',
+        'vehicle_number', 'make_year', 'vehicle_color', 'brand', 'model', 'status',
+        'created_at', 'updated_at', 'deleted_at', 'last_updated_by', 'last_deleted_by'
     ];
- 
+
     protected $appends = [
-          'thumbnail_path', 'image_path'
+        'thumbnail_path', 'image_path'
     ];
 
     function getImagePathAttribute()
@@ -60,14 +61,16 @@ class Vehicle extends Model
         else
             return 'assets/media/noimage.png';
     }
-    
+
     //Vehicle belonging to the rider
-    public function vehicle(){
+    public function vehicle()
+    {
         return $this->belongsTo(Rider::class);
     }
 
     //Vehicle belonging to the rider
-    public function vehicle_type(){
+    public function vehicle_type()
+    {
         return $this->belongsTo(VehicleType::class); //, 'vehicle_type_id', 'id');
     }
 
@@ -79,5 +82,4 @@ class Vehicle extends Model
     {
         return $this->morphMany(Document::class, 'documentable');
     }
-
 }

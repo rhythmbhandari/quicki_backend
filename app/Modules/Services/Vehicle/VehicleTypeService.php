@@ -16,8 +16,13 @@ class VehicleTypeService extends Service
         $this->vehicle_type = $vehicle_type;
     }
 
-    function getVehicleType(){
+    function getVehicleType()
+    {
         return $this->vehicle_type;
     }
 
+    function all()
+    {
+        return $this->vehicle_type->all();
+    }
 }

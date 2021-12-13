@@ -17,18 +17,18 @@ use App\Modules\Services\Vehicle\VehicleService;
 //models
 use App\Modules\Models\Rider;
 use App\Modules\Models\User;
+
 class RiderService extends Service
 {
     protected  $rider, $user_service, $vehicle_type_service, $vehicle_service, $document_service;
 
     function __construct(
-            UserService $user_service,
-            VehicleTypeService $vehicle_type_service, 
-            VehicleService $vehicle_service, 
-            DocumentService $document_service,
-            Rider $rider
-        )
-    {
+        UserService $user_service,
+        VehicleTypeService $vehicle_type_service,
+        VehicleService $vehicle_service,
+        DocumentService $document_service,
+        Rider $rider
+    ) {
         $this->user_service = $user_service;
         $this->vehicle_service = $vehicle_service;
         $this->vehicle_type_service = $vehicle_type_service;
@@ -36,7 +36,8 @@ class RiderService extends Service
         $this->rider = $rider;
     }
 
-    function getRider(){
+    function getRider()
+    {
         return $this->rider;
     }
 
@@ -44,21 +45,27 @@ class RiderService extends Service
     {
         $allowed_rider = new Rider();
         $allowed_riders = $allowed_rider->newQuery();
-        $allowed_riders = $allowed_riders->where('status','active');
+        $allowed_riders = $allowed_riders->where('status', 'active');
         $allowed_riders = $allowed_riders->whereNotNull('approved_at');
-        $allowed_riders = $allowed_rider->whereHas('vehicle',function (Builder $query) {
-            $query->whereRelation('vehicle_type','status','!=','in_active');
+        $allowed_riders = $allowed_rider->whereHas('vehicle', function (Builder $query) {
+            $query->whereRelation('vehicle_type', 'status', '!=', 'in_active');
         });
         return $allowed_riders;
     }
+
+    function all()
+    {
+        return $this->rider->all();
+    }
+
     function getAllowedRiders()
     {
         $allowed_rider = new Rider();
         $allowed_riders = $allowed_rider->newQuery();
-        $allowed_riders = $allowed_riders->where('status','active');
+        $allowed_riders = $allowed_riders->where('status', 'active');
         $allowed_riders = $allowed_riders->whereNotNull('approved_at');
-        $allowed_riders = $allowed_rider->whereHas('vehicle',function (Builder $query) {
-            $query->whereRelation('vehicle_type_id','status','!=','in_active');
+        $allowed_riders = $allowed_rider->whereHas('vehicle', function (Builder $query) {
+            $query->whereRelation('vehicle_type_id', 'status', '!=', 'in_active');
         })->get();
         return $allowed_riders;
     }
@@ -66,33 +73,31 @@ class RiderService extends Service
     {
         $allowed_rider = new Rider();
         $allowed_riders = $allowed_rider->newQuery();
-        $allowed_riders = $allowed_riders->where('status','active');
+        $allowed_riders = $allowed_riders->where('status', 'active');
         $allowed_riders = $allowed_riders->whereNotNull('approved_at');
-        $allowed_riders = $allowed_rider->whereHas('vehicle',function (Builder $query) {
-            $query->whereRelation('vehicle_type_id','status','!=','in_active');
+        $allowed_riders = $allowed_rider->whereHas('vehicle', function (Builder $query) {
+            $query->whereRelation('vehicle_type_id', 'status', '!=', 'in_active');
         })->pluck('id');
         return $allowed_riders;
     }
 
-    function create(array $data, $user=null)
+    function create(array $data, $user = null)
     {
         try {
-            
+
             //CREATE USER
             $created_user = null;
-            if($user == null)
+            if ($user == null)
                 $createdUser = $this->user_service->create($data);
             else
                 $createdUser = $user;   //Not newly created, but old user being upgraded
             //dd($createdUser, 'creating rider user');
-            if($createdUser)
-            {
+            if ($createdUser) {
                 $data['rider']['user_id'] = intval($createdUser->id);
-                $data['rider']['status'] = isset($data['rider']['status'])?$data['rider']['status']:'in_active';
+                $data['rider']['status'] = isset($data['rider']['status']) ? $data['rider']['status'] : 'in_active';
                 //CREATE RIDER
                 $createdRider = $this->rider->create($data['rider']);
-                if($createdRider)
-                {
+                if ($createdRider) {
                     $createdRider->user->roles()->attach(2);
 
                     //CREATE DOCUMENT
@@ -113,10 +118,7 @@ class RiderService extends Service
                     return $createdRider;
                 }
             }
-                
-           
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
         return null;
@@ -155,5 +157,4 @@ class RiderService extends Service
             return false;
         }
     }
-
 }
