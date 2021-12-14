@@ -12,6 +12,7 @@ use App\Modules\Models\Location;
 use App\Modules\Models\CompletedTrip;
 use App\Modules\Models\VehicleType;
 use App\Modules\Models\BookingPayment;
+use App\Modules\Models\PriceDetail;
 class Booking extends Model
 {
     use HasFactory, SoftDeletes;
@@ -56,6 +57,11 @@ class Booking extends Model
     public function vehicle_type()
     {
         return $this->belongsTo(VehicleType::class);
+    }
+
+    public function price_detail()
+    {
+        return $this->hasOne(PriceDetail::class);
     }
 
 }

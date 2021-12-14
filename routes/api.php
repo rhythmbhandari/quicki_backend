@@ -69,6 +69,8 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   //---------------------------------------------------------------------------------------------------------
   //  BOOKING and COMPLETED TRIP ROUTES
   //---------------------------------------------------------------------------------------------------------
+  $router->get('/test', [BookingController::class, 'testFunction'])->name('booking.test');
+  
   $router->post('/booking/create', [BookingController::class, 'store'])->name('booking.store');
   $router->post('/booking/change_status', [BookingController::class, 'change_status'])->name('booking.change_status');
   $router->get('/booking/{booking_id}', [BookingController::class, 'getBooking'])->name('user.booking.show');         ///TO BE 

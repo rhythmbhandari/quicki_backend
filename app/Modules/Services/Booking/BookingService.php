@@ -13,6 +13,7 @@ use Throwable;
 use App\Modules\Services\Location\LocationService;
 use App\Modules\Services\Location\RiderLocationService;
 use App\Modules\Services\Booking\CompletedTripService;
+use App\Modules\Services\Booking\PriceDetailService;
 
 //models
 use App\Modules\Models\Booking;
@@ -24,12 +25,13 @@ class BookingService extends Service
 {
     protected $booking, $location_service;
 
-    function __construct(Booking $booking, LocationService $location_service, CompletedTripService $completed_trip_service, RiderLocationService $rider_location_service)
+    function __construct(Booking $booking, LocationService $location_service, CompletedTripService $completed_trip_service, RiderLocationService $rider_location_service, PriceDetailService $price_detail_service)
     {
         $this->booking = $booking;
         $this->location_service = $location_service;
         $this->completed_trip_service = $completed_trip_service;
         $this->rider_location_service = $rider_location_service;
+        $this->price_detail_service = $price_detail_service;
     }
 
     function getBooking(){
@@ -84,8 +86,24 @@ class BookingService extends Service
                     $createdBooking->location_id = intval($createdLocation->id);
                     $createdBooking->save();
                     $createdBooking->location = $createdLocation;
+                    // return $createdBooking;
+
+                    
+                    //CREAT PRICE DETAIL
+                    $price_detail_data = $this->calculateEstimatedPrice(
+                        $data['location']['latitude_origin'], $data['location']['longitude_origin'], 
+                        $data['vehicle_type_id'], $data['distance'], $data['duration']
+                    );  
+                    $price_detail_data = $price_detail_data['price_breakdown'];
+                    $price_detail_data['booking_id'] = $createdBooking->id;
+                    //dd($createdBooking->toArray(), $price_detail_data);
+                    $this->price_detail_service->create($price_detail_data);
+                    
                     return $createdBooking;
                 }
+
+
+             
             }
             return NULL;
         }
@@ -112,6 +130,8 @@ class BookingService extends Service
                 if($new_status == "accepted")
                 {
                     $booking->rider_id = intval($data['optional_data']['rider_id']);
+
+
                     if($booking->save())
                         return $booking;
                 }
@@ -152,6 +172,16 @@ class BookingService extends Service
                     $completed_trip_data['price'] = $final_price;
 
                     $booking->createdCompletedTrip = $this->completed_trip_service->create($completed_trip_data);
+                    
+                    //CREAT PRICE DETAIL
+                    $price_detail_data = $this->calculateEstimatedPrice(
+                        $booking->location->latitude_origin, $booking->location->longitude_origin, 
+                        $booking->vehicle_type_id, $booking->distance,  $new_duration
+                    );  
+                    $price_detail_data = $price_detail_data['price_breakdown'];
+                    $price_detail_data['completed_trip_id'] =   $booking->createdCompletedTrip->id;
+                    $this->price_detail_service->create($price_detail_data);
+
                     return $booking;
                 }
                 else if($new_status == "cancelled")
@@ -174,6 +204,15 @@ class BookingService extends Service
                     
 
                     $booking->createdCompletedTrip = $this->completed_trip_service->create($cancelled_trip_data);
+                    //CREAT PRICE DETAIL
+                    $price_detail_data = $this->calculateEstimatedPrice(
+                        $booking->location->latitude_origin, $booking->location->longitude_origin, 
+                        $booking->vehicle_type_id, $booking->distance,  $booking->duration
+                    );  
+                    $price_detail_data = $price_detail_data['price_breakdown'];
+                    $price_detail_data['completed_trip_id'] =   $booking->createdCompletedTrip->id;
+                    $this->price_detail_service->create($price_detail_data);
+
                     return $booking;
                 }
             }
@@ -210,7 +249,7 @@ class BookingService extends Service
                 $query->where('status','pending')
                 ->orWhere('status','accepted')
                 ->orWhere('status','running');
-            })->with('location')->first();
+            })->with('location')->with('price_detail')->first();
             return $booking;
         }
         catch(Exception $e)
@@ -226,7 +265,7 @@ class BookingService extends Service
             $booking = $this->booking->where('rider_id',$riderId)->where(function($query){
                 $query->where('status','accepted')
                 ->orWhere('status','running');
-            })->with('location')->first();
+            })->with('location')->with('price_detail')->first();
             return $booking;
         }
         catch(Exception $e)
@@ -333,7 +372,7 @@ class BookingService extends Service
         $estimated_price['shift'] = isset($shift->title)?$shift->title:1;
         $estimated_price['price_breakdown'] = [];
         //Provided
-        $estimated_price['price_breakdown']['minimum_charge'] = intval($vehicle_type->base_fair);
+        $estimated_price['price_breakdown']['minimum_charge'] = intval($vehicle_type->base_fare);
         //PRICE AFTER DISTANCE
         $estimated_price['price_breakdown']['price_per_km'] = $vehicle_type->price_per_km;
         $estimated_price['price_breakdown']['price_after_distance']  = ($vehicle_type->price_per_km * $distance);
