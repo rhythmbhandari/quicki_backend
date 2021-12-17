@@ -32,15 +32,15 @@
                     </div>
                     <div class="col mt-5">
                         <label>Vehicle Type <span class="text-danger">*</span></label>
-                        <select style="width: 100%" class="form-control @error('vehicle_type') is-invalid @enderror"
-                            name="vehicle_type" id="vehicle_type" required>
+                        <select style="width: 100%" class="form-control @error('vehicle_type_id') is-invalid @enderror"
+                            name="vehicle_type_id" id="vehicle_type" required>
                             <option></option>
                             @isset($vehicle->vehicle_type)
                             <option value="{{$vehicle->vehicle_type->id}}" selected>{{$vehicle->vehicle_type->name}}
                             </option>
                             @endisset
                         </select>
-                        @error('vehicle_type')
+                        @error('vehicle_type_id')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -53,8 +53,8 @@
                         <select style="width: 100%" class="form-control @error('rider_id') is-invalid @enderror"
                             name="rider_id" id="rider" required>
                             <option></option>
-                            @isset($vehicle->rider)
-                            <option value="{{$vehicle->rider->name}}" selected>{{$vehicle->rider->id}}</option>
+                            @isset($rider)
+                            <option value="{{$rider->id}}" selected>{{$rider->user->name}}</option>
                             @endisset
                         </select>
                         @error('rider_id')
@@ -68,12 +68,12 @@
                         <label>Make Year
                             <span class="text-danger">*</span></label>
                         <input type="text" max="{{ date(" Y") }}"
-                            class="form-control  @error('vehicle_year') is-invalid @enderror"
-                            placeholder="Select Vehicle Model Year" id="vehicle_year" name="vehicle_year"
-                            value="{{old('vehicle_year',isset($vehicle->vehicle_year) ? $vehicle->vehicle_year : '')}}"
-                            required autocomplete="off" />
+                            class="form-control  @error('make_year') is-invalid @enderror"
+                            placeholder="Select Vehicle Make Year" id="vehicle_year" name="make_year"
+                            value="{{old('make_year',isset($vehicle->make_year) ? $vehicle->make_year : '')}}" required
+                            autocomplete="off" />
 
-                        @error('vehicle_year')
+                        @error('make_year')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -84,7 +84,7 @@
                     <div class="col mt-5">
                         <label>Vehicle Color
                             <span class="text-danger">*</span></label>
-                        <input type="number" min="1" class="form-control @error('vehicle_color') is-invalid @enderror"
+                        <input type="text" min="1" class="form-control @error('vehicle_color') is-invalid @enderror"
                             max="50" placeholder="Enter vehicle color" name="vehicle_color"
                             value="{{old('vehicle_color',isset($vehicle->vehicle_color) ? $vehicle->vehicle_color : '4')}}"
                             required autocomplete="off" />
@@ -96,7 +96,7 @@
                     </div>
                     <div class="col mt-5">
                         <label>Brand<span class="text-danger">*</span></label>
-                        <input class="form-control @error('brand') is-invalid @enderror" type="number" min="1"
+                        <input class="form-control @error('brand') is-invalid @enderror" type="text" min="1"
                             id="milage-input" name="brand" placeholder="Enter Brand of the Vehicle"
                             value="{{old('brand',isset($vehicle->brand) ? $vehicle->brand : '')}}" required
                             autocomplete="off" />
@@ -110,7 +110,7 @@
                 <div class="form-group row">
                     <div class="col mt-5">
                         <label>Model<span class="text-danger">*</span></label>
-                        <input class="form-control @error('model') is-invalid @enderror" type="number" min="1"
+                        <input class="form-control @error('model') is-invalid @enderror" type="text" min="1"
                             id="milage-input" name="model" placeholder="Enter model of the Vehicle"
                             value="{{old('model',isset($vehicle->model) ? $vehicle->model : '')}}" required
                             autocomplete="off" />
@@ -130,7 +130,7 @@
                                 id="insurance-start" readonly="readonly" name="insurance_issue_date"
                                 placeholder="Start date"
                                 value="{{old('insurance_issue_date',isset($vehicle->insurance_issue_date) && isset($vehicle->insurance_issue_date) ? $vehicle->insurance_issue_date : '')}}"
-                                required autocomplete="off" data-parsley-errors-container="#insurance-issue-errors">
+                                autocomplete="off" data-parsley-errors-container="#insurance-issue-errors">
                             <div class="input-group-append">
                                 <span class="input-group-text">
                                     <i class="la la-calendar-check-o"></i>
@@ -154,8 +154,7 @@
                                     id="insurance-expire" name="insurance_expiry_date" readonly="readonly"
                                     placeholder="Select date"
                                     value="{{old('insurance_expiry_date',isset($vehicle->insurance_expiry_date) ? $vehicle->insurance_expiry_date : '')}}"
-                                    required autocomplete="off"
-                                    data-parsley-errors-container="#insurance-expire-errors" />
+                                    autocomplete="off" data-parsley-errors-container="#insurance-expire-errors" />
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="la la-calendar-check-o"></i>
@@ -218,7 +217,7 @@
                                 id="bluebook-issue" name="bluebook_issue_date" readonly="readonly"
                                 placeholder="Select date"
                                 value="{{old('bluebook_issue_date',isset($vehicle->bluebook_issue_date) ? $vehicle->bluebook_issue_date : '')}}"
-                                required autocomplete="off" data-parsley-errors-container="#bluebook-issue-errors" />
+                                autocomplete="off" data-parsley-errors-container="#bluebook-issue-errors" />
                             <div class="input-group-append">
                                 <span class="input-group-text">
                                     <i class="la la-calendar-check-o"></i>
@@ -239,7 +238,7 @@
                                 id="bluebook-expire" name="bluebook_expiry_date" readonly="readonly"
                                 placeholder="Select date"
                                 value="{{old('bluebook_expiry_date',isset($vehicle->bluebook_expiry_date) ? $vehicle->bluebook_expiry_date :'')}}"
-                                required autocomplete="off" data-parsley-errors-container="#bluebook-expire-errors" />
+                                autocomplete="off" data-parsley-errors-container="#bluebook-expire-errors" />
                             <div class="input-group-append">
                                 <span class="input-group-text">
                                     <i class="la la-calendar-check-o"></i>
@@ -372,7 +371,6 @@
 <script src="{{asset('assets/admin/js/pages/crud/forms/widgets/bootstrap-datepicker.js')}}"></script>
 <script src="{{asset('assets/admin/plugins/custom/lightbox/lightbox.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-@endsection
 
 <script>
     $('#vehicle_type').select2({
@@ -384,12 +382,13 @@
         }
     });
 
-    $('#vehicle_type').select2({
+    $('#rider').select2({
         width: 'resolve',
-        placeholder: "Select Vehicle Type",
+        placeholder: "Select Rider",
         ajax: {
             'url' : '{{route('admin.rider.ajax')}}',
             'dataType': 'json'
         }
     });
 </script>
+@endsection

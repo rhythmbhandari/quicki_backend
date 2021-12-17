@@ -43,7 +43,7 @@ class Vehicle extends Model
     ];
 
     protected $appends = [
-        'thumbnail_path', 'image_path'
+        'thumbnail_path', 'image_path', 'status_text'
     ];
 
     function getImagePathAttribute()
@@ -63,15 +63,14 @@ class Vehicle extends Model
     }
 
     //Vehicle belonging to the rider
-    public function vehicle()
-    {
-        return $this->belongsTo(Rider::class);
-    }
-
-    //Vehicle belonging to the rider
     public function vehicle_type()
     {
         return $this->belongsTo(VehicleType::class); //, 'vehicle_type_id', 'id');
+    }
+
+    function getStatusTextAttribute()
+    {
+        return ucwords(str_replace('_', '', $this->status));
     }
 
 
@@ -81,5 +80,10 @@ class Vehicle extends Model
     public function documents()
     {
         return $this->morphMany(Document::class, 'documentable');
+    }
+
+    public function rider()
+    {
+        return $this->belongsTo(Rider::class);
     }
 }

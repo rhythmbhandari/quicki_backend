@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Modules\Services;
+
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\File\File;
@@ -14,7 +16,7 @@ abstract class Service
 
     protected $uploadPath = '/uploads';
 
-/*
+    /*
     public function uploadSocialImage($user, $url)
     {
         try{
@@ -71,10 +73,10 @@ abstract class Service
 
     public function upload(UploadedFile $file, $width = 1170, $height = 559)
     {
-        if(!is_dir('uploads'))
+        if (!is_dir('uploads'))
             mkdir('uploads');
 
-        if(!is_dir($this->uploadPath))
+        if (!is_dir($this->uploadPath))
             mkdir($this->uploadPath);
 
         $destination = $this->uploadPath;
@@ -84,7 +86,7 @@ abstract class Service
             $newFileName = sprintf("%s.%s", sha1($fileName . time()), $file_type);
             try {
                 $image = $file->move($destination, $newFileName);
-                if(substr($file->getClientMimeType(), 0, 5) == 'image')
+                if (substr($file->getClientMimeType(), 0, 5) == 'image')
                     $this->createThumb($image, $width, $height);
                 return $image->getFilename();
             } catch (Exception $e) {
@@ -112,11 +114,11 @@ abstract class Service
             $newFileName = sprintf("%s.%s", sha1($fileName . time()), $file_type);
             try {
                 $image = $file->move($destination, $newFileName);
-               
+
                 if (substr($file->getClientMimeType(), 0, 5) == 'image')
                     $this->createThumb($image, $width, $height);
                 return $image->getFilename();
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 return $e->getMessage();
             }
             return false;
@@ -133,7 +135,7 @@ abstract class Service
      */
     public function createThumb(File $image, $width = 320, $height = 320)
     {
-        try{
+        try {
             $img = Image::make($image->getPathname());
             $img->fit($width, $height);
             $path = sprintf('%s/thumb/%s', $image->getPath(), $image->getFilename());
@@ -142,10 +144,9 @@ abstract class Service
                 mkdir($directory, 0777, true);
             }
             return $img->save($path);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return '';
         }
-
     }
 
     /**
@@ -184,7 +185,8 @@ abstract class Service
         }
     }
 
-    public function uploadExcel($file) {
+    public function uploadExcel($file)
+    {
         $destinationPath = base_path() . '/public/uploads';
 
         $fileName = $file->getClientOriginalName();
@@ -199,7 +201,8 @@ abstract class Service
         }
     }
 
-    public function uploadFile($file) {
+    public function uploadFile($file)
+    {
         $destination = $this->uploadPath;
 
         $fileName = $file->getClientOriginalName();
@@ -228,8 +231,8 @@ abstract class Service
         }
     }
 
-    public function generateCode($base = '') {
+    public function generateCode($base = '')
+    {
         return sha1($base . rand() . time());
     }
-
 }

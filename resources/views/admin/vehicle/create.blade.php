@@ -7,7 +7,7 @@
 	<li class="breadcrumb-item text-muted">
 		<a href="{{route('admin.dashboard') }}" class="text-muted">Dashboard</a>
 	</li>
-    <li class="breadcrumb-item text-muted">
+	<li class="breadcrumb-item text-muted">
 		<a href="{{ route('admin.vehicle.index')}}" class="text-muted">Vehicles</a>
 	</li>
 	<li class="breadcrumb-item text-active">
@@ -18,7 +18,6 @@
 
 @section('content')
 <form action="{{route('admin.vehicle.store')}}" class="custom-validation" method="post" enctype="multipart/form-data">
-  @include('admin.vehicle.form')
+	@include('admin.vehicle.form')
 </form>
 @endsection
-
