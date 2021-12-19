@@ -2903,6 +2903,27 @@
                 ]
             }
         },
+        "/api/notification/test": {
+            "get": {
+                "tags": [
+                    "Test"
+                ],
+                "summary": "Test Notification",
+                "operationId": "6d7f2c6f9f31eaebff04275205cd678a",
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": []
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/review/create": {
             "post": {
                 "tags": [

@@ -239,7 +239,7 @@ return [
 
     'sparrow_key' => env('SPARROW_KEY', 'v2_16Pr1QjTdtNEhry38axqvcxu9Y3.BZvg'),
 
-    "firebase_api_key" => env('FIREBASE_API_KEY', 'firebaseapikey'),
+    "firebase_server_api_key" => env('FIREBASE_SERVER_API_KEY', 'firebaseapikey'),
     
 
 ];
