@@ -22,7 +22,7 @@ class CreateNotificationsTable extends Migration
             $table->string('title')->nullable();
             $table->text('message');
             $table->string('image')->nullable();
-            $table->foreignId('recipient_id')->nullable()->nullable()->constrained("users")->cascadeOnUpdate()->nullOnDelete(); 
+            $table->foreignId('recipient_id')->nullable();//->nullable()->constrained("users")->cascadeOnUpdate()->nullOnDelete(); 
             $table->text('recipient_device_token')->nullable();
             $table->string('recipient_type')->default('customer')->comment('User Roles like customer, rider, admin, etc.');
             $table->enum('recipient_quantity_type',['individual','some','all'])->default('individual')->comment('Allowed values individual, some or all.');

@@ -54,9 +54,9 @@ class Notification extends Model
     /**
      * Gets the user model of the recipient!
      */
-    public function recipient_user(){
-        return $this->belongsTo(User::class,'recipient_id');
-    }
+    // public function recipient_user(){
+    //     return $this->belongsTo(User::class,'recipient_id');
+    // }
 
 
 
