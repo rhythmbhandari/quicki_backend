@@ -59,6 +59,7 @@ class CompletedTripService extends Service
                 $payment_data['payment_status'] = 'unpaid' ;
                 $payment_data['commission_payment_status'] = 'unpaid' ;
 
+
                 //CREATE PAYMENT RECORD
                 $createdPayment = $this->payment_service->create($payment_data);
                 if($createdPayment)
