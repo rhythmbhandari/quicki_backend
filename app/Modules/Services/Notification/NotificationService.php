@@ -197,7 +197,7 @@ class NotificationService extends Service{
                     }
                     // dd($recipient_id,$recipient_type,$device_token);
                    if($device_token)
-                        $device_tokens[] = $device_token->device_token;
+                        $device_tokens[] = $device_token = $device_token->device_token;
 
                     // $title = $this->push_notification_messages['default'][$recipient_type]['title'];
                     // $body = $this->push_notification_messages['default'][$recipient_type]['body'];

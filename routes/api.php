@@ -165,7 +165,11 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->post('/logout', [ApiAuthController::class, 'logout'])->name('logout');
 
   
-
+  //---------------------------------------------------------------------------------------------------------
+  //  NOTIFICATION
+  //---------------------------------------------------------------------------------------------------------
+  $router->get('/user/notifications', [NotificationController::class, 'getUserNotifications'])->name('user.notifications');
+  $router->get('/rider/notifications', [NotificationController::class, 'getRiderNotifications'])->name('rider.notifications');
 
 
   

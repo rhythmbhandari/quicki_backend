@@ -467,6 +467,8 @@ class BookingService extends Service
 
         $estimated_price['price_breakdown']['total_price'] = round( $estimated_price['price_breakdown']['total_price']);
 
+        
+
         return $estimated_price;
     }
 

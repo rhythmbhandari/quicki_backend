@@ -25,8 +25,8 @@ class CreateNotificationsTable extends Migration
             $table->foreignId('recipient_id')->nullable()->nullable()->constrained("users")->cascadeOnUpdate()->nullOnDelete(); 
             $table->text('recipient_device_token')->nullable();
             $table->string('recipient_type')->default('customer')->comment('User Roles like customer, rider, admin, etc.');
-            $table->enum('recipient_quantity_type', [ 'individual','some','all' ])->default('individual')->comment('Allowed values individual, some or all.');
-            $table->enum('notification_type')->default('push_notification');
+            $table->enum('recipient_quantity_type',['individual','some','all'])->default('individual')->comment('Allowed values individual, some or all.');
+            $table->string('notification_type')->default('push_notification');
             $table->timestamp('read_at')->nullable();
 
             $table->softDeletes();

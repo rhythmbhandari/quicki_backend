@@ -11,11 +11,12 @@ use App\Modules\Models\Sos;
 
 class SosService extends Service{
 
-    protected $sos;
+    protected $sos, $notification_service;
 
-    function __construct(Sos $sos)
+    function __construct(Sos $sos, NotificationService $notification_service)
     {
         $this->sos = $sos;
+        $this->notification_service = $notification_service;
     }
 
     public function create(array $data)
@@ -42,5 +43,9 @@ class SosService extends Service{
         }
         return NULL;
     }
+
+
+
+
 
 }
