@@ -2,8 +2,9 @@
 
 namespace App\Modules\Services\Notification;
 
-//services
 
+//services
+// use App\Modules\Services\Notification\NotificationService;
 
 //models
 use App\Modules\Models\Notification;
@@ -16,9 +17,9 @@ class FirebaseNotificationService{
     private $server_api_key;
     private $fcm_url;
     private $headers;
-    protected $notification_service;
+    // protected $notification_service;
 
-    public function __construct(NotificationService $notification_service){
+    public function __construct(){
         $this->server_api_key = config('app.firebase_server_api_key');
         $this->fcm_url = 'https://fcm.googleapis.com/fcm/send';
         $this->headers = [
@@ -26,7 +27,7 @@ class FirebaseNotificationService{
             'Content-Type: application/json',
         ];
 
-        $this->notification_service = $notification_service;
+        // $this->notification_service = $notification_service;
     }
 
     /**
@@ -36,7 +37,7 @@ class FirebaseNotificationService{
      * @param  array  $registration_ids (Array of tokens)
      * @return \Illuminate\Http\Response
      */
-    public function send($notification, $registration_ids, $data="push_notification"){
+    public function send($notification, $registration_ids, $data=["data"=>"push_notification"]){//, $recipient_data=null){
         $dataString = json_encode(compact('registration_ids', 'notification', 'data'));
 
         // if (count($registration_ids) == 1) {
@@ -52,8 +53,24 @@ class FirebaseNotificationService{
         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
         $response = curl_exec($ch);
 
+        // if(json_decode($response)->success == 1 &&  ($recipient_data[0]['recipient_quantity_type'] == "individual" || $recipient_data[0]['recipient_quantity_type'] == "some" ) )
+        // {
+        //    // dd(  "sent!" );
+        //     //Save Notification
+        //     foreach($recipient_data as $rd)
+        //         $this->notification_service->create($rd);
+
+
+        // }
+
         return $response;
     }
+
+    // public function saveNotification($device_token, $notification, $notification_type, $recipient_type)
+    // {
+        
+    // }
+
 
     // public function saveNotification($device_token, $notification, $type)
     // {

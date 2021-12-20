@@ -14,6 +14,8 @@ use App\Modules\Services\Location\LocationService;
 use App\Modules\Services\Location\RiderLocationService;
 use App\Modules\Services\Booking\CompletedTripService;
 use App\Modules\Services\Booking\PriceDetailService;
+use App\Modules\Services\Notification\NotificationService;
+
 
 //models
 use App\Modules\Models\Booking;
@@ -23,15 +25,22 @@ use App\Modules\Models\Shift;
 
 class BookingService extends Service
 {
-    protected $booking, $location_service;
+    protected $booking, $location_service, $notification_service;
 
-    function __construct(Booking $booking, LocationService $location_service, CompletedTripService $completed_trip_service, RiderLocationService $rider_location_service, PriceDetailService $price_detail_service)
+    function __construct(Booking $booking, 
+                        LocationService $location_service, 
+                        CompletedTripService $completed_trip_service, 
+                        RiderLocationService $rider_location_service, 
+                        PriceDetailService $price_detail_service, 
+                        NotificationService $notification_service
+                        )
     {
         $this->booking = $booking;
         $this->location_service = $location_service;
         $this->completed_trip_service = $completed_trip_service;
         $this->rider_location_service = $rider_location_service;
         $this->price_detail_service = $price_detail_service;
+        $this->notification_service = $notification_service;
     }
 
     function getBooking(){
@@ -99,6 +108,16 @@ class BookingService extends Service
                     //dd($createdBooking->toArray(), $price_detail_data);
                     $this->price_detail_service->create($price_detail_data);
                     
+                     //Send Notification
+                     $this->notification_service->send_firebase_notification( 
+                        [
+                            ['customer', $createdBooking->user_id ],
+                        ],
+                        "booking_created",
+                        "individual"
+                     );
+
+
                     return $createdBooking;
                 }
 
@@ -125,6 +144,10 @@ class BookingService extends Service
             $booking = Booking::findOrFail($booking_id);
             $booking->status = $new_status;
 
+
+            //NOTIFICATION DATA
+            
+
             if($booking->save())
             {    
                 if($new_status == "accepted")
@@ -133,12 +156,36 @@ class BookingService extends Service
 
 
                     if($booking->save())
+                    {
+                        //Send Notification
+                        $this->notification_service->send_firebase_notification( 
+                            [
+                                ['customer', $booking->user_id ],
+                                ['rider',$booking->rider_id]
+                            ],
+                            "booking_accepted",
+                            "some"
+                         );
+
+
                         return $booking;
+                    }
                 }
                 else if($new_status == "running")
                 {
                     $booking->start_time = Carbon::now();
                     $booking->save();
+
+                     //Send Notification
+                     $this->notification_service->send_firebase_notification( 
+                        [
+                            ['customer', $booking->user_id ],
+                            ['rider',$booking->rider_id]
+                        ],
+                        "booking_running",
+                        "some"
+                     );
+
                     return $booking;
                 }
                 else if($new_status == "completed")
@@ -182,6 +229,16 @@ class BookingService extends Service
                     $price_detail_data['completed_trip_id'] =   $booking->createdCompletedTrip->id;
                     $this->price_detail_service->create($price_detail_data);
 
+                    //Send Notification
+                    $this->notification_service->send_firebase_notification( 
+                        [
+                            ['customer', $booking->user_id ],
+                            ['rider',$booking->rider_id]
+                        ],
+                        "booking_completed",
+                        "some"
+                     );
+
                     return $booking;
                 }
                 else if($new_status == "cancelled")
@@ -212,6 +269,16 @@ class BookingService extends Service
                     $price_detail_data = $price_detail_data['price_breakdown'];
                     $price_detail_data['completed_trip_id'] =   $booking->createdCompletedTrip->id;
                     $this->price_detail_service->create($price_detail_data);
+
+                    //Send Notification
+                    $this->notification_service->send_firebase_notification( 
+                        [
+                            ['customer', $booking->user_id ],
+                            ['rider',$booking->rider_id]
+                        ],
+                        "booking_cancelled",
+                        "some"
+                     );
 
                     return $booking;
                 }

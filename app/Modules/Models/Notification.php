@@ -23,10 +23,11 @@ class Notification extends Model
      * booking_paid => Interpreted in: Rider or Customer Apps, Should trigger the invoice of the rider booking by fetching the latest completed trip!
      * rider_accepted => Interpreted in: Customer App, Should fetch the latest booking details!
      * 
+     * Recipient quantity types are individual, all, some where....only one row is stored for all types
      */
 
     protected $fillable = ([
-        'recipient_id', 'recipient_type', 'recipient_device_token', 'notification_type','read_at', 'message','image','title',
+        'recipient_id', 'recipient_type', 'recipient_device_token', 'recipient_quantity_type' ,'notification_type','read_at', 'message','image','title',
         'created_at', 'updated_at' ,'deleted_at'
     ]);
 
