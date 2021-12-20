@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\Review\ReviewController;
 use App\Http\Controllers\Api\Document\DocumentController;
 use App\Http\Controllers\Api\Vehicle\VehicleController;
 use App\Http\Controllers\Api\Suggestion\SuggestionController;
+use App\Http\Controllers\Api\Notification\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,7 @@ use App\Http\Controllers\Api\Suggestion\SuggestionController;
 |
 */
 
+$router->get('/notification/test', [NotificationController::class, 'test_notification'])->name('notification.test');
 
 
 Route::group(['as' => 'api.', ], function ($router) {
@@ -69,6 +71,8 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   //---------------------------------------------------------------------------------------------------------
   //  BOOKING and COMPLETED TRIP ROUTES
   //---------------------------------------------------------------------------------------------------------
+  // $router->get('/test', [BookingController::class, 'testFunction'])->name('booking.test');
+  
   $router->post('/booking/create', [BookingController::class, 'store'])->name('booking.store');
   $router->post('/booking/change_status', [BookingController::class, 'change_status'])->name('booking.change_status');
   $router->get('/booking/{booking_id}', [BookingController::class, 'getBooking'])->name('user.booking.show');         ///TO BE 

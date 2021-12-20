@@ -1110,12 +1110,12 @@
                                     "example": {
                                         "message": "Success!",
                                         "booking": {
-                                            "id": 1,
+                                            "id": 24,
                                             "stoppage": [
                                                 {
                                                     "name": "Sanepa, Lalitpur",
                                                     "latitude": 27.1234,
-                                                    "longitude": "85.3434"
+                                                    "longitude": 85.3434
                                                 },
                                                 {
                                                     "name": "New Baneshwor, Kathmandu",
@@ -1125,29 +1125,51 @@
                                             ],
                                             "user_id": 3,
                                             "vehicle_type_id": 1,
-                                            "rider_id": null,
-                                            "location_id": 1,
-                                            "start_time": null,
-                                            "end_time": null,
+                                            "rider_id": 1,
+                                            "location_id": 24,
+                                            "start_time": "2021-12-14 14:24:25",
+                                            "end_time": "2021-12-14 14:37:35",
                                             "origin": "Sanepa, Lalitpur",
                                             "destination": "New Baneshwor, Kathmandu",
                                             "distance": 12,
                                             "duration": 20,
                                             "passenger_number": 2,
-                                            "status": "pending",
+                                            "status": "completed",
                                             "price": 160,
                                             "payment_type": "CASH",
                                             "deleted_at": null,
-                                            "created_at": "2021-11-25T19:07:34.000000Z",
-                                            "updated_at": "2021-11-25T19:07:34.000000Z",
+                                            "created_at": "2021-12-14T08:12:21.000000Z",
+                                            "updated_at": "2021-12-14T08:52:35.000000Z",
                                             "location": {
-                                                "id": 1,
+                                                "id": 24,
                                                 "longitude_origin": 27.123456,
                                                 "latitude_origin": 85.123423,
                                                 "longitude_destination": 27.234325,
                                                 "latitude_destination": 86.12313,
-                                                "created_at": "2021-11-25T19:07:34.000000Z",
-                                                "updated_at": "2021-11-25T19:07:34.000000Z"
+                                                "deleted_at": null,
+                                                "created_at": "2021-12-14T08:12:21.000000Z",
+                                                "updated_at": "2021-12-14T08:12:21.000000Z"
+                                            },
+                                            "price_detail": {
+                                                "id": 7,
+                                                "booking_id": 24,
+                                                "completed_trip_id": null,
+                                                "minimum_charge": 50,
+                                                "price_per_km": 15,
+                                                "price_after_distance": 0.18,
+                                                "surge_rate": 1,
+                                                "surge": 0,
+                                                "price_after_surge": 0.18,
+                                                "app_charge_percent": 10,
+                                                "app_charge": 0.02,
+                                                "price_after_app_charge": 0.18,
+                                                "price_per_min": 5,
+                                                "duration_charge": 1.67,
+                                                "price_after_duration": 1.85,
+                                                "total_price": 50,
+                                                "deleted_at": null,
+                                                "created_at": "2021-12-14T08:12:21.000000Z",
+                                                "updated_at": "2021-12-14T08:12:21.000000Z"
                                             }
                                         }
                                     }
@@ -1182,12 +1204,12 @@
                                     "example": {
                                         "message": "Success!",
                                         "booking": {
-                                            "id": 1,
+                                            "id": 24,
                                             "stoppage": [
                                                 {
                                                     "name": "Sanepa, Lalitpur",
                                                     "latitude": 27.1234,
-                                                    "longitude": "85.3434"
+                                                    "longitude": 85.3434
                                                 },
                                                 {
                                                     "name": "New Baneshwor, Kathmandu",
@@ -1197,29 +1219,51 @@
                                             ],
                                             "user_id": 3,
                                             "vehicle_type_id": 1,
-                                            "rider_id": null,
-                                            "location_id": 1,
-                                            "start_time": null,
-                                            "end_time": null,
+                                            "rider_id": 1,
+                                            "location_id": 24,
+                                            "start_time": "2021-12-14 14:24:25",
+                                            "end_time": "2021-12-14 14:37:35",
                                             "origin": "Sanepa, Lalitpur",
                                             "destination": "New Baneshwor, Kathmandu",
                                             "distance": 12,
                                             "duration": 20,
                                             "passenger_number": 2,
-                                            "status": "pending",
+                                            "status": "completed",
                                             "price": 160,
                                             "payment_type": "CASH",
                                             "deleted_at": null,
-                                            "created_at": "2021-11-25T19:07:34.000000Z",
-                                            "updated_at": "2021-11-25T19:07:34.000000Z",
+                                            "created_at": "2021-12-14T08:12:21.000000Z",
+                                            "updated_at": "2021-12-14T08:52:35.000000Z",
                                             "location": {
-                                                "id": 1,
+                                                "id": 24,
                                                 "longitude_origin": 27.123456,
                                                 "latitude_origin": 85.123423,
                                                 "longitude_destination": 27.234325,
                                                 "latitude_destination": 86.12313,
-                                                "created_at": "2021-11-25T19:07:34.000000Z",
-                                                "updated_at": "2021-11-25T19:07:34.000000Z"
+                                                "deleted_at": null,
+                                                "created_at": "2021-12-14T08:12:21.000000Z",
+                                                "updated_at": "2021-12-14T08:12:21.000000Z"
+                                            },
+                                            "price_detail": {
+                                                "id": 7,
+                                                "booking_id": 24,
+                                                "completed_trip_id": null,
+                                                "minimum_charge": 50,
+                                                "price_per_km": 15,
+                                                "price_after_distance": 0.18,
+                                                "surge_rate": 1,
+                                                "surge": 0,
+                                                "price_after_surge": 0.18,
+                                                "app_charge_percent": 10,
+                                                "app_charge": 0.02,
+                                                "price_after_app_charge": 0.18,
+                                                "price_per_min": 5,
+                                                "duration_charge": 1.67,
+                                                "price_after_duration": 1.85,
+                                                "total_price": 50,
+                                                "deleted_at": null,
+                                                "created_at": "2021-12-14T08:12:21.000000Z",
+                                                "updated_at": "2021-12-14T08:12:21.000000Z"
                                             }
                                         }
                                     }
@@ -1453,13 +1497,13 @@
                                             "current_page": 1,
                                             "data": [
                                                 {
-                                                    "id": 13,
-                                                    "user_id": 2,
+                                                    "id": 6,
+                                                    "user_id": 3,
                                                     "rider_id": null,
-                                                    "booking_id": 2,
-                                                    "location_id": 2,
-                                                    "start_time": "2021-11-27 16:36:23",
-                                                    "end_time": "2021-11-27 16:36:23",
+                                                    "booking_id": 18,
+                                                    "location_id": 18,
+                                                    "start_time": "2021-12-14 13:35:19",
+                                                    "end_time": "2021-12-14 13:35:19",
                                                     "origin": "Sanepa, Lalitpur",
                                                     "destination": "New Baneshwor, Kathmandu",
                                                     "stoppage": [
@@ -1471,7 +1515,7 @@
                                                         {
                                                             "name": "New Baneshwor, Kathmandu",
                                                             "latitude": 28.3454,
-                                                            "longitude": "87.1234"
+                                                            "longitude": 87.1234
                                                         }
                                                     ],
                                                     "distance": 12,
@@ -1486,25 +1530,138 @@
                                                     "cancelled_by_id": null,
                                                     "cancel_message": null,
                                                     "deleted_at": null,
-                                                    "created_at": "2021-11-26T01:04:14.000000Z",
-                                                    "updated_at": "2021-11-27T10:51:23.000000Z",
+                                                    "created_at": "2021-12-14T02:02:06.000000Z",
+                                                    "updated_at": "2021-12-14T02:05:19.000000Z",
                                                     "location": {
-                                                        "id": 2,
+                                                        "id": 18,
                                                         "longitude_origin": 27.123456,
                                                         "latitude_origin": 85.123423,
                                                         "longitude_destination": 27.234325,
                                                         "latitude_destination": 86.12313,
                                                         "deleted_at": null,
-                                                        "created_at": "2021-11-26T01:04:14.000000Z",
-                                                        "updated_at": "2021-11-26T01:04:14.000000Z"
+                                                        "created_at": "2021-12-14T07:47:06.000000Z",
+                                                        "updated_at": "2021-12-14T07:47:06.000000Z"
                                                     },
-                                                    "rider": null
+                                                    "rider": null,
+                                                    "price_detail": {
+                                                        "id": 4,
+                                                        "booking_id": null,
+                                                        "completed_trip_id": 6,
+                                                        "minimum_charge": 0,
+                                                        "price_per_km": 15,
+                                                        "price_after_distance": 0.18,
+                                                        "surge_rate": 1,
+                                                        "surge": 0,
+                                                        "price_after_surge": 0.18,
+                                                        "app_charge_percent": 10,
+                                                        "app_charge": 0.02,
+                                                        "price_after_app_charge": 0.18,
+                                                        "price_per_min": 5,
+                                                        "duration_charge": 1.67,
+                                                        "price_after_duration": 1.85,
+                                                        "total_price": 2,
+                                                        "deleted_at": null,
+                                                        "created_at": "2021-12-14T07:50:19.000000Z",
+                                                        "updated_at": "2021-12-14T07:50:19.000000Z"
+                                                    }
+                                                },
+                                                {
+                                                    "id": 7,
+                                                    "user_id": 3,
+                                                    "rider_id": 1,
+                                                    "booking_id": 19,
+                                                    "location_id": 19,
+                                                    "start_time": "2021-12-14 13:36:38",
+                                                    "end_time": "2021-12-14 13:49:06",
+                                                    "origin": "Sanepa, Lalitpur",
+                                                    "destination": "New Baneshwor, Kathmandu",
+                                                    "stoppage": [
+                                                        {
+                                                            "name": "Sanepa, Lalitpur",
+                                                            "latitude": 27.1234,
+                                                            "longitude": 85.3434
+                                                        },
+                                                        {
+                                                            "name": "New Baneshwor, Kathmandu",
+                                                            "latitude": 28.3454,
+                                                            "longitude": 87.1234
+                                                        }
+                                                    ],
+                                                    "distance": 12,
+                                                    "duration": 748,
+                                                    "passenger_number": 1,
+                                                    "profile_img_user": null,
+                                                    "profile_img_rider": null,
+                                                    "status": "completed",
+                                                    "price": 221,
+                                                    "payment_type": "CASH",
+                                                    "cancelled_by_type": null,
+                                                    "cancelled_by_id": null,
+                                                    "cancel_message": null,
+                                                    "deleted_at": null,
+                                                    "created_at": "2021-12-14T02:06:00.000000Z",
+                                                    "updated_at": "2021-12-14T02:19:06.000000Z",
+                                                    "location": {
+                                                        "id": 19,
+                                                        "longitude_origin": 27.123456,
+                                                        "latitude_origin": 85.123423,
+                                                        "longitude_destination": 27.234325,
+                                                        "latitude_destination": 86.12313,
+                                                        "deleted_at": null,
+                                                        "created_at": "2021-12-14T07:51:00.000000Z",
+                                                        "updated_at": "2021-12-14T07:51:00.000000Z"
+                                                    },
+                                                    "rider": {
+                                                        "id": 1,
+                                                        "user_id": 2,
+                                                        "experience": 3,
+                                                        "trained": "YES",
+                                                        "status": "active",
+                                                        "approved_at": "2021-12-03 17:17:20",
+                                                        "device_token": null,
+                                                        "deleted_at": null,
+                                                        "last_deleted_by": null,
+                                                        "last_updated_by": null,
+                                                        "created_at": "2021-12-03T11:32:20.000000Z",
+                                                        "updated_at": "2021-12-03T11:32:20.000000Z",
+                                                        "vehicle": null,
+                                                        "user": {
+                                                            "id": 2,
+                                                            "first_name": "Sasuke",
+                                                            "last_name": "Uchiha",
+                                                            "image": "adfsdfs",
+                                                            "name": "Sasuke Uchiha",
+                                                            "thumbnail_path": "uploads\\/user\\/thumb\\/adfsdfs",
+                                                            "image_path": "uploads\\/user\\/adfsdfs"
+                                                        }
+                                                    },
+                                                    "price_detail": {
+                                                        "id": 6,
+                                                        "booking_id": null,
+                                                        "completed_trip_id": 7,
+                                                        "minimum_charge": 0,
+                                                        "price_per_km": 15,
+                                                        "price_after_distance": 0.18,
+                                                        "surge_rate": 1,
+                                                        "surge": 0,
+                                                        "price_after_surge": 0.18,
+                                                        "app_charge_percent": 10,
+                                                        "app_charge": 0.02,
+                                                        "price_after_app_charge": 0.18,
+                                                        "price_per_min": 5,
+                                                        "duration_charge": 62.33,
+                                                        "price_after_duration": 62.51,
+                                                        "total_price": 63,
+                                                        "deleted_at": null,
+                                                        "created_at": "2021-12-14T08:04:06.000000Z",
+                                                        "updated_at": "2021-12-14T08:04:06.000000Z"
+                                                    }
                                                 }
                                             ],
-                                            "first_page_url": "http:\\/\\/127.0.0.1:8000\\/api\\/user\\/booking\\/history?page=1",
+                                            "first_page_url": "http:\\/\\/127.0.0.1:9000\\/api\\/user\\/booking\\/history?page=1",
                                             "from": 1,
                                             "last_page": 1,
-                                            "last_page_url": "http:\\/\\/127.0.0.1:8000\\/api\\/user\\/booking\\/history?page=1",
+                                            "last_page_url": "http:\\/\\/127.0.0.1:9000\\/api\\/user\\/booking\\/history?page=1",
                                             "links": [
                                                 {
                                                     "url": null,
@@ -1512,7 +1669,7 @@
                                                     "active": false
                                                 },
                                                 {
-                                                    "url": "http:\\/\\/127.0.0.1:8000\\/api\\/user\\/booking\\/history?page=1",
+                                                    "url": "http:\\/\\/127.0.0.1:9000\\/api\\/user\\/booking\\/history?page=1",
                                                     "label": "1",
                                                     "active": true
                                                 },
@@ -1523,11 +1680,11 @@
                                                 }
                                             ],
                                             "next_page_url": null,
-                                            "path": "http:\\/\\/127.0.0.1:8000\\/api\\/user\\/booking\\/history",
+                                            "path": "http:\\/\\/127.0.0.1:9000\\/api\\/user\\/booking\\/history",
                                             "per_page": 5,
                                             "prev_page_url": null,
-                                            "to": 1,
-                                            "total": 1
+                                            "to": 2,
+                                            "total": 2
                                         }
                                     }
                                 }
@@ -1564,13 +1721,13 @@
                                             "current_page": 1,
                                             "data": [
                                                 {
-                                                    "id": 13,
-                                                    "user_id": 2,
-                                                    "rider_id": null,
-                                                    "booking_id": 2,
-                                                    "location_id": 2,
-                                                    "start_time": "2021-11-27 16:36:23",
-                                                    "end_time": "2021-11-27 16:36:23",
+                                                    "id": 7,
+                                                    "user_id": 3,
+                                                    "rider_id": 1,
+                                                    "booking_id": 19,
+                                                    "location_id": 19,
+                                                    "start_time": "2021-12-14 13:36:38",
+                                                    "end_time": "2021-12-14 13:49:06",
                                                     "origin": "Sanepa, Lalitpur",
                                                     "destination": "New Baneshwor, Kathmandu",
                                                     "stoppage": [
@@ -1582,80 +1739,146 @@
                                                         {
                                                             "name": "New Baneshwor, Kathmandu",
                                                             "latitude": 28.3454,
-                                                            "longitude": "87.1234"
+                                                            "longitude": 87.1234
                                                         }
                                                     ],
                                                     "distance": 12,
-                                                    "duration": 20,
+                                                    "duration": 748,
                                                     "passenger_number": 1,
                                                     "profile_img_user": null,
                                                     "profile_img_rider": null,
-                                                    "status": "cancelled",
-                                                    "price": 160,
+                                                    "status": "completed",
+                                                    "price": 221,
                                                     "payment_type": "CASH",
                                                     "cancelled_by_type": null,
                                                     "cancelled_by_id": null,
                                                     "cancel_message": null,
                                                     "deleted_at": null,
-                                                    "created_at": "2021-11-26T01:04:14.000000Z",
-                                                    "updated_at": "2021-11-27T10:51:23.000000Z",
+                                                    "created_at": "2021-12-14T02:06:00.000000Z",
+                                                    "updated_at": "2021-12-14T02:19:06.000000Z",
                                                     "location": {
-                                                        "id": 2,
+                                                        "id": 19,
                                                         "longitude_origin": 27.123456,
                                                         "latitude_origin": 85.123423,
                                                         "longitude_destination": 27.234325,
                                                         "latitude_destination": 86.12313,
                                                         "deleted_at": null,
-                                                        "created_at": "2021-11-26T01:04:14.000000Z",
-                                                        "updated_at": "2021-11-26T01:04:14.000000Z"
+                                                        "created_at": "2021-12-14T07:51:00.000000Z",
+                                                        "updated_at": "2021-12-14T07:51:00.000000Z"
                                                     },
                                                     "user": {
-                                                        "id": 2,
-                                                        "slug": "sasuke-uchiha",
-                                                        "first_name": "Sasuke",
-                                                        "middle_name": "",
-                                                        "last_name": "Uchiha",
+                                                        "id": 3,
+                                                        "first_name": "Kakashi",
+                                                        "last_name": "Hatake",
                                                         "image": null,
-                                                        "dob": null,
-                                                        "gender": null,
-                                                        "google_id": null,
-                                                        "facebook_id": "amit@facebook.com",
-                                                        "username": "sasuke",
-                                                        "phone": "9816810976",
-                                                        "email": "sasuke@gmail.com",
-                                                        "location": {
-                                                            "home": {
-                                                                "name": "New Baneshwor, Kathmandu",
-                                                                "latitude": 27.691153232923103,
-                                                                "longitude": 85.33177163310808
-                                                            },
-                                                            "work": {
-                                                                "name": "Sanepa, Lalitpur",
-                                                                "latitude": 27.687052088825897,
-                                                                "longitude": 85.30439019937253
-                                                            }
-                                                        },
-                                                        "status": null,
-                                                        "email_verified_at": null,
-                                                        "last_logged_in": null,
-                                                        "no_of_logins": null,
-                                                        "avatar": null,
-                                                        "device_token": null,
-                                                        "deleted_at": null,
-                                                        "last_updated_by": null,
-                                                        "last_deleted_by": null,
-                                                        "created_at": "2021-11-25T12:16:44.000000Z",
-                                                        "updated_at": "2021-11-25T12:31:46.000000Z",
-                                                        "name": "Sasuke Uchiha",
+                                                        "name": "Kakashi Hatake",
                                                         "thumbnail_path": "assets\\/media\\/user_placeholder.png",
                                                         "image_path": "assets\\/media\\/user_placeholder.png"
+                                                    },
+                                                    "price_detail": {
+                                                        "id": 6,
+                                                        "booking_id": null,
+                                                        "completed_trip_id": 7,
+                                                        "minimum_charge": 0,
+                                                        "price_per_km": 15,
+                                                        "price_after_distance": 0.18,
+                                                        "surge_rate": 1,
+                                                        "surge": 0,
+                                                        "price_after_surge": 0.18,
+                                                        "app_charge_percent": 10,
+                                                        "app_charge": 0.02,
+                                                        "price_after_app_charge": 0.18,
+                                                        "price_per_min": 5,
+                                                        "duration_charge": 62.33,
+                                                        "price_after_duration": 62.51,
+                                                        "total_price": 63,
+                                                        "deleted_at": null,
+                                                        "created_at": "2021-12-14T08:04:06.000000Z",
+                                                        "updated_at": "2021-12-14T08:04:06.000000Z"
+                                                    }
+                                                },
+                                                {
+                                                    "id": 8,
+                                                    "user_id": 3,
+                                                    "rider_id": 1,
+                                                    "booking_id": 24,
+                                                    "location_id": 24,
+                                                    "start_time": "2021-12-14 14:24:25",
+                                                    "end_time": "2021-12-14 14:37:35",
+                                                    "origin": "Sanepa, Lalitpur",
+                                                    "destination": "New Baneshwor, Kathmandu",
+                                                    "stoppage": [
+                                                        {
+                                                            "name": "Sanepa, Lalitpur",
+                                                            "latitude": 27.1234,
+                                                            "longitude": 85.3434
+                                                        },
+                                                        {
+                                                            "name": "New Baneshwor, Kathmandu",
+                                                            "latitude": 28.3454,
+                                                            "longitude": 87.1234
+                                                        }
+                                                    ],
+                                                    "distance": 12,
+                                                    "duration": 790,
+                                                    "passenger_number": 1,
+                                                    "profile_img_user": null,
+                                                    "profile_img_rider": null,
+                                                    "status": "completed",
+                                                    "price": 224,
+                                                    "payment_type": "CASH",
+                                                    "cancelled_by_type": null,
+                                                    "cancelled_by_id": null,
+                                                    "cancel_message": null,
+                                                    "deleted_at": null,
+                                                    "created_at": "2021-12-14T02:27:21.000000Z",
+                                                    "updated_at": "2021-12-14T03:07:35.000000Z",
+                                                    "location": {
+                                                        "id": 24,
+                                                        "longitude_origin": 27.123456,
+                                                        "latitude_origin": 85.123423,
+                                                        "longitude_destination": 27.234325,
+                                                        "latitude_destination": 86.12313,
+                                                        "deleted_at": null,
+                                                        "created_at": "2021-12-14T08:12:21.000000Z",
+                                                        "updated_at": "2021-12-14T08:12:21.000000Z"
+                                                    },
+                                                    "user": {
+                                                        "id": 3,
+                                                        "first_name": "Kakashi",
+                                                        "last_name": "Hatake",
+                                                        "image": null,
+                                                        "name": "Kakashi Hatake",
+                                                        "thumbnail_path": "assets\\/media\\/user_placeholder.png",
+                                                        "image_path": "assets\\/media\\/user_placeholder.png"
+                                                    },
+                                                    "price_detail": {
+                                                        "id": 8,
+                                                        "booking_id": null,
+                                                        "completed_trip_id": 8,
+                                                        "minimum_charge": 50,
+                                                        "price_per_km": 15,
+                                                        "price_after_distance": 0.18,
+                                                        "surge_rate": 1,
+                                                        "surge": 0,
+                                                        "price_after_surge": 0.18,
+                                                        "app_charge_percent": 10,
+                                                        "app_charge": 0.02,
+                                                        "price_after_app_charge": 0.18,
+                                                        "price_per_min": 5,
+                                                        "duration_charge": 65.83,
+                                                        "price_after_duration": 66.01,
+                                                        "total_price": 66,
+                                                        "deleted_at": null,
+                                                        "created_at": "2021-12-14T08:52:35.000000Z",
+                                                        "updated_at": "2021-12-14T08:52:35.000000Z"
                                                     }
                                                 }
                                             ],
-                                            "first_page_url": "http:\\/\\/127.0.0.1:8000\\/api\\/rider\\/booking\\/history?page=1",
+                                            "first_page_url": "http:\\/\\/127.0.0.1:9000\\/api\\/rider\\/booking\\/history?page=1",
                                             "from": 1,
                                             "last_page": 1,
-                                            "last_page_url": "http:\\/\\/127.0.0.1:8000\\/api\\/rider\\/booking\\/history?page=1",
+                                            "last_page_url": "http:\\/\\/127.0.0.1:9000\\/api\\/rider\\/booking\\/history?page=1",
                                             "links": [
                                                 {
                                                     "url": null,
@@ -1663,7 +1886,7 @@
                                                     "active": false
                                                 },
                                                 {
-                                                    "url": "http:\\/\\/127.0.0.1:8000\\/api\\/rider\\/booking\\/history?page=1",
+                                                    "url": "http:\\/\\/127.0.0.1:9000\\/api\\/rider\\/booking\\/history?page=1",
                                                     "label": "1",
                                                     "active": true
                                                 },
@@ -1674,11 +1897,11 @@
                                                 }
                                             ],
                                             "next_page_url": null,
-                                            "path": "http:\\/\\/127.0.0.1:8000\\/api\\/rider\\/booking\\/history",
+                                            "path": "http:\\/\\/127.0.0.1:9000\\/api\\/rider\\/booking\\/history",
                                             "per_page": 5,
                                             "prev_page_url": null,
-                                            "to": 1,
-                                            "total": 1
+                                            "to": 2,
+                                            "total": 2
                                         }
                                     }
                                 }
@@ -2680,6 +2903,27 @@
                 ]
             }
         },
+        "/api/notification/test": {
+            "get": {
+                "tags": [
+                    "Test"
+                ],
+                "summary": "Test Notification",
+                "operationId": "6d7f2c6f9f31eaebff04275205cd678a",
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": []
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/review/create": {
             "post": {
                 "tags": [
@@ -3346,7 +3590,11 @@
                                             "username": "luffy",
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
-                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
+                                            "emergency_contacts": [
+                                                "9816810976",
+                                                "987654321",
+                                                "981122345"
+                                            ],
                                             "status": null,
                                             "email_verified_at": null,
                                             "last_logged_in": null,

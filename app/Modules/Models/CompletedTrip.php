@@ -12,6 +12,7 @@ use App\Modules\Models\Rider;
 use App\Modules\Models\User;
 use App\Modules\Models\Location;
 use App\Modules\Models\Payment;
+use App\Modules\Models\PriceDetail;
 
 class CompletedTrip extends Model
 {
@@ -55,5 +56,13 @@ class CompletedTrip extends Model
     public function payment(){
         return $this->hasOne(Payment::class);
     }
+
+    
+    public function price_detail()
+    {
+        return $this->hasOne(PriceDetail::class);
+    }
+
+
 
 }
