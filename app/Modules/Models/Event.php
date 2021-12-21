@@ -34,9 +34,9 @@ class Event extends Model
     /**
      * Gets the user model of the creator of the sos event!
      */
-    public function creator_user(){
-        return $this->belongsTo(User::class,'created_by_id');
-    }
+    // public function creator_user(){
+    //     return $this->belongsTo(User::class,'created_by_id');
+    // }
 
      /**
      * Gets the sos model of the sos event!

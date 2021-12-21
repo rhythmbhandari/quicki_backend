@@ -2927,7 +2927,7 @@
         "/api/user/notifications": {
             "get": {
                 "tags": [
-                    "Notification"
+                    "Notification and Sos"
                 ],
                 "summary": "Get User's Notifications",
                 "operationId": "dddf8a0ea765f44b22171d46095b1898",
@@ -3021,7 +3021,7 @@
         "/api/rider/notifications": {
             "get": {
                 "tags": [
-                    "Notification"
+                    "Notification and Sos"
                 ],
                 "summary": "Get Rider's Notifications",
                 "operationId": "2ac926ba2974ce2bbc70173cafbda3c0",
@@ -3106,6 +3106,158 @@
                     },
                     "403": {
                         "description": "Forbidden Access"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/sos/create": {
+            "post": {
+                "tags": [
+                    "Notification and Sos"
+                ],
+                "summary": "Create Customer's Sos",
+                "operationId": "ea08742bb56274a9ef9921add37e088a",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "title": "Help!",
+                                    "message": "The rider looks suspicius!",
+                                    "booking_id": 1,
+                                    "location": {
+                                        "name": "Sanepa, Lalitpur",
+                                        "latitude": 27.1234,
+                                        "longitude": 85.3434
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Sos created successfully!",
+                                        "sos": {
+                                            "title": "Help!",
+                                            "message": "The rider looks suspicius!",
+                                            "booking_id": 1,
+                                            "location": {
+                                                "name": "Sanepa, Lalitpur",
+                                                "latitude": 27.1234,
+                                                "longitude": 85.3434
+                                            },
+                                            "created_by_id": 3,
+                                            "created_by_type": "customer",
+                                            "updated_at": "2021-12-21T05:55:18.000000Z",
+                                            "created_at": "2021-12-21T05:55:18.000000Z",
+                                            "id": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rider/sos/create": {
+            "post": {
+                "tags": [
+                    "Notification and Sos"
+                ],
+                "summary": "Create Rider's Sos",
+                "operationId": "eb5e522d900d13f480eaf0b68458b64c",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "title": "Help!",
+                                    "message": "The customer is a wanted criminal!",
+                                    "booking_id": 1,
+                                    "location": {
+                                        "name": "Sanepa, Lalitpur",
+                                        "latitude": 27.1234,
+                                        "longitude": 85.3434
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Sos created successfully!",
+                                        "sos": {
+                                            "title": "Help!",
+                                            "message": "The customer is a wanted criminal!",
+                                            "booking_id": 1,
+                                            "location": {
+                                                "name": "Sanepa, Lalitpur",
+                                                "latitude": 27.1234,
+                                                "longitude": 85.3434
+                                            },
+                                            "created_by_id": 1,
+                                            "created_by_type": "rider",
+                                            "updated_at": "2021-12-21T05:55:18.000000Z",
+                                            "created_at": "2021-12-21T05:55:18.000000Z",
+                                            "id": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
                     }
                 },
                 "security": [
