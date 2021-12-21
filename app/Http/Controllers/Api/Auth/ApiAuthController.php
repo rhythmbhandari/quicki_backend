@@ -70,7 +70,20 @@ class ApiAuthController extends Controller
     *                 "username": "luffy",
     *                 "image": "file()",
     *                 "email": "luffy@gmail.com",
-    *                "emergency_contacts": {"9816810976","987654321","981122345"},
+    *                 "emergency_contacts": {
+    *                        {
+    *                          "name": "Guts",
+    *                          "contact": "9816810976"
+    *                        },
+    *                        {
+    *                          "name": "Naruto",
+    *                          "contact": "9816810977"
+    *                        },
+    *                        {
+    *                          "name": "Luffy",
+    *                          "contact": "9816810978"
+    *                        }
+    *                       },
     *                 "phone": "9816810976",
     *                 "gender": "male",
     *                 "password": "password",
@@ -111,10 +124,19 @@ class ApiAuthController extends Controller
     *                                   "username": "monke_@4083",
     *                                   "phone": "981681019761",
     *                                   "email": "luffyaa@gmail.com",
-    *                                   "emergency_contacts": {
-    *                                     "9816810976",
-    *                                     "987654321",
-    *                                     "981122345"
+    *                                    "emergency_contacts": {
+    *                                    {
+    *                                      "name": "Guts",
+    *                                      "contact": "9816810976"
+    *                                    },
+    *                                    {
+    *                                      "name": "Naruto",
+    *                                      "contact": "9816810977"
+    *                                    },
+    *                                    {
+    *                                      "name": "Luffy",
+    *                                      "contact": "9816810978"
+    *                                    }
     *                                   },
     *                                   "status": null,
     *                                   "email_verified_at": null,
@@ -205,7 +227,20 @@ class ApiAuthController extends Controller
     *                 "username": "luffy",
     *                  "image": "file()",
     *                  "email": "luffy@gmail.com",
-    *                   "emergency_contacts": {"9816810976","987654321","981122345"},
+    *                    "emergency_contacts": {
+    *                        {
+    *                          "name": "Guts",
+    *                          "contact": "9816810976"
+    *                        },
+    *                        {
+    *                          "name": "Naruto",
+    *                          "contact": "9816810977"
+    *                        },
+    *                        {
+    *                          "name": "Luffy",
+    *                          "contact": "9816810978"
+    *                        }
+    *                       },
     *                  "phone": "9816810976",
     *                  "gender": "male",
     *                  "password": "password",
@@ -263,7 +298,20 @@ class ApiAuthController extends Controller
     *                               "username": "lusfssssssddfy",
     *                               "phone": "9811632833412s0976",
     *                               "email": "lusfesessdsdssfy@gmail.com",
-    *                               "emergency_contacts": {"9816810976","987654321","981122345"},
+    *                                "emergency_contacts": {
+    *                                {
+    *                                  "name": "Guts",
+    *                                  "contact": "9816810976"
+    *                                },
+    *                                {
+    *                                  "name": "Naruto",
+    *                                  "contact": "9816810977"
+    *                                },
+    *                                {
+    *                                  "name": "Luffy",
+    *                                  "contact": "9816810978"
+    *                                }
+    *                               },
     *                               "status": null,
     *                               "email_verified_at": null,
     *                               "last_logged_in": null,
@@ -529,7 +577,20 @@ class ApiAuthController extends Controller
     *                       "username": "sasuke",
     *                       "phone": "9869191572",
     *                       "email": "sasuke@gmail.com",
-    *                        "emergency_contacts": {"9816810976","987654321","981122345"},
+    *                        "emergency_contacts": {
+    *                        {
+    *                          "name": "Guts",
+    *                          "contact": "9816810976"
+    *                        },
+    *                        {
+    *                          "name": "Naruto",
+    *                          "contact": "9816810977"
+    *                        },
+    *                        {
+    *                          "name": "Luffy",
+    *                          "contact": "9816810978"
+    *                        }
+    *                       },
     *                       "status": null,
     *                       "email_verified_at": null,
     *                       "last_logged_in": null,
@@ -645,7 +706,20 @@ class ApiAuthController extends Controller
     *                           "username": "sasuke",
     *                           "phone": "9816810976",
     *                           "email": "sasuke@gmail.com",
-    *                            "emergency_contacts": {"9816810976","987654321","981122345"},
+    *                             "emergency_contacts": {
+    *                            {
+    *                              "name": "Guts",
+    *                              "contact": "9816810976"
+    *                            },
+    *                            {
+    *                              "name": "Naruto",
+    *                              "contact": "9816810977"
+    *                            },
+    *                            {
+    *                              "name": "Luffy",
+    *                              "contact": "9816810978"
+    *                            }
+    *                           },
     *                           "location": {
     *                             "home": {
     *                               "name": "New Baneshwor, Kathmandu",
@@ -877,7 +951,20 @@ class ApiAuthController extends Controller
     *                           "username": "sasuke",
     *                           "phone": "9816810976",
     *                           "email": "sasuke@gmail.com",
-    *                            "emergency_contacts": {"9816810976","987654321","981122345"},
+    *                            "emergency_contacts": {
+    *                            {
+    *                              "name": "Guts",
+    *                              "contact": "9816810976"
+    *                            },
+    *                            {
+    *                              "name": "Naruto",
+    *                              "contact": "9816810977"
+    *                            },
+    *                            {
+    *                              "name": "Luffy",
+    *                              "contact": "9816810978"
+    *                            }
+    *                           },
     *                           "location": {
     *                             "home": {
     *                               "name": "New Baneshwor, Kathmandu",

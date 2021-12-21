@@ -25,9 +25,18 @@
                                     "image": "file()",
                                     "email": "luffy@gmail.com",
                                     "emergency_contacts": [
-                                        "9816810976",
-                                        "987654321",
-                                        "981122345"
+                                        {
+                                            "name": "Guts",
+                                            "contact": "9816810976"
+                                        },
+                                        {
+                                            "name": "Naruto",
+                                            "contact": "9816810977"
+                                        },
+                                        {
+                                            "name": "Luffy",
+                                            "contact": "9816810978"
+                                        }
                                     ],
                                     "phone": "9816810976",
                                     "gender": "male",
@@ -70,9 +79,18 @@
                                                 "phone": "981681019761",
                                                 "email": "luffyaa@gmail.com",
                                                 "emergency_contacts": [
-                                                    "9816810976",
-                                                    "987654321",
-                                                    "981122345"
+                                                    {
+                                                        "name": "Guts",
+                                                        "contact": "9816810976"
+                                                    },
+                                                    {
+                                                        "name": "Naruto",
+                                                        "contact": "9816810977"
+                                                    },
+                                                    {
+                                                        "name": "Luffy",
+                                                        "contact": "9816810978"
+                                                    }
                                                 ],
                                                 "status": null,
                                                 "email_verified_at": null,
@@ -129,9 +147,18 @@
                                     "image": "file()",
                                     "email": "luffy@gmail.com",
                                     "emergency_contacts": [
-                                        "9816810976",
-                                        "987654321",
-                                        "981122345"
+                                        {
+                                            "name": "Guts",
+                                            "contact": "9816810976"
+                                        },
+                                        {
+                                            "name": "Naruto",
+                                            "contact": "9816810977"
+                                        },
+                                        {
+                                            "name": "Luffy",
+                                            "contact": "9816810978"
+                                        }
                                     ],
                                     "phone": "9816810976",
                                     "gender": "male",
@@ -190,9 +217,18 @@
                                             "phone": "9811632833412s0976",
                                             "email": "lusfesessdsdssfy@gmail.com",
                                             "emergency_contacts": [
-                                                "9816810976",
-                                                "987654321",
-                                                "981122345"
+                                                {
+                                                    "name": "Guts",
+                                                    "contact": "9816810976"
+                                                },
+                                                {
+                                                    "name": "Naruto",
+                                                    "contact": "9816810977"
+                                                },
+                                                {
+                                                    "name": "Luffy",
+                                                    "contact": "9816810978"
+                                                }
                                             ],
                                             "status": null,
                                             "email_verified_at": null,
@@ -383,9 +419,18 @@
                                             "phone": "9869191572",
                                             "email": "sasuke@gmail.com",
                                             "emergency_contacts": [
-                                                "9816810976",
-                                                "987654321",
-                                                "981122345"
+                                                {
+                                                    "name": "Guts",
+                                                    "contact": "9816810976"
+                                                },
+                                                {
+                                                    "name": "Naruto",
+                                                    "contact": "9816810977"
+                                                },
+                                                {
+                                                    "name": "Luffy",
+                                                    "contact": "9816810978"
+                                                }
                                             ],
                                             "status": null,
                                             "email_verified_at": null,
@@ -469,9 +514,18 @@
                                             "phone": "9816810976",
                                             "email": "sasuke@gmail.com",
                                             "emergency_contacts": [
-                                                "9816810976",
-                                                "987654321",
-                                                "981122345"
+                                                {
+                                                    "name": "Guts",
+                                                    "contact": "9816810976"
+                                                },
+                                                {
+                                                    "name": "Naruto",
+                                                    "contact": "9816810977"
+                                                },
+                                                {
+                                                    "name": "Luffy",
+                                                    "contact": "9816810978"
+                                                }
                                             ],
                                             "location": {
                                                 "home": {
@@ -654,9 +708,18 @@
                                             "phone": "9816810976",
                                             "email": "sasuke@gmail.com",
                                             "emergency_contacts": [
-                                                "9816810976",
-                                                "987654321",
-                                                "981122345"
+                                                {
+                                                    "name": "Guts",
+                                                    "contact": "9816810976"
+                                                },
+                                                {
+                                                    "name": "Naruto",
+                                                    "contact": "9816810977"
+                                                },
+                                                {
+                                                    "name": "Luffy",
+                                                    "contact": "9816810978"
+                                                }
                                             ],
                                             "location": {
                                                 "home": {
@@ -3657,7 +3720,20 @@
                                             "username": null,
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
-                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
+                                            "emergency_contacts": [
+                                                {
+                                                    "name": "Guts",
+                                                    "contact": "9816810976"
+                                                },
+                                                {
+                                                    "name": "Naruto",
+                                                    "contact": "9816810977"
+                                                },
+                                                {
+                                                    "name": "Luffy",
+                                                    "contact": "9816810978"
+                                                }
+                                            ],
                                             "status": null,
                                             "email_verified_at": null,
                                             "last_logged_in": null,
@@ -3787,7 +3863,20 @@
                                             "username": null,
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
-                                            "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
+                                            "emergency_contacts": [
+                                                {
+                                                    "name": "Guts",
+                                                    "contact": "9816810976"
+                                                },
+                                                {
+                                                    "name": "Naruto",
+                                                    "contact": "9816810977"
+                                                },
+                                                {
+                                                    "name": "Luffy",
+                                                    "contact": "9816810978"
+                                                }
+                                            ],
                                             "status": null,
                                             "email_verified_at": null,
                                             "last_logged_in": null,
@@ -3889,7 +3978,20 @@
                                     "last_name": "Luffy",
                                     "image": "file()",
                                     "email": "luffy@gmail.com",
-                                    "emergency_contacts": "{\\'9816810976\\',\\'987654321\\',\\'981122345\\'}",
+                                    "emergency_contacts": [
+                                        {
+                                            "name": "Guts",
+                                            "contact": "9816810976"
+                                        },
+                                        {
+                                            "name": "Naruto",
+                                            "contact": "9816810977"
+                                        },
+                                        {
+                                            "name": "Luffy",
+                                            "contact": "9816810978"
+                                        }
+                                    ],
                                     "username": "luffy",
                                     "dob": "2000/01/01",
                                     "gender": "male",
@@ -3934,9 +4036,18 @@
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
                                             "emergency_contacts": [
-                                                "9816810976",
-                                                "987654321",
-                                                "981122345"
+                                                {
+                                                    "name": "Guts",
+                                                    "contact": "9816810976"
+                                                },
+                                                {
+                                                    "name": "Naruto",
+                                                    "contact": "9816810977"
+                                                },
+                                                {
+                                                    "name": "Luffy",
+                                                    "contact": "9816810978"
+                                                }
                                             ],
                                             "status": null,
                                             "email_verified_at": null,
@@ -4017,9 +4128,18 @@
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
                                             "emergency_contacts": [
-                                                "9816810976",
-                                                "987654321",
-                                                "981122345"
+                                                {
+                                                    "name": "Guts",
+                                                    "contact": "9816810976"
+                                                },
+                                                {
+                                                    "name": "Naruto",
+                                                    "contact": "9816810977"
+                                                },
+                                                {
+                                                    "name": "Luffy",
+                                                    "contact": "9816810978"
+                                                }
                                             ],
                                             "status": null,
                                             "email_verified_at": null,
@@ -4099,9 +4219,18 @@
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
                                             "emergency_contacts": [
-                                                "9816810976",
-                                                "987654321",
-                                                "981122345"
+                                                {
+                                                    "name": "Guts",
+                                                    "contact": "9816810976"
+                                                },
+                                                {
+                                                    "name": "Naruto",
+                                                    "contact": "9816810977"
+                                                },
+                                                {
+                                                    "name": "Luffy",
+                                                    "contact": "9816810978"
+                                                }
                                             ],
                                             "status": null,
                                             "email_verified_at": null,
@@ -4196,9 +4325,18 @@
                                             "phone": "9816810976",
                                             "email": "gintama@gmail.com",
                                             "emergency_contacts": [
-                                                "9816810976",
-                                                "987654321",
-                                                "981122345"
+                                                {
+                                                    "name": "Guts",
+                                                    "contact": "9816810976"
+                                                },
+                                                {
+                                                    "name": "Naruto",
+                                                    "contact": "9816810977"
+                                                },
+                                                {
+                                                    "name": "Luffy",
+                                                    "contact": "9816810978"
+                                                }
                                             ],
                                             "status": null,
                                             "email_verified_at": null,
@@ -4319,9 +4457,18 @@
                                     "example": {
                                         "message": "Success!",
                                         "emergency_contacts": [
-                                            "9816810976",
-                                            "987654321",
-                                            "981122345"
+                                            {
+                                                "name": "Guts",
+                                                "contact": "9816810976"
+                                            },
+                                            {
+                                                "name": "Naruto",
+                                                "contact": "9816810977"
+                                            },
+                                            {
+                                                "name": "Luffy",
+                                                "contact": "9816810978"
+                                            }
                                         ]
                                     }
                                 }
@@ -4360,9 +4507,18 @@
                                     "example": {
                                         "message": "Success!",
                                         "emergency_contacts": [
-                                            "9816810976",
-                                            "987654321",
-                                            "981122345"
+                                            {
+                                                "name": "Guts",
+                                                "contact": "9816810976"
+                                            },
+                                            {
+                                                "name": "Naruto",
+                                                "contact": "9816810977"
+                                            },
+                                            {
+                                                "name": "Luffy",
+                                                "contact": "9816810978"
+                                            }
                                         ]
                                     }
                                 }
