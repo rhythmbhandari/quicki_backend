@@ -78,7 +78,8 @@ class RiderController extends Controller
         foreach ($query as $object) {
             array_push($results, [
                 'id' => $object['id'],
-                'text' => $object->user->first_name . ' ' . $object->user->last_name
+                'text' => $object->user->first_name . ' ' . $object->user->last_name,
+                'user_id' => $object->user_id
             ]);
         }
         // $pagination = [

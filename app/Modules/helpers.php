@@ -92,8 +92,12 @@ function getLabel($status)
             $label = 'label label-lg font-weight-bold label-light-primary label-inline';
             break;
 
+        case 'accepted':
+            $label = 'label label-lg font-weight-bold label-light-warning label-inline';
+            break;
+
         case 'running':
-            $label = 'label label-lg font-weight-bold label-light-info label-inline';
+            $label = 'label label-lg font-weight-bold label-light-warning label-inline';
             break;
 
         case 'cancelled':

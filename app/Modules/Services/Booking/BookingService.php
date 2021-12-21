@@ -13,6 +13,7 @@ use Throwable;
 use App\Modules\Services\Location\LocationService;
 use App\Modules\Services\Location\RiderLocationService;
 use App\Modules\Services\Booking\CompletedTripService;
+use Yajra\DataTables\Facades\DataTables;
 
 //models
 use App\Modules\Models\Booking;
@@ -35,6 +36,65 @@ class BookingService extends Service
     function getBooking()
     {
         return $this->booking;
+    }
+
+    /*For DataTable*/
+    public function  getAllData($filter = null)
+    {
+        $query = $this->booking->all();
+        // if (Auth::user()->hasRole('Vendor')) {
+        //     $query = $this->vehicle->whereVendorId(Auth::user()->vendor->id)->latest()->with(['vendor', 'model', 'model.type', 'model.manufacturer', 'bookings' => function ($query) {
+        //         return $query->where('status', 'running');
+        //     }]);
+        // } else {
+        //     $query = $this->vehicle->latest()->with(['vendor', 'model', 'model.type', 'model.manufacturer', 'bookings' => function ($query) {
+        //         return $query->where('status', 'running');
+        //     }]);
+        // }
+
+        return DataTables::of($query)
+            ->addIndexColumn()
+
+            ->addColumn('vehicle_type', function (Booking $booking) {
+                return $booking->vehicle_type->name;
+            })
+            ->addColumn('customer', function (Booking $booking) {
+                // return "test 1";
+                return $booking->user->name;
+            })
+            ->editColumn('rider', function (Booking $booking) {
+                // return "test 2";
+                if ($booking->rider_id != null)
+                    return $booking->rider->user->name;
+                return "N/A";
+            })
+            ->editColumn('start_time', function (Booking $booking) {
+                if ($booking->start_time != null)
+                    return $booking->start_time;
+                else return "N/A";
+            })
+            ->editColumn('end_time', function (Booking $booking) {
+                if ($booking->end_time != null)
+                    return $booking->end_time;
+                else return "N/A";
+            })
+            ->editColumn('origin', function (Booking $booking) {
+                return $booking->origin;
+            })
+            ->editColumn('destination', function (Booking $booking) {
+                return $booking->destination;
+            })
+            ->editColumn('status', function (Booking $booking) {
+                return getTableHtml($booking, 'status');
+            })
+            ->editColumn('actions', function (Booking $booking) {
+                $editRoute = route('admin.booking.edit', $booking->id);
+                $deleteRoute = '';
+                $optionRoute = '';
+                $optionRouteText = '';
+                return getTableHtml($booking, 'actions', $editRoute, $deleteRoute, $optionRoute, $optionRouteText);
+            })->rawColumns(['image', 'status', 'actions', 'booking', 'vehicle_type'])
+            ->make(true);
     }
 
 
@@ -87,6 +147,53 @@ class BookingService extends Service
             return NULL;
         } catch (Exception $e) {
             return NULL;
+        }
+    }
+
+    function update(array $data, $bookingId)
+    {
+
+
+        try {
+            //default status = pending
+
+            $data['status'] = isset($data['status']) ? $data['status'] : 'pending';
+
+            //Parse the possible string values of latitudes and longitudes to double/float
+            $data['location']['latitude_origin'] = floatval($data['location']['latitude_origin']);
+            $data['location']['longitude_origin'] = floatval($data['location']['longitude_origin']);
+            $data['location']['latitude_destination'] = floatval($data['location']['latitude_destination']);
+            $data['location']['longitude_destination'] = floatval($data['location']['longitude_destination']);
+
+            if (isset($data['stoppage']) && count($data['stoppage']) > 0) {
+                for ($i = 0; $i < count($data['stoppage']); $i++) {
+                    $data['stoppage'][$i]['latitude'] = floatval($data['stoppage'][$i]['latitude']);
+                    $data['stoppage'][$i]['longitude'] = floatval($data['stoppage'][$i]['longitude']);
+                }
+            }
+
+            //parse distance and duration to integer
+            $data['distance'] = intval($data['distance']);
+            $data['duration'] = intval($data['duration']);
+            $data['price'] = intval($data['price']);
+            // $data['location_id'] =intval( $data['location_id'] );
+            $data['user_id'] = intval($data['user_id']);
+            $data['rider_id'] = isset($data['rider_id']) ? intval($data['rider_id']) : null;
+
+            // dd("booking data", $data);
+
+
+            $this->booking->find($bookingId)->update($data);
+            $updatedBooking = $this->booking->find($bookingId);
+            // dd($updatedBooking);
+
+            if ($updatedBooking) {
+                $createdLocation = $this->location_service->update($data['location'], $updatedBooking->location_id);
+                return $createdLocation;
+            }
+            return false;
+        } catch (Exception $e) {
+            return false;
         }
     }
 

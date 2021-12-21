@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Kamaln7\Toastr\Facades\Toastr;
 
 //services
 use App\Modules\Services\Booking\BookingService;
@@ -18,6 +19,7 @@ use App\Modules\Models\User;
 use App\Modules\Models\Rider;
 use App\Modules\Models\VehicleType;
 use App\Modules\Models\CompletedTrip;
+use App\Http\Requests\Admin\Booking\BookingRequest;
 
 class BookingController extends Controller
 {
@@ -29,6 +31,27 @@ class BookingController extends Controller
         $this->user_service = $user_service;
     }
 
+    public function sanitize(Request $request)
+    {
+
+        if ($request->status == "pending") {
+            $request->merge(['start_time' => null]);
+            $request->merge(['end_time' => null]);
+            $request->merge(['rider_id' => null]);
+        }
+
+        if ($request->status == "accepted") {
+            $request->merge(['start_time' => null]);
+            $request->merge(['end_time' => null]);
+        }
+
+        if ($request->status == "running") {
+            $request->merge(['end_time' => null]);
+        }
+
+        return $request;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -38,6 +61,11 @@ class BookingController extends Controller
     {
 
         return view('admin.booking.index');
+    }
+
+    public function getAllData()
+    {
+        return $this->booking->getAllData();
     }
 
     /**
@@ -70,79 +98,47 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        //AUTHENTICATION CHECK
-        $user = null;
-        try {
-            $user = Auth::user();
-        } catch (Exception $e) {
-            $response = ['message' => 'Unauthorized: Login Required!'];
-            return response($response, 401);
-        }
-        if (!$user) {
-            $response = ['message' => 'Unauthorized: Login Required!'];
-            return response($response, 401);
-        }
+        $request = $this->sanitize($request);
 
-        //CHECK IF USER HAVE EXISTING ACTIVE BOOKINGS
-        $active_bookings = Booking::where('user_id', $user->id)->where(function ($query) {
-            $query->where('status', 'pending')
-                ->orWhere('status', 'accepted')
-                ->orWhere('status', 'running');
-        })->count();
+        $data = $request->all();
+        $data['location']['latitude_origin'] = $data['start_coordinate']['latitude'];
+        $data['location']['longitude_origin'] = $data['start_coordinate']['longitude'];
+        $data['location']['latitude_destination'] = $data['end_coordinate']['latitude'];
+        $data['location']['longitude_destination'] = $data['end_coordinate']['longitude'];
+        $data['origin'] = $data['start_location'];
+        $data['destination'] = $data['end_location'];
 
-        if ($active_bookings > 0) {
-            $response = ['message' => 'You already have existing active bookings!'];
-            return response($response, 400);
-        }
+        $estimatedPrice = $this->booking->calculateEstimatedPrice($data['location']['latitude_origin'], $data['location']['latitude_destination'], $request->vehicle_type_id, $request->distance, $request->duration);
+        $data['price'] = $estimatedPrice['price_breakdown']['total_price'];
 
-        //VALIDATIONS
+        // dd($data);
+        //BOOKING STORE
+        return DB::transaction(function () use ($request, $data) {
+            $createdBooking = $this->booking->create($request->only('user_id'), $data);
+            if ($createdBooking) {
+                Toastr::success('Booking created successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+                return redirect()->route('admin.booking.index');
+            }
+            Toastr::error('Booking cannot be created.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+            return redirect()->route('admin.booking.index');
+        });
+    }
+
+    public function estimatedPriceAjax(Request $request)
+    {
         $validator = Validator::make($request->all(), [
-
-            'origin' => 'required|string|max:255',
-            'destination' => 'required|string|max:255',
-            'vehicle_type_id' =>  ['required', function ($attribute, $value, $fail) {
-                $vehicle_type = VehicleType::find($value);
-
-                if (!$vehicle_type) {
-                    $fail('The vehicle type does not exist!');
-                }
-            },],
-            'distance' => 'required|numeric',
-            'duration' => 'required|numeric',
-            'passenger_number' => 'nullable|integer',
-
-            //Location
-            'location.latitude_origin' => 'required|numeric',
-            'location.longitude_origin' => 'required|numeric',
-            'location.latitude_destination' => 'required|numeric',
-            'location.longitude_destination' => 'required|numeric',
-
-
+            'vehicle_type_id' =>  'required',
+            'origin_latitude' => 'required',
+            'origin_longitude' => 'required',
+            'distance' => 'required',
+            'duration' => 'required'
         ]);
         if ($validator->fails()) {
             return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
         }
-
-
-        //dd("Booking DATA: ", $request->all());
-        if ($user) {
-
-            //ROLE CHECK FOR CUSTOMER
-            if (!$this->user_service->hasRole($user, 'customer')) {
-                $response = ['message' => 'Forbidden Access!'];
-                return response($response, 403);
-            }
-
-            //BOOKING STORE
-            return DB::transaction(function () use ($request, $user) {
-                $createdBooking = $this->booking->create($user->id, $request->all());
-                if ($createdBooking) {
-                    $response = ['message' => 'Booking Successful!',  "booking" => $createdBooking,];
-                    return response($response, 201);
-                }
-                return response("Internal Server Error!", 500);
-            });
-        }
+        // dd($request->all());
+        $estimatedPrice = $this->booking->calculateEstimatedPrice($request->origin_latitude, $request->origin_longitude, $request->vehicle_type_id, $request->distance, $request->duration);
+        return response(compact('estimatedPrice'), 200);
     }
 
 
@@ -222,6 +218,44 @@ class BookingController extends Controller
         });
     }
 
+    /**
+     * Update resource
+     */
+    public function update(BookingRequest $request, $id)
+    {
+        $request = $this->sanitize($request);
+
+        $data = $request->all();
+        $data['location']['latitude_origin'] = $data['start_coordinate']['latitude'];
+        $data['location']['longitude_origin'] = $data['start_coordinate']['longitude'];
+        $data['location']['latitude_destination'] = $data['end_coordinate']['latitude'];
+        $data['location']['longitude_destination'] = $data['end_coordinate']['longitude'];
+        $data['origin'] = $data['start_location'];
+        $data['destination'] = $data['end_location'];
+
+        $estimatedPrice = $this->booking->calculateEstimatedPrice($data['location']['latitude_origin'], $data['location']['latitude_destination'], $request->vehicle_type_id, $request->distance, $request->duration);
+        $data['price'] = $estimatedPrice['price_breakdown']['total_price'];
+        //UPDATE STATUS
+        return DB::transaction(function () use ($data, $id) {
+            $updatedBooking = $this->booking->update($data, $id);
+            if ($updatedBooking) {
+                // if ($updatedBooking->status == "completed") {
+                //     $completed_trip = CompletedTrip::where('booking_id', $updatedBooking->id)->first();
+                //     $response = ['message' => 'Booking Status Updated Successfully! Created Completed Booking History', "completed_trip" => $updatedBooking->completed_trip];
+                //     return response($response, 201);
+                // } else if ($updatedBooking->status == "cancelled") {
+                //     $completed_trip = CompletedTrip::where('booking_id', $updatedBooking->id)->first();
+                //     $response = ['message' => 'Booking Status Updated Successfully! Created Cancelled Booking History', "completed_trip" => $updatedBooking->completed_trip];
+                //     return response($response, 201);
+                // } else {
+                Toastr::success('Booking updated successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+                return redirect()->route('admin.booking.index');
+                // }
+            }
+            Toastr::success('Booking failed to update.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+            return redirect()->route('admin.booking.index');
+        });
+    }
     public function getActiveUserBooking()
     {
         $user = Auth::user();

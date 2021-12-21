@@ -125,6 +125,28 @@ class CustomerController extends Controller
         return view('admin.customer.edit', compact('customer'));
     }
 
+    function customerAjax(Request $request)
+    {
+
+        $query = User::with('rider')->select('id', 'first_name', 'last_name')->when($request->q, function ($query) use ($request) {
+            $q = $request->q;
+            return $query->where('name', 'LIKE', "%" . $q . "%");
+        })->simplePaginate(10);
+        // dd($query->toArray());
+        $results = array();
+        foreach ($query as $object) {
+            array_push($results, [
+                'id' => $object['id'],
+                'text' => $object->first_name . ' ' . $object->last_name,
+                'rider_id' => ($object->rider) ? $object->rider->id : null
+            ]);
+        }
+        // $pagination = [
+        //     'more' => !is_null($query->toArray()['next_page_url'])
+        // ];
+        return compact('results');
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -146,7 +168,7 @@ class CustomerController extends Controller
 
         return DB::transaction(function () use ($request, $data, $id) {
             if ($customer = $this->customer->update($id, $data)) {
- 
+
                 if ($request->hasFile('image')) {
                     $this->uploadFile($request, $customer);
                 }

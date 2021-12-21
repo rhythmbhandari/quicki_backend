@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', 'Customer')
+@section('title', 'Booking')
 
 @section('breadcrumb')
 <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
@@ -8,14 +8,14 @@
         <a href="{{route('admin.dashboard') }}" class="text-muted">Dashboard</a>
     </li>
     <li class="breadcrumb-item text-active">
-        <a href="#" class="text-active">Customer</a>
+        <a href="#" class="text-active">Booking</a>
     </li>
 </ul>
 @endsection
 
 @section('actionButton')
-<a href="{{ route('admin.customer.create') }}" class="btn btn-primary font-weight-bolder fas fa-plus">
-    Create Customer
+<a href="{{ route('admin.booking.create') }}" class="btn btn-primary font-weight-bolder fas fa-plus">
+    Create Booking
 </a>
 @endsection
 
@@ -38,7 +38,7 @@
         <div class="card card-custom">
             <div class="card-header flex-wrap py-5">
                 <div class="card-title">
-                    <h3 class="card-label">Customer List</h3>
+                    <h3 class="card-label">Booking List</h3>
                 </div>
                 <div class="card-toolbar">
                     <div class="dropdown dropdown-inline">
@@ -102,11 +102,13 @@
                         <tr>
                             <th class="notexport">ID</th>
                             <th>S.No.</th>
-                            <th class="notexport">Image</th>
-                            <th class="notexport">Customer Name</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Phone</th>
+                            <th class="notexport">Vehicle Type</th>
+                            <th class="notexport">Customer</th>
+                            <th class="notexport">Rider</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th class="notexport">Origin</th>
+                            <th>Destination</th>
                             <th>status</th>
                             <th class="notexport">Action</th>
                         </tr>
@@ -151,7 +153,7 @@
                     ],
                     stateSave: true,
                     ajax: {
-                        url: "{{ route('admin.customer.data') }}",
+                        url: "{{ route('admin.booking.data') }}",
                     },
                     buttons: [
                         {
@@ -190,6 +192,15 @@
                             }
                         }
                     ],
+                    // <th class="notexport">Vehicle Type</th>
+                    //         <th class="notexport">Customer</th>
+                    //         <th class="notexport">Rider</th>
+                    //         <th>Start Time</th>
+                    //         <th>End Time</th>
+                    //         <th class="notexport">Origin</th>
+                    //         <th>Destination</th>
+                    //         <th>status</th>
+                    //         <th class="notexport">Action</th>
                     columns: [
                         {
                             "data": "id",
@@ -201,19 +212,25 @@
                             searchable: false
                         },
                         {
-                            "data": "image"
+                            "data": "vehicle_type"
                         },
                         {
-                            "data": "name"
+                            "data": "customer"
                         },
                         {
-                            "data": "username"
+                            "data": "rider"
                         },
                         {
-                            "data": "email"
+                            "data": "start_time"
                         },
                         {
-                            "data": "phone"
+                            "data": "end_time"
+                        },
+                        {
+                            "data": "origin"
+                        },
+                        {
+                            "data": "destination"
                         },
                         {
                             "data": "status"
