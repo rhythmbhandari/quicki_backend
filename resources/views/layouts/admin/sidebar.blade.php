@@ -81,7 +81,7 @@
                     </div>
                 </li>
 
-                <li class="menu-item menu-item-submenu {{ request()->is('admin/vehicle') || request()->is('admin/vehicle') || request()->is('admin/role/*') || request()->is('admin/permission/*')
+                <li class="menu-item menu-item-submenu {{ request()->is('admin/vehicle') || request()->is('admin/vehicle/*') || request()->is('admin/vehicle_type/*') || request()->is('admin/vehicle_type')
                     ? " menu-item-active menu-item-open" : "" }}" {{-- {{
                     str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
                     aria-haspopup="true">
@@ -100,6 +100,13 @@
                                         <span></span>
                                     </i><span class="menu-text">Vehicle list</span></a>
                             </li>
+                            <li class="menu-item {{request()->is('admin/vehicle_type') || request()->is('admin/vehicle_type/*')
+                                ? " menu-item-active" : "" }}" aria-haspopup="true">
+                                <a href="{{route('admin.vehicle_type.index')}}" class="menu-link"><i
+                                        class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i><span class="menu-text">Vehicle Type list</span></a>
+                            </li>
                             {{-- @endcan --}}
 
                             {{-- <li class="menu-item {{ request()->is('admin/permission') || request()->is('admin/permission/*')
@@ -114,7 +121,8 @@
                     </div>
                 </li>
 
-                <li class="menu-item menu-item-submenu {{ request()->is('admin/customer') || request()->is('admin/customer/*')
+                <li class="menu-item menu-item-submenu {{ request()->is('admin/customer') || request()->is('admin/customer/*')||
+                    request()->is('admin/rider') || request()->is('admin/rider/*')
                     ? " menu-item-active menu-item-open" : "" }}" {{-- {{
                     str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
                     aria-haspopup="true">
@@ -133,8 +141,9 @@
                                         <span></span>
                                     </i><span class="menu-text">Customer list</span></a>
                             </li>
-                            <li class="menu-item" aria-haspopup="true">
-                                <a href="{{route('admin.vehicle.index')}}" class="menu-link"><i
+                            <li class="menu-item {{request()->is('admin/rider') || request()->is('admin/rider/*')
+                                ? " menu-item-active" : "" }}" aria-haspopup="true">
+                                <a href="{{route('admin.rider.index')}}" class="menu-link"><i
                                         class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i><span class="menu-text">Rider list</span></a>
@@ -151,6 +160,16 @@
 
                         </ul>
                     </div>
+                </li>
+
+                <li class="menu-item menu-item-submenu {{ request()->is('admin/booking') || request()->is('admin/booking/*')
+                    ? " menu-item-active menu-item-open" : "" }}" {{-- {{
+                    str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
+                    aria-haspopup="true">
+                    <a href="{{route('admin.booking.index')}}" class="menu-link menu-toggle">
+                        <i class="menu-icon fas fa-user-tag"></i>
+                        <span class="menu-text">Booking List</span><i class=""></i>
+                    </a>
                 </li>
             </ul>
             <!--end::Menu Nav-->

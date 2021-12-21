@@ -178,6 +178,7 @@ return [
 
     ],
 
+    "map_key" => env('MAP_API_KEY'),
     /*
     |--------------------------------------------------------------------------
     | Class Aliases
@@ -240,6 +241,6 @@ return [
     'sparrow_key' => env('SPARROW_KEY', 'v2_16Pr1QjTdtNEhry38axqvcxu9Y3.BZvg'),
 
     "firebase_server_api_key" => env('FIREBASE_SERVER_API_KEY', 'firebaseapikey'),
-    
+
 
 ];

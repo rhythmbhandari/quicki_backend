@@ -40,16 +40,16 @@ class VehicleRequest extends FormRequest
         return [
             'vehicle_type_id' =>  ['required', function ($attribute, $value, $fail) {
                 $vehicle_type = VehicleType::find($value);
-                    if ( !$vehicle_type) {
-                        $fail('The vehicle type does not exist!');
-                    }
-                },],
-            "vehicle_number"=>'required|string',
+                if (!$vehicle_type) {
+                    $fail('The vehicle type does not exist!');
+                }
+            },],
+            "vehicle_number" => 'required|string',
             'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-            "make_year"=>'nullable|string',
-            "brand"=>"required|string",
-            "model"=>"required|string",
-     
+            "make_year" => 'nullable|string',
+            "brand" => "required|string",
+            "model" => "required|string",
+
         ];
     }
 }

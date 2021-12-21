@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', 'Edit User')
+@section('title', 'Edit Customer')
 
 @section('breadcrumb')
 <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
@@ -8,7 +8,7 @@
         <a href="{{route('admin.dashboard') }}" class="text-muted">Dashboard</a>
     </li>
     <li class="breadcrumb-item text-muted">
-        <a href="{{ route('admin.user.index')}}" class="text-muted">Users</a>
+        <a href="{{ route('admin.customer.index')}}" class="text-muted">Customers</a>
     </li>
     <li class="breadcrumb-item text-active">
         <a href="#" class="text-active">Edit</a>
@@ -17,9 +17,10 @@
 @endsection
 
 @section('content')
-    <form action="{{route('admin.user.update',$getdata->id)}}" method="post" class="custom-validation" enctype="multipart/form-data">
-        @csrf
-        @method('PATCH')
-        @include('admin.users.form')
-    </form>
+<form action="{{route('admin.customer.update',$customer->id)}}" method="post" class="custom-validation"
+    enctype="multipart/form-data">
+    @csrf
+    @method('PATCH')
+    @include('admin.customer.form')
+</form>
 @endsection

@@ -15,7 +15,7 @@
 
 @section('actionButton')
 <a href="{{ route('admin.customer.create') }}" class="btn btn-primary font-weight-bolder fas fa-plus">
-    Create User
+    Create Customer
 </a>
 @endsection
 
@@ -105,6 +105,7 @@
                             <th class="notexport">Image</th>
                             <th class="notexport">Customer Name</th>
                             <th>Username</th>
+                            <th>Email</th>
                             <th>Phone</th>
                             <th>status</th>
                             <th class="notexport">Action</th>
@@ -206,10 +207,13 @@
                             "data": "name"
                         },
                         {
+                            "data": "username"
+                        },
+                        {
                             "data": "email"
                         },
                         {
-                            "data": "username"
+                            "data": "phone"
                         },
                         {
                             "data": "status"

@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Events\SosCreated;
 /*
 |--------------------------------------------------------------------------
 | ADMIN ROUTES
@@ -26,6 +28,10 @@ include 'admin.php';
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Route::post('/send_message',function(Request $request){
+//     event(new SosCreated(  ));
+// });
 
 // Route::get('/test', [ Controller::class, 'test'])->name('test');
 
