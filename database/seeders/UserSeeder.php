@@ -28,6 +28,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
+            'status' => 'active'
         ]);
 
         User::create([
@@ -37,10 +38,11 @@ class UserSeeder extends Seeder
             'email' => 'sasuke@gmail.com',
             'phone' => '9862170927',
             'username' => 'sasuke',
-            'emergency_contacts'=>'{"9816810976","987654321","981122345"}',
+            'emergency_contacts' => '{"9816810976","987654321","981122345"}',
             'password' => Hash::make('password'),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
+            'status' => 'active'
         ]);
 
         User::create([
@@ -50,10 +52,11 @@ class UserSeeder extends Seeder
             'email' => 'kakashi@gmail.com',
             'phone' => '9816810976',
             'username' => 'kakashi',
-            'emergency_contacts'=>'{"9816810976","987654321","981122345"}',
+            'emergency_contacts' => '{"9816810976","987654321","981122345"}',
             'password' => Hash::make('password'),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
+            'status' => 'active'
         ]);
 
         User::create([
@@ -63,11 +66,11 @@ class UserSeeder extends Seeder
             'email' => 'rythm@gmail.com',
             'phone' => '9869191572',
             'username' => 'rythm',
-            'emergency_contacts'=>'{"9816810976","987654321","981122345"}',
+            'emergency_contacts' => '{"9816810976","987654321","981122345"}',
             'password' => Hash::make('password'),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
+            'status' => 'active'
         ]);
-
     }
 }

@@ -92,8 +92,12 @@ function getLabel($status)
             $label = 'label label-lg font-weight-bold label-light-primary label-inline';
             break;
 
+        case 'accepted':
+            $label = 'label label-lg font-weight-bold label-light-warning label-inline';
+            break;
+
         case 'running':
-            $label = 'label label-lg font-weight-bold label-light-info label-inline';
+            $label = 'label label-lg font-weight-bold label-light-warning label-inline';
             break;
 
         case 'cancelled':
@@ -209,4 +213,35 @@ function getTableHtml($object, $type, $editRoute = null, $deleteRoute = null, $s
             }
             break;
     }
+}
+
+function getDocuments($object)
+{
+    $documents = $object['documents'];
+    if ($documents) {
+        foreach ($documents as $document) {
+            if ($document['type'] == "license") {
+                $object['license']['document_number'] = $document['document_number'];
+                $object['license']['issue_date'] = $document['issue_date'];
+                $object['license']['expiry_date'] = $document['expiry_date'];
+                $object['license']['image_path'] = $document['image_path'];
+                $object['license']['thumbnail_path'] = $document['thumbnail_path'];
+            }
+            if ($document['type'] == "bluebook") {
+                $object['bluebook']['document_number'] = $document['document_number'];
+                $object['bluebook']['issue_date'] = $document['issue_date'];
+                $object['bluebook']['expiry_date'] = $document['expiry_date'];
+                $object['bluebook']['image_path'] = $document['image_path'];
+                $object['bluebook']['thumbnail_path'] = $document['thumbnail_path'];
+            }
+            if ($document['type'] == "insurance") {
+                $object['insurance']['document_number'] = $document['document_number'];
+                $object['insurance']['issue_date'] = $document['issue_date'];
+                $object['insurance']['expiry_date'] = $document['expiry_date'];
+                $object['insurance']['image_path'] = $document['image_path'];
+                $object['insurance']['thumbnail_path'] = $document['thumbnail_path'];
+            }
+        }
+    }
+    return $object;
 }

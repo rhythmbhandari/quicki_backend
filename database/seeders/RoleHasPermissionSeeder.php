@@ -6,7 +6,7 @@ use App\Modules\Models\Permission;
 use App\Modules\Models\Role;
 use Illuminate\Database\Seeder;
 
-class RoleHasPermissions extends Seeder
+class RoleHasPermissionSeeder extends Seeder
 {
     /**
      * Run the database seeds.

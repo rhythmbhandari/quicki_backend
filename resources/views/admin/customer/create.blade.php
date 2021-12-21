@@ -1,14 +1,14 @@
 @extends('layouts.admin.app')
 
-@section('title', 'Add User')
+@section('title', 'Add Customer')
 
 @section('breadcrumb')
 <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
 	<li class="breadcrumb-item text-muted">
 		<a href="{{route('admin.dashboard') }}" class="text-muted">Dashboard</a>
 	</li>
-    <li class="breadcrumb-item text-muted">
-		<a href="{{ route('admin.user.index')}}" class="text-muted">Users</a>
+	<li class="breadcrumb-item text-muted">
+		<a href="{{ route('admin.customer.index')}}" class="text-muted">Customers</a>
 	</li>
 	<li class="breadcrumb-item text-active">
 		<a href="#" class="text-active">Add</a>
@@ -17,9 +17,8 @@
 @endsection
 
 @section('content')
-    <form action="{{route('admin.user.store')}}" class="custom-validation" method="post" enctype="multipart/form-data">
-    @csrf
-        @include('admin.users.form')
-    </form>
+<form action="{{route('admin.customer.store')}}" class="custom-validation" method="post" enctype="multipart/form-data">
+	@csrf
+	@include('admin.customer.form')
+</form>
 @endsection
-
