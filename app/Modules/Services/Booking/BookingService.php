@@ -13,7 +13,11 @@ use Throwable;
 use App\Modules\Services\Location\LocationService;
 use App\Modules\Services\Location\RiderLocationService;
 use App\Modules\Services\Booking\CompletedTripService;
+
 use Yajra\DataTables\Facades\DataTables;
+
+use App\Modules\Services\Booking\PriceDetailService;
+use App\Modules\Services\Notification\NotificationService;
 
 //models
 use App\Modules\Models\Booking;
@@ -23,14 +27,22 @@ use App\Modules\Models\Shift;
 
 class BookingService extends Service
 {
-    protected $booking, $location_service;
+    protected $booking, $location_service, $notification_service;
 
-    function __construct(Booking $booking, LocationService $location_service, CompletedTripService $completed_trip_service, RiderLocationService $rider_location_service)
+    function __construct(Booking $booking, 
+                        LocationService $location_service, 
+                        CompletedTripService $completed_trip_service, 
+                        RiderLocationService $rider_location_service, 
+                        PriceDetailService $price_detail_service, 
+                        NotificationService $notification_service
+                        )
     {
         $this->booking = $booking;
         $this->location_service = $location_service;
         $this->completed_trip_service = $completed_trip_service;
         $this->rider_location_service = $rider_location_service;
+        $this->price_detail_service = $price_detail_service;
+        $this->notification_service = $notification_service;
     }
 
     function getBooking()
@@ -141,8 +153,34 @@ class BookingService extends Service
                     $createdBooking->location_id = intval($createdLocation->id);
                     $createdBooking->save();
                     $createdBooking->location = $createdLocation;
+                    // return $createdBooking;
+
+                    
+                    //CREAT PRICE DETAIL
+                    $price_detail_data = $this->calculateEstimatedPrice(
+                        $data['location']['latitude_origin'], $data['location']['longitude_origin'], 
+                        $data['vehicle_type_id'], $data['distance'], $data['duration']
+                    );  
+                    $price_detail_data = $price_detail_data['price_breakdown'];
+                    $price_detail_data['booking_id'] = $createdBooking->id;
+                    //dd($createdBooking->toArray(), $price_detail_data);
+                    $this->price_detail_service->create($price_detail_data);
+                    
+                     //Send Notification
+                     $this->notification_service->send_firebase_notification( 
+                        [
+                            ['customer', $createdBooking->user_id ],
+                        ],
+                        "booking_created",
+                        "individual"
+                     );
+
+
                     return $createdBooking;
                 }
+
+
+             
             }
             return NULL;
         } catch (Exception $e) {
@@ -208,14 +246,55 @@ class BookingService extends Service
             $booking = Booking::findOrFail($booking_id);
             $booking->status = $new_status;
 
-            if ($booking->save()) {
-                if ($new_status == "accepted") {
+//             if ($booking->save()) {
+//                 if ($new_status == "accepted") {
+//                     $booking->rider_id = intval($data['optional_data']['rider_id']);
+//                     if ($booking->save())
+//                         return $booking;
+//                 } else if ($new_status == "running") {
+
+
+            //NOTIFICATION DATA
+            
+
+            if($booking->save())
+            {    
+                if($new_status == "accepted")
+                {
                     $booking->rider_id = intval($data['optional_data']['rider_id']);
-                    if ($booking->save())
+
+
+                    if($booking->save())
+                    {
+                        //Send Notification
+                        $this->notification_service->send_firebase_notification( 
+                            [
+                                ['customer', $booking->user_id ],
+                                ['rider',$booking->rider_id]
+                            ],
+                            "booking_accepted",
+                            "some"
+                         );
+
+
                         return $booking;
-                } else if ($new_status == "running") {
+                    }
+                }
+                else if($new_status == "running")
+                {
                     $booking->start_time = Carbon::now();
                     $booking->save();
+
+                     //Send Notification
+                     $this->notification_service->send_firebase_notification( 
+                        [
+                            ['customer', $booking->user_id ],
+                            ['rider',$booking->rider_id]
+                        ],
+                        "booking_running",
+                        "some"
+                     );
+
                     return $booking;
                 } else if ($new_status == "completed") {
                     if (!$booking->start_time) {
@@ -245,6 +324,26 @@ class BookingService extends Service
                     $completed_trip_data['price'] = $final_price;
 
                     $booking->createdCompletedTrip = $this->completed_trip_service->create($completed_trip_data);
+                    
+                    //CREAT PRICE DETAIL
+                    $price_detail_data = $this->calculateEstimatedPrice(
+                        $booking->location->latitude_origin, $booking->location->longitude_origin, 
+                        $booking->vehicle_type_id, $booking->distance,  $new_duration
+                    );  
+                    $price_detail_data = $price_detail_data['price_breakdown'];
+                    $price_detail_data['completed_trip_id'] =   $booking->createdCompletedTrip->id;
+                    $this->price_detail_service->create($price_detail_data);
+
+                    //Send Notification
+                    $this->notification_service->send_firebase_notification( 
+                        [
+                            ['customer', $booking->user_id ],
+                            ['rider',$booking->rider_id]
+                        ],
+                        "booking_completed",
+                        "some"
+                     );
+
                     return $booking;
                 } else if ($new_status == "cancelled") {
 
@@ -263,6 +362,25 @@ class BookingService extends Service
 
 
                     $booking->createdCompletedTrip = $this->completed_trip_service->create($cancelled_trip_data);
+                    //CREAT PRICE DETAIL
+                    $price_detail_data = $this->calculateEstimatedPrice(
+                        $booking->location->latitude_origin, $booking->location->longitude_origin, 
+                        $booking->vehicle_type_id, $booking->distance,  $booking->duration
+                    );  
+                    $price_detail_data = $price_detail_data['price_breakdown'];
+                    $price_detail_data['completed_trip_id'] =   $booking->createdCompletedTrip->id;
+                    $this->price_detail_service->create($price_detail_data);
+
+                    //Send Notification
+                    $this->notification_service->send_firebase_notification( 
+                        [
+                            ['customer', $booking->user_id ],
+                            ['rider',$booking->rider_id]
+                        ],
+                        "booking_cancelled",
+                        "some"
+                     );
+
                     return $booking;
                 }
             }
@@ -289,12 +407,14 @@ class BookingService extends Service
 
     public function active_user_booking($userId)
     {
-        try {
-            $booking = $this->booking->where('user_id', $userId)->where(function ($query) {
-                $query->where('status', 'pending')
-                    ->orWhere('status', 'accepted')
-                    ->orWhere('status', 'running');
-            })->with('location')->first();
+
+        try{
+            $booking = $this->booking->where('user_id',$userId)->where(function($query){
+                $query->where('status','pending')
+                ->orWhere('status','accepted')
+                ->orWhere('status','running');
+            })->with('location')->with('price_detail')->first();
+
             return $booking;
         } catch (Exception $e) {
             return null;
@@ -304,11 +424,13 @@ class BookingService extends Service
 
     public function active_rider_booking($riderId)
     {
-        try {
-            $booking = $this->booking->where('rider_id', $riderId)->where(function ($query) {
-                $query->where('status', 'accepted')
-                    ->orWhere('status', 'running');
-            })->with('location')->first();
+
+        try{
+            $booking = $this->booking->where('rider_id',$riderId)->where(function($query){
+                $query->where('status','accepted')
+                ->orWhere('status','running');
+            })->with('location')->with('price_detail')->first();
+          
             return $booking;
         } catch (Exception $e) {
             return null;
@@ -409,7 +531,7 @@ class BookingService extends Service
         $estimated_price['shift'] = isset($shift->title) ? $shift->title : 1;
         $estimated_price['price_breakdown'] = [];
         //Provided
-        $estimated_price['price_breakdown']['minimum_charge'] = intval($vehicle_type->base_fair);
+        $estimated_price['price_breakdown']['minimum_charge'] = intval($vehicle_type->base_fare);
         //PRICE AFTER DISTANCE
         $estimated_price['price_breakdown']['price_per_km'] = $vehicle_type->price_per_km;
         $estimated_price['price_breakdown']['price_after_distance']  = ($vehicle_type->price_per_km * $distance);
@@ -436,6 +558,8 @@ class BookingService extends Service
             ? $estimated_price['price_breakdown']['minimum_charge'] : $estimated_price['price_breakdown']['price_after_duration'];
 
         $estimated_price['price_breakdown']['total_price'] = round($estimated_price['price_breakdown']['total_price']);
+
+        
 
         return $estimated_price;
     }
