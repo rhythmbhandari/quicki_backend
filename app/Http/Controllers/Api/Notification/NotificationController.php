@@ -111,7 +111,7 @@ class NotificationController extends Controller
     /**
     * @OA\Get(
     *   path="/api/user/notifications",
-    *   tags={"Notification"},
+    *   tags={"Notification and Sos"},
     *   summary="Get User's Notifications",
     *   security={{"bearerAuth":{}}},
     *
@@ -214,7 +214,7 @@ class NotificationController extends Controller
     /**
     * @OA\Get(
     *   path="/api/rider/notifications",
-    *   tags={"Notification"},
+    *   tags={"Notification and Sos"},
     *   summary="Get Rider's Notifications",
     *   security={{"bearerAuth":{}}},
     *

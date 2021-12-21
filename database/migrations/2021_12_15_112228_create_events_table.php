@@ -17,7 +17,7 @@ class CreateEventsTable extends Migration
             $table->id();
 
             $table->text('message');
-            $table->foreignId('created_by_id')->nullable()->constrained("users")->cascadeOnUpdate()->nullOnDelete(); 
+            $table->foreignId('created_by_id')->nullable();//->constrained("users")->cascadeOnUpdate()->nullOnDelete(); 
             $table->string('created_by_type')->comment('User roles like customer, rider, etc.');
             $table->foreignId('sos_id')->nullable()->constrained("sos")->cascadeOnUpdate()->nullOnDelete(); 
 
