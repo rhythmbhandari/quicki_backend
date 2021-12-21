@@ -48,6 +48,10 @@ class User extends Authenticatable
     ];
     protected $appends = ['name', 'status_text', 'thumbnail_path', 'image_path'];
 
+    function getNameAttribute()
+    {
+        return $this->first_name . ( isset($this->middle_name) ? (' '.$this->middle_name) : ' ' ) . $this->last_name;
+    }
 
     function getImagePathAttribute()
     {
@@ -82,10 +86,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',  'emergency_contacts' => 'array', 'location' => 'array'
     ];
 
-    public function getNameAttribute()
-    {
-        return ucwords($this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name);
-    }
+    // public function getNameAttribute()
+    // {
+    //     return ucwords($this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name);
+    // }
 
 
     /**

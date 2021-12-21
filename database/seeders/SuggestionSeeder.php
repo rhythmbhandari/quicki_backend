@@ -64,5 +64,31 @@ class SuggestionSeeder extends Seeder
             'category'=>'',
         ]);
 
+        Suggestion::create([
+            'text'=>'Change of mind!',
+            'type'=>'booking_cancel_by_user',
+            'category'=>'',
+        ]);
+
+        Suggestion::create([
+            'text'=>'Change of mind!',
+            'type'=>'booking_cancel_by_rider',
+            'category'=>'',
+        ]);
+
+
+        Suggestion::create([
+            'text'=>'Something came up!',
+            'type'=>'booking_cancel_by_user',
+            'category'=>'',
+        ]);
+
+        Suggestion::create([
+            'text'=>'Something came up!',
+            'type'=>'booking_cancel_by_rider',
+            'category'=>'',
+        ]);
+
+
     }
 }
