@@ -534,10 +534,21 @@ class UserController extends Controller
     *         @OA\Schema(
     *             
     *             example={
-    *                   "emergency_contacts": {
-    *                        "9816810976","123456","1234555"
-    *                   }
-    *              }
+    *               "emergency_contacts": {
+    *                 {
+    *                   "name": "Guts",
+    *                   "contact": "9816810976"
+    *                 },
+    *                 {
+    *                   "name": "Naruto",
+    *                   "contact": "9816810977"
+    *                 },
+    *                 {
+    *                   "name": "Luffy",
+    *                   "contact": "9816810978"
+    *                 }
+    *               }
+    *             }
     *         )
     *     )
     *   ),
@@ -548,11 +559,20 @@ class UserController extends Controller
     *               mediaType="application/json",
     *                @OA\Schema(      
     *                   example={
-    *                     "message": "Success!",
+    *                     "message": "Emergency Contacts Updated Successfully!",
     *                     "emergency_contacts": {
-    *                       "9816810976",
-    *                       "987654321",
-    *                       "981122345"
+    *                       {
+    *                         "name": "Guts",
+    *                         "contact": "9816810976"
+    *                       },
+    *                       {
+    *                         "name": "Naruto",
+    *                         "contact": "9816810977"
+    *                       },
+    *                       {
+    *                         "name": "Luffy",
+    *                         "contact": "9816810978"
+    *                       }
     *                     }
     *                   }
     *                 )

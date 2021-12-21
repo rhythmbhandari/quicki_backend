@@ -4396,9 +4396,18 @@
                             "schema": {
                                 "example": {
                                     "emergency_contacts": [
-                                        "9816810976",
-                                        "123456",
-                                        "1234555"
+                                        {
+                                            "name": "Guts",
+                                            "contact": "9816810976"
+                                        },
+                                        {
+                                            "name": "Naruto",
+                                            "contact": "9816810977"
+                                        },
+                                        {
+                                            "name": "Luffy",
+                                            "contact": "9816810978"
+                                        }
                                     ]
                                 }
                             }
@@ -4412,11 +4421,20 @@
                             "application/json": {
                                 "schema": {
                                     "example": {
-                                        "message": "Success!",
+                                        "message": "Emergency Contacts Updated Successfully!",
                                         "emergency_contacts": [
-                                            "9816810976",
-                                            "987654321",
-                                            "981122345"
+                                            {
+                                                "name": "Guts",
+                                                "contact": "9816810976"
+                                            },
+                                            {
+                                                "name": "Naruto",
+                                                "contact": "9816810977"
+                                            },
+                                            {
+                                                "name": "Luffy",
+                                                "contact": "9816810978"
+                                            }
                                         ]
                                     }
                                 }
