@@ -11,13 +11,9 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    //Simple vendor extraction
-    .extract()  //automatically extracts any common directory from node module directory
-    .vue()
-    .sass('resources/sass/app.scss', 'public/css')
-    //.sourceMaps()
-    .version();
+mix.js('resources/js/pusher.js', 'public/js')
+.postCss('resources/css/app.css','public/css')
+
 
 
 mix.browserSync('127.0.0.1:8000');

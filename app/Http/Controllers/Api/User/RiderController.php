@@ -70,7 +70,20 @@ class RiderController extends Controller
     *                   "username": null,
     *                   "phone": "9816810976",
     *                   "email": "gintama@gmail.com",
-    *                   "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
+    *                    "emergency_contacts": {
+    *                        {
+    *                          "name": "Guts",
+    *                          "contact": "9816810976"
+    *                        },
+    *                        {
+    *                          "name": "Naruto",
+    *                          "contact": "9816810977"
+    *                        },
+    *                        {
+    *                          "name": "Luffy",
+    *                          "contact": "9816810978"
+    *                        }
+    *                       },
     *                   "status": null,
     *                   "email_verified_at": null,
     *                   "last_logged_in": null,
@@ -192,7 +205,20 @@ class RiderController extends Controller
     *                   "username": null,
     *                   "phone": "9816810976",
     *                   "email": "gintama@gmail.com",
-    *                   "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
+    *                    "emergency_contacts": {
+    *                        {
+    *                          "name": "Guts",
+    *                          "contact": "9816810976"
+    *                        },
+    *                        {
+    *                          "name": "Naruto",
+    *                          "contact": "9816810977"
+    *                        },
+    *                        {
+    *                          "name": "Luffy",
+    *                          "contact": "9816810978"
+    *                        }
+    *                       },
     *                   "status": null,
     *                   "email_verified_at": null,
     *                   "last_logged_in": null,
@@ -337,7 +363,20 @@ class RiderController extends Controller
     *                 "last_name": "Luffy",
     *                 "image": "file()",
     *                 "email": "luffy@gmail.com",
-    *                  "emergency_contacts": "{\'9816810976\',\'987654321\',\'981122345\'}",
+    *                  "emergency_contacts": {
+    *                        {
+    *                          "name": "Guts",
+    *                          "contact": "9816810976"
+    *                        },
+    *                        {
+    *                          "name": "Naruto",
+    *                          "contact": "9816810977"
+    *                        },
+    *                        {
+    *                          "name": "Luffy",
+    *                          "contact": "9816810978"
+    *                        }
+    *                       },
     *                 "username": "luffy",
     *                 "dob": "2000/01/01",
     *                 "gender": "male",
@@ -381,7 +420,20 @@ class RiderController extends Controller
     *                                 "username": "luffy",
     *                                 "phone": "9816810976",
     *                                 "email": "gintama@gmail.com",
-    *                                   "emergency_contacts": {"9816810976","987654321","981122345"},
+    *                                  "emergency_contacts": {
+    *                                    {
+    *                                      "name": "Guts",
+    *                                      "contact": "9816810976"
+    *                                    },
+    *                                    {
+    *                                      "name": "Naruto",
+    *                                      "contact": "9816810977"
+    *                                    },
+    *                                    {
+    *                                      "name": "Luffy",
+    *                                      "contact": "9816810978"
+    *                                    }
+    *                                   },
     *                                 "status": null,
     *                                 "email_verified_at": null,
     *                                 "last_logged_in": null,

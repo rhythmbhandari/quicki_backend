@@ -66,7 +66,20 @@ class UserController extends Controller
     *                 "username": null,
     *                 "phone": "9816810976",
     *                 "email": "gintama@gmail.com",
-    *                 "emergency_contacts":{"9816810976","987654321","981122345"},
+    *                  "emergency_contacts": {
+    *                        {
+    *                          "name": "Guts",
+    *                          "contact": "9816810976"
+    *                        },
+    *                        {
+    *                          "name": "Naruto",
+    *                          "contact": "9816810977"
+    *                        },
+    *                        {
+    *                          "name": "Luffy",
+    *                          "contact": "9816810978"
+    *                        }
+    *                       },
     *                 "status": null,
     *                 "email_verified_at": null,
     *                 "last_logged_in": null,
@@ -138,7 +151,20 @@ class UserController extends Controller
     *                 "username": null,
     *                 "phone": "9816810976",
     *                 "email": "gintama@gmail.com",
-    *                  "emergency_contacts":{"9816810976","987654321","981122345"},
+    *                  "emergency_contacts": {
+    *                        {
+    *                          "name": "Guts",
+    *                          "contact": "9816810976"
+    *                        },
+    *                        {
+    *                          "name": "Naruto",
+    *                          "contact": "9816810977"
+    *                        },
+    *                        {
+    *                          "name": "Luffy",
+    *                          "contact": "9816810978"
+    *                        }
+    *                       },
     *                 "status": null,
     *                 "email_verified_at": null,
     *                 "last_logged_in": null,
@@ -260,7 +286,20 @@ class UserController extends Controller
     *                                 "username": "luffy",
     *                                 "phone": "9816810976",
     *                                 "email": "gintama@gmail.com",
-    *                               "emergency_contacts": {"9816810976","987654321","981122345"},
+    *                                "emergency_contacts": {
+    *                                    {
+    *                                      "name": "Guts",
+    *                                      "contact": "9816810976"
+    *                                    },
+    *                                    {
+    *                                      "name": "Naruto",
+    *                                      "contact": "9816810977"
+    *                                    },
+    *                                    {
+    *                                      "name": "Luffy",
+    *                                      "contact": "9816810978"
+    *                                    }
+    *                                   },
     *                                 "status": null,
     *                                 "email_verified_at": null,
     *                                 "last_logged_in": null,
@@ -440,11 +479,20 @@ class UserController extends Controller
     *                @OA\Schema(      
     *                   example={
     *                     "message": "Success!",
-    *                     "emergency_contacts": {
-    *                       "9816810976",
-    *                       "987654321",
-    *                       "981122345"
-    *                     }
+    *                      "emergency_contacts": {
+    *                        {
+    *                          "name": "Guts",
+    *                          "contact": "9816810976"
+    *                        },
+    *                        {
+    *                          "name": "Naruto",
+    *                          "contact": "9816810977"
+    *                        },
+    *                        {
+    *                          "name": "Luffy",
+    *                          "contact": "9816810978"
+    *                        }
+    *                       }
     *                   }
     *                 )
     *           )
@@ -486,10 +534,19 @@ class UserController extends Controller
     *                   example={
     *                     "message": "Success!",
     *                     "emergency_contacts": {
-    *                       "9816810976",
-    *                       "987654321",
-    *                       "981122345"
-    *                     }
+    *                        {
+    *                          "name": "Guts",
+    *                          "contact": "9816810976"
+    *                        },
+    *                        {
+    *                          "name": "Naruto",
+    *                          "contact": "9816810977"
+    *                        },
+    *                        {
+    *                          "name": "Luffy",
+    *                          "contact": "9816810978"
+    *                        }
+    *                       }
     *                   }
     *                 )
     *           )

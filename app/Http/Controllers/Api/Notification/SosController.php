@@ -11,6 +11,8 @@ use App\Http\Controllers\Controller;
 //requests
 use App\Http\Requests\Api\Notification\SosRequest;
 
+use App\Events\SosCreated;
+
 //services
 use App\Modules\Services\Notification\NotificationService;
 use App\Modules\Services\Notification\SosService;
@@ -27,12 +29,13 @@ use App\Modules\Models\Notification;
 class SosController extends Controller
 {
 
-    protected $document, $user_service;
+    protected $document, $user_service, $notification_service;
 
-    public function __construct(SosService $sos, UserService $user_service)
+    public function __construct(SosService $sos, UserService $user_service, NotificationService $notification_service)
     {
         $this->sos = $sos;
         $this->user_service = $user_service;
+        $this->notification_service = $notification_service;
     }
 
 
@@ -125,13 +128,30 @@ class SosController extends Controller
 
 
         //CREATE SOS
-        return DB::transaction(function () use ($request)
+        return DB::transaction(function () use ($user,$request)
         {
             $createdSos = $this->sos->create($request->all());
     
             if($createdSos)
             {
-                $response = ['message' => 'Sos created successfully!',  "sos"=>$createdSos];
+
+                //Send pusher/echo broadcast notification
+                event(
+                    new SosCreated( 
+                        $request->title, 
+                        $request->message, 
+                        $user->name, 
+                        $request->created_by_type,
+                        $createdSos->id )
+                    );
+
+                //Create Notification sent via pusher broadcast
+                // $this->notification_service->store(
+
+                // );
+
+
+                $response = ['message' => 'Sos created and sent successfully!',  "sos"=>$createdSos];
                 return response($response, 201);
             }
             return response("Internal Server Error!", 500);
@@ -243,6 +263,7 @@ class SosController extends Controller
     
             if($createdSos)
             {
+                
                 $response = ['message' => 'Sos created successfully!',  "sos"=>$createdSos];
                 return response($response, 201);
             }

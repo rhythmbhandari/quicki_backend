@@ -428,9 +428,10 @@ class RiderLocationController extends Controller
             $response = ['message' => 'You need to get online to view active user bookings!'];
             return response($response, 400);
         }
+        $vehicle_type_id = $rider_location->rider->vehicle->vehicle_type_id;
 
         /***********FOR NOW TEMPORARYY CODE */
-        $available_users = Booking::where('status','pending')->with('location')->get();
+        $available_users = Booking::where('status','pending')->where('vehicle_type_id',$vehicle_type_id)->with('location')->get();
 
         $response = ['message' => 'Success!',  "available_users"=>$available_users];
         return response($response, 200);
