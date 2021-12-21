@@ -19,7 +19,7 @@ class CreateSosTable extends Migration
             $table->string('title')->nullable();
             $table->text('message');
             $table->foreignId('booking_id')->nullable()->constrained("bookings")->cascadeOnUpdate()->nullOnDelete(); 
-            $table->foreignId('created_by_id')->nullable()->constrained("users")->cascadeOnUpdate()->nullOnDelete(); 
+            $table->foreignId('created_by_id')->nullable();//->constrained("users")->cascadeOnUpdate()->nullOnDelete(); 
             $table->string('created_by_type')->comment('User roles like customer, rider, etc.');
             $table->json('location')->nullable()->comment('FORMAT: { "name":"Sanepa, Lalitpur", "latitude":"27.87652","longitude":"85.1234"}');
             $table->enum('status',['active','closed']); 

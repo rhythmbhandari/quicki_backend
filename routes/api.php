@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\Document\DocumentController;
 use App\Http\Controllers\Api\Vehicle\VehicleController;
 use App\Http\Controllers\Api\Suggestion\SuggestionController;
 use App\Http\Controllers\Api\Notification\NotificationController;
+use App\Http\Controllers\Api\Notification\SosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -166,10 +167,12 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
 
   
   //---------------------------------------------------------------------------------------------------------
-  //  NOTIFICATION
+  //  NOTIFICATION AND SOS
   //---------------------------------------------------------------------------------------------------------
   $router->get('/user/notifications', [NotificationController::class, 'getUserNotifications'])->name('user.notifications');
   $router->get('/rider/notifications', [NotificationController::class, 'getRiderNotifications'])->name('rider.notifications');
+  $router->post('/user/sos/create', [SosController::class, 'user_sos_store'])->name('user.sos.store');
+  $router->get('/rider/sos/create', [SosController::class, 'rider_sos_store'])->name('rider.sos.store');
 
 
   

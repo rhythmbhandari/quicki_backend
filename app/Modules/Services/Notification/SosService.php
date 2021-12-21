@@ -21,17 +21,17 @@ class SosService extends Service{
 
     public function create(array $data)
     {
+        // dd($data);
         try {
             $data['booking_id'] = isset($data['booking_id'])? intval($data['booking_id']) : null;
             $data['created_by_id'] = isset($data['created_by_id']) ? intval($data['created_by_id']) : null;
 
-            if(isset($data['location']) && count($data['location'])>0 )
+            
+
+            if(isset($data['location']) )
             {
-                for($i=0; $i < count($data['location']); $i++ )
-                {
-                    $data['location'][$i]['latitude'] = floatval( $data['location'][$i]['latitude'] );
-                    $data['location'][$i]['longitude'] = floatval( $data['location'][$i]['longitude'] );
-                }
+                $data['location']['latitude'] = floatval( $data['location']['latitude'] );
+                $data['location']['longitude'] = floatval( $data['location']['longitude'] );
             }
             $createdSos = $this->sos->create($data);
 

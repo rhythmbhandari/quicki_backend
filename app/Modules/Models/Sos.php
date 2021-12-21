@@ -36,9 +36,9 @@ class Sos extends Model
     /**
      * Gets the user model of the creator of the sos!
      */
-    public function creator_user(){
-        return $this->belongsTo(User::class,'created_by_id');
-    }
+    // public function creator_user(){
+    //     return $this->belongsTo(User::class,'created_by_id');
+    // }
 
     /**
      * Gets the booking model of the sos!
