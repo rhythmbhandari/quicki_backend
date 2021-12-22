@@ -171,6 +171,16 @@
                         <span class="menu-text">Booking List</span><i class=""></i>
                     </a>
                 </li>
+
+                <li class="menu-item menu-item-submenu {{ request()->is('admin/sos') || request()->is('admin/sos/*')
+                    ? " menu-item-active menu-item-open" : "" }}" {{-- {{
+                    str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
+                    aria-haspopup="true">
+                    <a href="{{route('admin.sos.index')}}" class="menu-link menu-toggle">
+                        <i class="menu-icon fas fa-user-tag"></i>
+                        <span class="menu-text">SOS</span><i class=""></i>
+                    </a>
+                </li>
             </ul>
             <!--end::Menu Nav-->
         </div>
