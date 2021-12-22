@@ -56,6 +56,10 @@ function getLabel($status)
             $label = 'label label-lg font-weight-bold label-light-success label-inline';
             break;
 
+        case 'closed':
+            $label = 'label label-lg font-weight-bold label-light-warning label-inline';
+            break;
+
         case 'in_active':
             $label = 'label label-lg font-weight-bold label-light-danger label-inline';
             break;

@@ -28,7 +28,7 @@ class Sos extends Model
     ]);
 
 
-    protected $appends = [];
+    protected $appends = ['status_text'];
 
 
     /**
@@ -45,5 +45,10 @@ class Sos extends Model
     public function booking()
     {
         return $this->belongsTo(Booking::class);
+    }
+
+    function getStatusTextAttribute()
+    {
+        return ucwords(str_replace('_', '', $this->status));
     }
 }

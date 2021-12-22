@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\User\CustomerController;
 use App\Http\Controllers\Admin\User\RiderController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Booking\BookingController;
+use App\Http\Controllers\Admin\Sos\SosController;
 use Inertia\Inertia;
 
 Route::get('/test', [UserController::class, 'inertia_test'])->name('test');
@@ -70,5 +71,7 @@ Route::group([
     //SOS
     $router->resource('/sos', SosController::class);
     $router->get('sos_data', [SosController::class, 'getAllData'])->name('sos.data');
+    $router->get('/sos/event/{id}', [SOSController::class, 'eventcreate'])->name('sos-detail.create');
+    $router->post('/sos/event/{id}', [SOSController::class, 'eventstore'])->name('sos-detail.store');
     // $router->get('vehicle_type_ajax', [VehicleTypeController::class, 'vehicleTypeAjax'])->name('vehicle_type.ajax');
 });

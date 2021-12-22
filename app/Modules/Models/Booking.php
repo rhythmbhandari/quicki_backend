@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Modules\Models\Rider;
 use App\Modules\Models\User;
+use App\Modules\Models\Sos;
 use App\Modules\Models\Location;
 use App\Modules\Models\CompletedTrip;
 use App\Modules\Models\VehicleType;
@@ -63,6 +64,11 @@ class Booking extends Model
     public function completed_trip()
     {
         return $this->hasOne(CompletedTrip::class);
+    }
+
+    public function sos()
+    {
+        return $this->hasMany(Sos::class);
     }
 
 

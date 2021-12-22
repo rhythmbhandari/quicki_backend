@@ -24,7 +24,7 @@ class RiderController extends Controller
 
     protected $rider, $user_service, $document_service;
 
-    public function __construct(RiderService $rider, UserService $user_service, DocumentService $document_service,)
+    public function __construct(RiderService $rider, UserService $user_service, DocumentService $document_service)
     {
         $this->rider = $rider;
         $this->user_service = $user_service;
