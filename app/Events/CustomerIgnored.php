@@ -10,24 +10,23 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SosCreated implements ShouldBroadcast
+class CustomerIgnored implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $title, $message, $sos_id, $user_name, $user_type ;
+    public $title, $message,  $user_name, $booking_id ;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct( $title, $message, $user_name=null, $user_type=null,  $sos_id=null  )
+    public function __construct( $title, $message, $booking_id=null, $user_name=null )
     {
         $this->title = $title;
         $this->message = $message;
         $this->user_name = $user_name;
-        $this->user_type = $user_type;
-        $this->sos_id = $sos_id;
+        $this->booking_id = $sos_id;
     }
 
     /**
@@ -38,12 +37,12 @@ class SosCreated implements ShouldBroadcast
     public function broadcastOn()
     {
         // return new PrivateChannel('channel-name');
-        return new Channel('sos');
+        return new Channel('customer_ignored');
     }
 
     public function broadcastAs()
     {
-        return 'sos_created';//sos
+        return 'message';
     }
 
 }

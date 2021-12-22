@@ -13,7 +13,13 @@
         <header>
             <h1> BroadCast Notification with Pusher Test </h1>
         </header>
+        <h3>SOS: </h3>
         <div id="sos_message">
+           
+        </div>
+
+        <h3>SOS EVENTS: </h3>
+        <div id="event_message">
            
         </div>
         

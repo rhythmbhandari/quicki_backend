@@ -988,38 +988,6 @@ class ApiAuthController extends Controller
     *                           "created_at": "2021-11-25T18:01:44.000000Z",
     *                           "updated_at": "2021-11-25T18:16:46.000000Z",
     *                           "name": "Sasuke  Uchiha",
-    *                           "roles": {
-    *                             {
-    *                               "id": 2,
-    *                               "slug": "rider",
-    *                               "name": "rider",
-    *                               "guard_name": "rider",
-    *                               "deleted_at": null,
-    *                               "created_at": "2021-11-25T18:01:43.000000Z",
-    *                               "updated_at": "2021-11-25T18:01:43.000000Z",
-    *                               "pivot": {
-    *                                 "user_id": 2,
-    *                                 "role_id": 2,
-    *                                 "created_at": "2021-11-25T18:01:44.000000Z",
-    *                                 "updated_at": "2021-11-25T18:01:44.000000Z"
-    *                               }
-    *                             },
-    *                             {
-    *                               "id": 3,
-    *                               "slug": "customer",
-    *                               "name": "customer",
-    *                               "guard_name": "customer",
-    *                               "deleted_at": null,
-    *                               "created_at": "2021-11-25T18:01:43.000000Z",
-    *                               "updated_at": "2021-11-25T18:01:43.000000Z",
-    *                               "pivot": {
-    *                                 "user_id": 2,
-    *                                 "role_id": 3,
-    *                                 "created_at": "2021-11-25T18:01:44.000000Z",
-    *                                 "updated_at": "2021-11-25T18:01:44.000000Z"
-    *                               }
-    *                             }
-    *                           },
     *                           "rider": {
     *                             "id": 1,
     *                             "user_id": 2,
@@ -1126,8 +1094,10 @@ class ApiAuthController extends Controller
                 }
                 $rider = $user->rider;
                 $accessToken = $createdRider->user->createToken('Laravel Password Grant Client')->accessToken;
+
+                
               
-                $response = ['message' => 'Rider registration success! Login Successful!', 'access_token' => $accessToken, "user"=>$createdRider->user,];
+                $response = ['message' => 'Rider registration success! Login Successful!', 'access_token' => $accessToken, "user"=>User::where('id',$createdRider->user->id)->with('rider')->first()];
                 return response($response, 200);
             }
             return response("Internal Server Error!", 500);
