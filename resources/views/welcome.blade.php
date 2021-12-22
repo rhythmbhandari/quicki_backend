@@ -8,5 +8,16 @@
 </head>
 <body>
     Hello, This is the welcome page!
+
+    <div class="app">
+        <header>
+            <h1> BroadCast Notification with Pusher Test </h1>
+        </header>
+        <div id="sos_message">
+           
+        </div>
+        
+    </div>
+    <script src="{{asset('/js/pusher.js')}}" defer></script>
 </body>
 </html>
