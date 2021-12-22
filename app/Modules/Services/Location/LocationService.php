@@ -16,14 +16,15 @@ class LocationService extends Service
         $this->location = $location;
     }
 
-    function getLocation(){
+    function getLocation()
+    {
         return $this->location;
     }
 
 
     function create(array $data)
     {
-        try{
+        try {
             $data['latitude_origin'] = floatval($data['latitude_origin']);
             $data['longitude_origin'] = floatval($data['longitude_origin']);
 
@@ -31,17 +32,29 @@ class LocationService extends Service
             $data['longitude_destination'] = floatval($data['longitude_destination']);
 
             $createdLocation = $this->location->create($data);
-            if($createdLocation)
-            {
+            if ($createdLocation) {
                 return $createdLocation;
             }
             return NULL;
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             return NULL;
         }
-       
     }
 
+    function update(array $data, $id)
+    {
+        try {
+            $data['latitude_origin'] = floatval($data['latitude_origin']);
+            $data['longitude_origin'] = floatval($data['longitude_origin']);
+
+            $data['latitude_destination'] = floatval($data['latitude_destination']);
+            $data['longitude_destination'] = floatval($data['longitude_destination']);
+
+            $updatedLocation = $this->location->find($id)->update($data);
+
+            return $updatedLocation;
+        } catch (Exception $e) {
+            return NULL;
+        }
+    }
 }

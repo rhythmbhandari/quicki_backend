@@ -39,41 +39,21 @@ class VehicleService extends Service
 
         return DataTables::of($query)
             ->addIndexColumn()
-            // ->filter(function ($instance) use ($filter) {
-            //     $instance->when($filter->has('vendor'), function ($query) use ($filter) {
-            //         $vendor = $this->vendor->findBySlug($filter->vendor);
-            //         if ($vendor) {
-            //             return $query->whereVendorId($vendor->id);
-            //         }
-            //     })->when($filter->has('manufacturer'), function ($query) use ($filter) {
-            //         $manufacturer = $this->manufacturer->findBySlug($filter->manufacturer);
-            //         if ($manufacturer) {
-            //             $models = $this->model->findByManufacturer($manufacturer->id);
-            //             $modelIds = $models->pluck('id')->toArray();
-            //             return $query->whereIn('model_id', $modelIds);
-            //         }
-            //     })->when($filter->has('type'), function ($query) use ($filter) {
-            //         $type = $this->type->findBySlug($filter->type);
-            //         if ($type) {
-            //             $types = $this->model->findByType($type->id);
-            //             $typeIds = $types->pluck('id')->toArray();
-            //             return $query->whereIn('model_id', $typeIds);
-            //         }
-            //     })->when($filter->has('model'), function ($query) use ($filter) {
-            //         $model = $this->model->findBySlug($filter->model);
-            //         if ($model) {
-            //             return $query->whereModelId($model->id);
-            //         }
-            //     });
-            // }, true)
+
             ->addColumn('image', function (Vehicle $vehicle) {
                 return getTableHtml($vehicle, 'image');
             })
             ->addColumn('vehicle', function (Vehicle $vehicle) {
-                return $vehicle->model->name . "<br /> <strong>" . $vehicle->vehicle_number . "</strong>";
+                return $vehicle->model . "<br /> <strong>" . $vehicle->vehicle_number . "</strong>";
             })
-            ->editColumn('vehicle_number', function (Vehicle $vehicle) {
-                return $vehicle->vehicle_number;
+            ->editColumn('vehicle_type', function (Vehicle $vehicle) {
+                return $vehicle->vehicle_type->name;
+            })
+            ->editColumn('rider', function (Vehicle $vehicle) {
+                return $vehicle->rider->user->first_name;
+            })
+            ->editColumn('phone', function (Vehicle $vehicle) {
+                return $vehicle->rider->user->phone;
             })
             ->editColumn('status', function (Vehicle $vehicle) {
                 return getTableHtml($vehicle, 'status');
@@ -88,6 +68,11 @@ class VehicleService extends Service
             ->make(true);
     }
 
+    public function find($id)
+    {
+        return $this->vehicle->find($id);
+    }
+
     public function all()
     {
         return $this->vehicle->whereStatus('active')->get();
@@ -97,10 +82,10 @@ class VehicleService extends Service
     {
         try {
 
-            $data['status'] = isset($data['status']) ? $data['status'] : 'active';
+            $data['status'] = (isset($data['status']) ?  $data['status'] : '') == 'on' ? 'active' : 'in_active';
 
-            $data['rider_id'] = intval($data['rider_id']);
-            $data['vehicle_type_id'] = intval($data['vehicle_type_id']);
+            $data['rider_id'] = isset($data['rider_id']) ?  intval($data['rider_id']) : null;
+            $data['vehicle_type_id'] = isset($data['vehicle_type_id']) ?  intval($data['vehicle_type_id']) : null;
 
             //CREATE VEHICLE
             $createdVehicle =  $this->vehicle->create($data);
@@ -119,11 +104,12 @@ class VehicleService extends Service
     public function update($vehicleId, array $data)
     {
         try {
+            $data['status'] = (isset($data['status']) ?  $data['status'] : '') == 'on' ? 'active' : 'in_active';
             if (isset($data['vehicle_type_id']))  $data['vehicle_type_id'] = intval($data['vehicle_type_id']);
             if (isset($data['rider_id']))  $data['rider_id'] = intval($data['rider_id']);
 
             $vehicle = Vehicle::findOrFail($vehicleId);
-            $updatedVehicle = $vehicle->update($data);
+            $vehicle->update($data);
             return $vehicle;
         } catch (Exception $e) {
             //$this->logger->error($e->getMessage());
@@ -133,11 +119,17 @@ class VehicleService extends Service
 
 
 
-    function uploadFile($file)
+    function uploadFile($file, $type = null)
     {
         if (!empty($file)) {
-            $this->uploadPath = 'uploads/vehicle';
-            return $fileName = $this->uploadFromAjax($file);
+
+            if ($type == 'image') {
+                $this->uploadPath = 'uploads/vehicle';
+                return $this->uploadFromAjax($file);
+            } else {
+                $this->uploadPath = 'uploads/vehicle/document';
+                return $this->uploadFromAjax($file);
+            }
         }
     }
 

@@ -46,7 +46,7 @@ class User extends Authenticatable
         'google_id', 'facebook_id', 'image', 'device_token', 'social_image_url', 'location',
         'created_at', 'updated_at', 'deleted_at', 'last_updated_by', 'last_deleted_by'
     ];
-    protected $appends = ['name',   'thumbnail_path', 'image_path'];
+    protected $appends = ['name', 'status_text', 'thumbnail_path', 'image_path'];
 
     function getNameAttribute()
     {
@@ -98,6 +98,11 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(Role::class)->withTimeStamps();
+    }
+
+    function getStatusTextAttribute()
+    {
+        return ucwords(str_replace('_', '', $this->status));
     }
 
     //Rider model of the user if any

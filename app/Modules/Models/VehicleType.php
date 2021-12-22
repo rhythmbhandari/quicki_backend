@@ -31,17 +31,17 @@ class VehicleType extends Model
         'base_fare' => 'integer',
         'commission' => 'integer',
         'capacity' => 'integer',
-        'surge_rate'=>'float',
+        'surge_rate' => 'float',
     ];
 
     //Here, rate is surge rate applies when booking falls either in density or shift surge criterion
-    
-    protected $fillable = [ 
-        'name','slug','price_km','price_min','image', 'base_fare','commission','capacity','status','surge_rate',
-        'created_at','updated_at','deleted_at'
+
+    protected $fillable = [
+        'name', 'slug', 'price_km', 'price_min', 'image', 'base_fare', 'commission', 'capacity', 'status', 'surge_rate',
+        'created_at', 'updated_at', 'deleted_at'
     ];
     protected $appends = [
-         'thumbnail_path', 'image_path', 'price_per_km', 'price_per_min'
+        'thumbnail_path', 'image_path', 'price_per_km', 'price_per_min', 'status_text'
     ];
 
     function getPricePerKmAttribute()
@@ -49,6 +49,10 @@ class VehicleType extends Model
         return $this->price_km;
     }
 
+    function getStatusTextAttribute()
+    {
+        return ucwords(str_replace('_', '', $this->status));
+    }
 
     function getPricePerMinAttribute()
     {
@@ -72,12 +76,14 @@ class VehicleType extends Model
     }
 
     //Vehicles of this type
-    public function vehicles(){
+    public function vehicles()
+    {
         return $this->hasMany(Vehicle::class);
     }
 
     //Shifts for this vehicle type
-    public function shifts(){
+    public function shifts()
+    {
         return $this->hasMany(Shift::class);
     }
     // public function prices(){

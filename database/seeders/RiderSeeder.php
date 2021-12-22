@@ -20,7 +20,6 @@ class RiderSeeder extends Seeder
             'experience' => '3',
             'trained'   => 'YES',
             'status'    => 'active',
-            
             'approved_at' => Carbon::now(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),

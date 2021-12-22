@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Builder;
 class CustomerService extends Service
 {
 
-
     protected $customer;
 
     function __construct(User $customer)
@@ -29,7 +28,16 @@ class CustomerService extends Service
                 return getTableHtml($user, 'image');
             })
             ->editColumn('name', function (User $user) {
-                return $user->full_name;
+                return $user->name;
+            })
+            ->editColumn('username', function (User $user) {
+                return $user->username;
+            })
+            ->editColumn('email', function (User $user) {
+                return $user->email;
+            })
+            ->editColumn('phone', function (User $user) {
+                return $user->phone;
             })
             ->editColumn('status', function (User $user) {
                 return getTableHtml($user, 'status');
@@ -107,7 +115,6 @@ class CustomerService extends Service
     public function updateImage($customerId, array $data)
     {
         try {
-
             $customer = $this->customer->find($customerId);
             $customer = $customer->update($data);
 

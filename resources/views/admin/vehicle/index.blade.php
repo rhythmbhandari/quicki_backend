@@ -14,12 +14,9 @@
 @endsection
 
 @section('actionButton')
-@can('vehicle-add')
 <a href="{{ route('admin.vehicle.create') }}" class="btn btn-primary font-weight-bolder fas fa-plus">
 	Add Vehicle
 </a>
-@endcan
-
 @endsection
 
 @section('page-specific-styles')
@@ -27,7 +24,8 @@
 	type="text/css" />
 <link href="{{asset('assets/admin/plugins/custom/lightbox/lightbox.css')}}" rel="stylesheet" type="text/css" />
 <style>
-	.availability-label:hover {
+	#tableData tbody tr:hover {
+		background: #cff5ff;
 		cursor: pointer;
 	}
 </style>
@@ -102,12 +100,14 @@
 				<table class="table table-separate table-head-custom table-checkable" id="tableData">
 					<thead>
 						<tr>
-							<th class="notexport"></th>
 							<th class="notexport">ID</th>
 							<th>S.No.</th>
 							<th class="notexport">Image</th>
-							<th>Vehicle</th>
-							<th>Status</th>
+							<th class="notexport">Vehicle</th>
+							<th class="notexport">Vehicle Type</th>
+							<th>Vehicle Rider</th>
+							<th>Rider Phone</th>
+							<th>status</th>
 							<th class="notexport">Action</th>
 						</tr>
 					</thead>
@@ -121,210 +121,158 @@
 	</div>
 	<!--end::Container-->
 </div>
-<!--end::Entry-->
-
-<!--end::Content-->
 @endsection
 @section('page-specific-scripts')
 <script src="{{asset('assets/admin/plugins/custom/datatables/datatables.bundle.js')}}"></script>
 <script src="{{asset('assets/admin/plugins/custom/lightbox/lightbox.js')}}"></script>
 <script>
-	function format(d) {
-		// return '<b>From</b> : '+d.origin+' <br><b>To :</b>  '+d.destination+' <br>'+
-		//  '<b>Payable amount</b> : '+d.payable_amount+ '<br>'+
-		//  '<b>Receivable amount</b> : '+d.receivable_amount;
-		return '<table class="table table-hover"><thead><tr><th>File Type</th><th>File</th><th>Issued Date</th><th>Expiry Date</th></tr></thead><tbody><tr><td>Insurance</td><td>' + d.insurance + '</td><td>' + d.insurance_issue_date + '</td><td>' + d.insurance_expiry_date + '</td></tr><tr><td>Bluebook</td><td>' + d.bluebook + '</td><td>' + d.bluebook_issue_date + '</td><td>' + d.bluebook_expiry_date + '</td></tr></tbody>';
-	}
 	/******/
-	(() => { // webpackBootstrap
-		/******/
-		"use strict";
-		var __webpack_exports__ = {};
-		/*!************************************************************!*\
-		  !*** ../demo1/src/js/pages/crud/datatables/basic/basic.js ***!
-		  \************************************************************/
+    (() => { // webpackBootstrap
+        /******/
+        "use strict";
+        var __webpack_exports__ = {};
+        /*!************************************************************!*\
+          !*** ../demo1/src/js/pages/crud/datatables/basic/basic.js ***!
+          \************************************************************/
 
-		var KTDatatablesBasicBasic = function() {
+        var KTDatatablesBasicBasic = function() {
 
-			var initTable1 = function() {
-				var table = $('#tableData');
+            var initTable1 = function() {
+                var table = $('#tableData');
 
-				// begin first table
-				var table1 = table.DataTable({
-					// responsive: true,
-					searchDelay: 500,
-					processing: true,
-					serverSide: true,
-					order: [
-						[0, 'desc']
-					],
-                    pageLength: 50,
-                    lengthMenu: [
-                        [50, 100, -1],
-                        [50, 100, "All"]
+                // begin first table
+                var table1 = table.DataTable({
+                    responsive: true,
+                    searchDelay: 500,
+                    processing: true,
+                    serverSide: true,
+                    order: [
+                        [0, 'desc']
                     ],
-					ajax: {
-						url: "{{ route('admin.vehicle.data') }}",
-					},
-					buttons: [{
-							extend: 'print',
-							exportOptions: {
-								columns: ':visible',
-								columns: ':not(.notexport)',
-							}
-						},
+                    stateSave: true,
+                    ajax: {
+                        url: "{{ route('admin.vehicle.data') }}",
+                    },
+                    buttons: [
+                        {
+                            extend: 'print',
+                            exportOptions: {
+                                columns: ':visible',
+                                columns: ':not(.notexport)',
+                            }
+                        },
+                        {
+                            extend: 'copyHtml5',
+                            exportOptions: {
+                                columns: ':visible',
+                                columns: ':not(.notexport)',
+                            }
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            exportOptions: {
+                                columns: ':visible',
+                                columns: ':not(.notexport)',
+                            }
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            exportOptions: {
+                                columns: ':visible',
+                                columns: ':not(.notexport)',
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            exportOptions: {
+                                columns: ':visible',
+                                columns: ':not(.notexport)',
+                            }
+                        }
+                    ],
+                    columns: [
+                        {
+                            "data": "id",
+                            'visible': false
+                        },
+                        {
+                            "data": "DT_RowIndex",
+                            orderable: true,
+                            searchable: false
+                        },
+                        {
+                            "data": "image"
+                        },
+                        {
+                            "data": "vehicle"
+                        },
+                        {
+                            "data": "vehicle_type"
+                        },
 						{
-							extend: 'copyHtml5',
-							exportOptions: {
-								columns: ':visible',
-								columns: ':not(.notexport)',
-							}
-						},
+                            "data": "rider"
+                        },
 						{
-							extend: 'excelHtml5',
-							exportOptions: {
-								columns: ':visible',
-								columns: ':not(.notexport)',
-							}
-						},
-						{
-							extend: 'csvHtml5',
-							exportOptions: {
-								columns: ':visible',
-								columns: ':not(.notexport)',
-							}
-						},
-						{
-							extend: 'pdfHtml5',
-							exportOptions: {
-								columns: ':visible',
-								columns: ':not(.notexport)',
-							}
-						}
-					],
-					columns: [{
-							"className": 'details-control',
-							"orderable": false,
-							"searchable": false,
-							"defaultContent": ''
-						},
-						{
-							"data": "id",
-							'visible': false
-						},
-						{
-							"data": "DT_RowIndex",
-							"name": "id",
-							orderable: true,
-							searchable: false
-						},
-						{
-							"data": "image",
-							"orderable": false,
-							"searchable": false
-						},
-						{
-							"data": "vehicle",
-						},
-						{
-							"data": "status"
-						}
-						{
-							"data": "actions",
-							orderable: false,
-							searchable: false
-						},
-					],
-					columnDefs: [{
-						targets: -1,
-						className: 'float-end'
-					}],
-					// "fnDrawCallback": function(settings) {
-					// 	$('.availability-label').click(function() {
-					// 		let availabilityLabel = $(this);
-					// 		$.ajax({
-					// 			url: "/admin/vehicle/availability/" + $(this).data('id'),
-					// 			success: function(result) {
-					// 				if (result === "success") {
-					// 					availabilityLabel.toggleClass("label-light-success");
-					// 					availabilityLabel.toggleClass("label-light-danger");
-					// 					availabilityLabel.html() == "Available" ? availabilityLabel.html('Not Available') : availabilityLabel.html('Available');
+                            "data": "phone"
+                        },
+                        {
+                            "data": "status"
+                        },
+                        {
+                            "data": "actions",
+                            orderable: false,
+                            searchable: false
+                        },
+                    ],
+                    columnDefs: [{
+                        targets: -1,
+                        className: 'float-end'
+                    }],
 
-					// 					toastr.success("Availability Changed Successfully");
-					// 				} else {
-					// 					toastr.danger("Something went wrong!!");
-					// 				}
-					// 			}
-					// 		});
-					// 	});
-					// }
-				});
+                });
 
-				$('#export_print').on('click', function(e) {
-					e.preventDefault();
-					table1.button(0).trigger();
-				});
+                $('#export_print').on('click', function(e) {
+                    e.preventDefault();
+                    table1.button(0).trigger();
+                });
 
-				$('#export_copy').on('click', function(e) {
-					e.preventDefault();
-					table1.button(1).trigger();
-				});
+                $('#export_copy').on('click', function(e) {
+                    e.preventDefault();
+                    table1.button(1).trigger();
+                });
 
-				$('#export_excel').on('click', function(e) {
-					e.preventDefault();
-					table1.button(2).trigger();
-				});
+                $('#export_excel').on('click', function(e) {
+                    e.preventDefault();
+                    table1.button(2).trigger();
+                });
 
-				$('#export_csv').on('click', function(e) {
-					e.preventDefault();
-					table1.button(3).trigger();
-				});
+                $('#export_csv').on('click', function(e) {
+                    e.preventDefault();
+                    table1.button(3).trigger();
+                });
 
-				$('#export_pdf').on('click', function(e) {
-					e.preventDefault();
-					table1.button(4).trigger();
-				});
-
-				var detailRows = [];
-				$('#tableData tbody').on('click', 'tr td.details-control', function() {
-					var tr = $(this).closest('tr');
-					// console.log()
-					var row = $('#tableData').DataTable().row(tr);
-					// var row = table.row( tr );
-					var idx = $.inArray(tr.attr('id'), detailRows);
-					if (row.child.isShown()) {
-						tr.removeClass('details');
-						row.child.hide();
-						// Remove from the 'open' array
-						detailRows.splice(idx, 1);
-					} else {
-						tr.addClass('details');
-						row.child(format(row.data())).show();
-						// Add to the 'open' array
-						if (idx === -1) {
-							detailRows.push(tr.attr('id'));
-						}
-					}
-				});
-			};
-
-			return {
-				//main function to initiate the module
-				init: function() {
-					initTable1();
-				}
-			};
-		}();
-
-		jQuery(document).ready(function() {
-			KTDatatablesBasicBasic.init();
+                $('#export_pdf').on('click', function(e) {
+                    e.preventDefault();
+                    table1.button(4).trigger();
+                });
 
 
-		});
+            };
 
+            return {
+                //main function to initiate the module
+                init: function() {
+                    initTable1();
+                }
+            };
+        }();
 
-		/******/
-	})();
-	//# sourceMappingURL=basic.js.map
+        jQuery(document).ready(function() {
+            KTDatatablesBasicBasic.init();
+        });
+
+        /******/
+    })();
+    //# sourceMappingURL=basic.js.map
 </script>
 @endsection
