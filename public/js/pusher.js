@@ -2090,13 +2090,17 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  */
 
 
+
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
   key: "e1c692ef7f00d5a24edc",
   cluster: "ap2",
   forceTLS: true
-});
+}); // window.EchoLibrary = new EchoLibrary({
+//     broadcaster: 'pusher',
+//     key: process.env.MIX_PUSHER_APP_KEY,
+// });
 
 /***/ }),
 
@@ -2109,12 +2113,64 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 var sos_message = document.getElementById('sos_message');
-window.Echo.channel('sos').listen('.message', function (e) {
+var event_message = document.getElementById('event_message'); // var window_echo = window.Echo;
+
+window.Echo.channel('sos').listen('.event_created', function (e) {
   console.log(e);
-  sos_message.innerHTML += '<h3> SOS: ' + e.title + ' </h3> \
+  event_message.innerHTML += '<h3> SOS: ' + e.title + ' </h3> \
                               <p>' + e.message + '</p>\
                               <p>By: ' + e.user_name + ' (' + e.user_type + ')</p>';
-});
+}).listen('.sos_created', function (ev) {
+  console.log(ev);
+  sos_message.innerHTML += '<h3> SOS: ' + ev.title + ' </h3> \
+                              <p>' + ev.message + '</p>\
+                              <p>By: ' + ev.user_name + ' (' + ev.user_type + ')</p>';
+}); // window.Echo.channel('event')
+// .listen('.message', (e) => {
+//   console.log(e);
+//   event_message.innerHTML += '<h3> EVENT: '+e.title+' </h3> \
+//                               <p>'+e.message+'</p>\
+//                               <p>By: '+e.user_name+' ('+ e.user_type +')</p>';
+// });
+// const sos_channel = window.Echo.channel('sos')
+// sos_channel.listen('.event_created_message', e => {
+//   console.log(e);
+//   event_message.innerHTML += '<h3> SOS: '+e.title+' </h3> \
+//                           <p>'+e.message+'</p>\
+//                           <p>By: '+e.user_name+' ('+ e.user_type +')</p>';
+// });
+// window.Echo.channel('sos').listen('.message', e => {
+//       console.log(e);
+//   sos_message.innerHTML += '<h3> SOS: '+e.title+' </h3> \
+//                               <p>'+e.message+'</p>\
+//                               <p>By: '+e.user_name+' ('+ e.user_type +')</p>';
+// });
+// const eventsTolisten = [
+//   '.sos_created_message',
+//   '.event_create_message',
+// ]
+// eventsTolisten.forEach(event => {
+//   sos_channel.listen(event, e => {
+//     (socket_body = {
+//       name: event,
+//       data: e.data
+//     }) => {
+//       event_message.innerHTML += '<h3> EVENT: '+e.title+' </h3> \
+//                                    <p>'+e.message+'</p>\
+//                                    <p>By: '+e.user_name+' ('+ e.user_type +')</p>';
+//     }
+//   })
+// })
+// handleSocketEvents(socket_body=null)
+// {
+//   if(socket_body != null)
+//   {
+//     console.log(e);
+//     event_message.innerHTML += '<h3> EVENT: '+e.title+' </h3> \
+//                               <p>'+e.message+'</p>\
+//                               <p>By: '+e.user_name+' ('+ e.user_type +')</p>';
+//   }
+// }
 
 /***/ }),
 

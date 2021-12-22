@@ -30,6 +30,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  */
 
 import Echo from 'laravel-echo';
+import EchoLibrary from 'laravel-echo';
 
 window.Pusher = require('pusher-js');
 
@@ -39,3 +40,9 @@ window.Echo = new Echo({
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
     forceTLS: true
 });
+
+
+// window.EchoLibrary = new EchoLibrary({
+//     broadcaster: 'pusher',
+//     key: process.env.MIX_PUSHER_APP_KEY,
+// });

@@ -13,6 +13,19 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
+Broadcast::channel('App.Modules.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
+});
+
+Broadcast::channel('sos', function() {
+    return true;
+});
+
+// Broadcast::channel('event', function() {
+//     return true;
+// });
+
+
+Broadcast::channel('booking', function() {
+    return true;
 });
