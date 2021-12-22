@@ -18,36 +18,32 @@ class Sos extends Model
 
     protected $casts = [
         'created_by_id' => 'integer',
-        'booking_id'=>'integer',
-        'location'=>'array'
+        'booking_id' => 'integer',
+        'location' => 'array'
     ];
 
     protected $fillable = ([
-        'created_by_id', 'created_by_type', 'booking_id', 'location','status','action_taken', 'message','title',
-        'created_at', 'updated_at' ,'deleted_at'
+        'created_by_id', 'created_by_type', 'booking_id', 'location', 'status', 'action_taken', 'message', 'title',
+        'created_at', 'updated_at', 'deleted_at'
     ]);
 
 
-    protected $appends = [
-        
-    ];
+    protected $appends = [];
 
 
     /**
      * Gets the user model of the creator of the sos!
      */
-    // public function creator_user(){
-    //     return $this->belongsTo(User::class,'created_by_id');
+    // public function creator()
+    // {
+    //     return $this->belongsTo(User::class, 'created_by_id');
     // }
 
     /**
      * Gets the booking model of the sos!
      */
-    public function booking(){
+    public function booking()
+    {
         return $this->belongsTo(Booking::class);
     }
-
-
-
-
 }

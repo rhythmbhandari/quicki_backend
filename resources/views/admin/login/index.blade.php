@@ -23,7 +23,7 @@
             <!--begin::Login Sign in form-->
             <div class="login-signin">
                 <div class="mb-20">
-                    <h3 class="opacity-40 font-weight-normal">Sign In To Self Drive Admin Panel</h3>
+                    <h3 class="opacity-40 font-weight-normal">Sign In To Puryaideu Admin Panel</h3>
                     <p class="opacity-40">Enter your details to login to your account:</p>
                 </div>
                 <form class="form" id="kt_login_signin_form" action="{{ route('admin.login') }}" method="post">

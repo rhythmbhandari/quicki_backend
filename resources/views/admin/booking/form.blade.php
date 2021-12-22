@@ -295,7 +295,6 @@ $status = ['pending', 'accepted', 'running', 'completed', 'cancelled'];
         'origin_longitude': null,
         'distance': null,
         'duration': null
-
     }
 
     $('.custom-validation').parsley();
@@ -319,7 +318,7 @@ $status = ['pending', 'accepted', 'running', 'completed', 'cancelled'];
         //hide form fields according to status
 
         $("#booking_status").change(function(){
-            
+
             switch($("#booking_status option").filter(":selected").val()) {
                 case 'pending':
                     $('#rider_select, #start_time, #end_time').hide()
