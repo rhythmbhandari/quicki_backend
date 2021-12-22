@@ -5,25 +5,23 @@ namespace App\Http\Controllers\Admin\Sos;
 use App\Http\Controllers\Controller;
 use App\Modules\Models\Booking;
 use App\Modules\Models\Sos;
-// use App\Modules\Models\SosEvent;
+use App\Modules\Models\User;
+use App\Modules\Models\Rider;
+use App\Modules\Models\Event;
 use App\Modules\Services\Sos\SosService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Modules\Services\Notification\NotificationService;
 
 class SosController extends Controller
 {
-    protected $sos;
-    function __construct(SosService $sos)
-    {
+    protected $sos, $notification_service;
+    function __construct(
+        SosService $sos,
+        NotificationService $notification_service
+    ) {
         $this->sos = $sos;
-
-        $this->middleware('permission:sos-view|sos-add|sos-edit|sos-delete', ['only' => ['index', 'show']]);
-
-        $this->middleware('permission:sos-add', ['only' => ['create', 'store']]);
-
-        $this->middleware('permission:sos-edit', ['only' => ['edit', 'update']]);
-
-        $this->middleware('permission:sos-delete', ['only' => ['destroy']]);
+        $this->notification_service = $notification_service;
     }
     /**
      * Display a listing of the resource.
@@ -63,48 +61,77 @@ class SosController extends Controller
         return view('admin.sos.edit', compact('sos'));
     }
 
-    // public function eventcreate($id)
-    // {
-    //     $sos = SOS::with('booking')->find($id);
-    //     $events = SosEvent::where('sos_id', $id)->get();
-    //     return view('admin.sos.detail', compact('sos', 'events'));
-    // }
+    public function eventcreate($id)
+    {
+        $sos = SOS::with('booking')->find($id);
+
+        if ($sos->created_by_type == 'rider')
+            $sos_creator = Rider::find($sos->created_by_id)->user;
+        else
+            $sos_creator = User::find($sos->created_by_id);
+
+        $sos->user = $sos_creator;
+
+        $events = Event::where('sos_id', $id)->get();
+
+        foreach ($events as $event) {
+            if ($event->created_by_type == 'rider')
+                $event_creator = Rider::find($event->created_by_id);
+            else
+                $event_creator = User::find($event->created_by_id);
+
+            $event->user = $event_creator;
+        }
+
+
+        return view('admin.sos.detail', compact('sos', 'events'));
+    }
 
     public function store()
     {
     }
 
-    // public function eventstore(Request $request, $id, FirebaseNotificationService $sendNotification)
-    // {
+    public function eventstore(Request $request, $id)
+    {
+        // dd($request->all(), $id);
+        $this->validate($request, [
+            'message' => 'required|string|max:255',
+            'status' => 'required|string',
+        ]);
+        $sos = SOS::find($id);
+        if (request('status') == 'closed') {
+            $sos->status = 'closed';
+            $sos->save();
+        }
 
-    //     $this->validate($request, [
-    //         'action_taken' => 'required|string|max:255',
-    //         'sos_status' => 'required|string',
-    //     ]);
-    //     $sos = SOS::with('customer')->find($id);
-    //     if (request('sos_status') == 'resolved') {
-    //         $sos->status = 'resolved';
-    //         $sos->save();
-    //     }
+        $sosevent = new Event();
+        $sosevent->message = request('message');
+        $sosevent->sos_id = $id;
+        $sosevent->created_by_id = Auth::user()->id;
+        $sosevent->created_by_type = 'admin';
+        $sosevent->save();
 
-    //     $sosevent = new SosEvent();
-    //     $sosevent->status = request('sos_status');
-    //     $sosevent->action_taken = request('action_taken');
-    //     $sosevent->sos_id = $id;
-    //     $sosevent->user_id = Auth::user()->id;
-    //     $sosevent->save();
+        //SEND PUSH NOTIFICATION HERE
+        //Send Notification
+        $response = $this->notification_service->send_firebase_notification(
+            [
+                [$sos->created_by_type, $sos->created_by_id],
+            ],
+            "sos_event",
+            "individual",
+            [
+                'title' => 'Sos Event : ' . $sos->title,
+                'body' => $request->message
+            ]
 
-    //     $response = $sendNotification->send([
-    //         "title" => "SOS Action Taken",
-    //         "body" => request('action_taken')
-    //     ], [$sos->booking->customer->device_token],  [
-    //         'type' => 'sos_action'
-    //     ]);
+        );
 
-    //     if (str_contains($response, '"success":1')) {
-    //         return redirect()->route('admin.sos.index')->with("status", "Action notification Sent");
-    //     } else {
-    //         return redirect()->route('admin.sos.index')->with("error", "Error while sending action notification");
-    //     }
-    // }
+        // dd($response);
+
+        if ($response) {
+            return redirect()->route('admin.sos-detail.create', $sos->id)->with("status", "Action notification Sent");
+        } else {
+            return redirect()->route('admin.sos-detail.create', $sos->id)->with("error", "Error while sending action notification");
+        }
+    }
 }

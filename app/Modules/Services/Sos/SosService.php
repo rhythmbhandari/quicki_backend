@@ -36,8 +36,11 @@ class SosService extends Service
                     return Rider::find($sos->created_by_id)->user->name;
                 }
             })
+            ->editColumn('title', function (Sos $sos) {
+                return $sos->title;
+            })
             ->editColumn('booking', function (Sos $sos) {
-                return "<a href='" . route('admin.booking.show', $sos->booking_id) . "' target='_blank'>" . $sos->booking->origin . " to " . $sos->booking->destination . "</a>";
+                return "<span>" . $sos->booking->origin . " to " . $sos->booking->destination . "</span>";
             })
             ->editColumn('created_at', function (Sos $sos) {
                 return prettyDate($sos->created_at);
@@ -48,11 +51,10 @@ class SosService extends Service
             ->editColumn('actions', function (Sos $sos) {
                 $editRoute = route('admin.sos-detail.create', $sos->id);
                 $deleteRoute = '';
-                // $deleteRoute = route('admin.vendor.destroy',$sos->id);
                 $optionRoute = '';
                 $optionRouteText = '';
                 return getTableHtml($sos, 'actions', $editRoute, $deleteRoute, $optionRoute, $optionRouteText);
-            })->rawColumns(['visibility', 'booking', 'status', 'created_by', 'actions'])
+            })->rawColumns(['booking', 'title', 'status', 'sos_by', 'actions'])
             ->make(true);
     }
 
