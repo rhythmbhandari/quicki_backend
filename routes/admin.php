@@ -66,4 +66,9 @@ Route::group([
     $router->get('booking_data', [BookingController::class, 'getAllData'])->name('booking.data');
     $router->get('estimated_price', [BookingController::class, 'estimatedPriceAjax'])->name('booking.price');
     // $router->get('vehicle_type_ajax', [VehicleTypeController::class, 'vehicleTypeAjax'])->name('vehicle_type.ajax');
+
+    //SOS
+    $router->resource('/sos', SosController::class);
+    $router->get('sos_data', [SosController::class, 'getAllData'])->name('sos.data');
+    // $router->get('vehicle_type_ajax', [VehicleTypeController::class, 'vehicleTypeAjax'])->name('vehicle_type.ajax');
 });
