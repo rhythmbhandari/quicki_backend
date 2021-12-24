@@ -23,7 +23,8 @@ class VehicleSeeder extends Seeder
                 'vehicle_number' => 'Ba 11 pa 1111',
                 'make_year' => 2021,
                 'vehicle_color' => 'black',
-                'status' => 'active'
+                'status' => 'active',
+                'capacity' => 1
             )
         );
     }

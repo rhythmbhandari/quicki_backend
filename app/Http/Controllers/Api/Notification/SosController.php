@@ -177,6 +177,7 @@ class SosController extends Controller
     *   summary="Create Rider's Sos",
     *   security={{"bearerAuth":{}}},
     *
+    *
     *   @OA\RequestBody(
     *      @OA\MediaType(
     *          mediaType="application/json",

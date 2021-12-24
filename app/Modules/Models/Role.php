@@ -8,6 +8,9 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Spatie\Permission\Traits\HasPermissions;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Modules\Models\User;
+use App\Modules\Models\Permissions;
+
 
 class Role extends Model
 {

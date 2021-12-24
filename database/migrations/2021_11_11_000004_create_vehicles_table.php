@@ -31,14 +31,15 @@ class CreateVehiclesTable extends Migration
             $table->string('image')->nullable();
             $table->string('make_year')->nullable();
             $table->string('vehicle_color')->nullable();
+            $table->integer('capacity')->defaul(2)->comment('Rider Exclusive!');
             $table->string('brand')->nullable();
             $table->string('model')->nullable();
             $table->enum('status',['active', 'in_active'])->nullable();
 
             
             $table->softDeletes();
-            $table->timestamp('last_deleted_by')->nullable();
-            $table->timestamp('last_updated_by')->nullable();
+            // $table->timestamp('last_deleted_by')->nullable();
+            // $table->timestamp('last_updated_by')->nullable();
             $table->timestamps();
         });
     }

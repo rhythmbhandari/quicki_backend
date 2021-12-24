@@ -19,12 +19,14 @@ class CreateShiftsTable extends Migration
             $table->string('title');
             
             // $table->double('rate')->nullable();
-            $table->integer('time_from')->nullable();
-            $table->integer('time_to')->nullable();
+            $table->integer('time_from');
+            $table->integer('time_to');
 
-            $table->foreignId('vehicle_type_id')->nullable()->constrained("vehicle_types")->cascadeOnUpdate()->cascadeOnDelete();
+            $table->double('rate');
+
+            $table->foreignId('vehicle_type_id')->constrained("vehicle_types")->cascadeOnUpdate()->cascadeOnDelete();
             
-            $table->enum('status',['active', 'in_active'])->nullable();
+            $table->enum('status',['active', 'in_active']);
 
             $table->timestamps();
         });

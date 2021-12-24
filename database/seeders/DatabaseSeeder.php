@@ -25,7 +25,8 @@ class DatabaseSeeder extends Seeder
             SuggestionSeeder::class,
             PermissionSeeder::class,
             RoleHasPermissionSeeder::class,
-            VehicleSeeder::class
+            VehicleSeeder::class,
+            ShiftSeeder::class,
         ]);
     }
 }
