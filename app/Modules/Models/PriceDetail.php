@@ -33,6 +33,7 @@ class PriceDetail extends Model
         'app_charge' =>'float' , 
         'price_after_app_charge' =>'float' , 
         'price_per_min' =>'float' , 
+        'price_per_min_after_base' =>'float' , 
         'duration_charge' =>'float' ,
         'price_after_duration' =>'float' , 
         'price_after_base_fare' =>'float' , 
@@ -43,7 +44,7 @@ class PriceDetail extends Model
                         'minimum_charge', 'price_per_km','price_after_distance', 'shift_surge','density_surge',
                         'surge_rate','price_per_km_after_surge',  'surge', 'price_after_surge', 'app_charge_percent',
                         'app_charge', 'price_after_app_charge', 'price_per_min', 'duration_charge',
-                        'price_after_duration', 'price_after_base_fare', 'total_price',
+                        'price_after_duration', 'price_after_base_fare', 'total_price','price_per_min_after_base',
                         'deleted_at', 'updated_at','deleted_at'];
 
 
