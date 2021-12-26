@@ -158,7 +158,7 @@
                 @if($events != null)
                 @foreach($events as $event)
                 @if ($event->created_by_type == "admin")
-                <div class="d-flex flex-wrap justify-content-end mb-10">
+                <div class="d-flex flex-wrap justify-content-end mb-4">
                     <div class="msg_cotainer_send">
                         {{-- <span class="respondant">Respondant Name</span> --}}
                         {{$event->message}}
@@ -171,14 +171,14 @@
                     <div class="msg_info mt-2">{{$event->created_at. ' by '. $event->user->name}}</div>
                 </div>
                 @else
-                <div class="d-flex flex-wrap justify-content-end mb-10">
+                <div class="d-flex flex-wrap justify-content-start mb-4">
+                    <div class="img_cont_msg">
+                        <img src="{{asset($event->user->thumbnail_path)}}" class="rounded-circle user_img_msg">
+                    </div>
                     <div class="msg_cotainer">
                         {{-- <span class="initiator">Initiator Name</span> --}}
                         {{$event->message}}
                         {{-- <span class="msg_time_send">8:55 AM, Today</span> --}}
-                    </div>
-                    <div class="img_cont_msg">
-                        <img src="{{asset($event->user->thumbnail_path)}}" class="rounded-circle user_img_msg">
                     </div>
                     <div style="flex-basis: 100%; height: 0"></div>
                     <div class="msg_info mt-2">{{$event->created_at. ' by '. $event->user->name}}</div>
@@ -277,4 +277,13 @@
         </div>
         <!--end::Form-->
     </div>
+    @endsection
+
+
+
+    @section('page-specific-scripts')
+    <script>
+        SOS_ID = " {{  isset($sos) ? $sos->id : "" }} ";
+
+    </script>
     @endsection
