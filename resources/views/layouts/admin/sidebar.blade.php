@@ -86,7 +86,7 @@
                     str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
                     aria-haspopup="true">
                     <a href="" class="menu-link menu-toggle">
-                        <i class="menu-icon fas fa-user-tag"></i>
+                        <i class="menu-icon fas fa-car"></i>
                         <span class="menu-text">Vehicle Management</span><i class="menu-arrow"></i>
                     </a>
                     <div class="menu-submenu">
@@ -127,7 +127,7 @@
                     str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
                     aria-haspopup="true">
                     <a href="" class="menu-link menu-toggle">
-                        <i class="menu-icon fas fa-user-tag"></i>
+                        <i class="menu-icon fas fa-users"></i>
                         <span class="menu-text">User Management</span><i class="menu-arrow"></i>
                     </a>
                     <div class="menu-submenu">
@@ -163,11 +163,11 @@
                 </li>
 
                 <li class="menu-item menu-item-submenu {{ request()->is('admin/booking') || request()->is('admin/booking/*')
-                    ? " menu-item-active menu-item-open" : "" }}" {{-- {{
+                    ? " menu-item-active menu-item-open" : "" }}" {{-- {{c
                     str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
                     aria-haspopup="true">
                     <a href="{{route('admin.booking.index')}}" class="menu-link menu-toggle">
-                        <i class="menu-icon fas fa-user-tag"></i>
+                        <i class="menu-icon fas fa-handshake"></i>
                         <span class="menu-text">Booking List</span><i class=""></i>
                     </a>
                 </li>
@@ -177,7 +177,7 @@
                     str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
                     aria-haspopup="true">
                     <a href="{{route('admin.sos.index')}}" class="menu-link menu-toggle">
-                        <i class="menu-icon fas fa-user-tag"></i>
+                        <i class="menu-icon fas fa-volume-up"></i>
                         <span class="menu-text">SOS</span><i class=""></i>
                     </a>
                 </li>

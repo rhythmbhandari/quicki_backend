@@ -5,6 +5,9 @@
 <!--end::Global Config-->
 <script>
     // "global" vars for icons
+    //initializing sos_id
+    var SOS_ID = null;
+
     const ICONS = {
         primary: '{{asset('images/primary.svg')}}',
         garage_request: '{{asset('images/garage_request.svg')}}',
@@ -20,6 +23,11 @@
 
 {!! Toastr::render() !!}
 @yield('page-specific-scripts')
+<!-- toastr and notification -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{asset('/js/sos_events_listener.js')}}"></script>
+
+<!-- custom scripts -->
 <script src="{{asset('assets/admin/js/my-script.js')}}"></script>
 
 {{-- <script>
