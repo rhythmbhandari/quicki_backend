@@ -219,6 +219,10 @@ function getTableHtml($object, $type, $editRoute = null, $deleteRoute = null, $s
     }
 }
 
+/**
+ * Reformat oject->document['license', 'bluebook', 'inurance'] to object->license, 
+ * object->bluebook,object->insurance if document present.
+ */
 function getDocuments($object)
 {
     $documents = $object['documents'];

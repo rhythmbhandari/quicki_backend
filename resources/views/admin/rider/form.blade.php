@@ -244,7 +244,7 @@
 
                         <input type="number" class="form-control @error('experience') is-invalid @enderror"
                             placeholder="Enter Experience" name="experience"
-                            value="@if(isset($user)){{$rider['experience']}}@else{{old('experience')}}@endif" />
+                            value="@if(isset($ruder['experience'])){{$rider['experience']}}@else{{old('experience')}}@endif" />
                         @error('experience')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -330,7 +330,7 @@
                             @enderror
                         </div>
 
-                        @if(isset($rider) && isset($rider['license']))
+                        @if(isset($rider['license']))
                         <div class="card card-custom gutter-b">
                             <div class="card-header">
                                 <div class="card-title">
@@ -359,7 +359,7 @@
                         <input type="number" data-parsley-type="digits"
                             class="form-control @error('license_number') is-invalid @enderror"
                             placeholder="License number" name="license_number"
-                            value="@if(isset($rider)){{$rider['license']['document_number']}}@else{{old('license_number')}}@endif"
+                            value="@if(isset($rider['license'])){{$rider['license']['document_number']}}@else{{old('license_number')}}@endif"
                             required />
                         @error('license_number')
                         <span class="invalid-feedback" role="alert">
@@ -512,7 +512,7 @@
                         <div class="custom-file">
                             <input type="file" class="custom-file-input @error('bluebook_image') is-invalid @enderror"
                                 name="bluebook_image" id="bluebook"
-                                value="@if(isset($vehicle) && $vehicle['bluebook']){{$vehicle['bluebook']['thumbnail_path']}}@else {{old('bluebook_image')}} @endif">
+                                value="@if(isset($vehicle['bluebook'])){{$vehicle['bluebook']['thumbnail_path']}}@else {{old('bluebook_image')}} @endif">
                             <label class="custom-file-label" for="bluebook">Choose image</label>
                             @error('bluebook_image')
                             <span class="invalid-feedback" role="alert">
@@ -615,7 +615,7 @@
                             </span>
                             @enderror
                         </div>
-                        @if(isset($vehicle) && isset($vehicle['insurance']))
+                        @if(isset($vehicle['insurance']))
                         <div class="card card-custom gutter-b">
                             <div class="card-header">
                                 <div class="card-title">

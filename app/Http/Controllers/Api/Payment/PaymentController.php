@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Payment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-    
+
 //models
 use App\Modules\Models\User;
 use App\Modules\Models\Rider;
@@ -32,16 +32,9 @@ class PaymentController extends Controller
         $this->transaction_service = $transaction_service;
     }
 
-    
+
 
     public function store(Request $request)
     {
-
     }
-
-
-    
-
-
-
 }

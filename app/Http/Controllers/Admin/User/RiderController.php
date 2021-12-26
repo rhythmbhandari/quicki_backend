@@ -60,8 +60,8 @@ class RiderController extends Controller
         $rider = getDocuments($rider);
         // $rider->document = $rider->documents[0];
         $vehicle = $rider['vehicle'];
-        $vehicle = getDocuments($vehicle);
-        // $vehicle->document = $vehicle->documents[0];
+
+        $vehicle = getDocuments($vehicle);        // $vehicle->document = $vehicle->documents[0];
 
         return view('admin.rider.edit', compact('user', 'rider', 'vehicle'));
     }
@@ -69,7 +69,6 @@ class RiderController extends Controller
 
     function riderAjax(Request $request)
     {
-
         $query = Rider::with(['user' => function ($q) {
             $q->select('id', 'first_name', 'last_name');
         }])->simplePaginate(10);
