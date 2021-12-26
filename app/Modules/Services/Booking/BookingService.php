@@ -534,11 +534,6 @@ class BookingService extends Service
             $density_surge = 0;
         }
 
-      
-
-       
-
-            
        
         //DEDUCTING SHIFT SURGE
        // $currentTime = Carbon::now();
@@ -569,26 +564,18 @@ class BookingService extends Service
            
 
         if ($shift_surge || $density_surge) {
-            // $surge_rate = VehicleType::find($vehicle_type_id)->surge_rate;
-            // $surge_rate = ($surge_rate > 0) ? $surge_rate : 1;
             $surge_rate =  ($density_surge > $shift_surge ) ? $density_surge : $shift_surge ;
         }
-   
 
-       
-
-
-        //$shift_rate = isset($shift->rate)?$shift->rate:1;
-
-        $surge_info = [
-            'nearbyPendingBookings' => $nearbyPendingBookings,
-            'threshold_pending_booking' => $threshold_pending_booking,
-            'permissable_density' => $permissable_density,
-            'current_density' => $current_density,
-            'density_surge' => $density_surge,
-            'shift_surge' => $shift_surge,
-            'surge_rate' => $surge_rate
-        ];
+        // $surge_info = [
+        //     'nearbyPendingBookings' => $nearbyPendingBookings,
+        //     'threshold_pending_booking' => $threshold_pending_booking,
+        //     'permissable_density' => $permissable_density,
+        //     'current_density' => $current_density,
+        //     'density_surge' => $density_surge,
+        //     'shift_surge' => $shift_surge,
+        //     'surge_rate' => $surge_rate
+        // ];
         // dd($surge_info);
 
 
@@ -652,7 +639,7 @@ class BookingService extends Service
 
         $estimated_price['price_breakdown']['total_price'] = ceil($estimated_price['price_breakdown']['total_price']);
 
-        dd($estimated_price);
+        // dd($estimated_price);
 
         return $estimated_price;
     }
