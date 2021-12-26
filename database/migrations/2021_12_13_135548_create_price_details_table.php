@@ -34,6 +34,7 @@ class CreatePriceDetailsTable extends Migration
             $table->double('app_charge')->nullable();
             $table->double('price_after_app_charge')->nullable();
             $table->double('price_per_min')->nullable();
+            $table->double('price_per_min_after_base')->nullable();
             $table->double('duration_charge')->nullable();
             $table->double('price_after_duration')->nullable();
             $table->double('price_after_base_fare')->nullable();

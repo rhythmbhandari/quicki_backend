@@ -538,12 +538,16 @@ class BookingService extends Service
         //DEDUCTING SHIFT SURGE
        // $currentTime = Carbon::now();
        $booking_time = Carbon::now();
+       $old_duration = null;
 
         if($booking_id)
         {
-            $booking = Booking::select('created_at')->where('id',$booking_id)->first();
+            $booking = Booking::select('created_at','duration')->where('id',$booking_id)->first();
             if($booking)
+            {
                 $booking_time = $booking->created_at;
+                $old_duration = $booking->duration;
+            }
         } 
 
         // $shift = 
@@ -620,14 +624,29 @@ class BookingService extends Service
         //PRICE AFTER DURATION CHARGE
         if( $vehicle_type->base_covers_duration == 'yes')
         {
-            $estimated_price['price_breakdown']['price_per_min'] = 0;
-            $estimated_price['price_breakdown']['duration_charge'] = 0;
-            $estimated_price['price_breakdown']['price_after_duration']  =  $estimated_price['price_breakdown']['price_after_app_charge'];
+            if(!$old_duration)
+            {
+                $estimated_price['price_breakdown']['price_per_min'] = 0;
+                $estimated_price['price_breakdown'] ['price_per_min_after_base'] = $vehicle_type->price_per_min;
+                $estimated_price['price_breakdown']['duration_charge'] = 0;
+                $estimated_price['price_breakdown']['price_after_duration']  =  $estimated_price['price_breakdown']['price_after_app_charge'];
+            }
+            else if( $duration > $old_duration ){
+                $estimated_price['price_breakdown'] ['price_per_min_after_base'] = $vehicle_type->price_per_min;
+                $estimated_price['price_breakdown']['duration_charge'] =  ( $duration - $old_duration )  * $duration / 60 ;
+                $estimated_price['price_breakdown']['price_after_duration']  =  $estimated_price['price_breakdown']['price_after_app_charge'] + $estimated_price['price_breakdown']['duration_charge'];
+            } else {
+
+            }
+
+         
         }
         else{
             $estimated_price['price_breakdown']['price_per_min'] = $vehicle_type->price_per_min;
+            $estimated_price['price_breakdown'] ['price_per_min_after_base'] = $vehicle_type->price_per_min;
             $estimated_price['price_breakdown']['duration_charge'] = ($vehicle_type->price_per_min * $duration / 60);
             $estimated_price['price_breakdown']['price_after_duration']  =  $estimated_price['price_breakdown']['price_after_app_charge'] + $estimated_price['price_breakdown']['duration_charge'];
+            
         }
         
         $estimated_price['price_breakdown']['price_after_base_fare'] =
@@ -644,18 +663,27 @@ class BookingService extends Service
         return $estimated_price;
     }
 
-    public function calculate_final_price($vehicle_type_id, $old_estimated_price, $old_duration, $new_duration = 600)  //minimum 10 minutes duration in seconds
+    public function calculate_final_price($vehicle_type_id, $old_estimated_price, $old_duration, $new_duration = 60)  //minimum 10 minutes duration in seconds
     {
         try {
             $price_per_min = VehicleType::find($vehicle_type_id)->price_per_min;
 
-            //Remove the old duration's price from the total price
-            $old_duration_charge = $price_per_min * $old_duration / 60;
-            $new_total_price = $old_estimated_price - $old_duration_charge;
+            $duration_to_be_charged = 0;
 
-            //Add new duration price to new total price
-            $new_duration_charge = $price_per_min * $new_duration / 60;
-            $new_total_price = $new_total_price + $new_duration_charge;
+            if($new_duration > $old_duration){
+                $duration_to_be_charged = $new_duration - $old_duration;
+            }
+
+            $duration_charge = ($price_per_min * $duration_to_be_charged / 60 ) ;
+            $new_total_price = $old_estimated_price +  $duration_charge;
+
+            //Remove the old duration's price from the total price
+            // $old_duration_charge = $price_per_min * $old_duration / 60;
+            // $new_total_price = $old_estimated_price - $old_duration_charge;
+
+            // //Add new duration price to new total price
+            // $new_duration_charge = $price_per_min * $new_duration / 60;
+            // $new_total_price = $new_total_price + $new_duration_charge;
 
             return round($new_total_price);
         } catch (Throwable $e) {
