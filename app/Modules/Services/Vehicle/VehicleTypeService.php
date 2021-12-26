@@ -69,7 +69,27 @@ class VehicleTypeService extends Service
         try {
 
             $data['status'] = (isset($data['status']) ?  $data['status'] : '') == 'on' ? 'active' : 'in_active';
-            $data['surge_rate'] = isset($data['surge_rate']) ?  (1 + ($data['surge_rate'] / 100) * 1) : 0;
+            // $data['default_surge_rate'] = isset($data['default_surge_rate']) ?  (1 + ($data['default_surge_rate'] / 100) * 1) : 0;
+
+            $data['price_km'] = isset($data['price_km']) ?  intval($data['price_km']) : 10;
+            $data['price_min'] = isset($data['price_min']) ?  intval($data['price_min']) : 1;
+            $data['base_fare'] = isset($data['base_fare']) ?  intval($data['base_fare']) : 1;
+            $data['commission'] = isset($data['commission']) ?  intval($data['commission']) : 1;
+            $data['capacity'] = isset($data['capacity']) ?  intval($data['capacity']) : 1;
+            $data['default_surge_rate'] = isset($data['default_surge_rate']) ?  floatval($data['default_surge_rate']) : 1;
+            $data['base_covered_km'] = isset($data['base_covered_km']) ?  intval($data['base_covered_km']) : 0;
+            $data['min_charge'] = isset($data['min_charge']) ?  intval($data['min_charge']) : 1;
+            $data['min_surge_customers'] = isset($data['min_surge_customers']) ?  intval($data['min_surge_customers']) : 1;
+            
+
+            
+            $data['price_km'] = isset($data['price_km']) ?  intval($data['price_km']) : 1;
+
+            // if (isset($data['surge_rates']) && count($data['surge_rates']) > 0) {
+            //     for ($i = 0; $i < count($data['surge_rates']); $i++) {
+            //         $data['surge_rates'][$i] = floatval($data['surge_rates'][$i]);
+            //     }
+            // }
 
             //CREATE VEHICLE
             $createdVehicleType =  $this->vehicle_type->create($data);
@@ -86,7 +106,7 @@ class VehicleTypeService extends Service
     {
         try {
             $data['status'] = (isset($data['status']) ?  $data['status'] : '') == 'on' ? 'active' : 'in_active';
-            $data['surge_rate'] = isset($data['surge_rate']) ?  (1 + ($data['surge_rate'] / 100) * 1) : 0;
+            $data['default_surge_rate'] = isset($data['default_surge_rate']) ?  (1 + ($data['default_surge_rate'] / 100) * 1) : 0;
 
             $vehicleType = VehicleType::findOrFail($vehicleTypeId);
             $vehicleType->update($data);

@@ -281,4 +281,9 @@ class BookingController extends Controller
 
         return $this->booking->active_rider_booking($user->rider->id);
     }
+
+
+    
+
+
 }

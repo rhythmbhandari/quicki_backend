@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\Suggestion\SuggestionController;
 use App\Http\Controllers\Api\Notification\NotificationController;
 use App\Http\Controllers\Api\Notification\SosController;
 use App\Http\Controllers\Api\Notification\EventController;
+use App\Http\Controllers\Api\Payment\PaymentController;
 
 
 /*
@@ -110,6 +111,15 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->post('/review/create', [ReviewController::class, 'store'])->name('review.store');
   $router->get('/user/{user_id}/reviews', [ReviewController::class, 'getUserReviews'])->name('review.user.reviews');
   $router->get('/rider/{rider_id}/reviews', [ReviewController::class, 'getRiderReviews'])->name('review.rider.reviews');
+
+
+  //---------------------------------------------------------------------------------------------------------
+  //  PAYMENT AND TRANSACTION
+  //---------------------------------------------------------------------------------------------------------
+  $router->post('/payment/{payment_id}/offline_ride_payment', [PaymentController::class, 'offline_ride_payment'])->name('payment.offline_ride_payment');
+
+
+
 
   //---------------------------------------------------------------------------------------------------------
   //  USER ROUTES

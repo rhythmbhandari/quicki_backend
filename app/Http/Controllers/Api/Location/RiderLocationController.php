@@ -226,7 +226,7 @@ class RiderLocationController extends Controller
     * @OA\Post(
     *   path="/api/riders/available",
     *   tags={"AVAILABLE AND ONLINE/OFFLINE RIDERS/USERS"},
-    *   summary="Available Riders [IN PROGRESS!]",
+    *   summary="Available Riders ",
     *   security={{"bearerAuth":{}}},
     *
     *   @OA\RequestBody(
@@ -409,55 +409,75 @@ class RiderLocationController extends Controller
     *      ),
     *)
     **/
-    function getAvailableUsers()
+    function getAvailableUsers($rider_id=null)
     {   
        
         $user = Auth::user();
-        //ROLE CHECK FOR RIDER
-        if( ! $this->user_service->hasRole($user, 'rider') )
+        $rider_location = null;
+
+        if(!$rider_id)
         {
-            $response = ['message' => 'Forbidden Access!'];
-            return response($response, 403);
+            //ROLE CHECK FOR RIDER
+            if( ! $this->user_service->hasRole($user, 'rider') )
+            {
+                $response = ['message' => 'Forbidden Access!'];
+                return response($response, 403);
+            }
+
+            $rider_id =  $user->rider->id;
+
+            //Check if the rider is online or not
+            $rider_location = RiderLocation::where('rider_id',$rider_id)->first();
+            if(!$rider_location || $rider_location->status != 'active'){
+                $response = ['message' => 'You need to get online to view active user bookings!'];
+                return response($response, 400);
+            }
+
         }
+// dd()
+        $nearby_pending_bookings = $this->rider_location->getNearbyAvailableUsers(
+            $rider_location->latitude, $rider_location->longitude,$rider_location->rider->vehicle->vehicle_type_id 
+        );
 
-
-
-        //Check if the rider is online or not
-        $rider_location = RiderLocation::where('rider_id',$user->rider->id)->first();
-        if(!$rider_location || $rider_location->status != 'active'){
-            $response = ['message' => 'You need to get online to view active user bookings!'];
-            return response($response, 400);
-        }
-        $vehicle_type_id = $rider_location->rider->vehicle->vehicle_type_id;
-
-        /***********FOR NOW TEMPORARYY CODE */
-        $available_users = Booking::where('status','pending')->where('vehicle_type_id',$vehicle_type_id)->with('location')->get();
-
-        $response = ['message' => 'Success!',  "available_users"=>$available_users];
+        $response = ['message' => 'Success!',  "available_users"=>$nearby_pending_bookings];
         return response($response, 200);
+        
+        return response("Internal Server Error!", 500);
+
+      
+        // $vehicle_type_id = $rider_location->rider->vehicle->vehicle_type_id;
+
+        // /***********FOR NOW TEMPORARYY CODE */
+        // $available_users = Booking::where('status','pending')->where('vehicle_type_id',$vehicle_type_id)->with('location')->get();
+
+        // $response = ['message' => 'Success!',  "available_users"=>$available_users];
+        // return response($response, 200);
+
+        // $nearby_pending_bookings = [];
+        // $this->rider_location->getNearbyAvailableUsers($request->origin_latitude,$request->origin_longitude);
 
 
         dd("END");
 
         dd('assa');
 
-        $available_riders = [];
+        // $available_riders = [];
       
-        if(isset($request->vehicle_type_id))
-        {  
-            $available_riders = 
-            $this->rider_location->getNearbyAvailableRiders($request->origin_latitude,$request->origin_longitude,$request->vehicle_type_id);
-        }
-        else{
-            $available_riders = 
-            $this->rider_location->getNearbyAvailableRiders($request->origin_latitude,$request->origin_longitude);
-        }
+        // if(isset($request->vehicle_type_id))
+        // {  
+        //     $available_riders = 
+        //     $this->rider_location->getNearbyAvailableRiders($request->origin_latitude,$request->origin_longitude,$request->vehicle_type_id);
+        // }
+        // else{
+        //     $available_riders = 
+        //     $this->rider_location->getNearbyAvailableRiders($request->origin_latitude,$request->origin_longitude);
+        // }
 
       
-        $response = ['message' => 'Success!',  "available_riders"=>$available_riders];
-        return response($response, 200);
+        // $response = ['message' => 'Success!',  "available_riders"=>$available_riders];
+        // return response($response, 200);
 
-        return response("Internal Server Error!", 500);
+      
     }
 
 
