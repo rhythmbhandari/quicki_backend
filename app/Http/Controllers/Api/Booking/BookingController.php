@@ -395,25 +395,47 @@ class BookingController extends Controller
        $booking = Booking::find($request->booking_id);
        if($booking)
        {
-           if($request->new_status == 'accepted')
-           {
+            if($request->new_status == 'accepted')
+            {
                 if($booking->status != 'pending')
                 {
                     $response = ['message' => 'The booking is no longer available!'];
                     return response($response, 400);
                 }
-           }
+            }
 
-           if( $request->new_status == "running")
+            if( $request->new_status == "running")
             {
-                $response = ['message' => 'The booking is not accepted yet!'];
-                return response($response, 400);
+                if($booking->status != 'accepted')
+                {
+                    $response = ['message' => 'The booking is not accepted yet!'];
+                    return response($response, 400);
+                }
+                if($request['optional_data']['rider_id'] != $booking->rider_id)
+                {
+                    $response = ['message' => 'The rider for the booking did not match!'];
+                    return response($response, 400);
+                }
+            }
+
+            if( $request->new_status == "completed")
+            {
+                if($booking->status != 'running')
+                {
+                    $response = ['message' => 'The booking has not been started yet!'];
+                    return response($response, 400);
+                }
+                if($request['optional_data']['rider_id'] != $booking->rider_id)
+                {
+                    $response = ['message' => 'The rider for the booking did not match!'];
+                    return response($response, 400);
+                }
             }
 
            if($booking->status == "completed" || $booking->status == "cancelled")
            {
-            $response = ['message' => 'No active booking found!'];
-            return response($response, 404);
+                $response = ['message' => 'No active booking found!'];
+                return response($response, 404);
            }
        }
      
