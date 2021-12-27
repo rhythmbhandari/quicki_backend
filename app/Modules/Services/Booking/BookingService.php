@@ -141,6 +141,9 @@ class BookingService extends Service
             $data['user_id'] = intval($data['user_id']);
             $data['rider_id'] = isset($data['rider_id']) ? intval($data['rider_id']) : null;
 
+            $existing_codes = Booking::pluck('trip_id')->toArray();
+            $data['trip_id'] = generateBokkingCode($existing_codes);
+            // dd($data['trip_id'], $existing_codes);
             // dd("booking data", $data);
 
 
@@ -314,22 +317,24 @@ class BookingService extends Service
                     //RECALCULATE THE BOOKING PRICE WITH UPDATED DURATION
                     $new_duration = $this->getTimeDiffInSeconds($booking->start_time, $booking->end_time);
                     $completed_trip_data['duration'] = $new_duration;
+                    $price_detail_data = $this->calculateEstimatedPrice(
+                        $booking->location->latitude_origin, $booking->location->longitude_origin, 
+                        $booking->vehicle_type_id, $booking->distance,  $new_duration, $booking->id
+                    );  
                     $final_price = 0;
-                    $final_price = $this->calculate_final_price(
-                        $booking->vehicle_type_id,
-                        $booking->price,
-                        $booking->duration,
-                        $new_duration
-                    );
+                    // $final_price = $this->calculate_final_price(
+                    //     $booking->vehicle_type_id,
+                    //     $booking->price,
+                    //     $booking->duration,
+                    //     $new_duration
+                    // );
+                    // dd($price_detail_data);
+                    $final_price = $price_detail_data['price_breakdown']['total_price'];
                     $completed_trip_data['price'] = $final_price;
 
                     $booking->createdCompletedTrip = $this->completed_trip_service->create($completed_trip_data);
                     
                     //CREAT PRICE DETAIL
-                    $price_detail_data = $this->calculateEstimatedPrice(
-                        $booking->location->latitude_origin, $booking->location->longitude_origin, 
-                        $booking->vehicle_type_id, $booking->distance,  $new_duration
-                    );  
                     $price_detail_data = $price_detail_data['price_breakdown'];
                     $price_detail_data['completed_trip_id'] =   $booking->createdCompletedTrip->id;
                     $this->price_detail_service->create($price_detail_data);
@@ -624,24 +629,23 @@ class BookingService extends Service
         //PRICE AFTER DURATION CHARGE
         if( $vehicle_type->base_covers_duration == 'yes')
         {
-            if(!$old_duration)
-            {
+            if( isset($old_duration) && $duration > $old_duration ){
+                $estimated_price['price_breakdown']['price_per_min'] = 0;
+                $estimated_price['price_breakdown'] ['price_per_min_after_base'] = $vehicle_type->price_per_min;
+                $estimated_price['price_breakdown']['duration_charge'] =  ( $duration - $old_duration )  * $duration / 60 ;
+                $estimated_price['price_breakdown']['price_after_duration']  =  $estimated_price['price_breakdown']['price_after_app_charge'] + $estimated_price['price_breakdown']['duration_charge'];
+            } else {
                 $estimated_price['price_breakdown']['price_per_min'] = 0;
                 $estimated_price['price_breakdown'] ['price_per_min_after_base'] = $vehicle_type->price_per_min;
                 $estimated_price['price_breakdown']['duration_charge'] = 0;
                 $estimated_price['price_breakdown']['price_after_duration']  =  $estimated_price['price_breakdown']['price_after_app_charge'];
             }
-            else if( $duration > $old_duration ){
-                $estimated_price['price_breakdown'] ['price_per_min_after_base'] = $vehicle_type->price_per_min;
-                $estimated_price['price_breakdown']['duration_charge'] =  ( $duration - $old_duration )  * $duration / 60 ;
-                $estimated_price['price_breakdown']['price_after_duration']  =  $estimated_price['price_breakdown']['price_after_app_charge'] + $estimated_price['price_breakdown']['duration_charge'];
-            } else {
-
-            }
 
          
         }
         else{
+
+
             $estimated_price['price_breakdown']['price_per_min'] = $vehicle_type->price_per_min;
             $estimated_price['price_breakdown'] ['price_per_min_after_base'] = $vehicle_type->price_per_min;
             $estimated_price['price_breakdown']['duration_charge'] = ($vehicle_type->price_per_min * $duration / 60);
