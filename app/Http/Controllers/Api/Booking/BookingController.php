@@ -108,10 +108,10 @@ class BookingController extends Controller
     *                           "id": 2,
     *                           "location_id": 2,
     *                           "location": {
-    *                               "latitude_origin": 85.123423,
-    *                               "longitude_origin": 27.123456,
-    *                               "latitude_destination": 86.12313,
-    *                               "longitude_destination": 27.234325,
+    *                               "latitude_origin": 27.687012,
+    *                               "longitude_origin": 85.304359,
+    *                               "latitude_destination": 27.234325,
+    *                               "longitude_destination": 86.12313,
     *                               "updated_at": "2021-12-27T05:40:03.000000Z",
     *                               "created_at": "2021-12-27T05:40:03.000000Z",
     *                               "id": 2
