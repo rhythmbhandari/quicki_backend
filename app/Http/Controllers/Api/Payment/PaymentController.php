@@ -159,7 +159,7 @@ class PaymentController extends Controller
     * @OA\Get(
     *   path="/api/payment/{payment_id}",
     *   tags={"Payment"},
-    *   summary="Create Rider's Sos",
+    *   summary="Get payment from payment id",
     *   security={{"bearerAuth":{}}},
     *
     *      @OA\Parameter(
@@ -221,6 +221,95 @@ class PaymentController extends Controller
     public function getPayment($paymentId)
     {
         $payment = Payment::where('id',$paymentId)->with('transactions')->first();
+        if(!$payment)
+        {
+            $response = ['message' => 'Payment not found!'];
+            return response($response, 404);
+        }
+        $response = ['message' => 'Success!', 'payment'=>$payment];
+            return response($response, 200);
+    }
+
+
+      /**
+    * @OA\Get(
+    *   path="/api/booking/{booking_id}/payment",
+    *   tags={"Payment"},
+    *   summary="Get Payment from booking id",
+    *   security={{"bearerAuth":{}}},
+    *
+    *      @OA\Parameter(
+    *         name="payment_id",
+    *         in="path",
+    *         description="Payment Id",
+    *         required=true,
+    *      ),
+    *
+    *
+    *      @OA\Response(
+    *        response=201,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                   @OA\Schema(      
+    *                   example={
+    *                       "message": "Sos created successfully!",
+    *                       "sos": {
+    *                           "title": "Help!",
+    *                           "message": "The customer is a wanted criminal!",
+    *                           "booking_id": 1,
+    *                           "location": {
+    *                               "name": "Sanepa, Lalitpur",
+    *                               "latitude": 27.1234,
+    *                               "longitude": 85.3434
+    *                           },
+    *                           "created_by_id": 1,
+    *                           "created_by_type": "rider",
+    *                           "updated_at": "2021-12-21T05:55:18.000000Z",
+    *                           "created_at": "2021-12-21T05:55:18.000000Z",
+    *                           "id": 1
+    *                       }
+    *                   }
+    *                 )
+    *           )
+    *      ),
+    *
+    *      @OA\Response(
+    *          response=422,
+    *          description="Validation Fail",
+    *             @OA\MediaType(
+    *           mediaType="application/json",
+    *      )
+    *      ),
+    *      @OA\Response(
+    *          response=403,
+    *          description="Forbidden Access",
+    *      ),
+    *      @OA\Response(
+    *          response=500,
+    *          description="Internal Server Error",
+    *             @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+    *      ),
+    *)
+    **/
+    public function getPaymentFromBooking($bookingId)
+    {
+        $booking = Booking::find($bookingId);
+        if(!$booking)
+        {
+            $response = ['message' => 'Booking not found!'];
+            return response($response, 404);
+        }
+        if($booking->status != 'completed')
+        {
+            $response = ['message' => 'Booking has not been completed!'];
+            return response($response, 400);
+        }
+
+        $payment = $booking->completed_trip->payment;
+
         if(!$payment)
         {
             $response = ['message' => 'Payment not found!'];
