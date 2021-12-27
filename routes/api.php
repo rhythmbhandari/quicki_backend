@@ -117,7 +117,7 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   //  PAYMENT AND TRANSACTION
   //---------------------------------------------------------------------------------------------------------
   $router->post('/payment/{payment_id}/offline_ride_payment', [PaymentController::class, 'offline_ride_payment'])->name('payment.offline_ride_payment');
-
+  $router->get('/payment/{payment_id}', [PaymentController::class, 'getPayment'])->name('payment.get_payment');
 
 
 

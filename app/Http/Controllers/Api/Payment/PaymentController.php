@@ -49,6 +49,115 @@ class PaymentController extends Controller
     /**
     * @OA\Post(
     *   path="/api/payment/{payment_id}/offline_ride_payment",
+    *   tags={"Payment"},
+    *   summary="Booking Offine Payment",
+    *   security={{"bearerAuth":{}}},
+    *
+    *      @OA\Parameter(
+    *         name="payment_id",
+    *         in="path",
+    *         description="Payment Id",
+    *         required=true,
+    *      ),
+    *
+    *
+    *      @OA\Response(
+    *        response=201,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                   @OA\Schema(      
+    *                   example={
+    *                       "message": "Payment Updated Successflly!",
+    *                       "sos": {
+    *                           "title": "Help!",
+    *                           "message": "The customer is a wanted criminal!",
+    *                           "booking_id": 1,
+    *                           "location": {
+    *                               "name": "Sanepa, Lalitpur",
+    *                               "latitude": 27.1234,
+    *                               "longitude": 85.3434
+    *                           },
+    *                           "created_by_id": 1,
+    *                           "created_by_type": "rider",
+    *                           "updated_at": "2021-12-21T05:55:18.000000Z",
+    *                           "created_at": "2021-12-21T05:55:18.000000Z",
+    *                           "id": 1
+    *                       }
+    *                   }
+    *                 )
+    *           )
+    *      ),
+    *
+    *      @OA\Response(
+    *          response=422,
+    *          description="Validation Fail",
+    *             @OA\MediaType(
+    *           mediaType="application/json",
+    *      )
+    *      ),
+    *      @OA\Response(
+    *          response=400,
+    *          description="The ride has already been paid!",
+    *      ),
+    *      @OA\Response(
+    *          response=500,
+    *          description="Internal Server Error",
+    *             @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+    *      ),
+    *)
+    **/
+    public function offline_ride_payment($paymentId)
+    {
+        $payment = Payment::find($paymentId);
+        if(!$payment)
+        {
+            $response = ['message' => 'Payment not found!'];
+            return response($response, 404);
+        }
+
+        if($payment->customer_payment_status == "paid")
+        {
+            $response = ['message' => 'The ride has already been paid!', 'payment'=>$payment];
+            return response($response, 400);
+        }
+
+        if( !$payment->completed_trip->rider_id )
+        {
+            $response = ['message' => 'Debtor not found for the transaction!', 'payment'=>$payment];
+            return response($response, 400);
+        }
+
+
+        return DB::transaction(function () use ($paymentId)
+        {
+            
+            $updatedPayment = $this->payment->offline_ride_payment($paymentId);
+
+            if($updatedPayment)
+            {
+                $payment = Payment::where('id',$paymentId)-with('transactions')->first();
+                $response = ['message' => 'Payment Updated Successflly!', "payment"=>$payment];
+                return response($response, 200);
+            }
+
+            return response("Internal Server Error!", 500);
+        });
+
+
+
+
+    }
+
+
+
+
+
+    /**
+    * @OA\Get(
+    *   path="/api/payment/{payment_id}",
     *   tags={"Notification and Sos"},
     *   summary="Create Rider's Sos",
     *   security={{"bearerAuth":{}}},
@@ -109,33 +218,17 @@ class PaymentController extends Controller
     *      ),
     *)
     **/
-    public function offline_ride_payment($paymentId)
+    public function getPayment($paymentId)
     {
-        $payment = Payment::find($paymentId);
+        $payment = Payment::where('id',$paymentId)->with('transactions')->first();
         if(!$payment)
         {
             $response = ['message' => 'Payment not found!'];
             return response($response, 404);
         }
-        return DB::transaction(function () use ($paymentId)
-        {
-            
-            $updatedPayment = $this->payment->offline_ride_payment($paymentId);
-
-            if($updatedPayment)
-            {
-                $response = ['message' => 'Payment Updated Successflly!', "payment"=>Payment::find($paymentId)];
-                return response($response, 200);
-            }
-
-            return response("Internal Server Error!", 500);
-        });
-
-
-
-
+        $response = ['message' => 'Success!', 'payment'=>$payment];
+            return response($response, 200);
     }
-
 
 
 }

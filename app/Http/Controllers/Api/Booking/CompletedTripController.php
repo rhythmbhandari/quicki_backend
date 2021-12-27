@@ -76,6 +76,12 @@ class CompletedTripController extends Controller
     *                                   "passenger_number": 1,
     *                                   "profile_img_user": null,
     *                                   "profile_img_rider": null,
+    *                                    "booking": {
+    *                                     "id": 3,
+    *                                     "status": "cancelled",
+    *                                     "trip_id": "#86UQ7F1",
+    *                                     "status_text": "Cancelled"
+    *                                   },
     *                                   "status": "completed",
     *                                   "price": 159,
     *                                   "payment_type": "CASH",
@@ -239,8 +245,10 @@ class CompletedTripController extends Controller
         $completed_trips = CompletedTrip::where('user_id',$user->id)
         ->with('location')
         ->with('payment')
+        ->with('booking:id,status,trip_id')
         ->with('rider.user:id,first_name,last_name,image')
         ->with('price_detail')
+        ->with('booking.review')
         ->orderByDesc('created_at')->paginate(5);
 
         $response = ['message' => 'Success!',  "completed_trips"=>$completed_trips];
@@ -277,6 +285,12 @@ class CompletedTripController extends Controller
     *                               "end_time": "2021-12-23 13:45:35",
     *                               "origin": "Sanepa, Lalitpur",
     *                               "destination": "New Baneshwor, Kathmandu",
+    *                                "booking": {
+    *                                     "id": 3,
+    *                                     "status": "cancelled",
+    *                                     "trip_id": "#86UQ7F1",
+    *                                     "status_text": "Cancelled"
+    *                                   },
     *                               "stoppage": {
     *                                 {
     *                                   "name": "Sanepa, Lalitpur",
@@ -499,6 +513,8 @@ class CompletedTripController extends Controller
         ->with('user:id,first_name,last_name,image')
         ->with('price_detail')
         ->with('payment')
+        ->with('booking:id,status,trip_id')
+        ->with('booking.review')
         ->orderByDesc('created_at')
         ->paginate(5);
 
@@ -551,6 +567,12 @@ class CompletedTripController extends Controller
     *                               "start_time": "2021-12-23 13:52:00",
     *                               "end_time": "2021-12-23 13:52:06",
     *                               "origin": "Sanepa, Lalitpur",
+    *                                "booking": {
+    *                                     "id": 3,
+    *                                     "status": "cancelled",
+    *                                     "trip_id": "#86UQ7F1",
+    *                                     "status_text": "Cancelled"
+    *                                   },
     *                               "destination": "New Baneshwor, Kathmandu",
     *                               "stoppage": {
     *                                 {
@@ -718,6 +740,7 @@ class CompletedTripController extends Controller
                                         ->where('status',$booking_status)
                                         ->whereRelation('booking','vehicle_type_id',$vehicle_type_id)
                                         ->with('payment')
+                                        ->with('booking.review')
                                         ->orderByDesc('created_at')
                                         ->with('location')->with('rider')->paginate(5);
 
@@ -768,6 +791,12 @@ class CompletedTripController extends Controller
     *                                   "start_time": "2021-12-23 13:45:28",
     *                                   "end_time": "2021-12-23 13:45:35",
     *                                   "origin": "Sanepa, Lalitpur",
+    *                                    "booking": {
+    *                                     "id": 3,
+    *                                     "status": "cancelled",
+    *                                     "trip_id": "#86UQ7F1",
+    *                                     "status_text": "Cancelled"
+    *                                   },
     *                                   "destination": "New Baneshwor, Kathmandu",
     *                                   "stoppage": {
     *                                     {
@@ -1038,6 +1067,8 @@ class CompletedTripController extends Controller
         $completed_trips = CompletedTrip::where('rider_id',$user->rider->id)
                                         ->where('status',$booking_status)
                                         ->whereRelation('booking','vehicle_type_id',$vehicle_type_id)
+                                        ->with('booking:id,status,trip_id')
+                                        ->with('booking.review')
                                         ->with('payment')
                                         ->orderByDesc('created_at')
                                         ->with('location')->with('rider')->paginate(5);

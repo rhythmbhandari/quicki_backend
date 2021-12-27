@@ -10,6 +10,8 @@ use Illuminate\Support\Carbon;
 //models
 use App\Modules\Models\Payment;
 use App\Modules\Models\Transaction;
+use App\Modules\Models\Rider;
+use App\Modules\Models\PaymentTransaction;
 
 //services
 
@@ -61,6 +63,9 @@ class PaymentService extends Service
 
         try{
             $completed_trip = $payment->completed_trip;
+
+            $debtor_id = isset($completed_trip->rider_id) ? Rider::select('user_id')->where('id',$completed_trip->rider_id)->first()->user_id : $completed_trip->rider_id;
+
             //Create transaction table
             $createdTransaction = $this->transaction_service->create([
                 'amount'=>$completed_trip->price,
@@ -68,7 +73,7 @@ class PaymentService extends Service
                 'creditor_type'=>'customer',
                 'creditor_id'=>$completed_trip->user_id,
                 'debtor_type'=>'rider',
-                'debtor_id'=>$completed_trip->rider_id,
+                'debtor_id'=>$debtor_id,
                 'payment_mode'=>'offline'
             ]);
 
@@ -76,6 +81,11 @@ class PaymentService extends Service
             //Update payment table
             if($createdTransaction)
             {
+                // PaymentTransaction::create([
+                //     'payment_id'=>$paymentId,
+                //     'transaction_id'=>$createdTransaction->id
+                // ]);
+                $payment->transactions()->attach($createdTransaction->id);
                 $payment->payment_status = 'paid';
                 $payment->save();
                 return true;

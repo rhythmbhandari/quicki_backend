@@ -44,7 +44,8 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-            'status' => 'active'
+            'status' => 'active',
+            'device_token'=>'fAoy8lrNQ1KRB14rcbULyX:APA91bEM1WWaHwC0W1Xdlqh3mnk_jxMp6Bvm0X9cXfkJE1PJp1XpzuJUHbQRXT0mVttlVN3dqPLI4HaYqrnIRtHwzbGUk48OD_1Nk6cIQ-5mKYfSS8Xby9g7re6fzhS5BFyqmyzdWAht'
         ]);
 
         User::create([

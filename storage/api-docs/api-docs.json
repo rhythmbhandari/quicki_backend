@@ -938,8 +938,8 @@
                                             "passenger_number": 2,
                                             "vehicle_type_id": 1,
                                             "distance": 12,
-                                            "duration": 20,
                                             "price": 160,
+                                            "duration": 20,
                                             "stoppage": [
                                                 {
                                                     "name": "Sanepa, Lalitpur",
@@ -952,21 +952,24 @@
                                                     "longitude": 87.1234
                                                 }
                                             ],
-                                            "user_id": 3,
+                                            "user_id": 2,
                                             "status": "pending",
-                                            "updated_at": "2021-11-21T07:42:14.000000Z",
-                                            "created_at": "2021-11-21T07:42:14.000000Z",
-                                            "id": 1,
-                                            "location_id": 1,
+                                            "rider_id": null,
+                                            "trip_id": "#Q78A8LU",
+                                            "updated_at": "2021-12-27T05:40:03.000000Z",
+                                            "created_at": "2021-12-27T05:40:03.000000Z",
+                                            "id": 2,
+                                            "location_id": 2,
                                             "location": {
-                                                "latitude_origin": 27.123456,
-                                                "longitude_origin": 85.123423,
-                                                "latitude_destination": 27.234325,
-                                                "longitude_destination": 86.12313,
-                                                "updated_at": "2021-11-21T07:42:14.000000Z",
-                                                "created_at": "2021-11-21T07:42:14.000000Z",
-                                                "id": 1
-                                            }
+                                                "latitude_origin": 85.123423,
+                                                "longitude_origin": 27.123456,
+                                                "latitude_destination": 86.12313,
+                                                "longitude_destination": 27.234325,
+                                                "updated_at": "2021-12-27T05:40:03.000000Z",
+                                                "created_at": "2021-12-27T05:40:03.000000Z",
+                                                "id": 2
+                                            },
+                                            "status_text": "Pending"
                                         }
                                     }
                                 }
@@ -1054,6 +1057,7 @@
                                             "id": 3,
                                             "user_id": 2,
                                             "rider_id": 1,
+                                            "trip_id": "#Q78A8LU",
                                             "booking_id": 16,
                                             "location_id": 16,
                                             "start_time": "2021-12-23 14:21:58",
@@ -1212,6 +1216,7 @@
                                             "user_id": 3,
                                             "vehicle_type_id": 1,
                                             "rider_id": 1,
+                                            "trip_id": "#Q78A8LU",
                                             "location_id": 24,
                                             "start_time": "2021-12-14 14:24:25",
                                             "end_time": "2021-12-14 14:37:35",
@@ -1306,6 +1311,7 @@
                                             "user_id": 3,
                                             "vehicle_type_id": 1,
                                             "rider_id": 1,
+                                            "trip_id": "#Q78A8LU",
                                             "location_id": 24,
                                             "start_time": "2021-12-14 14:24:25",
                                             "end_time": "2021-12-14 14:37:35",
@@ -1392,6 +1398,7 @@
                                                 "origin": "Patan, Lalitpur",
                                                 "destination": "Kirtipur, Kathmandu",
                                                 "passenger_number": 2,
+                                                "trip_id": "#Q78A8LU",
                                                 "vehicle_type_id": 1,
                                                 "distance": 12,
                                                 "duration": 20,
@@ -1475,67 +1482,85 @@
                                             {
                                                 "vehicle_type_id": 1,
                                                 "vehicle_type_name": "bike",
-                                                "shift": 1,
+                                                "shift": "shift_surge",
                                                 "price_breakdown": {
-                                                    "minimum_charge": 150,
-                                                    "price_per_km": 15,
-                                                    "price_after_distance": 300,
-                                                    "shift_rate": 1,
-                                                    "density_surge": 0,
+                                                    "base_fare": 30,
+                                                    "base_covered_km": 2,
+                                                    "minimum_charge": 50,
+                                                    "price_per_km": 17,
+                                                    "charged_km": 0,
+                                                    "price_after_distance": 0,
                                                     "shift_surge": 0,
+                                                    "density_surge": 0,
+                                                    "surge_rate": 1,
+                                                    "price_per_km_after_surge": 17,
                                                     "surge": 0,
-                                                    "price_after_surge": 300,
+                                                    "price_after_surge": 0,
                                                     "app_charge_percent": 10,
-                                                    "app_charge": 30,
-                                                    "price_after_app_charge": 300,
-                                                    "price_per_min": 5,
-                                                    "duration_charge": 25,
-                                                    "price_after_duration": 325,
-                                                    "total_price": 325
+                                                    "app_charge": 0,
+                                                    "price_after_app_charge": 0,
+                                                    "price_per_min": 0,
+                                                    "price_per_min_after_base": 1,
+                                                    "duration_charge": 0,
+                                                    "price_after_duration": 0,
+                                                    "price_after_base_fare": 30,
+                                                    "total_price": 50
                                                 }
                                             },
                                             {
                                                 "vehicle_type_id": 2,
                                                 "vehicle_type_name": "car",
-                                                "shift": 1,
+                                                "shift": "shift_surge",
                                                 "price_breakdown": {
+                                                    "base_fare": 100,
+                                                    "base_covered_km": 2,
                                                     "minimum_charge": 150,
-                                                    "price_per_km": 40,
-                                                    "price_after_distance": 800,
-                                                    "shift_rate": 1,
+                                                    "price_per_km": 42,
+                                                    "charged_km": 0,
+                                                    "price_after_distance": 0,
+                                                    "shift_surge": 0,
                                                     "density_surge": 0,
-                                                    "shift_surge": 800,
+                                                    "surge_rate": 1,
+                                                    "price_per_km_after_surge": 42,
                                                     "surge": 0,
-                                                    "price_after_surge": 800,
+                                                    "price_after_surge": 0,
                                                     "app_charge_percent": 10,
-                                                    "app_charge": 80,
-                                                    "price_after_app_charge": 800,
-                                                    "price_per_min": 15,
-                                                    "duration_charge": 75,
-                                                    "price_after_duration": 875,
-                                                    "total_price": 875
+                                                    "app_charge": 0,
+                                                    "price_after_app_charge": 0,
+                                                    "price_per_min": 2,
+                                                    "price_per_min_after_base": 2,
+                                                    "duration_charge": 10,
+                                                    "price_after_duration": 10,
+                                                    "price_after_base_fare": 110,
+                                                    "total_price": 150
                                                 }
                                             },
                                             {
                                                 "vehicle_type_id": 3,
                                                 "vehicle_type_name": "city_safari",
-                                                "shift": 1,
+                                                "shift": "shift_surge",
                                                 "price_breakdown": {
-                                                    "minimum_charge": 150,
-                                                    "price_per_km": 25,
-                                                    "price_after_distance": 500,
-                                                    "shift_rate": 1,
+                                                    "base_fare": 10,
+                                                    "base_covered_km": 1,
+                                                    "minimum_charge": 20,
+                                                    "price_per_km": 10,
+                                                    "charged_km": 1,
+                                                    "price_after_distance": 10,
+                                                    "shift_surge": 0,
                                                     "density_surge": 0,
-                                                    "shift_surge": 500,
+                                                    "surge_rate": 1,
+                                                    "price_per_km_after_surge": 10,
                                                     "surge": 0,
-                                                    "price_after_surge": 500,
+                                                    "price_after_surge": 10,
                                                     "app_charge_percent": 10,
-                                                    "app_charge": 50,
-                                                    "price_after_app_charge": 500,
-                                                    "price_per_min": 10,
-                                                    "duration_charge": 50,
-                                                    "price_after_duration": 550,
-                                                    "total_price": 550
+                                                    "app_charge": 1,
+                                                    "price_after_app_charge": 11,
+                                                    "price_per_min": 2,
+                                                    "price_per_min_after_base": 2,
+                                                    "duration_charge": 10,
+                                                    "price_after_duration": 21,
+                                                    "price_after_base_fare": 31,
+                                                    "total_price": 31
                                                 }
                                             }
                                         ]
@@ -1609,6 +1634,12 @@
                                                     "passenger_number": 1,
                                                     "profile_img_user": null,
                                                     "profile_img_rider": null,
+                                                    "booking": {
+                                                        "id": 3,
+                                                        "status": "cancelled",
+                                                        "trip_id": "#86UQ7F1",
+                                                        "status_text": "Cancelled"
+                                                    },
                                                     "status": "completed",
                                                     "price": 159,
                                                     "payment_type": "CASH",
@@ -1789,6 +1820,12 @@
                                                     "end_time": "2021-12-23 13:45:35",
                                                     "origin": "Sanepa, Lalitpur",
                                                     "destination": "New Baneshwor, Kathmandu",
+                                                    "booking": {
+                                                        "id": 3,
+                                                        "status": "cancelled",
+                                                        "trip_id": "#86UQ7F1",
+                                                        "status_text": "Cancelled"
+                                                    },
                                                     "stoppage": [
                                                         {
                                                             "name": "Sanepa, Lalitpur",
@@ -2041,6 +2078,12 @@
                                                     "start_time": "2021-12-23 13:52:00",
                                                     "end_time": "2021-12-23 13:52:06",
                                                     "origin": "Sanepa, Lalitpur",
+                                                    "booking": {
+                                                        "id": 3,
+                                                        "status": "cancelled",
+                                                        "trip_id": "#86UQ7F1",
+                                                        "status_text": "Cancelled"
+                                                    },
                                                     "destination": "New Baneshwor, Kathmandu",
                                                     "stoppage": [
                                                         {
@@ -2224,6 +2267,12 @@
                                                     "start_time": "2021-12-23 13:45:28",
                                                     "end_time": "2021-12-23 13:45:35",
                                                     "origin": "Sanepa, Lalitpur",
+                                                    "booking": {
+                                                        "id": 3,
+                                                        "status": "cancelled",
+                                                        "trip_id": "#86UQ7F1",
+                                                        "status_text": "Cancelled"
+                                                    },
                                                     "destination": "New Baneshwor, Kathmandu",
                                                     "stoppage": [
                                                         {
@@ -3612,10 +3661,76 @@
         "/api/payment/{payment_id}/offline_ride_payment": {
             "post": {
                 "tags": [
+                    "Payment"
+                ],
+                "summary": "Booking Offine Payment",
+                "operationId": "8bfb0df7e295fab02d963f9ab196ebba",
+                "parameters": [
+                    {
+                        "name": "payment_id",
+                        "in": "path",
+                        "description": "Payment Id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Payment Updated Successflly!",
+                                        "sos": {
+                                            "title": "Help!",
+                                            "message": "The customer is a wanted criminal!",
+                                            "booking_id": 1,
+                                            "location": {
+                                                "name": "Sanepa, Lalitpur",
+                                                "latitude": 27.1234,
+                                                "longitude": 85.3434
+                                            },
+                                            "created_by_id": 1,
+                                            "created_by_type": "rider",
+                                            "updated_at": "2021-12-21T05:55:18.000000Z",
+                                            "created_at": "2021-12-21T05:55:18.000000Z",
+                                            "id": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "400": {
+                        "description": "The ride has already been paid!"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/payment/{payment_id}": {
+            "get": {
+                "tags": [
                     "Notification and Sos"
                 ],
                 "summary": "Create Rider's Sos",
-                "operationId": "8bfb0df7e295fab02d963f9ab196ebba",
+                "operationId": "1a7dc51cdd195ce9e8e40d324d207c92",
                 "parameters": [
                     {
                         "name": "payment_id",

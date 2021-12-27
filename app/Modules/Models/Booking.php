@@ -36,7 +36,7 @@ class Booking extends Model
     protected $fillable = [
         'origin', 'destination', 'distance', 'duration', 'price', 'passenger_number', //'name','phone_number',
         'user_id', 'status', 'rider_id', 'status', 'location_id', 'vehicle_type_id', 'stoppage',
-        'start_time', 'end_time',
+        'start_time', 'end_time','trip_id',
         'updated_at', 'created_at', 'deleted_at'
     ];
 
@@ -80,5 +80,10 @@ class Booking extends Model
     public function price_detail()
     {
         return $this->hasOne(PriceDetail::class);
+    }
+
+    public function review()
+    {
+        return $this->hasOne(Review::class);
     }
 }

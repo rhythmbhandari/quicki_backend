@@ -249,3 +249,45 @@ function getDocuments($object)
     }
     return $object;
 }
+
+
+
+/**
+* Generates a random string of specified length at the end of the product.
+*
+* @param  int  $length
+* @return String 
+*/
+function randomStringCodeGenerator($code, $length = 4) {
+    //$length = 6;
+    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $randomString = '';
+  
+    for ($i = 0; $i < $length; $i++) {
+        $index = rand(0, strlen($characters) - 1);
+        $randomString .= $characters[$index];
+    }
+    $generatedCode = $code.$randomString;
+    return $generatedCode;
+}
+
+function generateBokkingCode( $existing_codes=null) {
+    //$company_code = 'LIG';
+    //$company_code = config('app.company_code');
+    
+    $company_code = !empty(config('settings.site_code')) ? config('settings.site_code') : config('app.site_code') ;
+
+    //$generatedCode = $company_code. '-' .strtoupper('BK'.substr($brand_name,0,3));
+    $prefix = '#';
+   // $generatedCode =  '#'; //$company_code.'-BK-';
+    $generatedCode = randomStringCodeGenerator($prefix, 7);
+    if($existing_codes)
+    {
+        while(in_array($generatedCode, $existing_codes)){
+            $generatedCode = randomStringCodeGenerator($prefix, 7);
+        }
+    }
+   
+   
+    return $generatedCode;
+}
