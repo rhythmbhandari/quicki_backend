@@ -158,7 +158,7 @@ class PaymentController extends Controller
     /**
     * @OA\Get(
     *   path="/api/payment/{payment_id}",
-    *   tags={"Notification and Sos"},
+    *   tags={"Payment"},
     *   summary="Create Rider's Sos",
     *   security={{"bearerAuth":{}}},
     *

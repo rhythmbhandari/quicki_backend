@@ -1204,4 +1204,187 @@ class CompletedTripController extends Controller
 
 
 
+
+
+
+
+
+
+    
+ /**
+    * @OA\Get(
+    *   path="/api/completed_trip/{completed_trip_id}",
+    *   tags={"Booking"},
+    *   summary="Get Completed Trip from ID",
+    *   security={{"bearerAuth":{}}},
+    *
+    *      @OA\Parameter(
+    *         name="completed_trip_id",
+    *         in="path",
+    *         description="Completed Trip ID",
+    *         required=true,
+    *      ),
+    *
+    *      @OA\Response(
+    *        response=200,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example=
+    *                   {
+    *                     "message": "Success!",
+    *                     "completed_trip": {
+    *                       "id": 5,
+    *                       "user_id": 2,
+    *                       "rider_id": 1,
+    *                       "booking_id": 5,
+    *                       "location_id": 5,
+    *                       "start_time": "2021-12-27 13:48:48",
+    *                       "end_time": "2021-12-27 13:49:06",
+    *                       "origin": "Sanepa, Lalitpur",
+    *                       "destination": "New Baneshwor, Kathmandu",
+    *                       "stoppage": {
+    *                         {
+    *                           "name": "Sanepa, Lalitpur",
+    *                           "latitude": 27.1234,
+    *                           "longitude": 85.3434
+    *                         },
+    *                         {
+    *                           "name": "New Baneshwor, Kathmandu",
+    *                           "latitude": 28.3454,
+    *                           "longitude": 87.1234
+    *                         }
+    *                       },
+    *                       "distance": 12,
+    *                       "duration": 18,
+    *                       "passenger_number": 1,
+    *                       "profile_img_user": null,
+    *                       "profile_img_rider": null,
+    *                       "status": "completed",
+    *                       "price": 50,
+    *                       "payment_type": "CASH",
+    *                       "cancelled_by_type": null,
+    *                       "cancelled_by_id": null,
+    *                       "cancel_message": null,
+    *                       "deleted_at": null,
+    *                       "created_at": "2021-12-27T02:10:00.000000Z",
+    *                       "updated_at": "2021-12-27T02:19:06.000000Z",
+    *                       "location": {
+    *                         "id": 5,
+    *                         "longitude_origin": 85.304359,
+    *                         "latitude_origin": 27.687012,
+    *                         "longitude_destination": 27.234325,
+    *                         "latitude_destination": 86.12313,
+    *                         "deleted_at": null,
+    *                         "created_at": "2021-12-27T07:55:00.000000Z",
+    *                         "updated_at": "2021-12-27T07:55:00.000000Z"
+    *                       },
+    *                       "booking": {
+    *                         "id": 5,
+    *                         "trip_id": "#GK6655W",
+    *                         "stoppage": {
+    *                           {
+    *                             "name": "Sanepa, Lalitpur",
+    *                             "latitude": 27.1234,
+    *                             "longitude": 85.3434
+    *                           },
+    *                           {
+    *                             "name": "New Baneshwor, Kathmandu",
+    *                             "latitude": 28.3454,
+    *                             "longitude": 87.1234
+    *                           }
+    *                         },
+    *                         "user_id": 2,
+    *                         "vehicle_type_id": 1,
+    *                         "rider_id": 1,
+    *                         "location_id": 5,
+    *                         "start_time": "2021-12-27 13:48:48",
+    *                         "end_time": "2021-12-27 13:49:06",
+    *                         "origin": "Sanepa, Lalitpur",
+    *                         "destination": "New Baneshwor, Kathmandu",
+    *                         "distance": 12,
+    *                         "duration": 20,
+    *                         "passenger_number": 2,
+    *                         "status": "completed",
+    *                         "price": 160,
+    *                         "payment_type": "CASH",
+    *                         "deleted_at": null,
+    *                         "created_at": "2021-12-27T07:55:00.000000Z",
+    *                         "updated_at": "2021-12-27T08:04:06.000000Z",
+    *                         "status_text": "Completed",
+    *                         "review": null
+    *                       },
+    *                       "payment": {
+    *                         "id": 5,
+    *                         "completed_trip_id": 5,
+    *                         "commission_amount": 8,
+    *                         "payment_status": "unpaid",
+    *                         "commission_payment_status": "unpaid",
+    *                         "deleted_at": null,
+    *                         "created_at": "2021-12-27T08:04:06.000000Z",
+    *                         "updated_at": "2021-12-27T08:04:06.000000Z",
+    *                         "customer_payment_status": "unpaid"
+    *                       },
+    *                       "price_detail": {
+    *                         "id": 10,
+    *                         "booking_id": null,
+    *                         "completed_trip_id": 5,
+    *                         "base_fare": 30,
+    *                         "base_covered_km": 2,
+    *                         "minimum_charge": 50,
+    *                         "price_per_km": 17,
+    *                         "charged_km": null,
+    *                         "price_after_distance": 0,
+    *                         "shift_surge": 0,
+    *                         "density_surge": 0,
+    *                         "surge_rate": 1,
+    *                         "price_per_km_after_surge": 17,
+    *                         "surge": 0,
+    *                         "price_after_surge": 0,
+    *                         "app_charge_percent": 10,
+    *                         "app_charge": 0,
+    *                         "price_after_app_charge": 0,
+    *                         "price_per_min": 0,
+    *                         "price_per_min_after_base": 1,
+    *                         "duration_charge": 0,
+    *                         "price_after_duration": 0,
+    *                         "price_after_base_fare": 30,
+    *                         "total_price": 50,
+    *                         "deleted_at": null,
+    *                         "created_at": "2021-12-27T08:04:06.000000Z",
+    *                         "updated_at": "2021-12-27T08:04:06.000000Z"
+    *                       }
+    *                     }
+    *                   }
+    *                 )
+    *           )
+    *      ),
+    *   @OA\Response(
+    *      response=404,
+    *       description="Completed Trip Not Found!",
+    *   )
+    *)
+    **/
+    public function getCompletedTrip($completed_trip_id)
+    {
+        $completed_trip = 
+        CompletedTrip::where('id',$completed_trip_id)
+        ->with('location')
+        ->with('booking')
+        ->with('booking.review')
+        ->with('payment')
+        ->with('price_detail')
+        ->first();
+        if($completed_trip) {
+            $response = ['message' => 'Success!', 'completed_trip'=>$completed_trip];
+            return response($response, 200);
+        }
+        else{
+            $response = ['message' => 'Completed Trip Not Found!'];
+            return response($response, 404);
+        }
+    }
+
+
 }
