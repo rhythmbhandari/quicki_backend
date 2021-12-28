@@ -266,4 +266,30 @@ class RiderController extends Controller
         $data['image'] = $fileName;
         $this->document_service->updateImage($document->id, $data);
     }
+
+    function riderCommissionData()
+    {
+        return $this->rider->getCommissionData();
+    }
+
+    function riderCommission()
+    {
+        return view('admin.rider.commission');
+    }
+
+    function makePaymentModal($rider_id)
+    {
+        $rider = Rider::with('user')->find($rider_id);
+
+        $result = [];
+        $result['content'] = view('admin.rider.includes.make_payment', compact('rider'))->render();
+
+        return $result;
+    }
+
+    function clearCommission($rider_id)
+    {
+        $rider = Rider::with('user')->find($rider_id);
+        dd("hlw rider commission wil be cleared!");
+    }
 }

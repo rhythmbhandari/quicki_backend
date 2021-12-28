@@ -44,7 +44,12 @@
                 data-placement="top" data-original-title="Manage">names</button></a>
 @endif
 
-@if(!empty($switch))
-<button type="button" class="btn btn-primary switch_btn" style="width: 200px;" data-toggle="tooltip"
-        data-placement="top" data-original-title="Switch" data-url="{{$switch}}">Switch To Vendor</button>
+@if(!empty($makePayment))
+<button type="button" id="makePayment" class="btn btn-success" style="width: 200px;" data-toggle="tooltip"
+        data-placement="top" data-original-title="Switch">Make Payment</button>
+@endif
+
+@if(!empty($history))
+<button type="button" id="showHistory" class="btn btn-warning" style="width: 200px;" data-toggle="tooltip"
+        data-placement="top" data-original-title="Switch">Show History</button>
 @endif

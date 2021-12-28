@@ -9,6 +9,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 
 use App\Modules\Models\Vehicle;
 use App\Modules\Models\RiderLocation;
+use App\Modules\Models\CompletedTrip;
 use App\Modules\Models\User;
 use App\Modules\Models\Booking;
 use App\Modules\Models\Review;
@@ -57,7 +58,7 @@ class Rider extends Model
     //CompletedTrips involving the rider
     public function completed_trips()
     {
-        return $this->hasMany(CompletedTrips::class);
+        return $this->hasMany(CompletedTrip::class);
     }
 
     //Reviews involving the rider --> Returns both reviews made by and made for this rider

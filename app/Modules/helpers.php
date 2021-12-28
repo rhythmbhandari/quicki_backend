@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
+
 function test()
 {
     return 'helpers test!';
@@ -252,4 +254,23 @@ function getDocuments($object)
         }
     }
     return $object;
+}
+
+function getTotalCommissions($rider)
+{
+    $data = DB::table('payments')
+        ->select(DB::raw("SUM(commission_amount) as total_commissions"))
+        ->whereIn('completed_trip_id', $rider->completed_trips->pluck('id'))
+        ->first();
+    return $data->total_commissions ? $data->total_commissions : 0;
+}
+
+function getTotalPaid($user)
+{
+    $data = DB::table('transactions')
+        ->select(DB::raw("SUM(amount) as total_paid"))
+        ->where('creditor_id', $user->id)
+        ->first();
+
+    return $data->total_paid ? $data->total_paid : 0;
 }

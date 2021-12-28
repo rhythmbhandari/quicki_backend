@@ -148,6 +148,13 @@
                                         <span></span>
                                     </i><span class="menu-text">Rider list</span></a>
                             </li>
+                            <li class="menu-item {{request()->is('admin/rider_commission') || request()->is('admin/rider_commission/*')
+                                ? " menu-item-active" : "" }}" aria-haspopup="true">
+                                <a href="{{route('admin.rider.commission')}}" class="menu-link"><i
+                                        class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i><span class="menu-text">Rider Commissions</span></a>
+                            </li>
                             {{-- @endcan --}}
 
                             {{-- <li class="menu-item {{ request()->is('admin/permission') || request()->is('admin/permission/*')
@@ -179,6 +186,16 @@
                     <a href="{{route('admin.sos.index')}}" class="menu-link menu-toggle">
                         <i class="menu-icon fas fa-volume-up"></i>
                         <span class="menu-text">SOS</span><i class=""></i>
+                    </a>
+                </li>
+
+                <li class="menu-item menu-item-submenu {{ request()->is('admin/transaction') || request()->is('admin/transaction/*')
+                    ? " menu-item-active menu-item-open" : "" }}" {{-- {{
+                    str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
+                    aria-haspopup="true">
+                    <a href="{{route('admin.transaction.index')}}" class="menu-link menu-toggle">
+                        <i class="menu-icon fas fa-volume-up"></i>
+                        <span class="menu-text">Transaction</span><i class=""></i>
                     </a>
                 </li>
             </ul>
