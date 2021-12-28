@@ -138,7 +138,7 @@ class PaymentController extends Controller
 
             if($updatedPayment)
             {
-                $payment = Payment::where('id',$paymentId)-with('transactions')->first();
+                $payment = Payment::where('id',$paymentId)->with('transactions')->first();
                 $response = ['message' => 'Payment Updated Successflly!', "payment"=>$payment];
                 return response($response, 200);
             }

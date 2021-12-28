@@ -22,7 +22,7 @@ class CreateSosTable extends Migration
             $table->foreignId('created_by_id')->nullable();//->constrained("users")->cascadeOnUpdate()->nullOnDelete(); 
             $table->string('created_by_type')->comment('User roles like customer, rider, etc.');
             $table->json('location')->nullable()->comment('FORMAT: { "name":"Sanepa, Lalitpur", "latitude":"27.87652","longitude":"85.1234"}');
-            $table->enum('status',['active','closed']); 
+            $table->enum('status',['active','closed'])->default('active'); 
             $table->string('action_taken')->nullable();
 
             $table->softDeletes();

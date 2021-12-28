@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Modules\Models\PaymentTransaction;
 use App\Modules\Models\Transaction;
 use App\Modules\Models\CompletedTrip;
+use App\Modules\Models\PromotionVoucher;
 
 class Payment extends Model
 {
@@ -51,6 +52,12 @@ class Payment extends Model
 
     public function getCustomerPaymentStatusAttribute(){
         return ( $this->payment_status == "paid"  ||  $this->commission_payment_status == "paid" ) ? "paid" : "unpaid";
+    }
+
+
+    public function promotion_voucher()
+    {
+        return $this->belongsTo(PromotionVoucher::class);
     }
 
 

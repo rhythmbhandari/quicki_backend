@@ -914,10 +914,10 @@
                                         }
                                     ],
                                     "location": {
-                                        "latitude_origin": 85.123423,
-                                        "longitude_origin": 27.123456,
-                                        "latitude_destination": 86.12313,
-                                        "longitude_destination": 27.234325
+                                        "latitude_origin": 27.687012,
+                                        "longitude_origin": 85.304359,
+                                        "latitude_destination": 27.234325,
+                                        "longitude_destination": 86.12313
                                     }
                                 }
                             }
@@ -3890,8 +3890,74 @@
                 "tags": [
                     "Payment"
                 ],
-                "summary": "Create Rider's Sos",
+                "summary": "Get payment from payment id",
                 "operationId": "1a7dc51cdd195ce9e8e40d324d207c92",
+                "parameters": [
+                    {
+                        "name": "payment_id",
+                        "in": "path",
+                        "description": "Payment Id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Sos created successfully!",
+                                        "sos": {
+                                            "title": "Help!",
+                                            "message": "The customer is a wanted criminal!",
+                                            "booking_id": 1,
+                                            "location": {
+                                                "name": "Sanepa, Lalitpur",
+                                                "latitude": 27.1234,
+                                                "longitude": 85.3434
+                                            },
+                                            "created_by_id": 1,
+                                            "created_by_type": "rider",
+                                            "updated_at": "2021-12-21T05:55:18.000000Z",
+                                            "created_at": "2021-12-21T05:55:18.000000Z",
+                                            "id": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/booking/{booking_id}/payment": {
+            "get": {
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Get Payment from booking id",
+                "operationId": "748828353410e8a7d6ddde88b21ffdd9",
                 "parameters": [
                     {
                         "name": "payment_id",

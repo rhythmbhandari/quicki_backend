@@ -25,7 +25,7 @@ class CreateVehicleTypesTable extends Migration
 
             $table->double('default_surge_rate')->nullable()->comment('SURGE RATE applied either for shift surge!');
 
-            $table->json('surge_rates')->comment( 
+            $table->json('surge_rates')->nullable()->comment( 
                 'FORMAT: {  
                     1 => 1.2,  #here 1 is customer:rider where customer is always more than rider as a value of 0 would have meant otherwise
                     2 => 1.5,
