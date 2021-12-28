@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 //models
 use App\Modules\Models\Booking;
 use App\Modules\Models\CompletedTrip;
+use App\Modules\Models\PromotionVoucher;
 
 class PriceDetail extends Model
 {
@@ -48,7 +49,13 @@ class PriceDetail extends Model
                         'deleted_at', 'updated_at','deleted_at'];
 
 
-    protected $appends = [];
+    protected $appends = [
+        'original_price'
+    ];
+
+    public function getOriginalPriceAttribute(){
+        return ($this->total_price + $this->discount_amount);
+    }
 
     public function booking(){
         return $this->belongsTo(Booking::class);
@@ -58,6 +65,11 @@ class PriceDetail extends Model
         return $this->belongsTo(CompletedTrip::class);
     }
 
+
+    public function promotion_voucher()
+    {
+        return $this->belongsTo(PromotionVoucher::class);
+    }
 
 
 

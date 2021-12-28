@@ -20,6 +20,9 @@ class CreatePaymentsTable extends Migration
             $table->foreignId('completed_trip_id')->nullable()->constrained("completed_trips")->cascadeOnUpdate()->nullOnDelete(); 
             $table->double('commission_amount');
 
+            $table->foreignId('promotion_voucher_id')->nullable()->constrained("promotion_vouchers")->cascadeOnUpdate()->nullOnDelete();
+            $table->integer('discount_amount')->default(0);
+
             $table->enum('payment_status',['unpaid','paid'])->default('unpaid')->comment('Determines whether the rider got his share of income for this booking or not!');
             $table->enum('commission_payment_status',['unpaid','paid'])->default('unpaid')->comment('Determines whether the commission for this ride is paid to the admin on not!');
 

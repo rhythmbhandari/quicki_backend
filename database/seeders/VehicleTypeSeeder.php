@@ -85,5 +85,25 @@ class VehicleTypeSeeder extends Seeder
             ]
         ]);
 
+        VehicleType::create([
+            'name' => 'ambulance',
+            'capacity' => 6,
+            'status' => 'active',
+            'commission' => 0,
+            
+            'base_fare' => 0,
+            'base_covered_km' => 0,
+            'base_covers_duration' => 'no',
+            
+            'price_km' =>0,
+            'price_min' => 0,
+            'min_charge' => 0,
+
+            'default_surge_rate' => 0,
+            'min_surge_customers' => 50,
+            // 'surge_level' => 3,
+            'surge_rates' => null
+        ]);
+
     }
 }

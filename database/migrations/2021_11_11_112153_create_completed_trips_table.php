@@ -22,6 +22,8 @@ class CreateCompletedTripsTable extends Migration
             $table->foreignId('booking_id')->nullable()->constrained("bookings")->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('location_id')->nullable()->constrained("locations")->cascadeOnUpdate()->nullOnDelete();
 
+      
+
             $table->timestamp('start_time')->nullable();
             $table->timestamp('end_time')->nullable();
 

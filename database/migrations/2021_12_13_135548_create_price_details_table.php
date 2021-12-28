@@ -38,6 +38,9 @@ class CreatePriceDetailsTable extends Migration
             $table->double('duration_charge')->nullable();
             $table->double('price_after_duration')->nullable();
             $table->double('price_after_base_fare')->nullable();
+
+            $table->foreignId('promotion_voucher_id')->nullable()->constrained("promotion_vouchers")->cascadeOnUpdate()->nullOnDelete();
+            $table->integer('discount_amount')->default(0);
             
             $table->integer('total_price')->nullable();
 

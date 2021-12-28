@@ -61,10 +61,10 @@ class BookingController extends Controller
     *                       {"name":"New Baneshwor, Kathmandu", "latitude":28.3454,"longitude":87.1234},
     *                   },
     *                  "location":{
-    *                       "latitude_origin":85.123423,
-    *                       "longitude_origin":27.123456,
-    *                       "latitude_destination":86.12313,
-    *                       "longitude_destination":27.234325,
+    *                       "latitude_origin": 27.687012,
+    *                       "longitude_origin": 85.304359,
+    *                       "latitude_destination": 27.234325,
+    *                       "longitude_destination": 86.12313,
     *                   },
     *               }
     *         )
