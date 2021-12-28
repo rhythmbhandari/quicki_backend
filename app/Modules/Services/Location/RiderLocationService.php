@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Modules\Services\Service;
 
 use App\Modules\Models\RiderLocation;
+use App\Modules\Models\Booking;
 
 //services
 use App\Modules\Services\User\RiderService;
@@ -46,75 +47,124 @@ class RiderLocationService extends Service
      */
     function getNearbyAvailableRiders($origin_lat, $origin_lng, $vehicle_type_id = null,  $radius = null)
     {
-        /**********TEMPORARY SOLUTION...gives all active riders..! ******/
-        $rider_locations = RiderLocation::whereStatus('active')->get();
-        return $rider_locations;
-        // if($rider_locations)
-        // {
-        //     dd("adsads", $rider_locations, $rider_locations->count());
-        // }
-        // dd($rider_locations);
+     
+        
+        $rider_locations = null;
+
+        if($vehicle_type_id)
+        {
+            $rider_locations = RiderLocation::whereStatus('active')
+            ->whereRelation('rider','status','!=','in_active')
+            ->whereRelation('rider','approved_at','!=',NULL)
+            ->whereRelation('rider.vehicle', 'vehicle_type_id', $vehicle_type_id)->get();
+        }
+        else{
+            $rider_locations = RiderLocation::whereStatus('active')
+            ->whereRelation('rider','status','!=','in_active')
+            ->whereRelation('rider','approved_at','!=',NULL)
+            ->get();
+        }
 
 
         try{
-            try{
-                if($radius==null)
-                {
-                    $radius = !empty( config('settings.scan_radius') ) ? floatval( config('settings.scan_radius') ) : 5.0;
-                }
-                else{
-                    $radius = floatval($radius);
-                }
-            }
-            catch(Exception $e)
+            if($radius==null)
             {
-                $radius = 5.0;
+                $radius = !empty( config('settings.scan_radius') ) ? floatval( config('settings.scan_radius') ) : 20.0; //20km
             }
-            $rider_locations = [];  
-            if( $vehicle_type_id != null)
-            {  
-               $rider_locations = $this->rider_service->getAllowedRidersQuery()
-                                    ->get(); 
+            else{
+                $radius = floatval($radius);
             }
-            else 
-            {
-                $rider_locations = $this->rider_service->getAllowedRidersQuery()
-                                    ->whereRelation('rider_location','status','!=','in_active')
-                                    ->with('rider_location')
-                                    ->get();
-            }
-               
-            return $rider_locations;
-           // dd($rider_locations);
-            
-            $nearby_available_riders = [];
-            foreach($rider_locations as $rider_location)
-            {
-                if($rider_location->availability == "available")
-                {
-                    $distance_from_origin = calcuateDistance( 
-                        floatval($origin_lat), 
-                        floatval($origin_lng), 
-                        floatval($rider_location->latitude), 
-                        floatval($rider_location->longitude)
-                    );
-                   // $str = "DISTANCE: ".$distance_from_origin.", ORIGINLAT: ".$origin_lat.", ORIGINLNG: ". $origin_lng.", RLAT: ".$rider_location->latitude.", RLNG: ".$rider_location->longitude.", RADIUS: ".$radius;
-                   /// dd($str );
-                    
-                    if( $distance_from_origin <= $radius )
-                    {
-                        $rider_location->rider = $rider_location->rider;
-                        $nearby_available_riders[] = $rider_location;//->rider;
-                    }
-                }
-            }
-            return $nearby_available_riders;
         }
         catch(Exception $e)
         {
-            return NULL;
+            $radius = 20.0;
         }
+
+        $nearby_available_riders = [];
+        foreach($rider_locations as $rider_location)
+        {
+            // if($rider_location->availability == "available")
+            // {
+                $distance_from_origin = calcuateDistance( 
+                    floatval($origin_lat), 
+                    floatval($origin_lng), 
+                    floatval($rider_location->latitude), 
+                    floatval($rider_location->longitude)
+                );
+           
+                
+                if( $distance_from_origin <= $radius )
+                {
+                    // $rider_location = $rider_location->toArray();//->rider->user;
+                    $nearby_available_riders[] = $rider_location->toArray();//->rider;
+                }
+            // }
+        }
+        return $nearby_available_riders;
+
+
     }
+
+
+
+
+     /**
+     * Fetches the pending bookings  within the radius circle of certain origin latitude and longitude from the riders
+     */
+    function getNearbyAvailableUsers($origin_lat, $origin_lng, $vehicle_type_id = null,  $radius = null)
+    {
+     
+        
+        $pending_bookings = null;
+
+        if($vehicle_type_id)
+        {
+            $pending_bookings = Booking::whereStatus('pending')->where('vehicle_type_id',$vehicle_type_id)->get();
+        }
+        else{
+            $pending_bookings = Booking::whereStatus('pending')->get();
+        }
+
+
+        try{
+            if($radius==null)
+            {
+                $radius = !empty( config('settings.scan_radius') ) ? floatval( config('settings.scan_radius') ) : 20.0; //20km
+            }
+            else{
+                $radius = floatval($radius);
+            }
+        }
+        catch(Exception $e)
+        {
+            $radius = 20.0;
+        }
+
+        $nearby_pending_bookings = [];
+        foreach($pending_bookings as $booking)
+        {
+            // if($rider_location->availability == "available")
+            // {
+                $distance_from_origin = calcuateDistance( 
+                    floatval($origin_lat), 
+                    floatval($origin_lng), 
+                    floatval($booking->location->latitude_origin), 
+                    floatval($booking->location->longitude_origin)
+                );
+           
+                
+                if( $distance_from_origin <= $radius )
+                {
+                    //$booking = $booking->toArray();//->rider->user;
+                    $nearby_pending_bookings[] = $booking->toArray();//->rider;
+                }
+            // }
+        }
+        return $nearby_pending_bookings;
+
+
+    }
+
 
 
 

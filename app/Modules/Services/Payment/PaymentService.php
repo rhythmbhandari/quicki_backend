@@ -7,17 +7,26 @@ use App\Modules\Services\Service;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
+use Illuminate\Support\Carbon;
+
+
 //models
 use App\Modules\Models\Payment;
 use App\Modules\Models\Transaction;
+use App\Modules\Models\Rider;
+use App\Modules\Models\PaymentTransaction;
+
+//services
+
 
 class PaymentService extends Service
 {
-    protected $payment;
+    protected $payment, $transaction_service;
 
-    function __construct(Payment $payment)
+    function __construct(Payment $payment, TransactionService $transaction_service)
     {
         $this->payment = $payment;
+        $this->transaction_service = $transaction_service;
     }
 
     /*For DataTable*/
@@ -97,4 +106,48 @@ class PaymentService extends Service
             return NULL;
         }
     }
+
+    function offline_ride_payment($paymentId)
+    {
+        $payment = Payment::find($paymentId);
+
+        try{
+            $completed_trip = $payment->completed_trip;
+
+            $debtor_id = isset($completed_trip->rider_id) ? Rider::select('user_id')->where('id',$completed_trip->rider_id)->first()->user_id : $completed_trip->rider_id;
+
+            //Create transaction table
+            $createdTransaction = $this->transaction_service->create([
+                'amount'=>$completed_trip->price,
+                'transaction_date'=> Carbon::now(),
+                'creditor_type'=>'customer',
+                'creditor_id'=>$completed_trip->user_id,
+                'debtor_type'=>'rider',
+                'debtor_id'=>$debtor_id,
+                'payment_mode'=>'offline'
+            ]);
+
+
+            //Update payment table
+            if($createdTransaction)
+            {
+                // PaymentTransaction::create([
+                //     'payment_id'=>$paymentId,
+                //     'transaction_id'=>$createdTransaction->id
+                // ]);
+                $payment->transactions()->attach($createdTransaction->id);
+                $payment->payment_status = 'paid';
+                $payment->save();
+                return true;
+            }
+
+            return false;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
+
+    }
+  
 }

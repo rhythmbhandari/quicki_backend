@@ -144,7 +144,7 @@ class NotificationService extends Service
         $this->firebase_notification_service = $firebase_notification_service;
         $this->title = "PURAIDEY NOTIFICATION TEST ";
         $this->message = "blah blah blah!!!!!";
-        $this->imageUrl =  Config::get('webapp_url', 'http://puryaideuv2.letitgrownepal.com/') . '/assets/media/logo.png';
+        $this->imageUrl =  Config::get('webapp_url', 'http://puryaideuv2.letitgrownepal.com/') . 'assets/media/logo.png';
     }
 
 
@@ -171,6 +171,8 @@ class NotificationService extends Service
         
         $title = $this->push_notification_messages['default']['default']['title'];
         $body = $this->push_notification_messages['default']['default']['body'];
+        $sound = "default";
+        // $icon =  $this->imageUrl ;
 
         if($message == null)
         {
@@ -267,7 +269,9 @@ class NotificationService extends Service
                 [
                     "title" => $title,
                     "body" => $body,
-                    "imageUrl" =>  $this->imageUrl
+                    "sound"=>$sound,
+                    "imageUrl" =>  $this->imageUrl,
+                    // "icon"=>$icon 
                 ],
                 $device_tokens,
                 [

@@ -13,6 +13,8 @@ class PaymentTransaction extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = "payment_transaction";
+
     protected $casts = [
                         'payment_id'=>'integer',
                         'transaction_id'=>'integer'

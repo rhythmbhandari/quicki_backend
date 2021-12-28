@@ -38,6 +38,7 @@ class CompletedTripService extends Service
             $data['passenger_number'] =   ( isset($data['passenger_number']) && !empty($data['passenger_number']) ) ?  intval($data['passenger_number']) : null;
             $data['distance'] = intval($data['distance']);
             $data['duration'] = intval($data['duration']);
+            $data['price'] = intval($data['price']);
             // $data['cancelled_by_id'] =  ( isset($data['cancelled_by_id']) && !empty($data['cancelled_by_id']) ) ? intval($data['cancelled_by_id']) : null;
            
             $data['optional_data']['cancelled_by_id'] = isset($data['optional_data']['cancelled_by_id']) ? intval($data['optional_data']['cancelled_by_id']) : null ;

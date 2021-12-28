@@ -28,7 +28,8 @@ class Vehicle extends Model
 
     protected $casts = [
         'vehicle_type_id' => 'integer',
-        'rider_id' => 'integer'
+        'rider_id' => 'integer',
+        'capacity' => 'integer'
     ];
 
     /**
@@ -38,8 +39,8 @@ class Vehicle extends Model
      */
     protected $fillable = [
         'slug', 'rider_id', 'vehicle_type_id', 'image',
-        'vehicle_number', 'make_year', 'vehicle_color', 'brand', 'model', 'status',
-        'created_at', 'updated_at', 'deleted_at', 'last_updated_by', 'last_deleted_by'
+        'vehicle_number', 'make_year', 'vehicle_color', 'brand', 'model', 'status','capacity',
+        'created_at', 'updated_at', 'deleted_at'
     ];
 
     protected $appends = [

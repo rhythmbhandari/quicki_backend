@@ -242,5 +242,7 @@ return [
 
     "firebase_server_api_key" => env('FIREBASE_SERVER_API_KEY', 'firebaseapikey'),
 
+    "site_code" => env('SITE_CODE', 'lig'),
+
 
 ];

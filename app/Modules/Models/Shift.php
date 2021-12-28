@@ -16,10 +16,11 @@ class Shift extends Model
         'vehicle_type_id' => 'integer',
         'time_from' => 'integer',
         'time_to' => 'integer',
+        'rate'=>'float'
     ];
 
     protected $fillable = ([
-        'vehicle_type_id', 'title',  'time_from', 'time_to', 'status'
+        'vehicle_type_id', 'title',  'time_from', 'time_to', 'status', 'rate'
     ]);
 
     protected $appends = [

@@ -25,7 +25,7 @@ class Payment extends Model
     protected $fillable = [ 'commission_amount', 'payment_status','commission_payment_status','completed_trip_id',
                             'created_at','updated_at','deleted_at'];
 
-    protected $appends = [    ];
+    protected $appends = [ 'customer_payment_status'   ];
 
 
     /**
@@ -48,6 +48,10 @@ class Payment extends Model
     // public function booking(){
     //     return $this->belongsTo(CompletedTrip::class);
     // }
+
+    public function getCustomerPaymentStatusAttribute(){
+        return ( $this->payment_status == "paid"  ||  $this->commission_payment_status == "paid" ) ? "paid" : "unpaid";
+    }
 
 
 }

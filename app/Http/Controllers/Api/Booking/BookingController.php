@@ -78,44 +78,47 @@ class BookingController extends Controller
     *               mediaType="application/json",
     *                @OA\Schema(      
     *                   example={
-    *                         "message": "Booking Successful!",
-    *                         "booking": {
+    *                       "message": "Booking Successful!",
+    *                       "booking": {
     *                           "origin": "Sanepa, Lalitpur",
     *                           "destination": "New Baneshwor, Kathmandu",
     *                           "passenger_number": 2,
     *                           "vehicle_type_id": 1,
     *                           "distance": 12,
-    *                           "duration": 20,
     *                           "price": 160,
+    *                           "duration": 20,
     *                           "stoppage": {
-    *                             {
-    *                               "name": "Sanepa, Lalitpur",
-    *                               "latitude": 27.1234,
-    *                               "longitude": 85.3434
-    *                             },
-    *                             {
-    *                               "name": "New Baneshwor, Kathmandu",
-    *                               "latitude": 28.3454,
-    *                               "longitude": 87.1234
-    *                             }
+    *                               {
+    *                                   "name": "Sanepa, Lalitpur",
+    *                                   "latitude": 27.1234,
+    *                                   "longitude": 85.3434
+    *                               },
+    *                               {
+    *                                   "name": "New Baneshwor, Kathmandu",
+    *                                   "latitude": 28.3454,
+    *                                   "longitude": 87.1234
+    *                               }
     *                           },
-    *                           "user_id": 3,
+    *                           "user_id": 2,
     *                           "status": "pending",
-    *                           "updated_at": "2021-11-21T07:42:14.000000Z",
-    *                           "created_at": "2021-11-21T07:42:14.000000Z",
-    *                           "id": 1,
-    *                           "location_id": 1,
+    *                           "rider_id": null,
+    *                           "trip_id": "#Q78A8LU",
+    *                           "updated_at": "2021-12-27T05:40:03.000000Z",
+    *                           "created_at": "2021-12-27T05:40:03.000000Z",
+    *                           "id": 2,
+    *                           "location_id": 2,
     *                           "location": {
-    *                             "latitude_origin": 85.123423,
-    *                             "longitude_origin": 27.123456,
-    *                             "latitude_destination": 86.12313,
-    *                             "longitude_destination": 27.234325,
-    *                             "updated_at": "2021-11-21T07:42:14.000000Z",
-    *                             "created_at": "2021-11-21T07:42:14.000000Z",
-    *                             "id": 1
-    *                           }
-    *                         }
+    *                               "latitude_origin": 27.687012,
+    *                               "longitude_origin": 85.304359,
+    *                               "latitude_destination": 27.234325,
+    *                               "longitude_destination": 86.12313,
+    *                               "updated_at": "2021-12-27T05:40:03.000000Z",
+    *                               "created_at": "2021-12-27T05:40:03.000000Z",
+    *                               "id": 2
+    *                           },
+    *                           "status_text": "Pending"
     *                       }
+    *                   }
     *                 )
     *           )
     *      ),
@@ -247,42 +250,97 @@ class BookingController extends Controller
     *               mediaType="application/json",
     *                @OA\Schema(      
     *                   example={
-    *                           "message":"Booking Status Updated Successfully! Created Completed Booking History",
-    *                           "completed_trip":
-    *                               {
-    *                               "id": 4,
-    *                               "user_id": 3,
-    *                               "rider_id": null,
-    *                               "booking_id": 2,
-    *                               "location_id": 2,
-    *                               "origin": "Sanepa, Lalitpur",
-    *                               "destination": "New Baneshwor, Kathmandu",
-    *                               "stoppage": {
-    *                                 {
-    *                                   "name": "Sanepa, Lalitpur",
-    *                                   "latitude": 27.1234,
-    *                                   "longitude": 85.3434
-    *                                 },
-    *                                 {
-    *                                   "name": "New Baneshwor, Kathmandu",
-    *                                   "latitude": 28.3454,
-    *                                   "longitude": 87.1234
-    *                                 }
-    *                               },
-    *                               "distance": "12",
-    *                               "duration": "20",
-    *                               "passenger_number": 1,
-    *                               "profile_img_user": null,
-    *                               "profile_img_rider": null,
-    *                               "status": "completed",
-    *                               "cancelled_by_type": null,
-    *                               "cancelled_by_id": null,
-    *                               "cancel_message": null,
-    *                               "deleted_at": null,
-    *                               "created_at": "2021-11-17T06:43:25.000000Z",
-    *                               "updated_at": "2021-11-17T06:43:58.000000Z"
+    *                         "message": "Booking Status Updated Successfully! Created Completed Booking History",
+    *                         "completed_trip": {
+    *                           "id": 3,
+    *                           "user_id": 2,
+    *                           "rider_id": 1,
+    *                           "trip_id": "#Q78A8LU",
+    *                           "booking_id": 16,
+    *                           "location_id": 16,
+    *                           "start_time": "2021-12-23 14:21:58",
+    *                           "end_time": "2021-12-23 14:22:04",
+    *                           "origin": "Sanepa, Lalitpur",
+    *                           "destination": "New Baneshwor, Kathmandu",
+    *                           "stoppage": {
+    *                             {
+    *                               "name": "Sanepa, Lalitpur",
+    *                               "latitude": 27.1234,
+    *                               "longitude": 85.3434
     *                             },
-    *                   }
+    *                             {
+    *                               "name": "New Baneshwor, Kathmandu",
+    *                               "latitude": 28.3454,
+    *                               "longitude": 87.1234
+    *                             }
+    *                           },
+    *                           "distance": 12,
+    *                           "duration": 6,
+    *                           "passenger_number": 1,
+    *                           "profile_img_user": null,
+    *                           "profile_img_rider": null,
+    *                           "status": "completed",
+    *                           "price": 159,
+    *                           "payment_type": "CASH",
+    *                           "cancelled_by_type": null,
+    *                           "cancelled_by_id": null,
+    *                           "cancel_message": null,
+    *                           "deleted_at": null,
+    *                           "created_at": "2021-12-23T02:51:15.000000Z",
+    *                           "updated_at": "2021-12-23T02:52:04.000000Z",
+    *                           "payment": {
+    *                             "id": 3,
+    *                             "completed_trip_id": 3,
+    *                             "commission_amount": 24,
+    *                             "payment_status": "unpaid",
+    *                             "commission_payment_status": "unpaid",
+    *                             "deleted_at": null,
+    *                             "created_at": "2021-12-23T08:37:04.000000Z",
+    *                             "updated_at": "2021-12-23T08:37:04.000000Z"
+    *                           },
+    *                           "location": {
+    *                             "id": 16,
+    *                             "longitude_origin": 27.123456,
+    *                             "latitude_origin": 85.123423,
+    *                             "longitude_destination": 27.234325,
+    *                             "latitude_destination": 86.12313,
+    *                             "deleted_at": null,
+    *                             "created_at": "2021-12-23T08:36:15.000000Z",
+    *                             "updated_at": "2021-12-23T08:36:15.000000Z"
+    *                           },
+    *                           "user": {
+    *                             "id": 2,
+    *                             "first_name": "Sasuke",
+    *                             "last_name": "Uchiha",
+    *                             "image": null,
+    *                             "name": "Sasuke Uchiha",
+    *                             "status_text": "",
+    *                             "thumbnail_path": "assets/media/user_placeholder.png",
+    *                             "image_path": "assets/media/user_placeholder.png"
+    *                           },
+    *                           "price_detail": {
+    *                             "id": 6,
+    *                             "booking_id": null,
+    *                             "completed_trip_id": 3,
+    *                             "minimum_charge": 50,
+    *                             "price_per_km": 15,
+    *                             "price_after_distance": 0.18,
+    *                             "surge_rate": 1,
+    *                             "surge": 0,
+    *                             "price_after_surge": 0.18,
+    *                             "app_charge_percent": 10,
+    *                             "app_charge": 0.02,
+    *                             "price_after_app_charge": 0.18,
+    *                             "price_per_min": 5,
+    *                             "duration_charge": 0.5,
+    *                             "price_after_duration": 0.68,
+    *                             "total_price": 50,
+    *                             "deleted_at": null,
+    *                             "created_at": "2021-12-23T08:37:04.000000Z",
+    *                             "updated_at": "2021-12-23T08:37:04.000000Z"
+    *                           }
+    *                         }
+    *                       }
     *                 )
     *           )
     *      ),
@@ -337,10 +395,47 @@ class BookingController extends Controller
        $booking = Booking::find($request->booking_id);
        if($booking)
        {
+            if($request->new_status == 'accepted')
+            {
+                if($booking->status != 'pending')
+                {
+                    $response = ['message' => 'The booking is no longer available!'];
+                    return response($response, 400);
+                }
+            }
+
+            if( $request->new_status == "running")
+            {
+                if($booking->status != 'accepted')
+                {
+                    $response = ['message' => 'The booking is not accepted yet!'];
+                    return response($response, 400);
+                }
+                if($request['optional_data']['rider_id'] != $booking->rider_id)
+                {
+                    $response = ['message' => 'The rider for the booking did not match!'];
+                    return response($response, 400);
+                }
+            }
+
+            if( $request->new_status == "completed")
+            {
+                if($booking->status != 'running')
+                {
+                    $response = ['message' => 'The booking has not been started yet!'];
+                    return response($response, 400);
+                }
+                if($request['optional_data']['rider_id'] != $booking->rider_id)
+                {
+                    $response = ['message' => 'The rider for the booking did not match!'];
+                    return response($response, 400);
+                }
+            }
+
            if($booking->status == "completed" || $booking->status == "cancelled")
            {
-            $response = ['message' => 'No active booking found!'];
-            return response($response, 404);
+                $response = ['message' => 'No active booking found!'];
+                return response($response, 404);
            }
        }
      
@@ -389,14 +484,26 @@ class BookingController extends Controller
             {
                 if($updatedBooking->status == "completed")
                 {
-                    $completed_trip = CompletedTrip::where('booking_id',$updatedBooking->id)->first();
-                    $response = ['message' => 'Booking Status Updated Successfully! Created Completed Booking History', "completed_trip"=>$updatedBooking->completed_trip];
+                    $completed_trip = CompletedTrip::where('booking_id',$updatedBooking->id)->with('payment')
+                    ->with('location')
+                    ->with('user:id,first_name,last_name,image')
+                    ->with('booking:id,status,trip_id')
+                    ->with('price_detail')
+                    ->with('payment')
+                    ->first();
+                    $response = ['message' => 'Booking Status Updated Successfully! Created Completed Booking History', "completed_trip"=>$completed_trip];
                     return response($response, 201);
                 }
                 else if($updatedBooking->status == "cancelled")
                 {
-                    $completed_trip = CompletedTrip::where('booking_id',$updatedBooking->id)->first();
-                    $response = ['message' => 'Booking Status Updated Successfully! Created Cancelled Booking History', "completed_trip"=>$updatedBooking->completed_trip];
+                    $completed_trip = CompletedTrip::where('booking_id',$updatedBooking->id)
+                    ->with('location')
+                    ->with('user:id,first_name,last_name,image')
+                    ->with('booking:id,status,trip_id')
+                    ->with('price_detail')
+                    ->with('payment')
+                    ->first();
+                    $response = ['message' => 'Booking Status Updated Successfully! Created Cancelled Booking History', "completed_trip"=>$completed_trip];
                     return response($response, 201);
                 }
             
@@ -452,6 +559,7 @@ class BookingController extends Controller
     *                           "user_id": 3,
     *                           "vehicle_type_id": 1,
     *                           "rider_id": 1,
+    *                           "trip_id": "#Q78A8LU",
     *                           "location_id": 24,
     *                           "start_time": "2021-12-14 14:24:25",
     *                           "end_time": "2021-12-14 14:37:35",
@@ -554,6 +662,7 @@ class BookingController extends Controller
     *                           "user_id": 3,
     *                           "vehicle_type_id": 1,
     *                           "rider_id": 1,
+    *                           "trip_id": "#Q78A8LU",
     *                           "location_id": 24,
     *                           "start_time": "2021-12-14 14:24:25",
     *                           "end_time": "2021-12-14 14:37:35",
@@ -658,6 +767,7 @@ class BookingController extends Controller
     *                               "origin": "Patan, Lalitpur",
     *                               "destination": "Kirtipur, Kathmandu",
     *                               "passenger_number": 2,
+    *                               "trip_id": "#Q78A8LU",
     *                               "vehicle_type_id": 1,
     *                               "distance": 12,
     *                               "duration": 20,
@@ -752,7 +862,96 @@ class BookingController extends Controller
     *      @OA\MediaType(
     *           mediaType="application/json",
     *               @OA\Schema(
-    *                   example={"message":"Success!","estimated_price":{{"vehicle_type_id":1,"vehicle_type_name":"bike","shift":1,"price_breakdown":{"minimum_charge":150,"price_per_km":15,"price_after_distance":300,"shift_rate":1,"density_surge":0,"shift_surge":0,"surge":0,"price_after_surge":300,"app_charge_percent":10,"app_charge":30,"price_after_app_charge":300,"price_per_min":5,"duration_charge":25,"price_after_duration":325,"total_price":325}},{"vehicle_type_id":2,"vehicle_type_name":"car","shift":1,"price_breakdown":{"minimum_charge":150,"price_per_km":40,"price_after_distance":800,"shift_rate":1,"density_surge":0,"shift_surge":800,"surge":0,"price_after_surge":800,"app_charge_percent":10,"app_charge":80,"price_after_app_charge":800,"price_per_min":15,"duration_charge":75,"price_after_duration":875,"total_price":875}},{"vehicle_type_id":3,"vehicle_type_name":"city_safari","shift":1,"price_breakdown":{"minimum_charge":150,"price_per_km":25,"price_after_distance":500,"shift_rate":1,"density_surge":0,"shift_surge":500,"surge":0,"price_after_surge":500,"app_charge_percent":10,"app_charge":50,"price_after_app_charge":500,"price_per_min":10,"duration_charge":50,"price_after_duration":550,"total_price":550}}}}
+    *                   example=
+    *                       {
+    *                         "message": "Success!",
+    *                         "estimated_price": {
+    *                           {
+    *                             "vehicle_type_id": 1,
+    *                             "vehicle_type_name": "bike",
+    *                             "shift": "shift_surge",
+    *                             "price_breakdown": {
+    *                               "base_fare": 30,
+    *                               "base_covered_km": 2,
+    *                               "minimum_charge": 50,
+    *                               "price_per_km": 17,
+    *                               "charged_km": 0,
+    *                               "price_after_distance": 0,
+    *                               "shift_surge": 0,
+    *                               "density_surge": 0,
+    *                               "surge_rate": 1,
+    *                               "price_per_km_after_surge": 17,
+    *                               "surge": 0,
+    *                               "price_after_surge": 0,
+    *                               "app_charge_percent": 10,
+    *                               "app_charge": 0,
+    *                               "price_after_app_charge": 0,
+    *                               "price_per_min": 0,
+    *                               "price_per_min_after_base": 1,
+    *                               "duration_charge": 0,
+    *                               "price_after_duration": 0,
+    *                               "price_after_base_fare": 30,
+    *                               "total_price": 50
+    *                             }
+    *                           },
+    *                           {
+    *                             "vehicle_type_id": 2,
+    *                             "vehicle_type_name": "car",
+    *                             "shift": "shift_surge",
+    *                             "price_breakdown": {
+    *                               "base_fare": 100,
+    *                               "base_covered_km": 2,
+    *                               "minimum_charge": 150,
+    *                               "price_per_km": 42,
+    *                               "charged_km": 0,
+    *                               "price_after_distance": 0,
+    *                               "shift_surge": 0,
+    *                               "density_surge": 0,
+    *                               "surge_rate": 1,
+    *                               "price_per_km_after_surge": 42,
+    *                               "surge": 0,
+    *                               "price_after_surge": 0,
+    *                               "app_charge_percent": 10,
+    *                               "app_charge": 0,
+    *                               "price_after_app_charge": 0,
+    *                               "price_per_min": 2,
+    *                               "price_per_min_after_base": 2,
+    *                               "duration_charge": 10,
+    *                               "price_after_duration": 10,
+    *                               "price_after_base_fare": 110,
+    *                               "total_price": 150
+    *                             }
+    *                           },
+    *                           {
+    *                             "vehicle_type_id": 3,
+    *                             "vehicle_type_name": "city_safari",
+    *                             "shift": "shift_surge",
+    *                             "price_breakdown": {
+    *                               "base_fare": 10,
+    *                               "base_covered_km": 1,
+    *                               "minimum_charge": 20,
+    *                               "price_per_km": 10,
+    *                               "charged_km": 1,
+    *                               "price_after_distance": 10,
+    *                               "shift_surge": 0,
+    *                               "density_surge": 0,
+    *                               "surge_rate": 1,
+    *                               "price_per_km_after_surge": 10,
+    *                               "surge": 0,
+    *                               "price_after_surge": 10,
+    *                               "app_charge_percent": 10,
+    *                               "app_charge": 1,
+    *                               "price_after_app_charge": 11,
+    *                               "price_per_min": 2,
+    *                               "price_per_min_after_base": 2,
+    *                               "duration_charge": 10,
+    *                               "price_after_duration": 21,
+    *                               "price_after_base_fare": 31,
+    *                               "total_price": 31
+    *                             }
+    *                           }
+    *                         }
+    *                       }
     *               )
     *      )
     *   ),

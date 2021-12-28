@@ -18,18 +18,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         //
-        User::create([
-            'first_name' => 'Naruto',
-            'middle_name' => '',
-            'last_name' => 'Uzumaki',
-            'email' => 'naruto@gmail.com',
-            'phone' => '9843936821',
-            'username' => 'naruto',
-            'password' => Hash::make('password'),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-            'status' => 'active'
-        ]);
+
 
         User::create([
             'first_name' => 'Sasuke',
@@ -46,11 +35,25 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
+            'first_name' => 'Naruto',
+            'middle_name' => '',
+            'last_name' => 'Uzumaki',
+            'email' => 'naruto@gmail.com',
+            'phone' => '9816810976',
+            'username' => 'naruto',
+            'password' => Hash::make('password'),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+            'status' => 'active',
+            'device_token'=>'fAoy8lrNQ1KRB14rcbULyX:APA91bEM1WWaHwC0W1Xdlqh3mnk_jxMp6Bvm0X9cXfkJE1PJp1XpzuJUHbQRXT0mVttlVN3dqPLI4HaYqrnIRtHwzbGUk48OD_1Nk6cIQ-5mKYfSS8Xby9g7re6fzhS5BFyqmyzdWAht'
+        ]);
+
+        User::create([
             'first_name' => 'Kakashi',
             'middle_name' => '',
             'last_name' => 'Hatake',
             'email' => 'kakashi@gmail.com',
-            'phone' => '9816810976',
+            'phone' => '9843936821',
             'username' => 'kakashi',
             'emergency_contacts' => '{"9816810976","987654321","981122345"}',
             'password' => Hash::make('password'),

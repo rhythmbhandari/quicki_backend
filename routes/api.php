@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\Suggestion\SuggestionController;
 use App\Http\Controllers\Api\Notification\NotificationController;
 use App\Http\Controllers\Api\Notification\SosController;
 use App\Http\Controllers\Api\Notification\EventController;
+use App\Http\Controllers\Api\Payment\PaymentController;
 
 
 /*
@@ -78,11 +79,13 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   
   $router->post('/booking/create', [BookingController::class, 'store'])->name('booking.store');
   $router->post('/booking/change_status', [BookingController::class, 'change_status'])->name('booking.change_status');
+  $router->get('/booking/{booking_id}/payment', [PaymentController::class, 'getPaymentFromBooking'])->name('user.booking.payment');     
   $router->get('/booking/{booking_id}', [BookingController::class, 'getBooking'])->name('user.booking.show');         ///TO BE 
   $router->get('/user/booking/active', [BookingController::class, 'getActiveUserBooking'])->name('user.booking.active');
   $router->get('/rider/booking/active', [BookingController::class, 'getActiveRiderBooking'])->name('rider.booking.active');
   $router->get('/user/booking/history', [CompletedTripController::class, 'getUserTrips'])->name('user.booking.history');
   $router->get('/rider/booking/history', [CompletedTripController::class, 'getRiderTrips'])->name('rider.booking.history');
+  $router->get('/completed_trip/{completed_trip_id}', [CompletedTripController::class, 'getCompletedTrip'])->name('user.completed_trip.show');  
 
   $router->get('/{user_type}/total_distance', [CompletedTripController::class, 'getTotalDistance'])->name('completed_trip.total_distance');
   $router->get('/{user_type}/total_trips', [CompletedTripController::class, 'getTotalTrips'])->name('completed_trip.total_trips');
@@ -110,6 +113,15 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->post('/review/create', [ReviewController::class, 'store'])->name('review.store');
   $router->get('/user/{user_id}/reviews', [ReviewController::class, 'getUserReviews'])->name('review.user.reviews');
   $router->get('/rider/{rider_id}/reviews', [ReviewController::class, 'getRiderReviews'])->name('review.rider.reviews');
+
+
+  //---------------------------------------------------------------------------------------------------------
+  //  PAYMENT AND TRANSACTION
+  //---------------------------------------------------------------------------------------------------------
+  $router->post('/payment/{payment_id}/offline_ride_payment', [PaymentController::class, 'offline_ride_payment'])->name('payment.offline_ride_payment');
+  $router->get('/payment/{payment_id}', [PaymentController::class, 'getPayment'])->name('payment.get_payment');
+
+
 
   //---------------------------------------------------------------------------------------------------------
   //  USER ROUTES
