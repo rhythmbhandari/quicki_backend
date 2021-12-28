@@ -36,7 +36,7 @@ class Transaction extends Model
         return $this->belongsToMany(Payment::class)->withTimestamps();
     }
 
-    /**
+/*
      * Get the creditor of this transaction.
      */
     public function creditor(){

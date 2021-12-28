@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
+
 function test()
 {
     return 'helpers test!';
@@ -219,6 +221,10 @@ function getTableHtml($object, $type, $editRoute = null, $deleteRoute = null, $s
     }
 }
 
+/**
+ * Reformat oject->document['license', 'bluebook', 'inurance'] to object->license, 
+ * object->bluebook,object->insurance if document present.
+ */
 function getDocuments($object)
 {
     $documents = $object['documents'];
@@ -251,6 +257,24 @@ function getDocuments($object)
 }
 
 
+function getTotalCommissions($rider)
+{
+    $data = DB::table('payments')
+        ->select(DB::raw("SUM(commission_amount) as total_commissions"))
+        ->whereIn('completed_trip_id', $rider->completed_trips->pluck('id'))
+        ->first();
+    return $data->total_commissions ? $data->total_commissions : 0;
+}
+
+function getTotalPaid($user)
+{
+    $data = DB::table('transactions')
+        ->select(DB::raw("SUM(amount) as total_paid"))
+        ->where('creditor_id', $user->id)
+        ->first();
+
+    return $data->total_paid ? $data->total_paid : 0;
+}
 
 /**
 * Generates a random string of specified length at the end of the product.

@@ -14,21 +14,24 @@ use App\Modules\Services\User\UserService;
 use App\Modules\Services\Document\DocumentService;
 use App\Modules\Services\Vehicle\VehicleTypeService;
 use App\Modules\Services\Vehicle\VehicleService;
+use App\Modules\Services\Payment\PaymentService;
 
 //models
 use App\Modules\Models\Rider;
 use App\Modules\Models\User;
 use App\Modules\Models\Document;
+use App\Modules\Models\Payment;
 
 class RiderService extends Service
 {
-    protected  $rider, $user_service, $user, $vehicle_type_service, $vehicle_service, $document_service;
+    protected  $rider, $user_service, $user, $vehicle_type_service, $vehicle_service, $document_service, $payment;
 
     function __construct(
         UserService $user_service,
         VehicleTypeService $vehicle_type_service,
         VehicleService $vehicle_service,
         DocumentService $document_service,
+        PaymentService $payment,
         Rider $rider,
         User $user
     ) {
@@ -38,6 +41,7 @@ class RiderService extends Service
         $this->document_service = $document_service;
         $this->rider = $rider;
         $this->user = $user;
+        $this->payment = $payment;
     }
 
     function getRider()
@@ -75,6 +79,38 @@ class RiderService extends Service
                 $optionRoute = '';
                 $optionRouteText = '';
                 return getTableHtml($user, 'actions', $editRoute, $deleteRoute, $optionRoute, $optionRouteText);
+            })->rawColumns(['image', 'status', 'actions'])
+            ->make(true);
+    }
+
+    public function getCommissionData()
+    {
+        // dd("test");
+        $query = Rider::all();
+        return DataTables::of($query)
+            ->addIndexColumn()
+            ->editColumn('image', function (Rider $rider) {
+                // return getTableHtml($rider->user, 'image');
+                return "test";
+            })
+            ->editColumn('name', function (Rider $rider) {
+                return $rider->user->name;
+            })
+            ->editColumn('total_commissions', function (Rider $rider) {
+                return getTotalCommissions($rider);
+            })
+            ->editColumn('total_paid', function (Rider $rider) {
+                return getTotalPaid($rider->user);
+            })
+            ->editColumn('status', function (Rider $rider) {
+                return getTableHtml($rider, 'status');
+            })
+            ->editColumn('actions', function (Rider $rider) {
+                return '<button type="button" id="makePayment" data-toggle="modal" data-target="#makePaymentForm" class="btn btn-success" style="width: 200px;"
+                data-placement="top" data-id="' . $rider->id . '" data-original-title="Make Payment">Make Payment</button>
+                <button type="button" id="showHistory" class="btn btn-warning" style="width: 200px;" data-toggle="tooltip"
+                data-placement="top" data-original-title="Transaction History">Show History</button>
+                ';
             })->rawColumns(['image', 'status', 'actions'])
             ->make(true);
     }

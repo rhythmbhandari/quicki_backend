@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Api\Payment;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
-    
+
 //models
 use App\Modules\Models\User;
 use App\Modules\Models\Rider;
@@ -33,11 +34,10 @@ class PaymentController extends Controller
         $this->transaction_service = $transaction_service;
     }
 
-    
+
 
     public function store(Request $request)
     {
-
     }
 
 
@@ -318,6 +318,5 @@ class PaymentController extends Controller
         $response = ['message' => 'Success!', 'payment'=>$payment];
             return response($response, 200);
     }
-
 
 }

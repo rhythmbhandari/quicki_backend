@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\User\CustomerController;
 use App\Http\Controllers\Admin\User\RiderController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Booking\BookingController;
+use App\Http\Controllers\Admin\Payment\TransactionController;
 use App\Http\Controllers\Admin\Sos\SosController;
 use Inertia\Inertia;
 
@@ -56,6 +57,10 @@ Route::group([
     $router->resource('/rider', RiderController::class);
     $router->get('rider_data', [RiderController::class, 'getAllData'])->name('rider.data');
     $router->get('rider_ajax', [RiderController::class, 'riderAjax'])->name('rider.ajax');
+    $router->get('rider_commission', [RiderController::class, 'riderCommission'])->name('rider.commission');
+    $router->get('rider_commission_data', [RiderController::class, 'riderCommissionData'])->name('rider.commission.data');
+    $router->get('rider/{rider_id}/clear_commission', [RiderController::class, 'clearCommission'])->name('rider.commission_clear');
+    $router->get('rider/{rider_id}/make_payment', [RiderController::class, 'makePaymentModal'])->name('rider.make_payment_modal');
 
     //vehicle type
     $router->resource('/vehicle_type', VehicleTypeController::class);
@@ -74,4 +79,8 @@ Route::group([
     $router->get('/sos/event/{id}', [SOSController::class, 'eventcreate'])->name('sos-detail.create');
     $router->post('/sos/event/{id}', [SOSController::class, 'eventstore'])->name('sos-detail.store');
     // $router->get('vehicle_type_ajax', [VehicleTypeController::class, 'vehicleTypeAjax'])->name('vehicle_type.ajax');
+
+    //transaction
+    $router->resource('/transaction', TransactionController::class);
+    $router->get('transaction_data', [TransactionController::class, 'getAllData'])->name('transaction.data');
 });
