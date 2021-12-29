@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Throwable;
 
 //services
-use App\Modules\Services\Location\LocationService;
+// use App\Modules\Services\Location\LocationService;
 use App\Modules\Services\Location\RiderLocationService;
 use App\Modules\Services\Booking\CompletedTripService;
 
@@ -30,10 +30,10 @@ use App\Modules\Models\PriceDetail;
 
 class BookingService extends Service
 {
-    protected $booking, $location_service, $notification_service;
+    protected $booking,  $notification_service, $rider_location_service, $price_detail_service, $completed_trip_service;
 
     function __construct(Booking $booking, 
-                        LocationService $location_service, 
+                        // LocationService $location_service, 
                         CompletedTripService $completed_trip_service, 
                         RiderLocationService $rider_location_service, 
                         PriceDetailService $price_detail_service, 
@@ -41,7 +41,7 @@ class BookingService extends Service
                         )
     {
         $this->booking = $booking;
-        $this->location_service = $location_service;
+        // $this->location_service = $location_service;
         $this->completed_trip_service = $completed_trip_service;
         $this->rider_location_service = $rider_location_service;
         $this->price_detail_service = $price_detail_service;
@@ -94,10 +94,10 @@ class BookingService extends Service
                 else return "N/A";
             })
             ->editColumn('origin', function (Booking $booking) {
-                return $booking->origin;
+                return $booking->location['origin']['name'];
             })
             ->editColumn('destination', function (Booking $booking) {
-                return $booking->destination;
+                return $booking->location['destination']['name'];
             })
             ->editColumn('status', function (Booking $booking) {
                 return getTableHtml($booking, 'status');
@@ -128,10 +128,10 @@ class BookingService extends Service
             // $data['location']['longitude_origin'] = floatval($data['location']['longitude_origin']);
             // $data['location']['latitude_destination'] = floatval($data['location']['latitude_destination']);
             // $data['location']['longitude_destination'] = floatval($data['location']['longitude_destination']);
-            $data['location']['origin']['name'] = floatval($data['location']['origin']['name']);
+            $data['location']['origin']['name'] = $data['location']['origin']['name'];
             $data['location']['origin']['latitude'] = floatval($data['location']['origin']['latitude']);
             $data['location']['origin']['longitude'] = floatval($data['location']['origin']['longitude']);
-            $data['location']['destination']['name'] = floatval($data['location']['destination']['name']);
+            $data['location']['destination']['name'] = $data['location']['destination']['name'];
             $data['location']['destination']['latitude'] = floatval($data['location']['destination']['latitude']);
             $data['location']['destination']['longitude'] = floatval($data['location']['destination']['longitude']);
 
@@ -184,7 +184,7 @@ class BookingService extends Service
                                                 );  
                     $createdBooking->price = $price_detail_data['price_breakdown']['total_price'];
                     $createdBooking->save();                            
-                    $createdBooking->location = $createdLocation;
+                   // $createdBooking->location = $createdLocation;
 
                     $price_detail_data = $price_detail_data['price_breakdown'];
                     
@@ -335,12 +335,22 @@ class BookingService extends Service
                     $completed_trip_data = $booking->toArray();
                     $completed_trip_data['booking_id'] = intval($booking->id);
 
-                    if( isset($data['optional_data']['location']) && isset($data['optional_date']['distance'])  )
+                    if( isset($data['optional_data']['location']) && isset($data['optional_data']['distance'])  )
                     {
-                        $completed_trip_data['location'] = $data['optional_data']['location'];
-                        $completed_trip_data['distance'] = $data['optional_date']['distance'];
-                    }
+                        // $completed_trip_data['location'] = $data['optional_data']['location'];
 
+                        $completed_trip_data['location']['origin']['name'] = $data['optional_data']['location']['origin']['name'];
+                        $completed_trip_data['location']['origin']['latitude'] = floatval($data['optional_data']['location']['origin']['latitude']);
+                        $completed_trip_data['location']['origin']['longitude'] = floatval($data['optional_data']['location']['origin']['longitude']);
+                        $completed_trip_data['location']['destination']['name'] = $data['optional_data']['location']['destination']['name'];
+                        $completed_trip_data['location']['destination']['latitude'] = floatval($data['optional_data']['location']['destination']['latitude']);
+                        $completed_trip_data['location']['destination']['longitude'] = floatval($data['optional_data']['location']['destination']['longitude']);
+
+                        $completed_trip_data['distance'] = $data['optional_data']['distance'];
+
+                        //dd('reached here');
+                    }
+                    //dd('did',$data);
                     //RECALCULATE THE BOOKING PRICE WITH UPDATED DURATION
                     $new_duration = $this->getTimeDiffInSeconds($booking->start_time, $booking->end_time);
                     $completed_trip_data['duration'] = $new_duration;
@@ -406,8 +416,8 @@ class BookingService extends Service
                     // dd($booking, $voucher);
                     //CREAT PRICE DETAIL
                     $price_detail_data = $this->calculateEstimatedPrice(
-                                                    $booking->location->origin->latitude, 
-                                                    $booking->location->origin->longitude, 
+                                                    $booking->location['origin']['latitude'], 
+                                                    $booking->location['origin']['longitude'], 
                                                     $booking->vehicle_type_id, 
                                                     $booking->distance,  
                                                     $booking->duration, 
@@ -461,7 +471,7 @@ class BookingService extends Service
                 $query->where('status','pending')
                 ->orWhere('status','accepted')
                 ->orWhere('status','running');
-            })->with('location')->with('price_detail')->first();
+            })->with('price_detail')->first();
 
             return $booking;
         } catch (Exception $e) {
@@ -477,7 +487,7 @@ class BookingService extends Service
             $booking = $this->booking->where('rider_id',$riderId)->where(function($query){
                 $query->where('status','accepted')
                 ->orWhere('status','running');
-            })->with('location')->with('price_detail')->first();
+            })->with('price_detail')->first();
           
             return $booking;
         } catch (Exception $e) {
@@ -522,7 +532,17 @@ class BookingService extends Service
                                             $booking_id=null
                                             )
     {
-
+        // dd(
+        //     $origin_latitude, 
+        //                                     $origin_longitude, 
+        //                                     $vehicle_type_id, 
+        //                                     $distance, 
+        //                                     $duration,
+        //                                     $user_id,
+        //                                     $voucher, 
+        //                                     $booking_id,
+        //                                     Booking::find($booking_id)->toArray()
+        // );
         // dd($booking_id,Booking::find($booking_id));
         $distance = $distance / 1000;        //convert the distance in meters to kilometers
 
@@ -646,9 +666,9 @@ class BookingService extends Service
         //     'current_density' => $current_density,
         //     'density_surge' => $density_surge,
         //     'shift_surge' => $shift_surge,
-        //     'surge_rate' => $surge_rate
+        //     'surge_rate' => $surge_rate,
+        //     'distance'=>$distance
         // ];
-        // dd($surge_info);
 
 
         $estimated_price['vehicle_type_id'] = $vehicle_type->id;
@@ -656,15 +676,16 @@ class BookingService extends Service
         $estimated_price['shift'] = isset($shift[0]->title) ? $shift[0]->title : "shift_surge";
         $estimated_price['price_breakdown'] = [];
         //Provided
-        $estimated_price['price_breakdown']['base_fare'] = intval($vehicle_type->base_fare);
-        $estimated_price['price_breakdown']['base_covered_km'] = intval($vehicle_type->base_covered_km);
+        $estimated_price['price_breakdown']['base_fare'] = floatval($vehicle_type->base_fare);
+        $estimated_price['price_breakdown']['base_covered_km'] = floatval($vehicle_type->base_covered_km);
         $esitmated_price['price_breakdown']['base_covers_duration'] = $vehicle_type->base_covers_duration;
-        $estimated_price['price_breakdown']['minimum_charge'] = intval($vehicle_type->min_charge);
+        $estimated_price['price_breakdown']['minimum_charge'] = floatval($vehicle_type->min_charge);
 
         //PRICE AFTER DISTANCE AND SURGE
         $estimated_price['price_breakdown']['price_per_km'] = $vehicle_type->price_per_km;
         $distance_charged =   $distance - $vehicle_type->base_covered_km;
         $distance_charged = ($distance_charged > 0) ? $distance_charged : 0;
+        // dd($distance_charged, $vehicle_type->base_covered_km, $distance);
         $estimated_price['price_breakdown']['base_covered_km'] = $vehicle_type->base_covered_km;
         $estimated_price['price_breakdown']['charged_km'] = $distance_charged;
         $estimated_price['price_breakdown']['price_after_distance']  = ($vehicle_type->price_per_km * $distance_charged);
@@ -727,7 +748,7 @@ class BookingService extends Service
 
         $estimated_price = $this->getDiscountAmount($estimated_price, $user_id, $voucher);
 
-        // dd($estimated_price);
+    //    dd($estimated_price);
         return $estimated_price;
     }
 

@@ -245,7 +245,6 @@ class CompletedTripController extends Controller
 
         //Fetch booking history/ completed trips
         $completed_trips = CompletedTrip::where('user_id',$user->id)
-        ->with('location')
         ->with('payment')
         ->with('booking:id,status,trip_id')
         ->with('rider.user:id,first_name,last_name,image')
@@ -536,7 +535,7 @@ class CompletedTripController extends Controller
           
 
         //Fetch booking history/ completed trips
-        $completed_trips = CompletedTrip::where('rider_id',$user->rider->id)->with('location')
+        $completed_trips = CompletedTrip::where('rider_id',$user->rider->id)
         ->with('user:id,first_name,last_name,image')
         ->with('price_detail')
         ->with('payment')
@@ -783,7 +782,7 @@ class CompletedTripController extends Controller
                                         ->with('payment')
                                         ->with('booking.review')
                                         ->orderByDesc('created_at')
-                                        ->with('location')->with('rider')->paginate(5);
+                                        ->with('rider')->paginate(5);
 
         $response = ['message' => 'Success!',  "completed_trips"=>$completed_trips];
         return response($response, 200);
@@ -1126,7 +1125,7 @@ class CompletedTripController extends Controller
                                         ->with('booking.review')
                                         ->with('payment')
                                         ->orderByDesc('created_at')
-                                        ->with('location')->with('rider')->paginate(5);
+                                        ->with('rider')->paginate(5);
 
         $response = ['message' => 'Success!',  "completed_trips"=>$completed_trips];
         return response($response, 200);
@@ -1450,7 +1449,6 @@ class CompletedTripController extends Controller
     {
         $completed_trip = 
         CompletedTrip::where('id',$completed_trip_id)
-        ->with('location')
         ->with('booking')
         ->with('booking.review')
         ->with('payment')

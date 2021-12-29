@@ -44,6 +44,7 @@ class CreateVehiclesTable extends Migration
         });
     }
 
+    
     /**
      * Reverse the migrations.
      *

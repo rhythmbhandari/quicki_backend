@@ -20,17 +20,19 @@ class DatabaseSeeder extends Seeder
            // UserSeeder::class,
            // RiderSeeder::class,
           //  RoleUserSeeder::class,
-            VehicleTypeSeeder::class,
+         
           //  OtpSeeder::class,
-
-
-          //In server, first seed vehicle type, then import users and then seed these
-            // SuggestionSeeder::class,
-            // PermissionSeeder::class,
-            // RoleHasPermissionSeeder::class,
             // VehicleSeeder::class,
-            // ShiftSeeder::class,
-            // PromotionVoucherSeeder::class,
+
+
+           //VehicleTypeSeeder::class,
+          //In server, first seed vehicle type, then import users and then seed these
+            SuggestionSeeder::class,
+            PermissionSeeder::class,
+            RoleHasPermissionSeeder::class,
+     
+            ShiftSeeder::class,
+            PromotionVoucherSeeder::class,
         ]);
     }
 }

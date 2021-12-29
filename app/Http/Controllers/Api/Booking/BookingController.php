@@ -54,7 +54,7 @@ class BookingController extends Controller
     *                  "passenger_number":2,
     *                  "vehicle_type_id":1,
     *                  "voucher":"#9816810976C",
-    *                  "distance":12,
+    *                  "distance":9520,
     *                   "price": 160,
     *                  "duration":20,
     *                   "stoppage":{
@@ -91,7 +91,7 @@ class BookingController extends Controller
     *                           "destination": "New Baneshwor, Kathmandu",
     *                           "passenger_number": 2,
     *                           "vehicle_type_id": 1,
-    *                           "distance": 12,
+    *                           "distance": 4500,
     *                           "price": 160,
     *                           "duration": 20,
     *                           "stoppage": {
@@ -205,7 +205,7 @@ class BookingController extends Controller
                 $createdBooking = $this->booking->create($user->id, $request->all());
                 if($createdBooking)
                 {
-                    $booking = Booking::where('id',$createdBooking->id)->with('location')->with('price_detail')->with('user:id,first_name,last_name,image')->first();
+                    $booking = Booking::where('id',$createdBooking->id)->with('price_detail')->with('user:id,first_name,last_name,image')->first();
                     $response = ['message' => 'Booking Successful!',  "booking"=>$booking];
                     return response($response, 201);
                 }
@@ -242,12 +242,12 @@ class BookingController extends Controller
     *                               "longitude": 85.304359
     *                           },
     *                           "destination":{
-    *                               "name": "New Baneshwor, Kathmandu",
-    *                               "latitude": 28.234325,
-    *                               "longitude": 87.12313
+    *                               "name": "Maitighar, Kathmandu",
+    *                               "latitude": 27.693587,
+    *                               "longitude": 85.320443
     *                           }
     *                       }, 
-    *                       "distance":2000
+    *                       "distance":5600
     *                   },
     *               }
     *         )
@@ -296,7 +296,7 @@ class BookingController extends Controller
     *                               "longitude": 87.1234
     *                             }
     *                           },
-    *                           "distance": 12,
+    *                           "distance": 5600,
     *                           "location": {
     *                               "origin":{
     *                                   "name": "Sanepa, Lalitpur",
@@ -304,9 +304,9 @@ class BookingController extends Controller
     *                                   "longitude": 85.304359
     *                               },
     *                               "destination":{
-    *                                   "name": "New Baneshwor, Kathmandu",
-    *                                   "latitude": 28.234325,
-    *                                   "longitude": 87.12313
+    *                                    "name": "Maitighar, Kathmandu",
+    *                                   "latitude": 27.693587,
+    *                                   "longitude": 85.320443
     *                               }
     *                           },
     *                           "duration": 6,
@@ -445,7 +445,7 @@ class BookingController extends Controller
 
             if( $request->new_status == "completed")
             {
-                if($request->vehicle_type_id != 4 &&  ( $request['optional_data']['location'] || $request['optional_data']['distance'] ))
+                if($request->vehicle_type_id != 4 &&  ( !isset($request['optional_data']['location']) || !isset($request['optional_data']['distance']) ))
                 {
                     $response = ['message' => 'The new location data and distance is required to complete the ride!'];
                     return response($response, 422);
@@ -516,7 +516,6 @@ class BookingController extends Controller
                 if($updatedBooking->status == "completed")
                 {
                     $completed_trip = CompletedTrip::where('booking_id',$updatedBooking->id)->with('payment')
-                    ->with('location')
                     ->with('user:id,first_name,last_name,image')
                     ->with('booking:id,status,trip_id')
                     ->with('price_detail')
@@ -528,7 +527,6 @@ class BookingController extends Controller
                 else if($updatedBooking->status == "cancelled")
                 {
                     $completed_trip = CompletedTrip::where('booking_id',$updatedBooking->id)
-                    ->with('location')
                     ->with('user:id,first_name,last_name,image')
                     ->with('booking:id,status,trip_id')
                     ->with('price_detail')
@@ -591,18 +589,6 @@ class BookingController extends Controller
     *                           "vehicle_type_id": 1,
     *                           "rider_id": 1,
     *                           "trip_id": "#Q78A8LU",
-    *                           "location": {
-    *                               "origin":{
-    *                                   "name": "Sanepa, Lalitpur",
-    *                                   "latitude": 27.687012,
-    *                                   "longitude": 85.304359
-    *                               },
-    *                               "destination":{
-    *                                   "name": "New Baneshwor, Kathmandu",
-    *                                   "latitude": 28.234325,
-    *                                   "longitude": 87.12313
-    *                               }
-    *                           },
     *                           "start_time": "2021-12-14 14:24:25",
     *                           "end_time": "2021-12-14 14:37:35",
     *                           "origin": "Sanepa, Lalitpur",
@@ -617,14 +603,16 @@ class BookingController extends Controller
     *                           "created_at": "2021-12-14T08:12:21.000000Z",
     *                           "updated_at": "2021-12-14T08:52:35.000000Z",
     *                           "location": {
-    *                               "id": 24,
-    *                               "longitude_origin": 27.123456,
-    *                               "latitude_origin": 85.123423,
-    *                               "longitude_destination": 27.234325,
-    *                               "latitude_destination": 86.12313,
-    *                               "deleted_at": null,
-    *                               "created_at": "2021-12-14T08:12:21.000000Z",
-    *                               "updated_at": "2021-12-14T08:12:21.000000Z"
+    *                             "origin": {
+    *                               "name": "Sanepa, Lalitpur",
+    *                               "latitude": 27.687012,
+    *                               "longitude": 85.304359
+    *                             },
+    *                             "destination": {
+    *                               "name": "Maitighar, Kathmandu",
+    *                               "latitude": 27.693587,
+    *                               "longitude": 85.320443
+    *                             }
     *                           },
     *                           "price_detail": {
     *                               "id": 7,
@@ -660,7 +648,7 @@ class BookingController extends Controller
     **/
     public function getBooking($booking_id)
     {
-        $booking = Booking::where('id',$booking_id)->with('location')->with('price_detail')->first();
+        $booking = Booking::where('id',$booking_id)->with('price_detail')->first();
         if($booking) {
             $response = ['message' => 'Success!', 'booking'=>$booking];
             return response($response, 200);
