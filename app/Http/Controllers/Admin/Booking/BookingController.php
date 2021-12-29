@@ -68,6 +68,28 @@ class BookingController extends Controller
         return $this->booking->getAllData();
     }
 
+    function bookingAjax(Request $request)
+    {
+        $query = Booking::with(['user' => function ($q) {
+            $q->select('id', 'first_name', 'last_name');
+        }, 'rider.user' => function ($q) {
+            $q->select('id', 'first_name', 'last_name');
+        }])->simplePaginate(10);
+        // dd($query->toArray());
+        $results = array();
+        foreach ($query as $object) {
+            array_push($results, [
+                'id' => $object['id'],
+                'text' => 'ID: ' . $object->id . ' / Origin: ' . $object->origin . ' / Destination: ' . $object->destination . ' / Customer: ' . $object->user->first_name . ' ' . $object->user->last_name . ' / Rider: ' . $object->rider->user->first_name . ' ' . $object->rider->user->last_name,
+                'booking_id' => $object->id
+            ]);
+        }
+        // $pagination = [
+        //     'more' => !is_null($query->toArray()['next_page_url'])
+        // ];
+        return compact('results');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -281,9 +303,4 @@ class BookingController extends Controller
 
         return $this->booking->active_rider_booking($user->rider->id);
     }
-
-
-    
-
-
 }

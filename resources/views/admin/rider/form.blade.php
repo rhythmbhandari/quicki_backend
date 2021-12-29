@@ -666,9 +666,23 @@
                     <div class="col-6">
                         <span class="switch switch-outline switch-icon switch-success">
                             <label>
-                                <input type="checkbox" name="status" checked {{ old('status', isset($user['status']) ?
-                                    $user['status'] : '' )=='active' ? 'checked' :'' }} {{ (old('status')=='on' )
+                                {{-- {{dd($user['status'])}} --}}
+                                <input type="checkbox" name="status" {{ old('status', isset($rider['status']) ?
+                                    $rider['status'] : '' )=='active' ? 'checked' :'' }} {{ (old('status')=='on' )
                                     ? 'checked' :'' }} />
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-6 col-form-label">Approve</label>
+                    <div class="col-6">
+                        <span class="switch switch-outline switch-icon switch-success">
+                            <label>
+                                <input type="checkbox" name="approved_at" {{ old('approved_at',
+                                    isset($rider['approved_at']) ? $rider['approved_at'] : null )==null ? '' :'checked'
+                                    }} {{ (old('approved_at')=='on' ) ? 'checked' :'' }} />
                                 <span></span>
                             </label>
                         </span>

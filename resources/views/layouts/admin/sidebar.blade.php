@@ -155,16 +155,6 @@
                                         <span></span>
                                     </i><span class="menu-text">Rider Commissions</span></a>
                             </li>
-                            {{-- @endcan --}}
-
-                            {{-- <li class="menu-item {{ request()->is('admin/permission') || request()->is('admin/permission/*')
-                                ? " menu-item-active" : "" }}" aria-haspopup="true">
-                                <a href="{{route('admin.permission.index')}}" class="menu-link"><i
-                                        class="menu-bullet menu-bullet-dot">
-                                        <span></span>
-                                    </i><span class="menu-text">Permission</span></a>
-                            </li> --}}
-
                         </ul>
                     </div>
                 </li>
@@ -194,9 +184,33 @@
                     str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
                     aria-haspopup="true">
                     <a href="{{route('admin.transaction.index')}}" class="menu-link menu-toggle">
-                        <i class="menu-icon fas fa-volume-up"></i>
+                        <i class="menu-icon fas fa-money-check-alt"></i>
                         <span class="menu-text">Transaction</span><i class=""></i>
                     </a>
+                </li>
+
+                <li class="menu-item menu-item-submenu {{ request()->is('admin/heatmap') || request()->is('admin/heatmap/*')||
+                    request()->is('admin/heatmap') || request()->is('admin/heatmap/*')
+                    ? " menu-item-active menu-item-open" : "" }}" {{-- {{
+                    str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
+                    aria-haspopup="true">
+                    <a href="" class="menu-link menu-toggle">
+                        <i class="menu-icon fas fa-users"></i>
+                        <span class="menu-text">Heatmap</span><i class="menu-arrow"></i>
+                    </a>
+                    <div class="menu-submenu">
+                        <span class="menu-arrow"></span>
+                        <ul class="menu-subnav">
+                            {{-- @can('role-view') --}}
+                            <li class="menu-item {{request()->is('admin/heatmap/booking') || request()->is('admin/heatmap/booking/*')
+                                ? " menu-item-active" : "" }}" aria-haspopup="true">
+                                <a href="{{route('admin.heatmap.booking')}}" class="menu-link"><i
+                                        class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i><span class="menu-text">Booking Heatmap</span></a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
             </ul>
             <!--end::Menu Nav-->

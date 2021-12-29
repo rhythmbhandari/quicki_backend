@@ -104,7 +104,7 @@
                             <th>Rider Name</th>
                             <th>Total Commission(NPR.)</th>
                             <th>Paid(NPR.)</th>
-                            {{-- <th>Dues(NPR.)</th> --}}
+                            <th>Dues(NPR.)</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -274,12 +274,12 @@
                             orderable: true,
                             searchable: true
                         },
-                        // {
-                        //     "data": null,
-                        //     "render": function(data, type, row) {
-                        //         return row.total_commissions - row.total_paid;
-                        //     }
-                        // },
+                        {
+                            "data": "amount_due",
+                            "render": function(data, type, row) {
+                                return row.total_commissions - row.total_paid;
+                            }
+                        },
                         {
                             "data": "actions",
                             orderable: true,

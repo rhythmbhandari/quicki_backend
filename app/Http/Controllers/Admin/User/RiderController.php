@@ -8,6 +8,7 @@ use App\Modules\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Kamaln7\Toastr\Facades\Toastr;
 use App\Modules\Services\Document\DocumentService;
+use Carbon\Carbon;
 
 //services
 use App\Modules\Services\User\UserService;
@@ -34,6 +35,12 @@ class RiderController extends Controller
     public function index()
     {
         return view('admin.rider.index');
+    }
+
+    public function history($rider_id)
+    {
+        $rider = Rider::with('user')->findOrFail($rider_id);
+        return view('admin.rider.history', compact('rider'));
     }
 
     /**
@@ -107,11 +114,12 @@ class RiderController extends Controller
     {
         $data = $request->except('image');
         // dd($request->all());
-        $data['rider'] = $request->only('experience', 'trained', 'status');
+        $data['rider'] = $request->only('experience', 'trained', 'status', 'approved_at');
         $data['vehicle'] = $request->only('vehicle_type_id', 'vehicle_number', 'brand', 'model', 'vehicle_color', 'make_year');
 
         $data['status'] = (isset($data['status']) ?  $data['status'] : '') == 'on' ? 'active' : 'in_active';
         $data['rider']['status'] = (isset($data['rider']['status']) ?  $data['rider']['status'] : '') == 'on' ? 'active' : 'in_active';
+        $data['rider']['approved_at'] = (isset($data['rider']['approved_at']) ?  $data['rider']['approved_at'] : '') == 'on' ? Carbon::now() : null;
 
         if ($request->has(['license_issue_date', 'license_expiry_date', 'license_number'])) {
             $data['license']['document_number'] = $request->license_number;
@@ -140,7 +148,7 @@ class RiderController extends Controller
             $data['location']['work'] = $data['work'];
         }
 
-        // dd($request->all());
+        dd($data);
 
         return DB::transaction(function () use ($request, $data) {
             if ($user = $this->rider->riderCreate($data)) {
