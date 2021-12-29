@@ -25,6 +25,7 @@ use App\Modules\Models\Rider;
 use App\Modules\Models\VehicleType;
 use App\Modules\Models\Shift;
 use App\Modules\Models\CompletedTrip;
+use App\Modules\Models\RiderLocation;
 
 class BookingController extends Controller
 {
@@ -433,7 +434,7 @@ class BookingController extends Controller
             {
                 if($booking->status != 'accepted')
                 {
-                    $response = ['message' => 'The booking is not accepted yet!'];
+                    $response = ['message' => 'The booking is not accepted yet or is already running/completed!'];
                     return response($response, 400);
                 }
                 if($request['optional_data']['rider_id'] != $booking->rider_id)
@@ -491,19 +492,30 @@ class BookingController extends Controller
                 $rider_id = $request->optional_data['rider_id'];
                 $pending_rider_booking = null;
                 
-                if($new_status == "accepted")
-                {
+                // if($new_status == "accepted")
+                // {
                     $pending_rider_booking = Booking::where('rider_id', $rider_id)->where(function($query) {
                         $query->where('status','accepted')
                         ->orWhere('status','running');
                     })->first();
-                    if($pending_rider_booking)
+                    //check availability of the rider
+                    $rider_location = RiderLocation::where('rider_id',$rider_id)->first();
+                    if(isset($rider_location))
                     {
-                        $response = ['message' => 'The rider already have an active booking!'];
-                        return response($response, 422);
+                        if(! ( ($rider_location->status == "active") && ($rider_location->availability == "available") ) )
+                        {
+                            $response = ['message' => 'The rider is currently unavailable!'];
+                            return response($response, 422);
+                        }
                     }
+
+                    // if($pending_rider_booking)
+                    // {
+                    //     $response = ['message' => 'The rider already have an active booking!'];
+                    //     return response($response, 422);
+                    // }
                     
-                }
+              //  }
 
 
             }

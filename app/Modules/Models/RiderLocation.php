@@ -23,7 +23,7 @@ class RiderLocation extends Model
 
 
     protected $fillable = ([
-        'longitude','latitude','rider_id','status',
+        'longitude','latitude','rider_id','status','availability',
         'created_at','updated_at', 'deleted_at'
     ]);
 

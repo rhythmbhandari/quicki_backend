@@ -27,6 +27,8 @@ use App\Modules\Models\Shift;
 use App\Modules\Models\User;
 use App\Modules\Models\PromotionVoucher;
 use App\Modules\Models\PriceDetail;
+use App\Modules\Models\RiderLocation;
+use App\Modules\Models\Rider;
 
 class BookingService extends Service
 {
@@ -289,6 +291,12 @@ class BookingService extends Service
                 {
                     $booking->rider_id = intval($data['optional_data']['rider_id']);
 
+                    $rider_location = RiderLocation::where('rider_id',$booking->rider_id)->first();
+                    if(isset($rider_location))
+                    {
+                        $rider_location->availability = "unavailable";
+                        $rider_location->save();
+                    }
 
                     if($booking->save())
                     {
@@ -329,6 +337,16 @@ class BookingService extends Service
                     } else {
                         $booking->end_time = Carbon::now();
                     }
+
+                    //Make the rider available again
+                    $rider_location = RiderLocation::where('rider_id',$booking->rider_id)->first();
+                    if(isset($rider_location))
+                    {
+                        $rider_location->availability = "unavailable";
+                        $rider_location->save();
+                    }
+
+
                     $booking->save();
 
                     //CREATE COMPLTED TRIP RECORD for COMPLETED STATUS
@@ -402,6 +420,16 @@ class BookingService extends Service
                     } else {
                         $booking->end_time = Carbon::now();
                     }
+
+                    //Make the rider available again
+                    $rider_location = RiderLocation::where('rider_id',$booking->rider_id)->first();
+                    if(isset($rider_location))
+                    {
+                        $rider_location->availability = "unavailable";
+                        $rider_location->save();
+                    }
+
+
                     $booking->save();
 
 
