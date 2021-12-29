@@ -23,7 +23,7 @@ class CreatePromotionVouchersTable extends Migration
             $table->string( 'image' )->nullable();
 
             // The voucher code
-            $table->string( 'code' )->nullable( );
+            $table->string( 'code' )->unique()->nullable( );
 
             // The human readable voucher code name
             $table->string( 'name' )->nullable();

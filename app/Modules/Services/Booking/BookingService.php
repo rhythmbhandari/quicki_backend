@@ -24,6 +24,9 @@ use App\Modules\Models\Booking;
 use App\Modules\Models\CompletedTrip;
 use App\Modules\Models\VehicleType;
 use App\Modules\Models\Shift;
+use App\Modules\Models\User;
+use App\Modules\Models\PromotionVoucher;
+use App\Modules\Models\PriceDetail;
 
 class BookingService extends Service
 {
@@ -121,10 +124,17 @@ class BookingService extends Service
             $data['status'] = isset($data['status']) ? $data['status'] : 'pending';
 
             //Parse the possible string values of latitudes and longitudes to double/float
-            $data['location']['latitude_origin'] = floatval($data['location']['latitude_origin']);
-            $data['location']['longitude_origin'] = floatval($data['location']['longitude_origin']);
-            $data['location']['latitude_destination'] = floatval($data['location']['latitude_destination']);
-            $data['location']['longitude_destination'] = floatval($data['location']['longitude_destination']);
+            // $data['location']['latitude_origin'] = floatval($data['location']['latitude_origin']);
+            // $data['location']['longitude_origin'] = floatval($data['location']['longitude_origin']);
+            // $data['location']['latitude_destination'] = floatval($data['location']['latitude_destination']);
+            // $data['location']['longitude_destination'] = floatval($data['location']['longitude_destination']);
+            $data['location']['origin']['name'] = floatval($data['location']['origin']['name']);
+            $data['location']['origin']['latitude'] = floatval($data['location']['origin']['latitude']);
+            $data['location']['origin']['longitude'] = floatval($data['location']['origin']['longitude']);
+            $data['location']['destination']['name'] = floatval($data['location']['destination']['name']);
+            $data['location']['destination']['latitude'] = floatval($data['location']['destination']['latitude']);
+            $data['location']['destination']['longitude'] = floatval($data['location']['destination']['longitude']);
+
 
             if (isset($data['stoppage']) && count($data['stoppage']) > 0) {
                 for ($i = 0; $i < count($data['stoppage']); $i++) {
@@ -141,6 +151,8 @@ class BookingService extends Service
             $data['user_id'] = intval($data['user_id']);
             $data['rider_id'] = isset($data['rider_id']) ? intval($data['rider_id']) : null;
 
+            $data['voucher'] = isset( $data['voucher'])? $data['voucher'] : null;
+
             $existing_codes = Booking::pluck('trip_id')->toArray();
             $data['trip_id'] = generateBokkingCode($existing_codes);
             // dd($data['trip_id'], $existing_codes);
@@ -151,20 +163,31 @@ class BookingService extends Service
 
             if ($createdBooking) {
                 //CREATE LOCATION
-                $createdLocation = $this->location_service->create($data['location']);
-                if ($createdLocation) {
-                    $createdBooking->location_id = intval($createdLocation->id);
-                    $createdBooking->save();
-                    $createdBooking->location = $createdLocation;
+                // $createdLocation = $this->location_service->create($data['location']);
+                // dd($createdBooking, $createdLocation);
+                // if ($createdLocation) {
+                //     $createdBooking->location_id = intval($createdLocation->id);
+                //     $createdBooking->save();
                     // return $createdBooking;
 
                     
                     //CREAT PRICE DETAIL
                     $price_detail_data = $this->calculateEstimatedPrice(
-                        $data['location']['latitude_origin'], $data['location']['longitude_origin'], 
-                        $data['vehicle_type_id'], $data['distance'], $data['duration']
-                    );  
+                                                    $data['location']['origin']['latitude'] , 
+                                                    $data['location']['origin']['longitude'] , 
+                                                    $data['vehicle_type_id'], 
+                                                    $data['distance'], 
+                                                    $data['duration'],
+                                                    $createdBooking->user_id,
+                                                    $data['voucher'],
+                                                    $createdBooking->id
+                                                );  
+                    $createdBooking->price = $price_detail_data['price_breakdown']['total_price'];
+                    $createdBooking->save();                            
+                    $createdBooking->location = $createdLocation;
+
                     $price_detail_data = $price_detail_data['price_breakdown'];
+                    
                     $price_detail_data['booking_id'] = $createdBooking->id;
                     //dd($createdBooking->toArray(), $price_detail_data);
                     $this->price_detail_service->create($price_detail_data);
@@ -180,7 +203,7 @@ class BookingService extends Service
 
 
                     return $createdBooking;
-                }
+                // }
 
 
              
@@ -201,10 +224,16 @@ class BookingService extends Service
             $data['status'] = isset($data['status']) ? $data['status'] : 'pending';
 
             //Parse the possible string values of latitudes and longitudes to double/float
-            $data['location']['latitude_origin'] = floatval($data['location']['latitude_origin']);
-            $data['location']['longitude_origin'] = floatval($data['location']['longitude_origin']);
-            $data['location']['latitude_destination'] = floatval($data['location']['latitude_destination']);
-            $data['location']['longitude_destination'] = floatval($data['location']['longitude_destination']);
+            // $data['location']['latitude_origin'] = floatval($data['location']['latitude_origin']);
+            // $data['location']['longitude_origin'] = floatval($data['location']['longitude_origin']);
+            // $data['location']['latitude_destination'] = floatval($data['location']['latitude_destination']);
+            // $data['location']['longitude_destination'] = floatval($data['location']['longitude_destination']);
+            $data['location']['origin']['name'] = floatval($data['location']['origin']['name']);
+            $data['location']['origin']['latitude'] = floatval($data['location']['origin']['latitude']);
+            $data['location']['origin']['longitude'] = floatval($data['location']['origin']['longitude']);
+            $data['location']['destination']['name'] = floatval($data['location']['destination']['name']);
+            $data['location']['destination']['latitude'] = floatval($data['location']['destination']['latitude']);
+            $data['location']['destination']['longitude'] = floatval($data['location']['destination']['longitude']);
 
             if (isset($data['stoppage']) && count($data['stoppage']) > 0) {
                 for ($i = 0; $i < count($data['stoppage']); $i++) {
@@ -229,9 +258,10 @@ class BookingService extends Service
             // dd($updatedBooking);
 
             if ($updatedBooking) {
-                $createdLocation = $this->location_service->update($data['location'], $updatedBooking->location_id);
-                return $createdLocation;
+                // $createdLocation = $this->location_service->update($data['location'], $updatedBooking->location_id);
+                return $updatedBooking;
             }
+            
             return false;
         } catch (Exception $e) {
             return false;
@@ -248,13 +278,6 @@ class BookingService extends Service
 
             $booking = Booking::findOrFail($booking_id);
             $booking->status = $new_status;
-
-//             if ($booking->save()) {
-//                 if ($new_status == "accepted") {
-//                     $booking->rider_id = intval($data['optional_data']['rider_id']);
-//                     if ($booking->save())
-//                         return $booking;
-//                 } else if ($new_status == "running") {
 
 
             //NOTIFICATION DATA
@@ -312,15 +335,26 @@ class BookingService extends Service
                     $completed_trip_data = $booking->toArray();
                     $completed_trip_data['booking_id'] = intval($booking->id);
 
-
+                    if( isset($data['optional_data']['location']) && isset($data['optional_date']['distance'])  )
+                    {
+                        $completed_trip_data['location'] = $data['optional_data']['location'];
+                        $completed_trip_data['distance'] = $data['optional_date']['distance'];
+                    }
 
                     //RECALCULATE THE BOOKING PRICE WITH UPDATED DURATION
                     $new_duration = $this->getTimeDiffInSeconds($booking->start_time, $booking->end_time);
                     $completed_trip_data['duration'] = $new_duration;
+                    $voucher = isset($booking->price_detail->promotion_voucher_id) ? $booking->price_detail->promotion_voucher->code : null;
                     $price_detail_data = $this->calculateEstimatedPrice(
-                        $booking->location->latitude_origin, $booking->location->longitude_origin, 
-                        $booking->vehicle_type_id, $booking->distance,  $new_duration, $booking->id
-                    );  
+                                                    $completed_trip_data['location']['origin']['latitude'], 
+                                                    $completed_trip_data['location']['origin']['longitude'], 
+                                                    $booking->vehicle_type_id, 
+                                                    $completed_trip_data['distance'],  
+                                                    $new_duration, 
+                                                    $booking->user_id, 
+                                                    $voucher , 
+                                                    $booking->id
+                                                );  
                     $final_price = 0;
                     // $final_price = $this->calculate_final_price(
                     //     $booking->vehicle_type_id,
@@ -367,11 +401,20 @@ class BookingService extends Service
 
 
                     $booking->createdCompletedTrip = $this->completed_trip_service->create($cancelled_trip_data);
+            
+                    $voucher = isset($booking->price_detail->promotion_voucher_id) ? $booking->price_detail->promotion_voucher->code : null;
+                    // dd($booking, $voucher);
                     //CREAT PRICE DETAIL
                     $price_detail_data = $this->calculateEstimatedPrice(
-                        $booking->location->latitude_origin, $booking->location->longitude_origin, 
-                        $booking->vehicle_type_id, $booking->distance,  $booking->duration
-                    );  
+                                                    $booking->location->origin->latitude, 
+                                                    $booking->location->origin->longitude, 
+                                                    $booking->vehicle_type_id, 
+                                                    $booking->distance,  
+                                                    $booking->duration, 
+                                                    $booking->user_id,  
+                                                    $voucher,
+                                                    $booking->id
+                                                );  
                     $price_detail_data = $price_detail_data['price_breakdown'];
                     $price_detail_data['completed_trip_id'] =   $booking->createdCompletedTrip->id;
                     $this->price_detail_service->create($price_detail_data);
@@ -452,7 +495,15 @@ class BookingService extends Service
         //DEDUCING SHIFT SURGE
         $vehicle_types = VehicleType::where('status', 'active')->get();
         foreach ($vehicle_types as $vehicle_type) {
-            $estimated_prices[] = $this->calculateEstimatedPrice($data['origin_latitude'], $data['origin_longitude'], $vehicle_type->id, $data['distance'], $data['duration']);
+            $estimated_prices[] = $this->calculateEstimatedPrice($data['origin_latitude'], 
+                                                                $data['origin_longitude'], 
+                                                                $vehicle_type->id, 
+                                                                $data['distance'], 
+                                                                $data['duration'],
+                                                                $data['user_id'],
+                                                                $data['voucher'],
+
+                                                                );
         }
 
         return $estimated_prices;
@@ -461,8 +512,18 @@ class BookingService extends Service
 
 
 
-    public function calculateEstimatedPrice($origin_latitude, $origin_longitude, $vehicle_type_id, $distance, $duration, $booking_id=null)
+    public function calculateEstimatedPrice($origin_latitude, 
+                                            $origin_longitude, 
+                                            $vehicle_type_id, 
+                                            $distance, 
+                                            $duration,
+                                            $user_id=null,
+                                            $voucher=null, 
+                                            $booking_id=null
+                                            )
     {
+
+        // dd($booking_id,Booking::find($booking_id));
         $distance = $distance / 1000;        //convert the distance in meters to kilometers
 
         $estimated_price = [];
@@ -475,8 +536,10 @@ class BookingService extends Service
          *-ORIGIN_LONGITUDE
          *-DISTANCE
          *-DURATION
+         *-VOUCHER
          */
 
+ 
 
         //TO BE CALCULATED
         $density_surge = 0;
@@ -662,9 +725,116 @@ class BookingService extends Service
 
         $estimated_price['price_breakdown']['total_price'] = ceil($estimated_price['price_breakdown']['total_price']);
 
-        // dd($estimated_price);
+        $estimated_price = $this->getDiscountAmount($estimated_price, $user_id, $voucher);
 
+        // dd($estimated_price);
         return $estimated_price;
+    }
+
+    public function getDiscountAmount($estimated_price, $user_id, $voucher)
+    {
+        $estimated_price['price_breakdown']['promotion_voucher_id'] = null;
+        $estimated_price['price_breakdown']['discount_amount']= 0;
+        $estimated_price['price_breakdown']['original_price'] =    $estimated_price['price_breakdown']['total_price'];
+        if($voucher)
+        {   
+
+            
+            $promotion_voucher = PromotionVoucher::where('code',$voucher)
+                                                    ->where('user_type','customer')
+                                                    ->where('status','active')
+                                                    ->whereRaw("starts_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')" , Carbon::now()->format('Y-m-d H:i'))
+                                                    ->whereRaw("expires_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')" , Carbon::now()->format('Y-m-d H:i'))
+                                                    ->whereRaw('uses < max_uses')
+                                                    ->first();
+            $user = User::find($user_id);
+
+
+            if($promotion_voucher && $user)
+            {
+                //CHECK FOR VARIOUS ELIGIBILITY FACTORS OF THE VOUCHER 
+          
+
+                $used_promotion_vouchers = PriceDetail::whereHas('completed_trip', function (Builder $query) use ($user_id) {
+                                                            $query->where('user_id', $user_id);
+                                                            $query->whereStatus('completed');
+                                                        })->where('promotion_voucher_id',$promotion_voucher->id)->pluck('id','promotion_voucher_id');
+                
+                //Check if the voucher still has uses left for the user
+                if(count($used_promotion_vouchers) < $promotion_voucher->max_uses_user  )
+                {
+                    $user_travelled_distance = CompletedTrip::where('user_id',$user_id)->where('status','completed')->sum('distance'); //in meters
+                    $user_spent_price = CompletedTrip::where('user_id',$user_id)->where('status','completed')->sum('price'); 
+
+                    $price_eligibility_allowance = 0;
+                    $distance_eligibility_allowance = 0;
+
+                    if(isset($promotion_voucher->price_eligibility))
+                    {
+                        //dd('as',$promotion_voucher->price_eligibility);
+                        foreach($promotion_voucher->price_eligibility as $price_range)
+                        {
+                            if($user_spent_price >= $price_range['price'])
+                                $price_eligibility_allowance = intval($price_range['worth']);
+                        }
+                    }
+                    if(isset($promotion_voucher->distance_eligibility))
+                    {
+                        foreach($promotion_voucher->distance_eligibility as $distance_range)
+                        {
+                            if($user_travelled_distance >= $distance_range['distance'])
+                                $distance_eligibility_allowance = intval($distance_range['worth']);
+                        }
+                    }
+
+                    $voucher_worth = $promotion_voucher->worth + $price_eligibility_allowance + $distance_eligibility_allowance;
+              
+                    if(isset($promotion_voucher->eligible_user_ids))
+                    {
+                        if(in_array($user_id, $promotion_voucher->eligible_user_ids))
+                        {
+                            //APPLY DISCOUNT
+                            if(!$promotion_voucher->is_fixed)
+                            {
+                                $estimated_price['price_breakdown']['discount_amount'] = 
+                                $estimated_price['price_breakdown']['total_price'] * ($voucher_worth/100) ;
+                            } else {
+                                $estimated_price['price_breakdown']['discount_amount'] = $voucher_worth;
+                            }
+                            $estimated_price['price_breakdown']['total_price'] = 
+                            $estimated_price['price_breakdown']['total_price'] - $estimated_price['price_breakdown']['discount_amount'];
+
+                            $estimated_price['price_breakdown']['total_price'] = ( $estimated_price['price_breakdown']['total_price'] >= 0 ) ?  $estimated_price['price_breakdown']['total_price'] : 0;
+                            $estimated_price['price_breakdown']['promotion_voucher_id'] = $promotion_voucher->id;
+                        
+                        }
+                        else{
+                            //DO NOT APPLY DISCOUNT
+                            $voucher_worth = 0;
+                        }
+                    }
+                    else{
+                        //APPLY DISCOUNT
+                        if(!$promotion_voucher->is_fixed)
+                        {
+                            $estimated_price['price_breakdown']['discount_amount'] = 
+                            $estimated_price['price_breakdown']['total_price'] * ($voucher_worth/100) ;
+                        } else {
+                            $estimated_price['price_breakdown']['discount_amount'] = $voucher_worth;
+                        }
+                        $estimated_price['price_breakdown']['total_price'] = 
+                        $estimated_price['price_breakdown']['total_price'] - $estimated_price['price_breakdown']['discount_amount'];
+
+                        $estimated_price['price_breakdown']['total_price'] = ( $estimated_price['price_breakdown']['total_price'] >= 0 ) ?  $estimated_price['price_breakdown']['total_price'] : 0;
+                        $estimated_price['price_breakdown']['promotion_voucher_id'] = $promotion_voucher->id;
+                    }
+                }
+               
+
+            }
+
+        }
+        return $estimated_price;    
     }
 
     public function calculate_final_price($vehicle_type_id, $old_estimated_price, $old_duration, $new_duration = 60)  //minimum 10 minutes duration in seconds

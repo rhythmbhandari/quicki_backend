@@ -33,15 +33,31 @@ class CreateBookingsTable extends Migration
             $table->foreignId('user_id')->nullable()->constrained("users")->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('vehicle_type_id')->nullable()->constrained("vehicle_types")->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('rider_id')->nullable()->constrained("riders")->cascadeOnUpdate()->nullOnDelete();
-            $table->foreignId('location_id')->nullable()->constrained("locations")->cascadeOnUpdate()->nullOnDelete();
+            // $table->foreignId('location_id')->nullable()->constrained("locations")->cascadeOnUpdate()->nullOnDelete();
+
+            $table->json('location')->comment('
+            FORMAT: 
+            {
+                "origin":{
+                    "name": "Sanepa, Lalitpur",
+                    "latitude": 27.687012,
+                    "longitude": 85.304359
+                },
+                "destination":{
+                    "name": "New Baneshwor, Kathmandu",
+                    "latitude": 28.234325,
+                    "longitude": 87.12313
+                }
+            }
+            ');
 
             
 
             $table->timestamp('start_time')->nullable();
             $table->timestamp('end_time')->nullable();
 
-            $table->string('origin');
-            $table->string('destination');
+            // $table->string('origin');
+            // $table->string('destination');
             $table->integer('distance');     //in meters
             $table->integer('duration');     //in seconds
             $table->integer('passenger_number')->nullable()->default(1);

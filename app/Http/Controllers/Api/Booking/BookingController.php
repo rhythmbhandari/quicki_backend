@@ -53,6 +53,7 @@ class BookingController extends Controller
     *                  "destination":"New Baneshwor, Kathmandu",
     *                  "passenger_number":2,
     *                  "vehicle_type_id":1,
+    *                  "voucher":"#9816810976C",
     *                  "distance":12,
     *                   "price": 160,
     *                  "duration":20,
@@ -60,12 +61,18 @@ class BookingController extends Controller
     *                       {"name":"Sanepa, Lalitpur", "latitude":27.1234,"longitude":85.3434},
     *                       {"name":"New Baneshwor, Kathmandu", "latitude":28.3454,"longitude":87.1234},
     *                   },
-    *                  "location":{
-    *                       "latitude_origin": 27.687012,
-    *                       "longitude_origin": 85.304359,
-    *                       "latitude_destination": 27.234325,
-    *                       "longitude_destination": 86.12313,
-    *                   },
+    *                   "location": {
+    *                       "origin":{
+    *                           "name": "Sanepa, Lalitpur",
+    *                           "latitude": 27.687012,
+    *                           "longitude": 85.304359
+    *                       },
+    *                       "destination":{
+    *                           "name": "New Baneshwor, Kathmandu",
+    *                           "latitude": 28.234325,
+    *                           "longitude": 87.12313
+    *                       }
+    *                   }
     *               }
     *         )
     *     )
@@ -106,15 +113,17 @@ class BookingController extends Controller
     *                           "updated_at": "2021-12-27T05:40:03.000000Z",
     *                           "created_at": "2021-12-27T05:40:03.000000Z",
     *                           "id": 2,
-    *                           "location_id": 2,
     *                           "location": {
-    *                               "latitude_origin": 27.687012,
-    *                               "longitude_origin": 85.304359,
-    *                               "latitude_destination": 27.234325,
-    *                               "longitude_destination": 86.12313,
-    *                               "updated_at": "2021-12-27T05:40:03.000000Z",
-    *                               "created_at": "2021-12-27T05:40:03.000000Z",
-    *                               "id": 2
+    *                               "origin":{
+    *                                   "name": "Sanepa, Lalitpur",
+    *                                   "latitude": 27.687012,
+    *                                   "longitude": 85.304359
+    *                               },
+    *                               "destination":{
+    *                                   "name": "New Baneshwor, Kathmandu",
+    *                                   "latitude": 28.234325,
+    *                                   "longitude": 87.12313
+    *                               }
     *                           },
     *                           "status_text": "Pending"
     *                       }
@@ -196,7 +205,8 @@ class BookingController extends Controller
                 $createdBooking = $this->booking->create($user->id, $request->all());
                 if($createdBooking)
                 {
-                    $response = ['message' => 'Booking Successful!',  "booking"=>$createdBooking,];
+                    $booking = Booking::where('id',$createdBooking->id)->with('location')->with('price_detail')->with('user:id,first_name,last_name,image')->first();
+                    $response = ['message' => 'Booking Successful!',  "booking"=>$booking];
                     return response($response, 201);
                 }
                 return response("Internal Server Error!", 500);
@@ -210,7 +220,7 @@ class BookingController extends Controller
     * @OA\Post(
     *   path="/api/booking/change_status",
     *   tags={"Booking"},
-    *   summary="Change Status",
+    *   summary="Change Status (Needs location data and distance for completed status)",
     *   security={{"bearerAuth":{}}},
     *   @OA\RequestBody(
     *      @OA\MediaType(
@@ -225,6 +235,19 @@ class BookingController extends Controller
     *                       "cancelled_by_id":1,
     *                       "cancelled_by_type":"customer",
     *                       "cancel_message":"Timeout or somethin!",
+    *                       "location": {
+    *                           "origin":{
+    *                               "name": "Sanepa, Lalitpur",
+    *                               "latitude": 27.687012,
+    *                               "longitude": 85.304359
+    *                           },
+    *                           "destination":{
+    *                               "name": "New Baneshwor, Kathmandu",
+    *                               "latitude": 28.234325,
+    *                               "longitude": 87.12313
+    *                           }
+    *                       }, 
+    *                       "distance":2000
     *                   },
     *               }
     *         )
@@ -257,7 +280,6 @@ class BookingController extends Controller
     *                           "rider_id": 1,
     *                           "trip_id": "#Q78A8LU",
     *                           "booking_id": 16,
-    *                           "location_id": 16,
     *                           "start_time": "2021-12-23 14:21:58",
     *                           "end_time": "2021-12-23 14:22:04",
     *                           "origin": "Sanepa, Lalitpur",
@@ -275,6 +297,18 @@ class BookingController extends Controller
     *                             }
     *                           },
     *                           "distance": 12,
+    *                           "location": {
+    *                               "origin":{
+    *                                   "name": "Sanepa, Lalitpur",
+    *                                   "latitude": 27.687012,
+    *                                   "longitude": 85.304359
+    *                               },
+    *                               "destination":{
+    *                                   "name": "New Baneshwor, Kathmandu",
+    *                                   "latitude": 28.234325,
+    *                                   "longitude": 87.12313
+    *                               }
+    *                           },
     *                           "duration": 6,
     *                           "passenger_number": 1,
     *                           "profile_img_user": null,
@@ -297,16 +331,6 @@ class BookingController extends Controller
     *                             "deleted_at": null,
     *                             "created_at": "2021-12-23T08:37:04.000000Z",
     *                             "updated_at": "2021-12-23T08:37:04.000000Z"
-    *                           },
-    *                           "location": {
-    *                             "id": 16,
-    *                             "longitude_origin": 27.123456,
-    *                             "latitude_origin": 85.123423,
-    *                             "longitude_destination": 27.234325,
-    *                             "latitude_destination": 86.12313,
-    *                             "deleted_at": null,
-    *                             "created_at": "2021-12-23T08:36:15.000000Z",
-    *                             "updated_at": "2021-12-23T08:36:15.000000Z"
     *                           },
     *                           "user": {
     *                             "id": 2,
@@ -393,7 +417,7 @@ class BookingController extends Controller
        // dd($request->all());
 
        $booking = Booking::find($request->booking_id);
-       if($booking)
+       if($booking  && $booking->vehicle_type_id != 4)
        {
             if($request->new_status == 'accepted')
             {
@@ -402,6 +426,7 @@ class BookingController extends Controller
                     $response = ['message' => 'The booking is no longer available!'];
                     return response($response, 400);
                 }
+        
             }
 
             if( $request->new_status == "running")
@@ -420,6 +445,12 @@ class BookingController extends Controller
 
             if( $request->new_status == "completed")
             {
+                if($request->vehicle_type_id != 4 &&  ( $request['optional_data']['location'] || $request['optional_data']['distance'] ))
+                {
+                    $response = ['message' => 'The new location data and distance is required to complete the ride!'];
+                    return response($response, 422);
+                }
+
                 if($booking->status != 'running')
                 {
                     $response = ['message' => 'The booking has not been started yet!'];
@@ -432,13 +463,23 @@ class BookingController extends Controller
                 }
             }
 
-           if($booking->status == "completed" || $booking->status == "cancelled")
+           if($booking->status == "completed" || $booking->status == "cancelled") 
            {
                 $response = ['message' => 'No active booking found!'];
                 return response($response, 404);
            }
-       }
-     
+        }
+        else if($booking && $booking->vehicle_type_id == 4) //IF AMBULANCE
+        {
+            if( $request['new_status'] = 'accepted')
+            {
+                $request['new_status'] = 'completed';
+                $booking->rider_id = $request['optional_data']['rider_id'];
+                $booking->save();
+            }
+        
+        }
+        else{}
 
         //UPDATE STATUS
         return DB::transaction(function () use ($request, $user)
@@ -463,20 +504,10 @@ class BookingController extends Controller
                     }
                     
                 }
-                // else{
-                //    $booking = Booking::find($request->booking_id);
-                //     //Check if the booking is accepted first
-                //     if($booking->status != 'accepted' || $booking->rider_id != $rider_id)
-                //     {
-                //         $response = ['message' => 'The rider needs to accept a ride first!'];
-                //         return response($response, 422);
-                //     }
 
-                // }
-               // dd('asffff', $pending_rider_booking->toArray());
 
             }
-            //dd('passed');
+        
 
 
             $updatedBooking = $this->booking->update_status($request->all());
@@ -560,7 +591,18 @@ class BookingController extends Controller
     *                           "vehicle_type_id": 1,
     *                           "rider_id": 1,
     *                           "trip_id": "#Q78A8LU",
-    *                           "location_id": 24,
+    *                           "location": {
+    *                               "origin":{
+    *                                   "name": "Sanepa, Lalitpur",
+    *                                   "latitude": 27.687012,
+    *                                   "longitude": 85.304359
+    *                               },
+    *                               "destination":{
+    *                                   "name": "New Baneshwor, Kathmandu",
+    *                                   "latitude": 28.234325,
+    *                                   "longitude": 87.12313
+    *                               }
+    *                           },
     *                           "start_time": "2021-12-14 14:24:25",
     *                           "end_time": "2021-12-14 14:37:35",
     *                           "origin": "Sanepa, Lalitpur",
@@ -663,7 +705,6 @@ class BookingController extends Controller
     *                           "vehicle_type_id": 1,
     *                           "rider_id": 1,
     *                           "trip_id": "#Q78A8LU",
-    *                           "location_id": 24,
     *                           "start_time": "2021-12-14 14:24:25",
     *                           "end_time": "2021-12-14 14:37:35",
     *                           "origin": "Sanepa, Lalitpur",
@@ -678,14 +719,16 @@ class BookingController extends Controller
     *                           "created_at": "2021-12-14T08:12:21.000000Z",
     *                           "updated_at": "2021-12-14T08:52:35.000000Z",
     *                           "location": {
-    *                               "id": 24,
-    *                               "longitude_origin": 27.123456,
-    *                               "latitude_origin": 85.123423,
-    *                               "longitude_destination": 27.234325,
-    *                               "latitude_destination": 86.12313,
-    *                               "deleted_at": null,
-    *                               "created_at": "2021-12-14T08:12:21.000000Z",
-    *                               "updated_at": "2021-12-14T08:12:21.000000Z"
+    *                               "origin":{
+    *                                   "name": "Sanepa, Lalitpur",
+    *                                   "latitude": 27.687012,
+    *                                   "longitude": 85.304359
+    *                               },
+    *                               "destination":{
+    *                                   "name": "New Baneshwor, Kathmandu",
+    *                                   "latitude": 28.234325,
+    *                                   "longitude": 87.12313
+    *                               }
     *                           },
     *                           "price_detail": {
     *                               "id": 7,
@@ -787,16 +830,18 @@ class BookingController extends Controller
     *                               "updated_at": "2021-11-17T06:46:13.000000Z",
     *                               "created_at": "2021-11-17T06:46:13.000000Z",
     *                               "id": 3,
-    *                               "location_id": 3,
-    *                               "location": {
-    *                                 "latitude_origin": 85.123423,
-    *                                 "longitude_origin": 27.123456,
-    *                                 "latitude_destination": 86.12313,
-    *                                 "longitude_destination": 27.234325,
-    *                                 "updated_at": "2021-11-17T06:46:13.000000Z",
-    *                                 "created_at": "2021-11-17T06:46:13.000000Z",
-    *                                 "id": 3
-    *                               }
+    *                              "location": {
+    *                                   "origin":{
+    *                                       "name": "Sanepa, Lalitpur",
+    *                                       "latitude": 27.687012,
+    *                                       "longitude": 85.304359
+    *                                   },
+    *                                   "destination":{
+    *                                       "name": "New Baneshwor, Kathmandu",
+    *                                       "latitude": 28.234325,
+    *                                       "longitude": 87.12313
+    *                                   }
+    *                               },
     *                             }
     *                           },
     *                   }
@@ -852,6 +897,7 @@ class BookingController extends Controller
     *                 "origin_longitude":85.3042161,
     *                 "distance":2000,
     *                  "duration":300,
+    *                  "voucher":"#9816810976C",
     *               }
     *         )
     *     )
@@ -975,6 +1021,7 @@ class BookingController extends Controller
     {
        
         try{
+            $request['user_id'] = Auth::user()->id;
             $estimated_price = $this->booking->get_estimated_price($request->all());
             if($estimated_price)
             {
