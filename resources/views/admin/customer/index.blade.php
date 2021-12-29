@@ -106,6 +106,7 @@
                             <th class="notexport">Customer Name</th>
                             <th>Username</th>
                             <th>Email</th>
+                            <th>Gender</th>
                             <th>Phone</th>
                             <th>status</th>
                             <th class="notexport">Action</th>
@@ -211,6 +212,9 @@
                         },
                         {
                             "data": "email"
+                        },
+                        {
+                            "data": "gender"
                         },
                         {
                             "data": "phone"

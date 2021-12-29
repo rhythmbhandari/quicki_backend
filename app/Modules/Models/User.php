@@ -43,7 +43,7 @@ class User extends Authenticatable
     protected $fillable = [
         'first_name', 'middle_name', 'last_name',   'email', 'username', 'password', 'slug', 'status',
         'image', 'phone', 'email_verified_at', 'no_of_logins', 'last_logged_in', 'avatar', 'dob', 'emergency_contacts',
-        'google_id', 'facebook_id', 'image', 'device_token', 'social_image_url', 'location',
+        'google_id', 'facebook_id', 'image', 'device_token', 'social_image_url', 'location', 'gender',
         'created_at', 'updated_at', 'deleted_at', 'last_updated_by', 'last_deleted_by'
     ];
     protected $appends = ['name', 'status_text', 'thumbnail_path', 'image_path'];
@@ -63,8 +63,9 @@ class User extends Authenticatable
 
     function getThumbnailPathAttribute()
     {
-        if ($this->image)
-            return $this->path .  '/thumb/' . $this->image;
+        if ($this->image) 
+        return $this->path .  '/' . $this->image;
+            // return $this->path .  '/thumb/' . $this->image;
         else
             return 'assets/media/user_placeholder.png';
     }

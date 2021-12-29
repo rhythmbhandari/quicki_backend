@@ -22,6 +22,10 @@ class CreateVehicleTypesTable extends Migration
             $table->double('commission')->comment('In Percent!');
             $table->string('capacity');
             $table->enum('status',['active','in_active']);
+            $table->json('available_cities')->nullable()->comment('
+                FORMAT: #CITIES where this vehicle type (city safari) operates
+                { "pokhara", "butwal" }
+            ');
 
             $table->double('default_surge_rate')->nullable()->comment('SURGE RATE applied either for shift surge!');
 

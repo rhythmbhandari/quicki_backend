@@ -20,13 +20,13 @@ class Payment extends Model
 
     protected $casts = [    
                         'commission_amount'=>'float',
-                        'completed_trip_id'=>'integer'
+                        'completed_trip_id'=>'integer',
                         ];
 
     protected $fillable = [ 'commission_amount', 'payment_status','commission_payment_status','completed_trip_id',
                             'created_at','updated_at','deleted_at'];
 
-    protected $appends = [ 'customer_payment_status'   ];
+    protected $appends = [ 'customer_payment_status' ,  ];
 
 
     /**
@@ -55,10 +55,6 @@ class Payment extends Model
     }
 
 
-    public function promotion_voucher()
-    {
-        return $this->belongsTo(PromotionVoucher::class);
-    }
 
 
 }

@@ -39,6 +39,9 @@ class PriceDetail extends Model
         'price_after_duration' =>'float' , 
         'price_after_base_fare' =>'float' , 
         'total_price' =>'integer' ,
+        'promotion_vouccher_id' =>'integer' ,
+        'discount_amount' =>'integer' ,
+        'original_price'=>'integer'
         ];
 
     protected $fillable = ['booking_id','completed_trip_id','base_fare','base_covered_km',
@@ -46,15 +49,17 @@ class PriceDetail extends Model
                         'surge_rate','price_per_km_after_surge',  'surge', 'price_after_surge', 'app_charge_percent',
                         'app_charge', 'price_after_app_charge', 'price_per_min', 'duration_charge',
                         'price_after_duration', 'price_after_base_fare', 'total_price','price_per_min_after_base',
+                        'promotion_voucher_id','discount_amount','original_price',
                         'deleted_at', 'updated_at','deleted_at'];
 
 
     protected $appends = [
-        'original_price'
+        'promo_applied'
     ];
 
-    public function getOriginalPriceAttribute(){
-        return ($this->total_price + $this->discount_amount);
+    public function getPromoAppliedAttribute()
+    {
+        return ( $this->discount_amount > 0 && ( $this->total_price < $this->original_price ));
     }
 
     public function booking(){

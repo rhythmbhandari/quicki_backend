@@ -53,8 +53,19 @@ class CompletedTripController extends Controller
     *                                   "id": 2,
     *                                   "user_id": 2,
     *                                   "rider_id": 1,
-    *                                   "booking_id": 15,
-    *                                   "location_id": 15,
+    *                                   "booking_id": 15,    
+    *                                    "location": {
+    *                                        "origin":{
+    *                                            "name": "Sanepa, Lalitpur",
+    *                                            "latitude": 27.687012,
+    *                                            "longitude": 85.304359
+    *                                        },
+    *                                        "destination":{
+    *                                            "name": "New Baneshwor, Kathmandu",
+    *                                            "latitude": 28.234325,
+    *                                            "longitude": 87.12313
+    *                                        }
+    *                                    },
     *                                   "start_time": "2021-12-23 13:52:00",
     *                                   "end_time": "2021-12-23 13:52:06",
     *                                   "origin": "Sanepa, Lalitpur",
@@ -80,7 +91,8 @@ class CompletedTripController extends Controller
     *                                     "id": 3,
     *                                     "status": "cancelled",
     *                                     "trip_id": "#86UQ7F1",
-    *                                     "status_text": "Cancelled"
+    *                                     "status_text": "Cancelled",
+    *                                     "review": null
     *                                   },
     *                                   "status": "completed",
     *                                   "price": 159,
@@ -91,16 +103,6 @@ class CompletedTripController extends Controller
     *                                   "deleted_at": null,
     *                                   "created_at": "2021-12-23T01:45:57.000000Z",
     *                                   "updated_at": "2021-12-23T02:22:06.000000Z",
-    *                                   "location": {
-    *                                     "id": 15,
-    *                                     "longitude_origin": 85.123423,
-    *                                     "latitude_origin": 27.123456,
-    *                                     "longitude_destination": 86.12313,
-    *                                     "latitude_destination": 27.234325,
-    *                                     "deleted_at": null,
-    *                                     "created_at": "2021-12-23T07:30:57.000000Z",
-    *                                     "updated_at": "2021-12-23T07:30:57.000000Z"
-    *                                   },
     *                                   "payment": {
     *                                     "id": 2,
     *                                     "completed_trip_id": 2,
@@ -280,7 +282,18 @@ class CompletedTripController extends Controller
     *                               "user_id": 3,
     *                               "rider_id": 1,
     *                               "booking_id": 1,
-    *                               "location_id": 1,
+    *                                "location": {
+    *                                    "origin":{
+    *                                        "name": "Sanepa, Lalitpur",
+    *                                        "latitude": 27.687012,
+    *                                        "longitude": 85.304359
+    *                                    },
+    *                                    "destination":{
+    *                                        "name": "New Baneshwor, Kathmandu",
+    *                                        "latitude": 28.234325,
+    *                                        "longitude": 87.12313
+    *                                    }
+    *                                },
     *                               "start_time": "2021-12-23 13:45:28",
     *                               "end_time": "2021-12-23 13:45:35",
     *                               "origin": "Sanepa, Lalitpur",
@@ -289,7 +302,20 @@ class CompletedTripController extends Controller
     *                                     "id": 3,
     *                                     "status": "cancelled",
     *                                     "trip_id": "#86UQ7F1",
-    *                                     "status_text": "Cancelled"
+    *                                     "status_text": "Cancelled",
+    *                                     "review": {
+    *                                             "id": 55,
+    *                                             "booking_id": 176,
+    *                                             "rider_id": 40,
+    *                                             "user_id": 108,
+    *                                             "reviewed_by_role": "customer",
+    *                                             "rate": 4,
+    *                                             "ride_date": "2021-12-23",
+    *                                             "comment": "10",
+    *                                             "deleted_at": null,
+    *                                             "created_at": "2021-12-23T07:28:23.000000Z",
+    *                                             "updated_at": "2021-12-23T07:28:23.000000Z"
+    *                                           }
     *                                   },
     *                               "stoppage": {
     *                                 {
@@ -374,7 +400,18 @@ class CompletedTripController extends Controller
     *                               "user_id": 2,
     *                               "rider_id": 1,
     *                               "booking_id": 15,
-    *                               "location_id": 15,
+    *                               "location": {
+    *                                   "origin":{
+    *                                       "name": "Sanepa, Lalitpur",
+    *                                       "latitude": 27.687012,
+    *                                       "longitude": 85.304359
+    *                                   },
+    *                                   "destination":{
+    *                                       "name": "New Baneshwor, Kathmandu",
+    *                                       "latitude": 28.234325,
+    *                                       "longitude": 87.12313
+    *                                   }
+    *                               },
     *                               "start_time": "2021-12-23 13:52:00",
     *                               "end_time": "2021-12-23 13:52:06",
     *                               "origin": "Sanepa, Lalitpur",
@@ -405,16 +442,6 @@ class CompletedTripController extends Controller
     *                               "deleted_at": null,
     *                               "created_at": "2021-12-23T01:45:57.000000Z",
     *                               "updated_at": "2021-12-23T02:22:06.000000Z",
-    *                               "location": {
-    *                                 "id": 15,
-    *                                 "longitude_origin": 85.123423,
-    *                                 "latitude_origin": 27.123456,
-    *                                 "longitude_destination": 86.12313,
-    *                                 "latitude_destination": 27.234325,
-    *                                 "deleted_at": null,
-    *                                 "created_at": "2021-12-23T07:30:57.000000Z",
-    *                                 "updated_at": "2021-12-23T07:30:57.000000Z"
-    *                               },
     *                               "user": {
     *                                 "id": 2,
     *                                 "first_name": "Sasuke",
@@ -563,7 +590,18 @@ class CompletedTripController extends Controller
     *                               "user_id": 2,
     *                               "rider_id": 1,
     *                               "booking_id": 15,
-    *                               "location_id": 15,
+    *                               "location": {
+    *                                   "origin":{
+    *                                       "name": "Sanepa, Lalitpur",
+    *                                       "latitude": 27.687012,
+    *                                       "longitude": 85.304359
+    *                                   },
+    *                                   "destination":{
+    *                                       "name": "New Baneshwor, Kathmandu",
+    *                                       "latitude": 28.234325,
+    *                                       "longitude": 87.12313
+    *                                   }
+    *                               },
     *                               "start_time": "2021-12-23 13:52:00",
     *                               "end_time": "2021-12-23 13:52:06",
     *                               "origin": "Sanepa, Lalitpur",
@@ -571,7 +609,20 @@ class CompletedTripController extends Controller
     *                                     "id": 3,
     *                                     "status": "cancelled",
     *                                     "trip_id": "#86UQ7F1",
-    *                                     "status_text": "Cancelled"
+    *                                     "status_text": "Cancelled",
+    *                                     "review": {
+    *                                             "id": 55,
+    *                                             "booking_id": 176,
+    *                                             "rider_id": 40,
+    *                                             "user_id": 108,
+    *                                             "reviewed_by_role": "customer",
+    *                                             "rate": 4,
+    *                                             "ride_date": "2021-12-23",
+    *                                             "comment": "10",
+    *                                             "deleted_at": null,
+    *                                             "created_at": "2021-12-23T07:28:23.000000Z",
+    *                                             "updated_at": "2021-12-23T07:28:23.000000Z"
+    *                                           }
     *                                   },
     *                               "destination": "New Baneshwor, Kathmandu",
     *                               "stoppage": {
@@ -609,16 +660,6 @@ class CompletedTripController extends Controller
     *                                 "deleted_at": null,
     *                                 "created_at": "2021-12-23T08:07:06.000000Z",
     *                                 "updated_at": "2021-12-23T08:07:06.000000Z"
-    *                               },
-    *                               "location": {
-    *                                 "id": 15,
-    *                                 "longitude_origin": 85.123423,
-    *                                 "latitude_origin": 27.123456,
-    *                                 "longitude_destination": 86.12313,
-    *                                 "latitude_destination": 27.234325,
-    *                                 "deleted_at": null,
-    *                                 "created_at": "2021-12-23T07:30:57.000000Z",
-    *                                 "updated_at": "2021-12-23T07:30:57.000000Z"
     *                               },
     *                               "rider": {
     *                                 "id": 1,
@@ -787,7 +828,18 @@ class CompletedTripController extends Controller
     *                                   "user_id": 3,
     *                                   "rider_id": 1,
     *                                   "booking_id": 1,
-    *                                   "location_id": 1,
+    *                                    "location": {
+    *                                        "origin":{
+    *                                            "name": "Sanepa, Lalitpur",
+    *                                            "latitude": 27.687012,
+    *                                            "longitude": 85.304359
+    *                                        },
+    *                                        "destination":{
+    *                                            "name": "New Baneshwor, Kathmandu",
+    *                                            "latitude": 28.234325,
+    *                                            "longitude": 87.12313
+    *                                        }
+    *                                    },
     *                                   "start_time": "2021-12-23 13:45:28",
     *                                   "end_time": "2021-12-23 13:45:35",
     *                                   "origin": "Sanepa, Lalitpur",
@@ -795,7 +847,20 @@ class CompletedTripController extends Controller
     *                                     "id": 3,
     *                                     "status": "cancelled",
     *                                     "trip_id": "#86UQ7F1",
-    *                                     "status_text": "Cancelled"
+    *                                     "status_text": "Cancelled",
+    *                                     "review": {
+    *                                             "id": 55,
+    *                                             "booking_id": 176,
+    *                                             "rider_id": 40,
+    *                                             "user_id": 108,
+    *                                             "reviewed_by_role": "customer",
+    *                                             "rate": 4,
+    *                                             "ride_date": "2021-12-23",
+    *                                             "comment": "10",
+    *                                             "deleted_at": null,
+    *                                             "created_at": "2021-12-23T07:28:23.000000Z",
+    *                                             "updated_at": "2021-12-23T07:28:23.000000Z"
+    *                                           }
     *                                   },
     *                                   "destination": "New Baneshwor, Kathmandu",
     *                                   "stoppage": {
@@ -833,16 +898,6 @@ class CompletedTripController extends Controller
     *                                     "deleted_at": null,
     *                                     "created_at": "2021-12-23T08:00:35.000000Z",
     *                                     "updated_at": "2021-12-23T08:00:35.000000Z"
-    *                                   },
-    *                                   "location": {
-    *                                     "id": 1,
-    *                                     "longitude_origin": 85.123423,
-    *                                     "latitude_origin": 27.123456,
-    *                                     "longitude_destination": 86.12313,
-    *                                     "latitude_destination": 27.234325,
-    *                                     "deleted_at": null,
-    *                                     "created_at": "2021-12-22T10:59:05.000000Z",
-    *                                     "updated_at": "2021-12-22T10:59:05.000000Z"
     *                                   },
     *                                   "rider": {
     *                                     "id": 1,
@@ -1239,7 +1294,18 @@ class CompletedTripController extends Controller
     *                       "user_id": 2,
     *                       "rider_id": 1,
     *                       "booking_id": 5,
-    *                       "location_id": 5,
+    *                       "location": {
+    *                           "origin":{
+    *                               "name": "Sanepa, Lalitpur",
+    *                               "latitude": 27.687012,
+    *                               "longitude": 85.304359
+    *                           },
+    *                           "destination":{
+    *                               "name": "New Baneshwor, Kathmandu",
+    *                               "latitude": 28.234325,
+    *                               "longitude": 87.12313
+    *                           }
+    *                       },
     *                       "start_time": "2021-12-27 13:48:48",
     *                       "end_time": "2021-12-27 13:49:06",
     *                       "origin": "Sanepa, Lalitpur",
@@ -1270,16 +1336,6 @@ class CompletedTripController extends Controller
     *                       "deleted_at": null,
     *                       "created_at": "2021-12-27T02:10:00.000000Z",
     *                       "updated_at": "2021-12-27T02:19:06.000000Z",
-    *                       "location": {
-    *                         "id": 5,
-    *                         "longitude_origin": 85.304359,
-    *                         "latitude_origin": 27.687012,
-    *                         "longitude_destination": 27.234325,
-    *                         "latitude_destination": 86.12313,
-    *                         "deleted_at": null,
-    *                         "created_at": "2021-12-27T07:55:00.000000Z",
-    *                         "updated_at": "2021-12-27T07:55:00.000000Z"
-    *                       },
     *                       "booking": {
     *                         "id": 5,
     *                         "trip_id": "#GK6655W",
@@ -1298,12 +1354,36 @@ class CompletedTripController extends Controller
     *                         "user_id": 2,
     *                         "vehicle_type_id": 1,
     *                         "rider_id": 1,
-    *                         "location_id": 5,
+    *                          "location": {
+    *                              "origin":{
+    *                                  "name": "Sanepa, Lalitpur",
+    *                                  "latitude": 27.687012,
+    *                                  "longitude": 85.304359
+    *                              },
+    *                              "destination":{
+    *                                  "name": "New Baneshwor, Kathmandu",
+    *                                  "latitude": 28.234325,
+    *                                  "longitude": 87.12313
+    *                              }
+    *                          },
     *                         "start_time": "2021-12-27 13:48:48",
     *                         "end_time": "2021-12-27 13:49:06",
     *                         "origin": "Sanepa, Lalitpur",
     *                         "destination": "New Baneshwor, Kathmandu",
     *                         "distance": 12,
+    *                         "review": {
+    *                                 "id": 55,
+    *                                 "booking_id": 176,
+    *                                 "rider_id": 40,
+    *                                 "user_id": 108,
+    *                                 "reviewed_by_role": "customer",
+    *                                 "rate": 4,
+    *                                 "ride_date": "2021-12-23",
+    *                                 "comment": "10",
+    *                                 "deleted_at": null,
+    *                                 "created_at": "2021-12-23T07:28:23.000000Z",
+    *                                 "updated_at": "2021-12-23T07:28:23.000000Z"
+    *                               }
     *                         "duration": 20,
     *                         "passenger_number": 2,
     *                         "status": "completed",
