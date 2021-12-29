@@ -4860,6 +4860,49 @@
                 ]
             }
         },
+        "/api/rider/income_details": {
+            "get": {
+                "tags": [
+                    "Details"
+                ],
+                "summary": "Get Rider's Income details",
+                "operationId": "13b50d14e77f713aa0bca8b71f84136f",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "data": {
+                                            "total_income": 2000,
+                                            "total_commission": 500,
+                                            "paid": 200,
+                                            "dues": 300
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/user/details": {
             "get": {
                 "tags": [

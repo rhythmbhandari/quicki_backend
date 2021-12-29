@@ -20,6 +20,10 @@ use App\Modules\Services\User\RiderService;
 //models
 use App\Modules\Models\Rider;
 use App\Modules\Models\User;
+use App\Modules\Models\CompletedTrip;
+use App\Modules\Models\Payment;
+use App\Modules\Models\Transaction;
+
 
 class RiderController extends Controller
 {
@@ -512,6 +516,80 @@ class RiderController extends Controller
     }
 
 
+
+
+    /**
+    * @OA\Get(
+    *   path="/api/rider/income_details",
+    *   tags={"Details"},
+    *   summary="Get Rider's Income details",
+    *   security={{"bearerAuth":{}}},
+    *
+    *
+    *      @OA\Response(
+    *        response=200,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                   @OA\Schema(      
+    *                   example={
+    *                           "message":"Success!",
+    *                           "data":{
+    *                               "total_income":2000,
+    *                               "total_commission":500,
+    *                               "paid":200,
+    *                               "dues":300,
+    *                           }
+    *                           
+    *                   }
+    *                 )
+    *           )
+    *      ),
+    *
+    *     @OA\Response(
+    *          response=403,
+    *          description="Forbidden Access",
+    *      ),
+    *)
+    **/
+    function getIncomeDetails()
+    {
+        $user = Auth::user();
+
+        //ROLE CHECK FOR RIDER
+        if( ! $this->user_service->hasRole($user, 'rider') )
+        {
+            $response = ['message' => 'Forbidden Access!'];
+            return response($response, 403);
+        }
+
+
+        $rider = $user->rider;
+
+        $data = [];
+
+        $total_ride_sales = CompletedTrip::where('rider_id',$rider->id)->where('status','completed')->sum('price');
+        $total_commission = Payment::whereRelation('completed_trip','rider_id',$rider->id)->sum('commission_amount');
+        $paid = Transaction::where('debtor_type', 'admin')->where('creditor_type','rider')->where('creditor_id',$user->id)->sum('amount');
+        $dues = $total_commission - $paid;
+        $total_income = $total_ride_sales - $total_commission;
+
+        $data = [
+            "total_income"=>$total_income,
+            "total_commission"=>$total_commission,
+            "paid"=>$paid,
+            "dues"=>$dues
+        ];
+
+        $response = ['message' => 'Success!',"data"=>$data];
+        return response($response, 200);
+
+    }
+
+
+
+
+
     //Image for user 
     function uploadFile(Request $request, $user)
     {
@@ -523,7 +601,6 @@ class RiderController extends Controller
         $data['image'] = $fileName;
         $this->user_service->updateImage($user->id, $data);
     }
-
 
 
 
