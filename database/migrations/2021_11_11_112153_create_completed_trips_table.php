@@ -27,8 +27,8 @@ class CreateCompletedTripsTable extends Migration
             $table->timestamp('start_time')->nullable();
             $table->timestamp('end_time')->nullable();
 
-            $table->string('origin');
-            $table->string('destination');
+            // $table->string('origin');
+            // $table->string('destination');
             $table->json('stoppage')->nullable();
             $table->integer('distance')->nullable();
             $table->integer('duration')->nullable();

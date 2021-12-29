@@ -31,7 +31,7 @@ class CreateVehiclesTable extends Migration
             $table->string('image')->nullable();
             $table->string('make_year')->nullable();
             $table->string('vehicle_color')->nullable();
-            $table->integer('capacity')->defaul(2)->comment('Rider Exclusive!');
+            $table->integer('capacity')->nullable()->default(2)->comment('Rider Exclusive!');
             $table->string('brand')->nullable();
             $table->string('model')->nullable();
             $table->enum('status',['active', 'in_active'])->nullable();

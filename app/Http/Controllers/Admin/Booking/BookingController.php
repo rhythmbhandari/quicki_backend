@@ -99,8 +99,9 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $request = $this->sanitize($request);
-
+        //voucher
         $data = $request->all();
+        
         $data['location']['latitude_origin'] = $data['start_coordinate']['latitude'];
         $data['location']['longitude_origin'] = $data['start_coordinate']['longitude'];
         $data['location']['latitude_destination'] = $data['end_coordinate']['latitude'];
@@ -108,8 +109,14 @@ class BookingController extends Controller
         $data['origin'] = $data['start_location'];
         $data['destination'] = $data['end_location'];
 
-        $estimatedPrice = $this->booking->calculateEstimatedPrice($data['location']['latitude_origin'], $data['location']['latitude_destination'], $request->vehicle_type_id, $request->distance, $request->duration);
-        $data['price'] = $estimatedPrice['price_breakdown']['total_price'];
+        // $estimatedPrice = $this->booking->calculateEstimatedPrice($data['location']['latitude_origin'], 
+        //                                                         $data['location']['latitude_destination'], 
+        //                                                         $request->vehicle_type_id, 
+        //                                                         $request->distance, 
+        //                                                         $request->duration,
+
+        //                                                     );
+        $data['price'] = isset($data['price'])?intval($data['price']):0;//$estimatedPrice['price_breakdown']['total_price'];
 
         // dd($data);
         //BOOKING STORE
@@ -136,8 +143,18 @@ class BookingController extends Controller
         if ($validator->fails()) {
             return response(['message' => 'Validation error', 'errors' => $validator->errors()->all()], 422);
         }
+        
         // dd($request->all());
-        $estimatedPrice = $this->booking->calculateEstimatedPrice($request->origin_latitude, $request->origin_longitude, $request->vehicle_type_id, $request->distance, $request->duration);
+        $estimatedPrice = $this->booking->calculateEstimatedPrice(
+            $request->origin_latitude, 
+            $request->origin_longitude,
+            $request->vehicle_type_id, 
+            $request->distance, 
+            $request->duration,
+            null,
+            null,
+            null
+        );
         return response(compact('estimatedPrice'), 200);
     }
 
@@ -224,6 +241,8 @@ class BookingController extends Controller
     public function update(BookingRequest $request, $id)
     {
         $request = $this->sanitize($request);
+        $booking = Booking::findOrFail($id);
+        $voucher = isset($booking->price_detail->promotion_voucher_id) ? $booking->price_detail->promotion_voucher->code : null;
 
         $data = $request->all();
         $data['location']['latitude_origin'] = $data['start_coordinate']['latitude'];
@@ -233,7 +252,15 @@ class BookingController extends Controller
         $data['origin'] = $data['start_location'];
         $data['destination'] = $data['end_location'];
 
-        $estimatedPrice = $this->booking->calculateEstimatedPrice($data['location']['latitude_origin'], $data['location']['latitude_destination'], $request->vehicle_type_id, $request->distance, $request->duration);
+        $estimatedPrice = $this->booking->calculateEstimatedPrice($data['location']['latitude_origin'], 
+                                                                $data['location']['latitude_destination'], 
+                                                                $request->vehicle_type_id, 
+                                                                $request->distance, 
+                                                                $request->duration,
+                                                                $booking->user_id,
+                                                                $voucher,
+                                                                $booking->id
+                                                                );
         $data['price'] = $estimatedPrice['price_breakdown']['total_price'];
         //UPDATE STATUS
         return DB::transaction(function () use ($data, $id) {

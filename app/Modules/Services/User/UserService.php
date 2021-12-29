@@ -44,6 +44,9 @@ class UserService extends Service
             ->editColumn('phone', function (User $user) {
                 return $user->phone;
             })
+            ->editColumn('gender', function (User $user) {
+                return $user->gender;
+            })
             ->editColumn('status', function (User $user) {
                 return getTableHtml($user, 'status');
             })
@@ -54,7 +57,7 @@ class UserService extends Service
                 $optionRoute = '';
                 $optionRouteText = '';
                 return getTableHtml($user, 'actions', $editRoute, $deleteRoute, $optionRoute, $optionRouteText);
-            })->rawColumns(['image', 'status', 'actions'])
+            })->rawColumns(['image', 'status', 'gender', 'actions'])
             ->make(true);
     }
 

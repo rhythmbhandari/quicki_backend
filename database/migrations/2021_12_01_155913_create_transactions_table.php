@@ -24,6 +24,10 @@ class CreateTransactionsTable extends Migration
             $table->string('debtor_type')->comment('User Roles: customer, rider, or admin');
             $table->foreignId('debtor_id')->nullable()->constrained("users")->cascadeOnUpdate()->nullOnDelete();   
 
+            $table->string('type')->nullable();
+            $table->string('description')->nullable();
+            $table->foreignId('promotion_voucher_id')->nullable()->constrained("promotion_vouchers")->cascadeOnUpdate()->nullOnDelete(); 
+
             $table->enum('payment_mode',['online','offline'])->default('offline');
             $table->string('payment_gateway_type')->nullable()->comment('Esewa or Khalti');
             $table->string('payment_gateway_user_id')->nullable()->comment('For Esewa, it might be the creditor\' mobile number!');

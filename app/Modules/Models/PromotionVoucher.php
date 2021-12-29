@@ -10,6 +10,7 @@ use Carbon\Carbon;
 
 use App\Modules\Models\PriceDetail;
 use App\Modules\Models\Payment;
+use App\Modules\Models\Transaction;
 
 class PromotionVoucher extends Model
 {
@@ -70,10 +71,9 @@ class PromotionVoucher extends Model
             return 'assets/media/user_placeholder.png';
     }
 
-
-    public function payments()
+    public function transactions()
     {
-        return $this->hasMany(Payment::class);
+        return $this->hasMany(Transaction::class);
     }
 
     public function price_details()

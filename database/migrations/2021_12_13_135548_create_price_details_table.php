@@ -41,7 +41,7 @@ class CreatePriceDetailsTable extends Migration
 
             $table->foreignId('promotion_voucher_id')->nullable()->constrained("promotion_vouchers")->cascadeOnUpdate()->nullOnDelete();
             $table->integer('discount_amount')->default(0);
-            
+            $table->integer('original_price')->nullable();
             $table->integer('total_price')->nullable();
 
             $table->softDeletes();
