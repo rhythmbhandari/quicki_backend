@@ -42,7 +42,7 @@ class CompletedTripController extends Controller
           
 
         //Fetch booking history/ completed trips
-        $completed_trips = CompletedTrip::where('user_id',$user->id)->with('location')->with('rider')->get();
+        $completed_trips = CompletedTrip::where('user_id',$user->id)->with('rider')->get();
 
         $response = ['message' => 'Success!',  "completed_trips"=>$completed_trips];
         return response($response, 200);
@@ -62,7 +62,7 @@ class CompletedTripController extends Controller
           
 
         //Fetch booking history/ completed trips
-        $completed_trips = CompletedTrip::where('user_id',$user->id)->with('location')->with('user')->get();
+        $completed_trips = CompletedTrip::where('user_id',$user->id)->with('user')->get();
 
         $response = ['message' => 'Success!',  "completed_trips"=>$completed_trips];
         return response($response, 200);

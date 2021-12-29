@@ -68,6 +68,8 @@ class BookingStatusRequest extends FormRequest
                             }
                         },],
             'optional_data.cancel_message'  => 'nullable|string',
+            'optional_data.distance'=>'integer',
+            // 'optional_data.location'
 
         ];
     }

@@ -148,8 +148,10 @@ class RiderLocationService extends Service
                 $distance_from_origin = calcuateDistance( 
                     floatval($origin_lat), 
                     floatval($origin_lng), 
-                    floatval($booking->location->latitude_origin), 
-                    floatval($booking->location->longitude_origin)
+                    // floatval($booking->location->latitude_origin), 
+                    // floatval($booking->location->longitude_origin)
+                    floatval($booking->location['origin']['latitude']), 
+                    floatval($booking->location['origin']['longitude'])
                 );
            
                 

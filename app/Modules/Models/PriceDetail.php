@@ -20,7 +20,7 @@ class PriceDetail extends Model
         'booking_id'=>'integer',
         'completed_trip_id'=>'integer',
         'base_fare'=>'float', 
-        'base_covered_km'=>'integer',
+        'base_covered_km'=>'float',
         'minimum_charge'=>'float', 
         'price_per_km' =>'float' ,
         'price_after_distance' =>'float' , 
@@ -41,10 +41,11 @@ class PriceDetail extends Model
         'total_price' =>'integer' ,
         'promotion_vouccher_id' =>'integer' ,
         'discount_amount' =>'integer' ,
+        'charged_km'=>'float',
         'original_price'=>'integer'
         ];
 
-    protected $fillable = ['booking_id','completed_trip_id','base_fare','base_covered_km',
+    protected $fillable = ['booking_id','completed_trip_id','base_fare','base_covered_km','charged_km',
                         'minimum_charge', 'price_per_km','price_after_distance', 'shift_surge','density_surge',
                         'surge_rate','price_per_km_after_surge',  'surge', 'price_after_surge', 'app_charge_percent',
                         'app_charge', 'price_after_app_charge', 'price_per_min', 'duration_charge',
