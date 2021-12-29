@@ -1383,7 +1383,7 @@ class CompletedTripController extends Controller
     *                                 "deleted_at": null,
     *                                 "created_at": "2021-12-23T07:28:23.000000Z",
     *                                 "updated_at": "2021-12-23T07:28:23.000000Z"
-    *                               }
+    *                               },
     *                         "duration": 20,
     *                         "passenger_number": 2,
     *                         "status": "completed",
