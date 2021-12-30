@@ -4043,9 +4043,9 @@
                 "operationId": "748828353410e8a7d6ddde88b21ffdd9",
                 "parameters": [
                     {
-                        "name": "payment_id",
+                        "name": "booking_id",
                         "in": "path",
-                        "description": "Payment Id",
+                        "description": "Booking Id",
                         "required": true
                     }
                 ],
@@ -4888,12 +4888,6 @@
                     },
                     "403": {
                         "description": "Forbidden Access"
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {}
-                        }
                     }
                 },
                 "security": [

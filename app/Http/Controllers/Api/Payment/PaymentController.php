@@ -239,9 +239,9 @@ class PaymentController extends Controller
     *   security={{"bearerAuth":{}}},
     *
     *      @OA\Parameter(
-    *         name="payment_id",
+    *         name="booking_id",
     *         in="path",
-    *         description="Payment Id",
+    *         description="Booking Id",
     *         required=true,
     *      ),
     *
@@ -294,9 +294,9 @@ class PaymentController extends Controller
     *      ),
     *)
     **/
-    public function getPaymentFromBooking($bookingId)
+    public function getPaymentFromBooking($booking_id)
     {
-        $booking = Booking::find($bookingId);
+        $booking = Booking::find($booking_id);
         if(!$booking)
         {
             $response = ['message' => 'Booking not found!'];

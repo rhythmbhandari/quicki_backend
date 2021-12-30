@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Booking\BookingController;
 use App\Http\Controllers\Admin\Payment\TransactionController;
 use App\Http\Controllers\Admin\Sos\SosController;
+use App\Http\Controllers\Admin\PromotionVoucher\PromotionVoucherController;
 use Inertia\Inertia;
 
 Route::get('/test', [UserController::class, 'inertia_test'])->name('test');
@@ -83,4 +84,10 @@ Route::group([
     //transaction
     $router->resource('/transaction', TransactionController::class);
     $router->get('transaction_data', [TransactionController::class, 'getAllData'])->name('transaction.data');
+
+
+     //promotion_voucher
+     $router->resource('/promotion_voucher', PromotionVoucherController::class);
+     $router->get('promotion_voucher_data', [PromotionVoucherController::class, 'getAllData'])->name('promotion_voucher.data');
+
 });
