@@ -29,7 +29,7 @@ class Rider extends Model
         'approved_at', 'created_at', 'deleted_at', 'updated_at', 'last_updated_by', 'last_deleted_by'
     ];
 
-    protected $appends = [];
+    protected $appends = ['status_text'];
 
     //User model of the rider
     public function user()
@@ -37,6 +37,11 @@ class Rider extends Model
         return $this->belongsTo(User::class);   //,'user_id','id');
     }
 
+
+    function getStatusTextAttribute()
+    {
+        return ucwords(str_replace('_', '', $this->status));
+    }
     //Vehicle belonging to the rider
     public function vehicle()
     {

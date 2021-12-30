@@ -3,7 +3,9 @@
     <div class="brand flex-column-auto" id="kt_brand">
         <!--begin::Logo-->
         <a href="{{route('admin.dashboard') }}" class="brand-logo">
-            <h3 class="text-white">{{ config('app.name', 'Puryaideu V2') }}</h3>
+            <h3 class="text-white">
+             
+                {{ config('app.name', 'Puryaideu V2') }}</h3>
         </a>
         <!--end::Logo-->
 
@@ -31,6 +33,8 @@
         <!--end::Toolbar-->
     </div>
     <!--end::Brand-->
+    <img src="{{asset('assets/media/logo.png')}}" alt="logo" class="m-auto mt-3"
+     style="height:50px !important;width:50px !important;margin-top:15px !important">
     <!--begin::Aside Menu-->
     <div class="aside-menu-wrapper flex-column-fluid" id="kt_aside_menu_wrapper">
         <!--begin::Menu Container-->
@@ -198,6 +202,18 @@
                         <span class="menu-text">Transaction</span><i class=""></i>
                     </a>
                 </li>
+
+
+                <li class="menu-item menu-item-submenu {{ request()->is('admin/promotion_voucher') || request()->is('admin/promotion_voucher/*')
+                    ? " menu-item-active menu-item-open" : "" }}" {{-- {{
+                    str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
+                    aria-haspopup="true">
+                    <a href="{{route('admin.promotion_voucher.index')}}" class="menu-link menu-toggle">
+                        <i class="menu-icon flaticon2-correct"></i>
+                        <span class="menu-text">Promotion Voucher</span><i class=""></i>
+                    </a>
+                </li>
+
             </ul>
             <!--end::Menu Nav-->
         </div>

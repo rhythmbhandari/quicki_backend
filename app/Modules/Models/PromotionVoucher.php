@@ -63,6 +63,11 @@ class PromotionVoucher extends Model
             return 'assets/media/user_placeholder.png';
     }
 
+    function getStatusTextAttribute()
+    {
+        return ucwords(str_replace('_', '', $this->status));
+    }
+
     function getThumbnailPathAttribute()
     {
         if ($this->image)

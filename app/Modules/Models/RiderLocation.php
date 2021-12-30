@@ -28,9 +28,13 @@ class RiderLocation extends Model
     ]);
 
     protected $appends = [
-        'availability'  
+        'availability' ,'status_text' 
     ];
 
+    function getStatusTextAttribute()
+    {
+        return ucwords(str_replace('_', '', $this->status));
+    }
     public function getAvailabilityAttribute()
     {
         if($this->status == "active")

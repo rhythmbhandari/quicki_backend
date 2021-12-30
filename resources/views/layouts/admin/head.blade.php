@@ -23,7 +23,8 @@
 	<link href="{{asset('assets/admin/css/themes/layout/brand/dark.css')}}" rel="stylesheet" type="text/css" />
 	<link href="{{asset('assets/admin/css/themes/layout/aside/dark.css')}}" rel="stylesheet" type="text/css" />
 	<!--end::Layout Themes-->
-	<link rel="shortcut icon" href="{{asset('favicon.ico')}}" />
+	{{-- <link rel="shortcut icon" href="{{asset('favicon.ico')}}" /> --}}
+	<link rel="shortcut icon" href="{{asset('assets/media/logo.png')}}" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 	@yield('page-specific-styles')
 	<link href="{{asset('assets/admin/css/style.custom.css')}}" rel="stylesheet" type="text/css" />
