@@ -8,6 +8,7 @@ use App\Modules\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Kamaln7\Toastr\Facades\Toastr;
 use App\Modules\Services\Document\DocumentService;
+use Carbon\Carbon;
 
 //services
 use App\Modules\Services\User\UserService;
@@ -16,6 +17,7 @@ use App\Http\Requests\Admin\Rider\RiderRequest;
 
 //models
 use App\Modules\Models\Rider;
+use App\Modules\Models\RiderLocation;
 use App\Modules\Models\User;
 
 class RiderController extends Controller
@@ -34,6 +36,17 @@ class RiderController extends Controller
     public function index()
     {
         return view('admin.rider.index');
+    }
+
+    public function show()
+    {
+        dd("hlw");
+    }
+
+    public function history($rider_id)
+    {
+        $rider = Rider::with('user')->findOrFail($rider_id);
+        return view('admin.rider.history', compact('rider'));
     }
 
     /**
@@ -81,10 +94,49 @@ class RiderController extends Controller
                 'user_id' => $object->user_id
             ]);
         }
-        // $pagination = [
-        //     'more' => !is_null($query->toArray()['next_page_url'])
-        // ];
+
         return compact('results');
+    }
+
+    function riderActiveLocationAjax(Request $request)
+    {
+
+        $nearest_rider = [];
+        if (isset($request->rider_id)) {
+            $active_rider = RiderLocation::with('rider.vehicle.vehicle_type:id,name')->select('rider_id', 'longitude', 'latitude')
+                ->where('rider_id', $request->rider_id)->first();
+            array_push($nearest_rider, $active_rider);
+
+            return compact('nearest_rider');
+        }
+
+        $active_riders = [];
+        $centerPoint = ['lat' => 27.687169, 'lng' => 85.304219]; //default center_point
+        //if center_point present fetch all riders near to that rider.
+        if (isset($request->center_point)) {
+            $active_riders = RiderLocation::with('rider.vehicle.vehicle_type:id,name')->select('rider_id', 'longitude', 'latitude')->where('status', 'active')->get();
+            $centerPoint = $request->center_point;
+        }
+
+        foreach ($active_riders as $rider) {
+            if ($this->rider->arePointsNear(
+                $centerPoint,
+                ['lat' => $rider->latitude, 'lng' => $rider->longitude],
+                10
+            )) {
+                array_push($nearest_rider, $rider);
+            };
+        }
+        return compact('nearest_rider');
+    }
+
+    function getRiderDetail($rider_id)
+    {
+        $rider = Rider::select('experience', 'trained', 'id', 'user_id')->with(['user' => function ($query) {
+            $query->select('id', 'first_name', 'last_name', 'image', 'phone');
+        }])->find($rider_id);
+
+        return compact('rider');
     }
 
     /**
@@ -107,11 +159,12 @@ class RiderController extends Controller
     {
         $data = $request->except('image');
         // dd($request->all());
-        $data['rider'] = $request->only('experience', 'trained', 'status');
+        $data['rider'] = $request->only('experience', 'trained', 'status', 'approved_at');
         $data['vehicle'] = $request->only('vehicle_type_id', 'vehicle_number', 'brand', 'model', 'vehicle_color', 'make_year');
 
         $data['status'] = (isset($data['status']) ?  $data['status'] : '') == 'on' ? 'active' : 'in_active';
         $data['rider']['status'] = (isset($data['rider']['status']) ?  $data['rider']['status'] : '') == 'on' ? 'active' : 'in_active';
+        $data['rider']['approved_at'] = (isset($data['rider']['approved_at']) ?  $data['rider']['approved_at'] : '') == 'on' ? Carbon::now() : null;
 
         if ($request->has(['license_issue_date', 'license_expiry_date', 'license_number'])) {
             $data['license']['document_number'] = $request->license_number;
@@ -140,7 +193,7 @@ class RiderController extends Controller
             $data['location']['work'] = $data['work'];
         }
 
-        // dd($request->all());
+        dd($data);
 
         return DB::transaction(function () use ($request, $data) {
             if ($user = $this->rider->riderCreate($data)) {

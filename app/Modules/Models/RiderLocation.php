@@ -68,6 +68,8 @@ class RiderLocation extends Model
         return $this->belongsTo(Rider::class);//->with('user')->with('vehicle')->with('reviews');  //,'rider_id');
     }
 
+  
+
 
 
    

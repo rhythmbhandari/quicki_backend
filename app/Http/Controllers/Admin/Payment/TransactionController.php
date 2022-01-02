@@ -40,8 +40,9 @@ class TransactionController extends Controller
     {
     }
 
-    public function getAllData()
+    public function getAllData(Request $request)
     {
-        return $this->transaction->getAllData();
+        return $this->transaction->getAllData($request);
     }
+
 }
