@@ -23,14 +23,18 @@ class RiderLocation extends Model
 
 
     protected $fillable = ([
-        'longitude','latitude','rider_id','status',
+        'longitude','latitude','rider_id','status','availability',
         'created_at','updated_at', 'deleted_at'
     ]);
 
     protected $appends = [
-        'availability'  
+        'availability' ,'status_text' 
     ];
 
+    function getStatusTextAttribute()
+    {
+        return ucwords(str_replace('_', '', $this->status));
+    }
     public function getAvailabilityAttribute()
     {
         if($this->status == "active")

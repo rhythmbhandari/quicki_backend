@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-use App\Modules\Models\Booking;
-use App\Modules\Models\CompletedTrip;
+// use App\Modules\Models\Booking;
+// use App\Modules\Models\CompletedTrip;
 class Location extends Model
 {
     use HasFactory, SoftDeletes;
@@ -35,11 +35,11 @@ class Location extends Model
     //                         'latitude_destination'=>'decimal:2,10', 
     //                     ];
 
-    public function booking() {
-        return $this->hasOne(Booking::class);
-    }
-    public function completed_trip() {
-        return $this->hasOne(CompletedTrip::class);
-    }
+    // public function booking() {
+    //     return $this->hasOne(Booking::class);
+    // }
+    // public function completed_trip() {
+    //     return $this->hasOne(CompletedTrip::class);
+    // }
 
 }

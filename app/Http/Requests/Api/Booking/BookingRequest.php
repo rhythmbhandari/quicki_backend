@@ -40,8 +40,8 @@ class BookingRequest extends FormRequest
 
         return [
            
-            'origin' => 'required|string|max:255',
-            'destination' => 'required|string|max:255',
+            // 'origin' => 'required|string|max:255',
+            // 'destination' => 'required|string|max:255',
             'vehicle_type_id' =>  ['required', function ($attribute, $value, $fail) {
                 $vehicle_type = VehicleType::find($value);
                     if ( !$vehicle_type) {
@@ -54,11 +54,17 @@ class BookingRequest extends FormRequest
             'passenger_number' => 'nullable|integer',
 
             //Location
-            'location.latitude_origin' =>  ['required' ,  new ValidateDoubleRule() ],
-            'location.longitude_origin' =>  ['required' ,  new ValidateDoubleRule() ],
-            'location.latitude_destination' =>  ['required' ,  new ValidateDoubleRule() ],
-            'location.longitude_destination' => ['required' ,  new ValidateDoubleRule() ],
+            // 'location.latitude_origin' =>  ['required' ,  new ValidateDoubleRule() ],
+            // 'location.longitude_origin' =>  ['required' ,  new ValidateDoubleRule() ],
+            // 'location.latitude_destination' =>  ['required' ,  new ValidateDoubleRule() ],
+            // 'location.longitude_destination' => ['required' ,  new ValidateDoubleRule() ],
 
+            'location.origin.name' => 'required|string|max:255',
+            'location.destination.name' => 'required|string|max:255',
+            'location.origin.latitude' =>  ['required' ,  new ValidateDoubleRule() ],
+            'location.origin.longitude' =>  ['required' ,  new ValidateDoubleRule() ],
+            'location.destination.latitude' =>  ['required' ,  new ValidateDoubleRule() ],
+            'location.destination.longitude' => ['required' ,  new ValidateDoubleRule() ],
 
             //Stoppage
             'stoppage.*.name' => [   ],

@@ -19,10 +19,10 @@ class CreatePriceDetailsTable extends Migration
             $table->foreignId('completed_trip_id')->nullable()->constrained("completed_trips")->cascadeOnUpdate()->nullOnDelete(); 
 
             $table->double('base_fare')->nullable();
-            $table->integer('base_covered_km')->nullable();
+            $table->double('base_covered_km')->nullable();
             $table->double('minimum_charge')->nullable();
             $table->double('price_per_km')->nullable();
-            $table->integer('charged_km')->nullable();
+            $table->double('charged_km')->nullable();
             $table->double('price_after_distance')->nullable();
             $table->double('shift_surge')->nullable();
             $table->double('density_surge')->nullable();

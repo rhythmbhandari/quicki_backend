@@ -25,6 +25,7 @@ use App\Modules\Models\Rider;
 use App\Modules\Models\VehicleType;
 use App\Modules\Models\Shift;
 use App\Modules\Models\CompletedTrip;
+use App\Modules\Models\RiderLocation;
 
 class BookingController extends Controller
 {
@@ -37,122 +38,115 @@ class BookingController extends Controller
     }
 
     /**
-     * @OA\Post(
-     *   path="/api/booking/create",
-     *   tags={"Booking"},
-     *   summary="Create Booking",
-     *   security={{"bearerAuth":{}}},
-     *   @OA\RequestBody(
-     *      @OA\MediaType(
-     *         mediaType="application/json",
-     *         @OA\Schema(
-     *             
-     *             example={
-     *                  "origin":"Sanepa, Lalitpur",
-     *                  "destination":"New Baneshwor, Kathmandu",
-     *                  "passenger_number":2,
-     *                  "vehicle_type_id":1,
-     *                  "voucher":"#9816810976C",
-     *                  "distance":12,
-     *                   "price": 160,
-     *                  "duration":20,
-     *                   "stoppage":{
-     *                       {"name":"Sanepa, Lalitpur", "latitude":27.1234,"longitude":85.3434},
-     *                       {"name":"New Baneshwor, Kathmandu", "latitude":28.3454,"longitude":87.1234},
-     *                   },
-     *                   "location": {
-     *                       "origin":{
-     *                           "name": "Sanepa, Lalitpur",
-     *                           "latitude": 27.687012,
-     *                           "longitude": 85.304359
-     *                       },
-     *                       "destination":{
-     *                           "name": "New Baneshwor, Kathmandu",
-     *                           "latitude": 28.234325,
-     *                           "longitude": 87.12313
-     *                       }
-     *                   }
-     *               }
-     *         )
-     *     )
-     *   ),
-     *
-     *      @OA\Response(
-     *        response=201,
-     *        description="Success",
-     *          @OA\MediaType(
-     *               mediaType="application/json",
-     *                @OA\Schema(      
-     *                   example={
-     *                       "message": "Booking Successful!",
-     *                       "booking": {
-     *                           "origin": "Sanepa, Lalitpur",
-     *                           "destination": "New Baneshwor, Kathmandu",
-     *                           "passenger_number": 2,
-     *                           "vehicle_type_id": 1,
-     *                           "distance": 12,
-     *                           "price": 160,
-     *                           "duration": 20,
-     *                           "stoppage": {
-     *                               {
-     *                                   "name": "Sanepa, Lalitpur",
-     *                                   "latitude": 27.1234,
-     *                                   "longitude": 85.3434
-     *                               },
-     *                               {
-     *                                   "name": "New Baneshwor, Kathmandu",
-     *                                   "latitude": 28.3454,
-     *                                   "longitude": 87.1234
-     *                               }
-     *                           },
-     *                           "user_id": 2,
-     *                           "status": "pending",
-     *                           "rider_id": null,
-     *                           "trip_id": "#Q78A8LU",
-     *                           "updated_at": "2021-12-27T05:40:03.000000Z",
-     *                           "created_at": "2021-12-27T05:40:03.000000Z",
-     *                           "id": 2,
-     *                           "location": {
-     *                               "origin":{
-     *                                   "name": "Sanepa, Lalitpur",
-     *                                   "latitude": 27.687012,
-     *                                   "longitude": 85.304359
-     *                               },
-     *                               "destination":{
-     *                                   "name": "New Baneshwor, Kathmandu",
-     *                                   "latitude": 28.234325,
-     *                                   "longitude": 87.12313
-     *                               }
-     *                           },
-     *                           "status_text": "Pending"
-     *                       }
-     *                   }
-     *                 )
-     *           )
-     *      ),
-     *       @OA\Response(
-     *             response=400,
-     *             description="You already have existing active bookings!"
-     *         ),
-     *       @OA\Response(
-     *             response=401,
-     *             description="Unauthenticated"
-     *         ),
-     *         @OA\Response(
-     *             response=403,
-     *             description="Forbidden Access: Booking is off limits!"
-     *         ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="The given data was invalid!",
-     *             @OA\MediaType(
-     *              mediaType="application/json",
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=500,
-     *          description="Internal Server Error",
-     *             @OA\MediaType(
+    * @OA\Post(
+    *   path="/api/booking/create",
+    *   tags={"Booking"},
+    *   summary="Create Booking",
+    *   security={{"bearerAuth":{}}},
+    *   @OA\RequestBody(
+    *      @OA\MediaType(
+    *         mediaType="application/json",
+    *         @OA\Schema(
+    *             
+    *             example={
+    *                  "origin":"Sanepa, Lalitpur",
+    *                  "destination":"New Baneshwor, Kathmandu",
+    *                  "passenger_number":2,
+    *                  "vehicle_type_id":1,
+    *                  "voucher":"#9816810976C",
+    *                  "distance":9520,
+    *                   "price": 160,
+    *                  "duration":20,
+    *                   "stoppage":{
+    *                       {"name":"Sanepa, Lalitpur", "latitude":27.1234,"longitude":85.3434},
+    *                       {"name":"New Baneshwor, Kathmandu", "latitude":28.3454,"longitude":87.1234},
+    *                   },
+    *                   "location": {
+    *                       "origin":{
+    *                           "name": "Sanepa, Lalitpur",
+    *                           "latitude": 27.687012,
+    *                           "longitude": 85.304359
+    *                       },
+    *                       "destination":{
+    *                           "name": "New Baneshwor, Kathmandu",
+    *                           "latitude": 28.234325,
+    *                           "longitude": 87.12313
+    *                       }
+    *                   }
+    *               }
+    *         )
+    *     )
+    *   ),
+    *
+    *      @OA\Response(
+    *        response=201,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example={
+    *                       "message": "Booking Successful!",
+    *                       "booking": {
+    *                           "origin": "Sanepa, Lalitpur",
+    *                           "destination": "New Baneshwor, Kathmandu",
+    *                           "passenger_number": 2,
+    *                           "vehicle_type_id": 1,
+    *                           "distance": 4500,
+    *                           "price": 160,
+    *                           "duration": 20,
+    *                           "stoppage": {
+    *                               {
+    *                                   "name": "Sanepa, Lalitpur",
+    *                                   "latitude": 27.1234,
+    *                                   "longitude": 85.3434
+    *                               },
+    *                               {
+    *                                   "name": "New Baneshwor, Kathmandu",
+    *                                   "latitude": 28.3454,
+    *                                   "longitude": 87.1234
+    *                               }
+    *                           },
+    *                           "user_id": 2,
+    *                           "status": "pending",
+    *                           "rider_id": null,
+    *                           "trip_id": "#Q78A8LU",
+    *                           "updated_at": "2021-12-27T05:40:03.000000Z",
+    *                           "created_at": "2021-12-27T05:40:03.000000Z",
+    *                           "id": 2,
+    *                           "location": {
+    *                               "origin":{
+    *                                   "name": "Sanepa, Lalitpur",
+    *                                   "latitude": 27.687012,
+    *                                   "longitude": 85.304359
+    *                               },
+    *                               "destination":{
+    *                                   "name": "New Baneshwor, Kathmandu",
+    *                                   "latitude": 28.234325,
+    *                                   "longitude": 87.12313
+    *                               }
+    *                           },
+    *                           "status_text": "Pending"
+    *                       }
+    *                   }
+    *                 )
+    *           )
+    *      ),
+    *       @OA\Response(
+    *             response=400,
+    *             description="You already have existing active bookings!"
+    *         ),
+    *       @OA\Response(
+    *             response=401,
+    *             description="Unauthenticated"
+    *         ),
+    *         @OA\Response(
+    *             response=403,
+    *             description="Forbidden Access: Booking is off limits!"
+    *         ),
+    *      @OA\Response(
+    *          response=422,
+    *          description="The given data was invalid!",
+    *             @OA\MediaType(
      *              mediaType="application/json",
      *          )
      *      ),
@@ -199,9 +193,10 @@ class BookingController extends Controller
             //BOOKING STORE
             return DB::transaction(function () use ($request, $user) {
                 $createdBooking = $this->booking->create($user->id, $request->all());
-                if ($createdBooking) {
-                    $booking = Booking::where('id', $createdBooking->id)->with('location')->with('price_detail')->with('user:id,first_name,last_name,image')->first();
-                    $response = ['message' => 'Booking Successful!',  "booking" => $booking];
+                if($createdBooking)
+                {
+                    $booking = Booking::where('id',$createdBooking->id)->with('price_detail')->with('user:id,first_name,last_name,image')->first();
+                    $response = ['message' => 'Booking Successful!',  "booking"=>$booking];
                     return response($response, 201);
                 }
                 return response("Internal Server Error!", 500);
@@ -210,170 +205,170 @@ class BookingController extends Controller
     }
 
 
-    /**
-     * @OA\Post(
-     *   path="/api/booking/change_status",
-     *   tags={"Booking"},
-     *   summary="Change Status (Needs location data and distance for completed status)",
-     *   security={{"bearerAuth":{}}},
-     *   @OA\RequestBody(
-     *      @OA\MediaType(
-     *         mediaType="application/json",
-     *         @OA\Schema(
-     *             
-     *             example={
-     *                 "booking_id":1,
-     *                  "new_status":"accepted",
-     *                  "optional_data":{
-     *                       "rider_id":1,
-     *                       "cancelled_by_id":1,
-     *                       "cancelled_by_type":"customer",
-     *                       "cancel_message":"Timeout or somethin!",
-     *                       "location": {
-     *                           "origin":{
-     *                               "name": "Sanepa, Lalitpur",
-     *                               "latitude": 27.687012,
-     *                               "longitude": 85.304359
-     *                           },
-     *                           "destination":{
-     *                               "name": "New Baneshwor, Kathmandu",
-     *                               "latitude": 28.234325,
-     *                               "longitude": 87.12313
-     *                           }
-     *                       }, 
-     *                       "distance":2000
-     *                   },
-     *               }
-     *         )
-     *     )
-     *   ),
-     *
-     *      @OA\Response(
-     *        response=200,
-     *        description="Success",
-     *          @OA\MediaType(
-     *               mediaType="application/json",
-     *                @OA\Schema(      
-     *                   example={
-     *                           "message":"Status Updated!",
-     *                   }
-     *                 )
-     *           )
-     *      ),
-     *      @OA\Response(
-     *        response=201,
-     *        description="Success",
-     *          @OA\MediaType(
-     *               mediaType="application/json",
-     *                @OA\Schema(      
-     *                   example={
-     *                         "message": "Booking Status Updated Successfully! Created Completed Booking History",
-     *                         "completed_trip": {
-     *                           "id": 3,
-     *                           "user_id": 2,
-     *                           "rider_id": 1,
-     *                           "trip_id": "#Q78A8LU",
-     *                           "booking_id": 16,
-     *                           "start_time": "2021-12-23 14:21:58",
-     *                           "end_time": "2021-12-23 14:22:04",
-     *                           "origin": "Sanepa, Lalitpur",
-     *                           "destination": "New Baneshwor, Kathmandu",
-     *                           "stoppage": {
-     *                             {
-     *                               "name": "Sanepa, Lalitpur",
-     *                               "latitude": 27.1234,
-     *                               "longitude": 85.3434
-     *                             },
-     *                             {
-     *                               "name": "New Baneshwor, Kathmandu",
-     *                               "latitude": 28.3454,
-     *                               "longitude": 87.1234
-     *                             }
-     *                           },
-     *                           "distance": 12,
-     *                           "location": {
-     *                               "origin":{
-     *                                   "name": "Sanepa, Lalitpur",
-     *                                   "latitude": 27.687012,
-     *                                   "longitude": 85.304359
-     *                               },
-     *                               "destination":{
-     *                                   "name": "New Baneshwor, Kathmandu",
-     *                                   "latitude": 28.234325,
-     *                                   "longitude": 87.12313
-     *                               }
-     *                           },
-     *                           "duration": 6,
-     *                           "passenger_number": 1,
-     *                           "profile_img_user": null,
-     *                           "profile_img_rider": null,
-     *                           "status": "completed",
-     *                           "price": 159,
-     *                           "payment_type": "CASH",
-     *                           "cancelled_by_type": null,
-     *                           "cancelled_by_id": null,
-     *                           "cancel_message": null,
-     *                           "deleted_at": null,
-     *                           "created_at": "2021-12-23T02:51:15.000000Z",
-     *                           "updated_at": "2021-12-23T02:52:04.000000Z",
-     *                           "payment": {
-     *                             "id": 3,
-     *                             "completed_trip_id": 3,
-     *                             "commission_amount": 24,
-     *                             "payment_status": "unpaid",
-     *                             "commission_payment_status": "unpaid",
-     *                             "deleted_at": null,
-     *                             "created_at": "2021-12-23T08:37:04.000000Z",
-     *                             "updated_at": "2021-12-23T08:37:04.000000Z"
-     *                           },
-     *                           "user": {
-     *                             "id": 2,
-     *                             "first_name": "Sasuke",
-     *                             "last_name": "Uchiha",
-     *                             "image": null,
-     *                             "name": "Sasuke Uchiha",
-     *                             "status_text": "",
-     *                             "thumbnail_path": "assets/media/user_placeholder.png",
-     *                             "image_path": "assets/media/user_placeholder.png"
-     *                           },
-     *                           "price_detail": {
-     *                             "id": 6,
-     *                             "booking_id": null,
-     *                             "completed_trip_id": 3,
-     *                             "minimum_charge": 50,
-     *                             "price_per_km": 15,
-     *                             "price_after_distance": 0.18,
-     *                             "surge_rate": 1,
-     *                             "surge": 0,
-     *                             "price_after_surge": 0.18,
-     *                             "app_charge_percent": 10,
-     *                             "app_charge": 0.02,
-     *                             "price_after_app_charge": 0.18,
-     *                             "price_per_min": 5,
-     *                             "duration_charge": 0.5,
-     *                             "price_after_duration": 0.68,
-     *                             "total_price": 50,
-     *                             "deleted_at": null,
-     *                             "created_at": "2021-12-23T08:37:04.000000Z",
-     *                             "updated_at": "2021-12-23T08:37:04.000000Z"
-     *                           }
-     *                         }
-     *                       }
-     *                 )
-     *           )
-     *      ),
-     *       @OA\Response(
-     *             response=401,
-     *             description="Unauthenticated"
-     *         ),
-     *         @OA\Response(
-     *             response=403,
-     *             description="Forbidden Access: Booking is off limits!"
-     *         ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="The given data was invalid!",
-     *             @OA\MediaType(
+  /**
+    * @OA\Post(
+    *   path="/api/booking/change_status",
+    *   tags={"Booking"},
+    *   summary="Change Status (Needs location data and distance for completed status)",
+    *   security={{"bearerAuth":{}}},
+    *   @OA\RequestBody(
+    *      @OA\MediaType(
+    *         mediaType="application/json",
+    *         @OA\Schema(
+    *             
+    *             example={
+    *                 "booking_id":1,
+    *                  "new_status":"accepted",
+    *                  "optional_data":{
+    *                       "rider_id":1,
+    *                       "cancelled_by_id":1,
+    *                       "cancelled_by_type":"customer",
+    *                       "cancel_message":"Timeout or somethin!",
+    *                       "location": {
+    *                           "origin":{
+    *                               "name": "Sanepa, Lalitpur",
+    *                               "latitude": 27.687012,
+    *                               "longitude": 85.304359
+    *                           },
+    *                           "destination":{
+    *                               "name": "Maitighar, Kathmandu",
+    *                               "latitude": 27.693587,
+    *                               "longitude": 85.320443
+    *                           }
+    *                       }, 
+    *                       "distance":5600
+    *                   },
+    *               }
+    *         )
+    *     )
+    *   ),
+    *
+    *      @OA\Response(
+    *        response=200,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example={
+    *                           "message":"Status Updated!",
+    *                   }
+    *                 )
+    *           )
+    *      ),
+    *      @OA\Response(
+    *        response=201,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example={
+    *                         "message": "Booking Status Updated Successfully! Created Completed Booking History",
+    *                         "completed_trip": {
+    *                           "id": 3,
+    *                           "user_id": 2,
+    *                           "rider_id": 1,
+    *                           "trip_id": "#Q78A8LU",
+    *                           "booking_id": 16,
+    *                           "start_time": "2021-12-23 14:21:58",
+    *                           "end_time": "2021-12-23 14:22:04",
+    *                           "origin": "Sanepa, Lalitpur",
+    *                           "destination": "New Baneshwor, Kathmandu",
+    *                           "stoppage": {
+    *                             {
+    *                               "name": "Sanepa, Lalitpur",
+    *                               "latitude": 27.1234,
+    *                               "longitude": 85.3434
+    *                             },
+    *                             {
+    *                               "name": "New Baneshwor, Kathmandu",
+    *                               "latitude": 28.3454,
+    *                               "longitude": 87.1234
+    *                             }
+    *                           },
+    *                           "distance": 5600,
+    *                           "location": {
+    *                               "origin":{
+    *                                   "name": "Sanepa, Lalitpur",
+    *                                   "latitude": 27.687012,
+    *                                   "longitude": 85.304359
+    *                               },
+    *                               "destination":{
+    *                                    "name": "Maitighar, Kathmandu",
+    *                                   "latitude": 27.693587,
+    *                                   "longitude": 85.320443
+    *                               }
+    *                           },
+    *                           "duration": 6,
+    *                           "passenger_number": 1,
+    *                           "profile_img_user": null,
+    *                           "profile_img_rider": null,
+    *                           "status": "completed",
+    *                           "price": 159,
+    *                           "payment_type": "CASH",
+    *                           "cancelled_by_type": null,
+    *                           "cancelled_by_id": null,
+    *                           "cancel_message": null,
+    *                           "deleted_at": null,
+    *                           "created_at": "2021-12-23T02:51:15.000000Z",
+    *                           "updated_at": "2021-12-23T02:52:04.000000Z",
+    *                           "payment": {
+    *                             "id": 3,
+    *                             "completed_trip_id": 3,
+    *                             "commission_amount": 24,
+    *                             "payment_status": "unpaid",
+    *                             "commission_payment_status": "unpaid",
+    *                             "deleted_at": null,
+    *                             "created_at": "2021-12-23T08:37:04.000000Z",
+    *                             "updated_at": "2021-12-23T08:37:04.000000Z"
+    *                           },
+    *                           "user": {
+    *                             "id": 2,
+    *                             "first_name": "Sasuke",
+    *                             "last_name": "Uchiha",
+    *                             "image": null,
+    *                             "name": "Sasuke Uchiha",
+    *                             "status_text": "",
+    *                             "thumbnail_path": "assets/media/user_placeholder.png",
+    *                             "image_path": "assets/media/user_placeholder.png"
+    *                           },
+    *                           "price_detail": {
+    *                             "id": 6,
+    *                             "booking_id": null,
+    *                             "completed_trip_id": 3,
+    *                             "minimum_charge": 50,
+    *                             "price_per_km": 15,
+    *                             "price_after_distance": 0.18,
+    *                             "surge_rate": 1,
+    *                             "surge": 0,
+    *                             "price_after_surge": 0.18,
+    *                             "app_charge_percent": 10,
+    *                             "app_charge": 0.02,
+    *                             "price_after_app_charge": 0.18,
+    *                             "price_per_min": 5,
+    *                             "duration_charge": 0.5,
+    *                             "price_after_duration": 0.68,
+    *                             "total_price": 50,
+    *                             "deleted_at": null,
+    *                             "created_at": "2021-12-23T08:37:04.000000Z",
+    *                             "updated_at": "2021-12-23T08:37:04.000000Z"
+    *                           }
+    *                         }
+    *                       }
+    *                 )
+    *           )
+    *      ),
+    *       @OA\Response(
+    *             response=401,
+    *             description="Unauthenticated"
+    *         ),
+    *         @OA\Response(
+    *             response=403,
+    *             description="Forbidden Access: Booking is off limits!"
+    *         ),
+    *      @OA\Response(
+    *          response=422,
+    *          description="The given data was invalid!",
+    *             @OA\MediaType(
      *              mediaType="application/json",
      *          )
      *      ),
@@ -416,9 +411,11 @@ class BookingController extends Controller
                 }
             }
 
-            if ($request->new_status == "running") {
-                if ($booking->status != 'accepted') {
-                    $response = ['message' => 'The booking is not accepted yet!'];
+            if( $request->new_status == "running")
+            {
+                if($booking->status != 'accepted')
+                {
+                    $response = ['message' => 'The booking is not accepted yet or is already running/completed!'];
                     return response($response, 400);
                 }
                 if ($request['optional_data']['rider_id'] != $booking->rider_id) {
@@ -427,8 +424,10 @@ class BookingController extends Controller
                 }
             }
 
-            if ($request->new_status == "completed") {
-                if ($request->vehicle_type_id != 4 &&  ($request['optional_data']['location'] || $request['optional_data']['distance'])) {
+            if( $request->new_status == "completed")
+            {
+                if($request->vehicle_type_id != 4 &&  ( !isset($request['optional_data']['location']) || !isset($request['optional_data']['distance']) ))
+                {
                     $response = ['message' => 'The new location data and distance is required to complete the ride!'];
                     return response($response, 422);
                 }
@@ -465,42 +464,59 @@ class BookingController extends Controller
             {
                 $rider_id = $request->optional_data['rider_id'];
                 $pending_rider_booking = null;
-
-                if ($new_status == "accepted") {
-                    $pending_rider_booking = Booking::where('rider_id', $rider_id)->where(function ($query) {
-                        $query->where('status', 'accepted')
-                            ->orWhere('status', 'running');
+                
+                // if($new_status == "accepted")
+                // {
+                    $pending_rider_booking = Booking::where('rider_id', $rider_id)->where(function($query) {
+                        $query->where('status','accepted')
+                        ->orWhere('status','running');
                     })->first();
-                    if ($pending_rider_booking) {
-                        $response = ['message' => 'The rider already have an active booking!'];
-                        return response($response, 422);
+                    //check availability of the rider
+                    $rider_location = RiderLocation::where('rider_id',$rider_id)->first();
+                    if(isset($rider_location))
+                    {
+                        if(! ( ($rider_location->status == "active") && ($rider_location->availability == "available") ) )
+                        {
+                            $response = ['message' => 'The rider is currently unavailable!'];
+                            return response($response, 422);
+                        }
                     }
-                }
+
+                    // if($pending_rider_booking)
+                    // {
+                    //     $response = ['message' => 'The rider already have an active booking!'];
+                    //     return response($response, 422);
+                    // }
+                    
+              //  }
+
             }
 
 
 
             $updatedBooking = $this->booking->update_status($request->all());
-            if ($updatedBooking) {
-                if ($updatedBooking->status == "completed") {
-                    $completed_trip = CompletedTrip::where('booking_id', $updatedBooking->id)->with('payment')
-                        ->with('location')
-                        ->with('user:id,first_name,last_name,image')
-                        ->with('booking:id,status,trip_id')
-                        ->with('price_detail')
-                        ->with('payment')
-                        ->first();
-                    $response = ['message' => 'Booking Status Updated Successfully! Created Completed Booking History', "completed_trip" => $completed_trip];
+            if($updatedBooking)
+            {
+                if($updatedBooking->status == "completed")
+                {
+                    $completed_trip = CompletedTrip::where('booking_id',$updatedBooking->id)->with('payment')
+                    ->with('user:id,first_name,last_name,image')
+                    ->with('booking:id,status,trip_id')
+                    ->with('price_detail')
+                    ->with('payment')
+                    ->first();
+                    $response = ['message' => 'Booking Status Updated Successfully! Created Completed Booking History', "completed_trip"=>$completed_trip];
                     return response($response, 201);
-                } else if ($updatedBooking->status == "cancelled") {
-                    $completed_trip = CompletedTrip::where('booking_id', $updatedBooking->id)
-                        ->with('location')
-                        ->with('user:id,first_name,last_name,image')
-                        ->with('booking:id,status,trip_id')
-                        ->with('price_detail')
-                        ->with('payment')
-                        ->first();
-                    $response = ['message' => 'Booking Status Updated Successfully! Created Cancelled Booking History', "completed_trip" => $completed_trip];
+                }
+                else if($updatedBooking->status == "cancelled")
+                {
+                    $completed_trip = CompletedTrip::where('booking_id',$updatedBooking->id)
+                    ->with('user:id,first_name,last_name,image')
+                    ->with('booking:id,status,trip_id')
+                    ->with('price_detail')
+                    ->with('payment')
+                    ->first();
+                    $response = ['message' => 'Booking Status Updated Successfully! Created Cancelled Booking History', "completed_trip"=>$completed_trip];
                     return response($response, 201);
                 } else {
                     $response = ['message' => 'Booking Status Updated Successfully!'];
@@ -512,118 +528,108 @@ class BookingController extends Controller
     }
 
 
-    /**
-     * @OA\Get(
-     *   path="/api/booking/{booking_id}",
-     *   tags={"Booking"},
-     *   summary="Get Booking from ID",
-     *   security={{"bearerAuth":{}}},
-     *
-     *      @OA\Parameter(
-     *         name="booking_id",
-     *         in="path",
-     *         description="Booking ID",
-     *         required=true,
-     *      ),
-     *
-     *      @OA\Response(
-     *        response=200,
-     *        description="Success",
-     *          @OA\MediaType(
-     *               mediaType="application/json",
-     *                @OA\Schema(      
-     *                   example={
-     *                       "message": "Success!",
-     *                       "booking": {
-     *                           "id": 24,
-     *                           "stoppage": {
-     *                               {
-     *                                   "name": "Sanepa, Lalitpur",
-     *                                   "latitude": 27.1234,
-     *                                   "longitude": 85.3434
-     *                               },
-     *                               {
-     *                                   "name": "New Baneshwor, Kathmandu",
-     *                                   "latitude": 28.3454,
-     *                                   "longitude": 87.1234
-     *                               }
-     *                           },
-     *                           "user_id": 3,
-     *                           "vehicle_type_id": 1,
-     *                           "rider_id": 1,
-     *                           "trip_id": "#Q78A8LU",
-     *                           "location": {
-     *                               "origin":{
-     *                                   "name": "Sanepa, Lalitpur",
-     *                                   "latitude": 27.687012,
-     *                                   "longitude": 85.304359
-     *                               },
-     *                               "destination":{
-     *                                   "name": "New Baneshwor, Kathmandu",
-     *                                   "latitude": 28.234325,
-     *                                   "longitude": 87.12313
-     *                               }
-     *                           },
-     *                           "start_time": "2021-12-14 14:24:25",
-     *                           "end_time": "2021-12-14 14:37:35",
-     *                           "origin": "Sanepa, Lalitpur",
-     *                           "destination": "New Baneshwor, Kathmandu",
-     *                           "distance": 12,
-     *                           "duration": 20,
-     *                           "passenger_number": 2,
-     *                           "status": "completed",
-     *                           "price": 160,
-     *                           "payment_type": "CASH",
-     *                           "deleted_at": null,
-     *                           "created_at": "2021-12-14T08:12:21.000000Z",
-     *                           "updated_at": "2021-12-14T08:52:35.000000Z",
-     *                           "location": {
-     *                               "id": 24,
-     *                               "longitude_origin": 27.123456,
-     *                               "latitude_origin": 85.123423,
-     *                               "longitude_destination": 27.234325,
-     *                               "latitude_destination": 86.12313,
-     *                               "deleted_at": null,
-     *                               "created_at": "2021-12-14T08:12:21.000000Z",
-     *                               "updated_at": "2021-12-14T08:12:21.000000Z"
-     *                           },
-     *                           "price_detail": {
-     *                               "id": 7,
-     *                               "booking_id": 24,
-     *                               "completed_trip_id": null,
-     *                               "minimum_charge": 50,
-     *                               "price_per_km": 15,
-     *                               "price_after_distance": 0.18,
-     *                               "surge_rate": 1,
-     *                               "surge": 0,
-     *                               "price_after_surge": 0.18,
-     *                               "app_charge_percent": 10,
-     *                               "app_charge": 0.02,
-     *                               "price_after_app_charge": 0.18,
-     *                               "price_per_min": 5,
-     *                               "duration_charge": 1.67,
-     *                               "price_after_duration": 1.85,
-     *                               "total_price": 50,
-     *                               "deleted_at": null,
-     *                               "created_at": "2021-12-14T08:12:21.000000Z",
-     *                               "updated_at": "2021-12-14T08:12:21.000000Z"
-     *                           }
-     *                       }
-     *                   }
-     *                 )
-     *           )
-     *      ),
-     *   @OA\Response(
-     *      response=404,
-     *       description="Booking Not Found!",
-     *   )
-     *)
-     **/
+ /**
+    * @OA\Get(
+    *   path="/api/booking/{booking_id}",
+    *   tags={"Booking"},
+    *   summary="Get Booking from ID",
+    *   security={{"bearerAuth":{}}},
+    *
+    *      @OA\Parameter(
+    *         name="booking_id",
+    *         in="path",
+    *         description="Booking ID",
+    *         required=true,
+    *      ),
+    *
+    *      @OA\Response(
+    *        response=200,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example={
+    *                       "message": "Success!",
+    *                       "booking": {
+    *                           "id": 24,
+    *                           "stoppage": {
+    *                               {
+    *                                   "name": "Sanepa, Lalitpur",
+    *                                   "latitude": 27.1234,
+    *                                   "longitude": 85.3434
+    *                               },
+    *                               {
+    *                                   "name": "New Baneshwor, Kathmandu",
+    *                                   "latitude": 28.3454,
+    *                                   "longitude": 87.1234
+    *                               }
+    *                           },
+    *                           "user_id": 3,
+    *                           "vehicle_type_id": 1,
+    *                           "rider_id": 1,
+    *                           "trip_id": "#Q78A8LU",
+    *                           "start_time": "2021-12-14 14:24:25",
+    *                           "end_time": "2021-12-14 14:37:35",
+    *                           "origin": "Sanepa, Lalitpur",
+    *                           "destination": "New Baneshwor, Kathmandu",
+    *                           "distance": 12,
+    *                           "duration": 20,
+    *                           "passenger_number": 2,
+    *                           "status": "completed",
+    *                           "price": 160,
+    *                           "payment_type": "CASH",
+    *                           "deleted_at": null,
+    *                           "created_at": "2021-12-14T08:12:21.000000Z",
+    *                           "updated_at": "2021-12-14T08:52:35.000000Z",
+    *                           "location": {
+    *                             "origin": {
+    *                               "name": "Sanepa, Lalitpur",
+    *                               "latitude": 27.687012,
+    *                               "longitude": 85.304359
+    *                             },
+    *                             "destination": {
+    *                               "name": "Maitighar, Kathmandu",
+    *                               "latitude": 27.693587,
+    *                               "longitude": 85.320443
+    *                             }
+    *                           },
+    *                           "price_detail": {
+    *                               "id": 7,
+    *                               "booking_id": 24,
+    *                               "completed_trip_id": null,
+    *                               "minimum_charge": 50,
+    *                               "price_per_km": 15,
+    *                               "price_after_distance": 0.18,
+    *                               "surge_rate": 1,
+    *                               "surge": 0,
+    *                               "price_after_surge": 0.18,
+    *                               "app_charge_percent": 10,
+    *                               "app_charge": 0.02,
+    *                               "price_after_app_charge": 0.18,
+    *                               "price_per_min": 5,
+    *                               "duration_charge": 1.67,
+    *                               "price_after_duration": 1.85,
+    *                               "total_price": 50,
+    *                               "deleted_at": null,
+    *                               "created_at": "2021-12-14T08:12:21.000000Z",
+    *                               "updated_at": "2021-12-14T08:12:21.000000Z"
+    *                           }
+    *                       }
+    *                   }
+    *                 )
+    *           )
+    *      ),
+    *   @OA\Response(
+    *      response=404,
+    *       description="Booking Not Found!",
+    *   )
+    *)
+    **/
     public function getBooking($booking_id)
     {
-        $booking = Booking::where('id', $booking_id)->with('location')->with('price_detail')->first();
-        if ($booking) {
-            $response = ['message' => 'Success!', 'booking' => $booking];
+        $booking = Booking::where('id',$booking_id)->with('price_detail')->first();
+        if($booking) {
+            $response = ['message' => 'Success!', 'booking'=>$booking];
             return response($response, 200);
         } else {
             $response = ['message' => 'Booking Not Found!'];
