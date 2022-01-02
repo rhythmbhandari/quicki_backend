@@ -81,21 +81,25 @@ class PromotionVoucherService extends Service
     function create(array $data)
     {
         try {
-            //payment_gateway_user_id
-            //promotion_voucher date
-            $data['payment_mode']
-                =  (isset($data['payment_mode']) && in_array($data['payment_mode'], ['online', 'offline'])) ? $data['payment_mode'] : 'offline';
+            
 
-            $data['creditor_id'] = intval($data['creditor_id']);
-            $data['debtor_id'] =  intval($data['debtor_id']);
-            //creditor type
-            //debtor type
+            $data['uses'] = isset( $data['uses']) ? intval($data['uses']) : 0;
+            $data['max_uses'] = isset( $data['max_uses']) ?  intval($data['max_uses']) : 0;
+            $data['max_uses_user'] = 1;
+            $data['worth'] = isset( $data['worth']) ?   floatval($data['worth']): 0;
+            $data['is_fixed'] = isset( $data['is_fixed']) ?   intval($data['is_fixed']): 0;
+            $data['status'] = (isset($data['status']) ?  $data['status'] : '')=='active' ? 'active' : 'in_active';
 
-            $data['payment_gateway_promotion_voucher_amount']
-                =  ($data['payment_mode'] == 'online') ? floatval($data['payment_gateway_promotion_voucher_amount']) : null;
+            if(isset($data['price_eligibility']))
+            {
+                $data['price_eligibility'] = json_decode($data['price_eligibility']);
+            }
+            if(isset($data['distance_eligibility']))
+            {
+                $data['distance_eligibility'] = json_decode($data['distance_eligibility']);
+            }
 
-            $data['amount']
-                =  ($data['payment_mode'] == 'online') ? floatval($data['payment_gateway_promotion_voucher_amount']) :  floatval($data['amount']);
+            // dd('FINAL DATA',$data);
 
             $createdPromotionVoucher = $this->promotion_voucher->create($data);
             if ($createdPromotionVoucher) {
@@ -106,4 +110,41 @@ class PromotionVoucherService extends Service
             return NULL;
         }
     }
+
+
+    function update(array $data, $promotionVoucherId)
+    {
+        try {
+            
+
+            $data['uses'] = isset( $data['uses']) ? intval($data['uses']) : 0;
+            $data['max_uses'] = isset( $data['max_uses']) ?  intval($data['max_uses']) : 0;
+            $data['max_uses_user'] = 1;
+            $data['worth'] = isset( $data['worth']) ?   floatval($data['worth']): 0;
+            $data['is_fixed'] = isset( $data['is_fixed']) ?   intval($data['is_fixed']): 0;
+            $data['status'] = (isset($data['status']) ?  $data['status'] : '')=='active' ? 'active' : 'in_active';
+
+            if(isset($data['price_eligibility']))
+            {
+                $data['price_eligibility'] = json_decode($data['price_eligibility']);
+            }
+            if(isset($data['distance_eligibility']))
+            {
+                $data['distance_eligibility'] = json_decode($data['distance_eligibility']);
+            }
+
+            // dd('FINAL DATA',$data);
+
+            $promotion_voucher = PromotionVoucher::find($promotionVoucherId);
+            $updatedPromotionVoucher = $promotion_voucher->update($data);
+            if ($updatedPromotionVoucher) {
+                return $updatedPromotionVoucher;
+            }
+            return NULL;
+        } catch (Exception $e) {
+            return NULL;
+        }
+    }
+
+
 }

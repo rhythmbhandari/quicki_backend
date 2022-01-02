@@ -17,7 +17,7 @@
 @endsection
 
 @section('content')
-<form action="{{route('admin.promotion_voucher.update',$promotion_voucher->id)}}" method="post" class="custom-validation"
+<form action="{{route('admin.promotion_voucher.update',$promotion_voucher->id)}}" method="post" class="custom-validation promoForm"
     enctype="multipart/form-data">
     @csrf
     @method('PUT')

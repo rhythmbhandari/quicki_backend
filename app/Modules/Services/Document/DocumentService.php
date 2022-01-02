@@ -26,6 +26,8 @@ class DocumentService extends Service
         try {
             $data['reason'] = isset($data['reason'])?$data['reason']:"pending";
             $data['documentable_id'] = intval($data['documentable_id']);
+            // $data['created_at'] = $data['updated_at'] = \Carbon\Carbon::now();
+            // dd(\Carbon\Carbon::now());
             $createdDocument = $this->document->create($data);
             if($createdDocument)
                 return $createdDocument;

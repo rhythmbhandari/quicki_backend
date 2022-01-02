@@ -36,6 +36,18 @@ class CompletedTrip extends Model
         'deleted_at','created_at','updated_at'
     ]);
 
+    protected $appends = ['distance_km','duration_min'];
+
+    public function getDistanceKmAttribute()
+    {
+        return floatval($this->distance/1000);
+    }
+
+    public function getDurationMinAttribute()
+    {
+        return floatval($this->duration/60);
+    }
+
     // public function location(){
     //     return $this->belongsTo(Location::class);//,'location_id');
     // }

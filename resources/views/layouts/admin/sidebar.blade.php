@@ -226,6 +226,19 @@
                         <span class="menu-text">Promotion Voucher</span><i class=""></i>
                     </a>
                 </li>
+
+
+                <li class="menu-item menu-item-submenu {{ request()->is('admin/setting') || request()->is('admin/setting/*')
+                    ? " menu-item-active menu-item-open" : "" }}" {{-- {{
+                    str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
+                    aria-haspopup="true">
+                    <a href="{{route('admin.setting.index')}}" class="menu-link menu-toggle">
+                        <i class="menu-icon flaticon2-settings"></i>
+                        <span class="menu-text">Settings</span><i class=""></i>
+                    </a>
+                </li>
+
+
             </ul>
             <!--end::Menu Nav-->
         </div>
