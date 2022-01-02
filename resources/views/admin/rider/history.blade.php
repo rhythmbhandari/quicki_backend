@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', 'Transaction')
+@section('title', 'Rider Transaction')
 
 @section('breadcrumb')
 <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
@@ -8,14 +8,14 @@
         <a href="{{route('admin.dashboard') }}" class="text-muted">Dashboard</a>
     </li>
     <li class="breadcrumb-item text-active">
-        <a href="#" class="text-active">Transaction</a>
+        <a href="#" class="text-active">Rider Transaction</a>
     </li>
 </ul>
 @endsection
 
 {{-- @section('actionButton')
 <a href="{{ route('admin.booking.create') }}" class="btn btn-primary font-weight-bolder fas fa-plus">
-    Create Transaction
+    Create Rider Transaction
 </a>
 @endsection --}}
 
@@ -38,7 +38,7 @@
         <div class="card card-custom">
             <div class="card-header flex-wrap py-5">
                 <div class="card-title">
-                    <h3 class="card-label">Transaction List</h3>
+                    <h3 class="card-label">Rider Transaction List</h3>
                 </div>
                 <div class="card-toolbar">
                     <div class="dropdown dropdown-inline">
@@ -96,27 +96,6 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="mt-4 mb-12">
-                    <div class="row mb-8">
-                        <div class="col-md-4">
-                            <label>Filter Date:</label>
-                            <div class="input-daterange input-group" id="kt_datepicker">
-                                <input type='text' class="form-control" id="datefilter" readonly
-                                    placeholder="Select date and time" type="text" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-8">
-                        <div class="col-lg-12">
-                            <button class="btn btn-secondary btn-secondary--icon" id="clear">
-                                <span>
-                                    <i class="la la-close"></i>
-                                    <span>Clear</span>
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
                 <!--begin: Datatable-->
                 <table class="table table-separate table-head-custom table-checkable" id="tableData">
                     <thead>
@@ -124,12 +103,8 @@
                             <th class="notexport">ID</th>
                             <th>S.No.</th>
                             <th class="notexport">Transaction Date</th>
-                            <th>Creditor First Name</th>
-                            <th>Creditor Last Name</th>
                             <th class="notexport">Creditor</th>
                             <th class="notexport">Creditor Type</th>
-                            <th>Debtor First Name</th>
-                            <th>Debtor Last Name</th>
                             <th class="notexport">Debtor</th>
                             <th class="notexport">Debtor Type</th>
                             <th>Payment Mode</th>
@@ -164,7 +139,6 @@
 
             var initTable1 = function() {
                 var table = $('#tableData');
-
                 // begin first table
                 var table1 = table.DataTable({
                     responsive: true,
@@ -178,7 +152,8 @@
                     ajax: {
                         url: "{{ route('admin.transaction.data') }}",
                         data: function(d) {
-                            d.datefilter = $('#datefilter').val();
+                            d.creditor_id = @if(isset($rider->user)) {{$rider->user->id}} @endif;
+                            d.creditor_type = 'rider';
                         }
                     },
                     buttons: [
@@ -232,44 +207,29 @@
                             "data": "transaction_date"
                         },
                         {
-                            "data": "creditor_first_name",
-                            name:'creditor.first_name',
-                            visible:false
-                        },
-                        {
-                            "data": "creditor_last_name",
-                            name:'creditor.last_name',
-                            visible:false
-                        },
-                        {
-                            "data": "creditor",
-                            render: function(data, type, row, meta) {
-                                return row.creditor_first_name + ' ' + row.creditor_last_name;
-
-                            }
+                            "data": "creditor"
                         },
                         {
                             "data": "creditor_type"
                         },
                         {
-                            "data": "debtor_first_name",
-                            name:'debtor.first_name',
-                            visible: false
-                        },
-                        {
-                            "data": "debtor_last_name",
-                            name:'debtor.last_name',
-                            visible: false
-                        },
-                        {
-                            "data": "debtor",
-                            render: function(data, type, row, meta) {
-                                return row.debtor_first_name + ' ' + row.debtor_last_name;
-                            }
+                            "data": "debtor"
                         },
                         {
                             "data": "debtor_type"
                         },
+                        // {
+                        //     "data": "purpose",
+                        //     "render": function(data, type, row) {
+                        //         if(data == 'customer') {
+                        //             return "ride payment"
+                        //         }
+                        //         if(data == 'rider' || data == 'admin') {
+                        //             return "commission payment"
+                        //         }
+                        //         return "N/A";
+                        //     }
+                        // },
                         {
                             "data": "payment_mode"
                         },
@@ -285,11 +245,9 @@
                     columnDefs: [{
                         targets: -1,
                         className: 'float-end'
-                    }
-                ],
+                    }],
 
                 });
-
 
                 $('#export_print').on('click', function(e) {
                     e.preventDefault();
@@ -315,30 +273,6 @@
                     e.preventDefault();
                     table1.button(4).trigger();
                 });
-
-                $('#datefilter').daterangepicker({
-                    buttonClasses: ' btn',
-                    applyClass: 'btn-primary',
-                    cancelClass: 'btn-secondary',
-
-                    timePicker: true,
-                    timePickerIncrement: 30,
-                    locale: {
-                        format: 'YYYY/MM/DD H:mm:ss'
-                    }
-                }, function(start, end, label) {
-                    $('#datefilter .form-control').val(start.format('MM/DD/YYYY h:mm A') + ' / ' + end.format('MM/DD/YYYY h:mm A'));
-                });
-
-                $("#datefilter").on('change', function() {
-                    table1.draw();
-                });
-
-                jQuery('#datefilter').val(null);
-
-                $('#clear').on('click', () => {
-                    jQuery('#datefilter').val(null).trigger('change');
-                })
             };
             return {
                 //main function to initiate the module

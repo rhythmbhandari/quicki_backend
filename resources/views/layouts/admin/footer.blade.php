@@ -9,9 +9,8 @@
     var SOS_ID = null;
 
     const ICONS = {
-        primary: '{{asset('images/primary.svg')}}',
-        garage_request: '{{asset('images/garage_request.svg')}}',
-        garage: '{{asset('images/garage.svg')}}'
+        bike: '{{asset('assets/admin/icons/rider_map.svg')}}',
+        car: '{{asset('assets/admin/icons/car_map.svg')}}'
     }
 </script>
 <!--begin::Global Theme Bundle(used by all pages)-->

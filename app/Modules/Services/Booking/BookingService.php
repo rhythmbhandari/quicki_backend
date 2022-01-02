@@ -59,15 +59,6 @@ class BookingService extends Service
     public function  getAllData($filter = null)
     {
         $query = $this->booking->all();
-        // if (Auth::user()->hasRole('Vendor')) {
-        //     $query = $this->vehicle->whereVendorId(Auth::user()->vendor->id)->latest()->with(['vendor', 'model', 'model.type', 'model.manufacturer', 'bookings' => function ($query) {
-        //         return $query->where('status', 'running');
-        //     }]);
-        // } else {
-        //     $query = $this->vehicle->latest()->with(['vendor', 'model', 'model.type', 'model.manufacturer', 'bookings' => function ($query) {
-        //         return $query->where('status', 'running');
-        //     }]);
-        // }
 
         return DataTables::of($query)
             ->addIndexColumn()
@@ -153,7 +144,7 @@ class BookingService extends Service
             $data['user_id'] = intval($data['user_id']);
             $data['rider_id'] = isset($data['rider_id']) ? intval($data['rider_id']) : null;
 
-            $data['voucher'] = isset( $data['voucher'])? $data['voucher'] : null;
+            $data['voucher'] = isset($data['voucher']) ? $data['voucher'] : null;
 
             $existing_codes = Booking::pluck('trip_id')->toArray();
             $data['trip_id'] = generateBokkingCode($existing_codes);
@@ -208,7 +199,7 @@ class BookingService extends Service
                 // }
 
 
-             
+
             }
             return NULL;
         } catch (Exception $e) {
@@ -263,7 +254,7 @@ class BookingService extends Service
                 // $createdLocation = $this->location_service->update($data['location'], $updatedBooking->location_id);
                 return $updatedBooking;
             }
-            
+
             return false;
         } catch (Exception $e) {
             return false;
@@ -283,12 +274,10 @@ class BookingService extends Service
 
 
             //NOTIFICATION DATA
-            
 
-            if($booking->save())
-            {    
-                if($new_status == "accepted")
-                {
+
+            if ($booking->save()) {
+                if ($new_status == "accepted") {
                     $booking->rider_id = intval($data['optional_data']['rider_id']);
 
                     $rider_location = RiderLocation::where('rider_id',$booking->rider_id)->first();
@@ -298,36 +287,33 @@ class BookingService extends Service
                         $rider_location->save();
                     }
 
-                    if($booking->save())
-                    {
+                    if ($booking->save()) {
                         //Send Notification
-                        $this->notification_service->send_firebase_notification( 
+                        $this->notification_service->send_firebase_notification(
                             [
-                                ['customer', $booking->user_id ],
-                                ['rider',$booking->rider_id]
+                                ['customer', $booking->user_id],
+                                ['rider', $booking->rider_id]
                             ],
                             "booking_accepted",
                             "some"
-                         );
+                        );
 
 
                         return $booking;
                     }
-                }
-                else if($new_status == "running")
-                {
+                } else if ($new_status == "running") {
                     $booking->start_time = Carbon::now();
                     $booking->save();
 
-                     //Send Notification
-                     $this->notification_service->send_firebase_notification( 
+                    //Send Notification
+                    $this->notification_service->send_firebase_notification(
                         [
-                            ['customer', $booking->user_id ],
-                            ['rider',$booking->rider_id]
+                            ['customer', $booking->user_id],
+                            ['rider', $booking->rider_id]
                         ],
                         "booking_running",
                         "some"
-                     );
+                    );
 
                     return $booking;
                 } else if ($new_status == "completed") {
@@ -352,10 +338,9 @@ class BookingService extends Service
                     //CREATE COMPLTED TRIP RECORD for COMPLETED STATUS
                     $completed_trip_data = $booking->toArray();
                     $completed_trip_data['booking_id'] = intval($booking->id);
-
+                  
                     if( isset($data['optional_data']['location']) && isset($data['optional_data']['distance'])  )
                     {
-                        // $completed_trip_data['location'] = $data['optional_data']['location'];
 
                         $completed_trip_data['location']['origin']['name'] = $data['optional_data']['location']['origin']['name'];
                         $completed_trip_data['location']['origin']['latitude'] = floatval($data['optional_data']['location']['origin']['latitude']);
@@ -374,15 +359,15 @@ class BookingService extends Service
                     $completed_trip_data['duration'] = $new_duration;
                     $voucher = isset($booking->price_detail->promotion_voucher_id) ? $booking->price_detail->promotion_voucher->code : null;
                     $price_detail_data = $this->calculateEstimatedPrice(
-                                                    $completed_trip_data['location']['origin']['latitude'], 
-                                                    $completed_trip_data['location']['origin']['longitude'], 
-                                                    $booking->vehicle_type_id, 
-                                                    $completed_trip_data['distance'],  
-                                                    $new_duration, 
-                                                    $booking->user_id, 
-                                                    $voucher , 
-                                                    $booking->id
-                                                );  
+                        $completed_trip_data['location']['origin']['latitude'],
+                        $completed_trip_data['location']['origin']['longitude'],
+                        $booking->vehicle_type_id,
+                        $completed_trip_data['distance'],
+                        $new_duration,
+                        $booking->user_id,
+                        $voucher,
+                        $booking->id
+                    );
                     $final_price = 0;
                     // $final_price = $this->calculate_final_price(
                     //     $booking->vehicle_type_id,
@@ -395,21 +380,21 @@ class BookingService extends Service
                     $completed_trip_data['price'] = $final_price;
 
                     $booking->createdCompletedTrip = $this->completed_trip_service->create($completed_trip_data);
-                    
+
                     //CREAT PRICE DETAIL
                     $price_detail_data = $price_detail_data['price_breakdown'];
                     $price_detail_data['completed_trip_id'] =   $booking->createdCompletedTrip->id;
                     $this->price_detail_service->create($price_detail_data);
 
                     //Send Notification
-                    $this->notification_service->send_firebase_notification( 
+                    $this->notification_service->send_firebase_notification(
                         [
-                            ['customer', $booking->user_id ],
-                            ['rider',$booking->rider_id]
+                            ['customer', $booking->user_id],
+                            ['rider', $booking->rider_id]
                         ],
                         "booking_completed",
                         "some"
-                     );
+                    );
 
                     return $booking;
                 } else if ($new_status == "cancelled") {
@@ -439,11 +424,12 @@ class BookingService extends Service
 
 
                     $booking->createdCompletedTrip = $this->completed_trip_service->create($cancelled_trip_data);
-            
+
                     $voucher = isset($booking->price_detail->promotion_voucher_id) ? $booking->price_detail->promotion_voucher->code : null;
                     // dd($booking, $voucher);
                     //CREAT PRICE DETAIL
                     $price_detail_data = $this->calculateEstimatedPrice(
+
                                                     $booking->location['origin']['latitude'], 
                                                     $booking->location['origin']['longitude'], 
                                                     $booking->vehicle_type_id, 
@@ -458,14 +444,14 @@ class BookingService extends Service
                     $this->price_detail_service->create($price_detail_data);
 
                     //Send Notification
-                    $this->notification_service->send_firebase_notification( 
+                    $this->notification_service->send_firebase_notification(
                         [
-                            ['customer', $booking->user_id ],
-                            ['rider',$booking->rider_id]
+                            ['customer', $booking->user_id],
+                            ['rider', $booking->rider_id]
                         ],
                         "booking_cancelled",
                         "some"
-                     );
+                    );
 
                     return $booking;
                 }
@@ -494,6 +480,7 @@ class BookingService extends Service
     public function active_user_booking($userId)
     {
 
+
         try{
             $booking = $this->booking->where('user_id',$userId)->where(function($query){
                 $query->where('status','pending')
@@ -516,7 +503,6 @@ class BookingService extends Service
                 $query->where('status','accepted')
                 ->orWhere('status','running');
             })->with('price_detail')->first();
-          
             return $booking;
         } catch (Exception $e) {
             return null;
@@ -533,20 +519,20 @@ class BookingService extends Service
         //DEDUCING SHIFT SURGE
         $vehicle_types = VehicleType::where('status', 'active')->get();
         foreach ($vehicle_types as $vehicle_type) {
-            $estimated_prices[] = $this->calculateEstimatedPrice($data['origin_latitude'], 
-                                                                $data['origin_longitude'], 
-                                                                $vehicle_type->id, 
-                                                                $data['distance'], 
-                                                                $data['duration'],
-                                                                $data['user_id'],
-                                                                $data['voucher'],
+            $estimated_prices[] = $this->calculateEstimatedPrice(
+                $data['origin_latitude'],
+                $data['origin_longitude'],
+                $vehicle_type->id,
+                $data['distance'],
+                $data['duration'],
+                $data['user_id'],
+                $data['voucher'],
 
-                                                                );
+            );
         }
 
         return $estimated_prices;
     }
-
 
 
 
@@ -560,17 +546,6 @@ class BookingService extends Service
                                             $booking_id=null
                                             )
     {
-        // dd(
-        //     $origin_latitude, 
-        //                                     $origin_longitude, 
-        //                                     $vehicle_type_id, 
-        //                                     $distance, 
-        //                                     $duration,
-        //                                     $user_id,
-        //                                     $voucher, 
-        //                                     $booking_id,
-        //                                     Booking::find($booking_id)->toArray()
-        // );
         // dd($booking_id,Booking::find($booking_id));
         $distance = $distance / 1000;        //convert the distance in meters to kilometers
 
@@ -587,7 +562,7 @@ class BookingService extends Service
          *-VOUCHER
          */
 
- 
+
 
         //TO BE CALCULATED
         $density_surge = 0;
@@ -597,7 +572,7 @@ class BookingService extends Service
 
         //DEDUCTING DENSITY SURGE
         //The minimum ratio of pending_bookings:riders after which the surge may apply
-        $permissable_density = isset($vehicle_type->surge_rates) ?  min($surge_levels) : 1;  
+        $permissable_density = isset($vehicle_type->surge_rates) ?  min($surge_levels) : 1;
 
         //The density surge applies only if the current pending bookings is >= this value
         $threshold_pending_booking =  $vehicle_type->min_surge_customers;
@@ -605,7 +580,7 @@ class BookingService extends Service
         $nearbyRiders = $this->get_available_riders_within_radius($origin_latitude, $origin_longitude, $vehicle_type->id);
         $nearbyPendingBookings = $this->get_nearby_pending_bookings($origin_latitude, $origin_longitude, $vehicle_type->id);
         // dd('Rider COUNT: ',count($nearbyRiders), '  Booking COUNT: ',count($nearbyPendingBookings));
-       
+
         $nearbyRiders = (count($nearbyRiders) > 0) ? count($nearbyRiders) : 1;
         $nearbyPendingBookings =  (count($nearbyPendingBookings) > 0) ? count($nearbyPendingBookings) : 1;
 
@@ -614,89 +589,70 @@ class BookingService extends Service
         $current_density = 1;
         if (!$nearbyRiders || !$nearbyRiders)
             $current_density = 1;
-        else
-        {
+        else {
             /******
              * HERE THE FLOOR COULD BE CHANGED TO ROUND for applying surges more precisely but would increase the total prices more frequently
              */
-            $current_density =  floor($nearbyPendingBookings / $nearbyRiders );
+            $current_density =  floor($nearbyPendingBookings / $nearbyRiders);
         }
 
-      
-        if ( isset($vehicle_type->surge_rates) &&  
-            ($current_density >= $permissable_density) &&  
-            ($nearbyPendingBookings >= $threshold_pending_booking)) 
-        {
-                       
-            if(in_array($current_density, $surge_levels))
-            {
+
+        if (
+            isset($vehicle_type->surge_rates) &&
+            ($current_density >= $permissable_density) &&
+            ($nearbyPendingBookings >= $threshold_pending_booking)
+        ) {
+
+            if (in_array($current_density, $surge_levels)) {
                 $density_surge = $surge_rates[$current_density];
-            }
-            else{
+            } else {
                 //Find the next lowest key/level *** use CLOSEST instead of NEXT LOWER IN CASE FOR MORE PRECISE/HIGHER SURGE RATES ***
                 sort($surge_levels);
                 $temp = min($surge_levels);
-                foreach($surge_levels as $level)
-                {
-                    if($level < $current_density )
-                    {
+                foreach ($surge_levels as $level) {
+                    if ($level < $current_density) {
                         $temp = $level;
                     }
                 }
                 $density_surge = $surge_rates[$temp];
             }
-        }
-        else{
+        } else {
             $density_surge = 0;
         }
 
-       
-        //DEDUCTING SHIFT SURGE
-       // $currentTime = Carbon::now();
-       $booking_time = Carbon::now();
-       $old_duration = null;
 
-        if($booking_id)
-        {
-            $booking = Booking::select('created_at','duration')->where('id',$booking_id)->first();
-            if($booking)
-            {
+        //DEDUCTING SHIFT SURGE
+        // $currentTime = Carbon::now();
+        $booking_time = Carbon::now();
+        $old_duration = null;
+
+        if ($booking_id) {
+            $booking = Booking::select('created_at', 'duration')->where('id', $booking_id)->first();
+            if ($booking) {
                 $booking_time = $booking->created_at;
                 $old_duration = $booking->duration;
             }
-        } 
+        }
 
         // $shift = 
         $shifts = Shift::where('vehicle_type_id', $vehicle_type_id)->whereStatus('active')->get();
 
-        $shift = $shifts->filter(function ($shift) use ( $booking_time ){
+        $shift = $shifts->filter(function ($shift) use ($booking_time) {
             $startTime = Carbon::createFromFormat('H', $shift->time_from);
             $endTime = Carbon::createFromFormat('H',  $shift->time_to);
             if ($booking_time->between($startTime, $endTime, true))   return true;
             else return false;
         });
         // dd($shifts->toArray(), $shift->toArray(), $booking_time->format('H'), $shift[0]->rate);
-        if( isset($shift[0]->rate) )
-        {
+        if (isset($shift[0]->rate)) {
             //$shift_surge = $vehicle_type->default_surge_rate;
             $shift_surge = $shift[0]->rate;
         }
-           
+
 
         if ($shift_surge || $density_surge) {
-            $surge_rate =  ($density_surge > $shift_surge ) ? $density_surge : $shift_surge ;
+            $surge_rate =  ($density_surge > $shift_surge) ? $density_surge : $shift_surge;
         }
-
-        // $surge_info = [
-        //     'nearbyPendingBookings' => $nearbyPendingBookings,
-        //     'threshold_pending_booking' => $threshold_pending_booking,
-        //     'permissable_density' => $permissable_density,
-        //     'current_density' => $current_density,
-        //     'density_surge' => $density_surge,
-        //     'shift_surge' => $shift_surge,
-        //     'surge_rate' => $surge_rate,
-        //     'distance'=>$distance
-        // ];
 
 
         $estimated_price['vehicle_type_id'] = $vehicle_type->id;
@@ -724,9 +680,9 @@ class BookingService extends Service
         $estimated_price['price_breakdown']['surge_rate']  =  $surge_rate;
         $estimated_price['price_breakdown']['price_per_km_after_surge'] = $vehicle_type->price_per_km *  $surge_rate;
         $estimated_price['price_breakdown']['surge']  =
-         ( $distance_charged * $estimated_price['price_breakdown']['price_per_km_after_surge']) - 
-         $estimated_price['price_breakdown']['price_after_distance'];
-        $estimated_price['price_breakdown']['price_after_surge'] =  ( $distance_charged  * $estimated_price['price_breakdown']['price_per_km_after_surge']);
+            ($distance_charged * $estimated_price['price_breakdown']['price_per_km_after_surge']) -
+            $estimated_price['price_breakdown']['price_after_distance'];
+        $estimated_price['price_breakdown']['price_after_surge'] =  ($distance_charged  * $estimated_price['price_breakdown']['price_per_km_after_surge']);
 
         // $estimated_price['price_breakdown']['surge']  = ($surge_rate * $estimated_price['price_breakdown']['price_after_distance']) - $estimated_price['price_breakdown']['price_after_distance'];
         // $estimated_price['price_breakdown']['price_after_surge'] = ($surge_rate * $estimated_price['price_breakdown']['price_after_distance']);
@@ -739,32 +695,27 @@ class BookingService extends Service
         $estimated_price['price_breakdown']['price_after_app_charge']  =  $estimated_price['price_breakdown']['price_after_surge'] + $estimated_price['price_breakdown']['app_charge'];
 
         //PRICE AFTER DURATION CHARGE
-        if( $vehicle_type->base_covers_duration == 'yes')
-        {
-            if( isset($old_duration) && $duration > $old_duration ){
+        if ($vehicle_type->base_covers_duration == 'yes') {
+            if (isset($old_duration) && $duration > $old_duration) {
                 $estimated_price['price_breakdown']['price_per_min'] = 0;
-                $estimated_price['price_breakdown'] ['price_per_min_after_base'] = $vehicle_type->price_per_min;
-                $estimated_price['price_breakdown']['duration_charge'] =  ( $duration - $old_duration )  * $duration / 60 ;
+                $estimated_price['price_breakdown']['price_per_min_after_base'] = $vehicle_type->price_per_min;
+                $estimated_price['price_breakdown']['duration_charge'] =  ($duration - $old_duration)  * $duration / 60;
                 $estimated_price['price_breakdown']['price_after_duration']  =  $estimated_price['price_breakdown']['price_after_app_charge'] + $estimated_price['price_breakdown']['duration_charge'];
             } else {
                 $estimated_price['price_breakdown']['price_per_min'] = 0;
-                $estimated_price['price_breakdown'] ['price_per_min_after_base'] = $vehicle_type->price_per_min;
+                $estimated_price['price_breakdown']['price_per_min_after_base'] = $vehicle_type->price_per_min;
                 $estimated_price['price_breakdown']['duration_charge'] = 0;
                 $estimated_price['price_breakdown']['price_after_duration']  =  $estimated_price['price_breakdown']['price_after_app_charge'];
             }
-
-         
-        }
-        else{
+        } else {
 
 
             $estimated_price['price_breakdown']['price_per_min'] = $vehicle_type->price_per_min;
-            $estimated_price['price_breakdown'] ['price_per_min_after_base'] = $vehicle_type->price_per_min;
+            $estimated_price['price_breakdown']['price_per_min_after_base'] = $vehicle_type->price_per_min;
             $estimated_price['price_breakdown']['duration_charge'] = ($vehicle_type->price_per_min * $duration / 60);
             $estimated_price['price_breakdown']['price_after_duration']  =  $estimated_price['price_breakdown']['price_after_app_charge'] + $estimated_price['price_breakdown']['duration_charge'];
-            
         }
-        
+
         $estimated_price['price_breakdown']['price_after_base_fare'] =
             $estimated_price['price_breakdown']['price_after_duration'] +  $estimated_price['price_breakdown']['base_fare'];
 
@@ -783,107 +734,90 @@ class BookingService extends Service
     public function getDiscountAmount($estimated_price, $user_id, $voucher)
     {
         $estimated_price['price_breakdown']['promotion_voucher_id'] = null;
-        $estimated_price['price_breakdown']['discount_amount']= 0;
+        $estimated_price['price_breakdown']['discount_amount'] = 0;
         $estimated_price['price_breakdown']['original_price'] =    $estimated_price['price_breakdown']['total_price'];
-        if($voucher)
-        {   
+        if ($voucher) {
 
-            
-            $promotion_voucher = PromotionVoucher::where('code',$voucher)
-                                                    ->where('user_type','customer')
-                                                    ->where('status','active')
-                                                    ->whereRaw("starts_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')" , Carbon::now()->format('Y-m-d H:i'))
-                                                    ->whereRaw("expires_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')" , Carbon::now()->format('Y-m-d H:i'))
-                                                    ->whereRaw('uses < max_uses')
-                                                    ->first();
+
+            $promotion_voucher = PromotionVoucher::where('code', $voucher)
+                ->where('user_type', 'customer')
+                ->where('status', 'active')
+                ->whereRaw("starts_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now()->format('Y-m-d H:i'))
+                ->whereRaw("expires_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now()->format('Y-m-d H:i'))
+                ->whereRaw('uses < max_uses')
+                ->first();
             $user = User::find($user_id);
 
 
-            if($promotion_voucher && $user)
-            {
+            if ($promotion_voucher && $user) {
                 //CHECK FOR VARIOUS ELIGIBILITY FACTORS OF THE VOUCHER 
-          
+
 
                 $used_promotion_vouchers = PriceDetail::whereHas('completed_trip', function (Builder $query) use ($user_id) {
-                                                            $query->where('user_id', $user_id);
-                                                            $query->whereStatus('completed');
-                                                        })->where('promotion_voucher_id',$promotion_voucher->id)->pluck('id','promotion_voucher_id');
-                
+                    $query->where('user_id', $user_id);
+                    $query->whereStatus('completed');
+                })->where('promotion_voucher_id', $promotion_voucher->id)->pluck('id', 'promotion_voucher_id');
+
                 //Check if the voucher still has uses left for the user
-                if(count($used_promotion_vouchers) < $promotion_voucher->max_uses_user  )
-                {
-                    $user_travelled_distance = CompletedTrip::where('user_id',$user_id)->where('status','completed')->sum('distance'); //in meters
-                    $user_spent_price = CompletedTrip::where('user_id',$user_id)->where('status','completed')->sum('price'); 
+                if (count($used_promotion_vouchers) < $promotion_voucher->max_uses_user) {
+                    $user_travelled_distance = CompletedTrip::where('user_id', $user_id)->where('status', 'completed')->sum('distance'); //in meters
+                    $user_spent_price = CompletedTrip::where('user_id', $user_id)->where('status', 'completed')->sum('price');
 
                     $price_eligibility_allowance = 0;
                     $distance_eligibility_allowance = 0;
 
-                    if(isset($promotion_voucher->price_eligibility))
-                    {
+                    if (isset($promotion_voucher->price_eligibility)) {
                         //dd('as',$promotion_voucher->price_eligibility);
-                        foreach($promotion_voucher->price_eligibility as $price_range)
-                        {
-                            if($user_spent_price >= $price_range['price'])
+                        foreach ($promotion_voucher->price_eligibility as $price_range) {
+                            if ($user_spent_price >= $price_range['price'])
                                 $price_eligibility_allowance = intval($price_range['worth']);
                         }
                     }
-                    if(isset($promotion_voucher->distance_eligibility))
-                    {
-                        foreach($promotion_voucher->distance_eligibility as $distance_range)
-                        {
-                            if($user_travelled_distance >= $distance_range['distance'])
+                    if (isset($promotion_voucher->distance_eligibility)) {
+                        foreach ($promotion_voucher->distance_eligibility as $distance_range) {
+                            if ($user_travelled_distance >= $distance_range['distance'])
                                 $distance_eligibility_allowance = intval($distance_range['worth']);
                         }
                     }
 
                     $voucher_worth = $promotion_voucher->worth + $price_eligibility_allowance + $distance_eligibility_allowance;
-              
-                    if(isset($promotion_voucher->eligible_user_ids))
-                    {
-                        if(in_array($user_id, $promotion_voucher->eligible_user_ids))
-                        {
+
+                    if (isset($promotion_voucher->eligible_user_ids)) {
+                        if (in_array($user_id, $promotion_voucher->eligible_user_ids)) {
                             //APPLY DISCOUNT
-                            if(!$promotion_voucher->is_fixed)
-                            {
-                                $estimated_price['price_breakdown']['discount_amount'] = 
-                                $estimated_price['price_breakdown']['total_price'] * ($voucher_worth/100) ;
+                            if (!$promotion_voucher->is_fixed) {
+                                $estimated_price['price_breakdown']['discount_amount'] =
+                                    $estimated_price['price_breakdown']['total_price'] * ($voucher_worth / 100);
                             } else {
                                 $estimated_price['price_breakdown']['discount_amount'] = $voucher_worth;
                             }
-                            $estimated_price['price_breakdown']['total_price'] = 
-                            $estimated_price['price_breakdown']['total_price'] - $estimated_price['price_breakdown']['discount_amount'];
+                            $estimated_price['price_breakdown']['total_price'] =
+                                $estimated_price['price_breakdown']['total_price'] - $estimated_price['price_breakdown']['discount_amount'];
 
-                            $estimated_price['price_breakdown']['total_price'] = ( $estimated_price['price_breakdown']['total_price'] >= 0 ) ?  $estimated_price['price_breakdown']['total_price'] : 0;
+                            $estimated_price['price_breakdown']['total_price'] = ($estimated_price['price_breakdown']['total_price'] >= 0) ?  $estimated_price['price_breakdown']['total_price'] : 0;
                             $estimated_price['price_breakdown']['promotion_voucher_id'] = $promotion_voucher->id;
-                        
-                        }
-                        else{
+                        } else {
                             //DO NOT APPLY DISCOUNT
                             $voucher_worth = 0;
                         }
-                    }
-                    else{
+                    } else {
                         //APPLY DISCOUNT
-                        if(!$promotion_voucher->is_fixed)
-                        {
-                            $estimated_price['price_breakdown']['discount_amount'] = 
-                            $estimated_price['price_breakdown']['total_price'] * ($voucher_worth/100) ;
+                        if (!$promotion_voucher->is_fixed) {
+                            $estimated_price['price_breakdown']['discount_amount'] =
+                                $estimated_price['price_breakdown']['total_price'] * ($voucher_worth / 100);
                         } else {
                             $estimated_price['price_breakdown']['discount_amount'] = $voucher_worth;
                         }
-                        $estimated_price['price_breakdown']['total_price'] = 
-                        $estimated_price['price_breakdown']['total_price'] - $estimated_price['price_breakdown']['discount_amount'];
+                        $estimated_price['price_breakdown']['total_price'] =
+                            $estimated_price['price_breakdown']['total_price'] - $estimated_price['price_breakdown']['discount_amount'];
 
-                        $estimated_price['price_breakdown']['total_price'] = ( $estimated_price['price_breakdown']['total_price'] >= 0 ) ?  $estimated_price['price_breakdown']['total_price'] : 0;
+                        $estimated_price['price_breakdown']['total_price'] = ($estimated_price['price_breakdown']['total_price'] >= 0) ?  $estimated_price['price_breakdown']['total_price'] : 0;
                         $estimated_price['price_breakdown']['promotion_voucher_id'] = $promotion_voucher->id;
                     }
                 }
-               
-
             }
-
         }
-        return $estimated_price;    
+        return $estimated_price;
     }
 
     public function calculate_final_price($vehicle_type_id, $old_estimated_price, $old_duration, $new_duration = 60)  //minimum 10 minutes duration in seconds
@@ -893,20 +827,12 @@ class BookingService extends Service
 
             $duration_to_be_charged = 0;
 
-            if($new_duration > $old_duration){
+            if ($new_duration > $old_duration) {
                 $duration_to_be_charged = $new_duration - $old_duration;
             }
 
-            $duration_charge = ($price_per_min * $duration_to_be_charged / 60 ) ;
+            $duration_charge = ($price_per_min * $duration_to_be_charged / 60);
             $new_total_price = $old_estimated_price +  $duration_charge;
-
-            //Remove the old duration's price from the total price
-            // $old_duration_charge = $price_per_min * $old_duration / 60;
-            // $new_total_price = $old_estimated_price - $old_duration_charge;
-
-            // //Add new duration price to new total price
-            // $new_duration_charge = $price_per_min * $new_duration / 60;
-            // $new_total_price = $new_total_price + $new_duration_charge;
 
             return round($new_total_price);
         } catch (Throwable $e) {
@@ -933,41 +859,6 @@ class BookingService extends Service
     {
         // dd($origin_latitude, $origin_longitude, $vehicle_type_id);
         return $this->rider_location_service->getNearbyAvailableUsers($origin_latitude, $origin_longitude, $vehicle_type_id);
-
-        // try {
-        //     try {
-        //         if ($radius == null) {
-        //             $radius = !empty(config('settings.scan_radius')) ? floatval(config('settings.scan_radius')) : 20.0;
-        //         } else {
-        //             $radius = floatval($radius);
-        //         }
-        //     } catch (Exception $e) {
-        //         $radius = 20.0;
-        //     }
-        //     $pending_bookings = [];
-        //     if (!$vehicle_type_id)
-        //         $pending_bookings = Booking::where('status', 'pending')->whereDate('created_at', Carbon::today())->get();
-        //     else
-        //         $pending_bookings = Booking::where('vehicle_type_id', $vehicle_type_id)->whereStatus( 'pending')->whereDate('created_at', Carbon::today())->get();
-
-        //     $nearby_pending_bookings = [];
-        //     foreach ($pending_bookings as $booking) {
-        //         $distance_from_origin = calcuateDistance(
-        //             floatval($origin_latitude),
-        //             floatval($origin_longitude),
-        //             floatval($booking->location->origin_latitude),
-        //             floatval($booking->location->origin_longitude)
-        //         );
-
-        //         if ($distance_from_origin <= $radius) {
-        //             $nearby_pending_bookings[] = $booking;
-        //         }
-        //     }
-            
-        //     return $nearby_pending_bookings;
-        // } catch (Exception $e) {
-        //     return NULL;
-        // }
     }
 
 

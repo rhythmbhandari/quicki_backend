@@ -120,17 +120,17 @@ $status = ['pending', 'accepted', 'running', 'completed', 'cancelled'];
                         <label>Origin <span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('start_location') is-invalid @enderror"
                             placeholder="Enter Start Location" name="start_location"
-                            value="{{old('start_location', isset($booking) ? $booking->origin : '')}}" id="origin"
-                            required />
+                            value="{{old('start_location', isset($booking) ? $booking->location['origin']['name'] : '')}}"
+                            id="origin" required />
 
                         <input type="text" class="form-control d-none" placeholder="Pick Up Location"
                             name="start_coordinate[latitude]" id="latitude_origin"
-                            value="{{old('start_coordinate.latitude', isset($booking) ? $booking->location->latitude_origin : '')}}"
+                            value="{{old('start_coordinate.latitude', isset($booking) ? $booking->location['origin']['latitude'] : '')}}"
                             readonly />
 
                         <input type="text" class="form-control d-none" placeholder="Pick Up Location"
                             name="start_coordinate[longitude]" id="longitude_origin"
-                            value="{{old('start_coordinate.longitude', isset($booking) ? $booking->location->longitude_origin : '')}}"
+                            value="{{old('start_coordinate.longitude', isset($booking) ? $booking->location['origin']['longitude'] : '')}}"
                             readonly />
 
                         @error('start_location')
@@ -143,17 +143,17 @@ $status = ['pending', 'accepted', 'running', 'completed', 'cancelled'];
                         <label>Destination <span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('end_location') is-invalid @enderror"
                             placeholder="Enter End Location" name="end_location"
-                            value="{{old('end_location', isset($booking) ? $booking->destination : '')}}"
+                            value="{{old('end_location', isset($booking) ? $booking->location['destination']['name'] : '')}}"
                             id="destination" required />
 
                         <input type="text" class="form-control d-none" placeholder="Pick Up Location"
                             name="end_coordinate[latitude]" id="latitude_destination"
-                            value="{{old('end_coordinate.latitude', isset($booking) ? $booking->location->latitude_destination: '')}}"
+                            value="{{old('end_coordinate.latitude', isset($booking) ? $booking->location['destination']['latitude']: '')}}"
                             readonly />
 
                         <input type="text" class="form-control d-none" placeholder="Pick Up Location"
                             name="end_coordinate[longitude]" id="longitude_destination"
-                            value="{{old('end_coordinate.longitude', isset($booking) ? $booking->location->longitude_destination : '')}}"
+                            value="{{old('end_coordinate.longitude', isset($booking) ? $booking->location['destination']['longitude'] : '')}}"
                             readonly />
 
                         @error('end_location')
@@ -487,7 +487,7 @@ $status = ['pending', 'accepted', 'running', 'completed', 'cancelled'];
             lat: parseFloat($('#latitude_origin').val()),
             lng: parseFloat($('#longitude_origin').val())
         }
-
+        console.log(place.geometry.location, "printin location format of for marker positions")
         marker.setPosition(place.geometry.location);
         marker.setVisible(true);
 
@@ -550,7 +550,7 @@ $status = ['pending', 'accepted', 'running', 'completed', 'cancelled'];
     function getFormattedAddress(response)
     {   
         
-        console.log('Geocoder Response:',response);
+        // console.log('Geocoder Response:',response);
 
        // var country = province = district = formatted_address = city = sub_locality = route = postal_code = '';
         var addressJSON = {
@@ -690,7 +690,7 @@ $status = ['pending', 'accepted', 'running', 'completed', 'cancelled'];
     };
 
     function finalStopPoints(options) {
-        console.log("inside finalStopPoints!!!!");
+        // console.log("inside finalStopPoints!!!!");
         waypts = [];
         var matches = [];
         var target;
@@ -718,9 +718,10 @@ $status = ['pending', 'accepted', 'running', 'completed', 'cancelled'];
         console.log("actual waypoint", waypts);
 
         $('#waypoints').val(JSON.stringify(reqWaypts));
-
+        
         if(start.lat != null && start.lng != null &&
         end.lat != null && end.lng != null) {
+            console.log("printing origin and destination ", start, end)
             // directionsRenderer.setMap(map);
             directionsService.route({
                 origin: start,

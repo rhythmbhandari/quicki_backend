@@ -79,4 +79,12 @@ class Rider extends Model
     {
         return $this->morphMany(Document::class, 'documentable');
     }
+
+    public function vehicle_type()
+    {
+        return $this->belongsToThrough(
+            VehicleType::class,
+            Vehicle::class
+        );
+    }
 }

@@ -102,14 +102,17 @@ class RiderService extends Service
             ->editColumn('total_paid', function (Rider $rider) {
                 return getTotalPaid($rider->user);
             })
+            ->editColumn('amount_due', function () {
+                return "N/A";
+            })
             ->editColumn('status', function (Rider $rider) {
                 return getTableHtml($rider, 'status');
             })
             ->editColumn('actions', function (Rider $rider) {
                 return '<button type="button" id="makePayment" data-toggle="modal" data-target="#makePaymentForm" class="btn btn-success" style="width: 200px;"
                 data-placement="top" data-id="' . $rider->id . '" data-original-title="Make Payment">Make Payment</button>
-                <button type="button" id="showHistory" class="btn btn-warning" style="width: 200px;" data-toggle="tooltip"
-                data-placement="top" data-original-title="Transaction History">Show History</button>
+                <a href="' . route('admin.rider.history', $rider->id) . '"class="btn btn-warning" style="width: 200px;" data-toggle="tooltip"
+                data-placement="top" data-original-title="Transaction History">Show History</a>
                 ';
             })->rawColumns(['image', 'status', 'actions'])
             ->make(true);
@@ -153,6 +156,16 @@ class RiderService extends Service
             $query->whereRelation('vehicle_type_id', 'status', '!=', 'in_active');
         })->pluck('id');
         return $allowed_riders;
+    }
+
+    function arePointsNear($checkPoint, $centerPoint, $km)
+    {
+        // dd($checkPoint, $centerPoint["lat"]);
+        $ky = 40000 / 360;
+        $kx = cos(pi() * $centerPoint['lat'] / 180.0) * $ky;
+        $dx = abs($centerPoint['lng'] - $checkPoint['lng']) * $kx;
+        $dy = abs($centerPoint['lat'] - $checkPoint['lat']) * $ky;
+        return sqrt($dx * $dx + $dy * $dy) <= $km;
     }
 
     function create(array $data, $user = null)

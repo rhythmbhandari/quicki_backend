@@ -25,22 +25,53 @@ class TransactionService extends Service
         return $this->transaction;
     }
 
-    public function getAllData()
+    public function getAllData($request)
     {
-        $query = $this->transaction->all();
+        $query = $this->transaction->with('creditor', 'debtor')->where('deleted_at', null);
         return DataTables::of($query)
             ->addIndexColumn()
+            ->filter(function ($instance) use ($request) {
+                return $instance->when($request->has('creditor_id') && $request->creditor_id != null, function ($query) use ($request) {
+                    return $query->where('creditor_id', $request->creditor_id);
+                })->when($request->has('creditor_type') && $request->creditor_type != null, function ($query) use ($request) {
+                    return $query->where('creditor_type', $request->creditor_type);
+                })->when($request->has('datefilter') && $request->datefilter != null, function ($query) use ($request) {
+                    $date = explode(" - ", $request->datefilter);
+                    return $query->whereBetween('created_at', $date);
+                });
+            }, true)
             ->editColumn('transaction_date', function (Transaction $transaction) {
                 return $transaction->transaction_date;
             })
-            ->editColumn('creditor', function (Transaction $transaction) {
-                return $transaction->creditor->name;
+            ->addColumn('creditor_first_name', function (Transaction $transaction) {
+                return $transaction->creditor->first_name;
             })
-            ->editColumn('debtor', function (Transaction $transaction) {
-                return $transaction->debtor->name;
+            ->addColumn('creditor_last_name', function (Transaction $transaction) {
+                return $transaction->creditor->last_name;
+            })
+            ->addColumn('creditor', function () {
+                return 'N/A';
+            })
+            ->editColumn('creditor_type', function (Transaction $transaction) {
+                return $transaction->creditor_type;
+            })
+            ->addColumn('debtor_first_name', function (Transaction $transaction) {
+                return $transaction->debtor->first_name;
+            })
+            ->addColumn('debtor_last_name', function (Transaction $transaction) {
+                return $transaction->debtor->last_name;
+            })
+            ->addColumn('debtor', function () {
+                return 'N/A';
+            })
+            ->editColumn('debtor_type', function (Transaction $transaction) {
+                return $transaction->debtor_type;
             })
             ->editColumn('payment_mode', function (Transaction $transaction) {
                 return $transaction->payment_mode;
+            })
+            ->addColumn('purpose', function (Transaction $transaction) {
+                return $transaction->creditor_type;
             })
             ->editColumn('amount', function (Transaction $transaction) {
                 return $transaction->amount;
@@ -56,6 +87,8 @@ class TransactionService extends Service
             // ->rawColumns(['image', 'status', 'actions'])
             ->make(true);
     }
+
+
 
     function getAllTransactions()
     {

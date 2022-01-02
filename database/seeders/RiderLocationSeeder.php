@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Modules\Models\RiderLocation;
+
 
 class RiderLocationSeeder extends Seeder
 {
@@ -13,6 +15,6 @@ class RiderLocationSeeder extends Seeder
      */
     public function run()
     {
-        //
+        RiderLocation::create([]);
     }
 }
