@@ -6,9 +6,13 @@ namespace App\Http\Controllers\Admin\PromotionVoucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Kamaln7\Toastr\Facades\Toastr;
 
 
 use App\Modules\Models\PromotionVoucher;
+use App\Modules\Models\User;
+use App\Http\Requests\Admin\PromotionVoucher\PromotionVoucherRequest;
+use App\Http\Requests\Admin\PromotionVoucher\UpdatePromotionVoucherRequest;
 
 use App\Modules\Services\PromotionVoucher\PromotionVoucherService;
 use App\Modules\Services\Notification\NotificationService;
@@ -47,7 +51,16 @@ class PromotionVoucherController extends Controller
     public function create()
     {
         //$bookings = Booking::get();
-        return view('admin.promotion_voucher.create');
+        $users = User::get();
+        $applicable_roles = ['customer','rider'];
+        $suggested_code = generateVoucherCode(PromotionVoucher::pluck('code')->toArray());
+        return view('admin.promotion_voucher.create',compact('applicable_roles','suggested_code','users'));
+    }
+
+
+    public function getGeneratedCode()
+    {
+        return $data = generateVoucherCode(PromotionVoucher::pluck('code')->toArray());
     }
 
     /**
@@ -58,23 +71,40 @@ class PromotionVoucherController extends Controller
      */
     public function edit($id)
     {
+        $users = User::get();
         $promotion_voucher = PromotionVoucher::findOrFail($id);
-        return view('admin.promotion_voucher.edit', compact('promotion_voucher'));
+        // $suggested_codes = ['asdasda', 'asdaccdads', 'asdasf'];
+        return view('admin.promotion_voucher.edit', compact('promotion_voucher','users'));
     }
 
  
-    public function store()
+    public function store(PromotionVoucherRequest $request)
     {
 
-
-
+      
+            
+        $createdPromotionVoucher = $this->promotion_voucher->create($request->all());
+        if ($createdPromotionVoucher) {
+            Toastr::success('PromotionVoucher created successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+            return redirect()->route('admin.promotion_voucher.index');
+        }
+        Toastr::error('PromotionVoucher cannot be created.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+        return redirect()->route('admin.promotion_voucher.index');
+    
+       
     }
 
 
-    public function update()
+    public function update(UpdatePromotionVoucherRequest $request,$id)
     {
 
-        
+        $createdPromotionVoucher = $this->promotion_voucher->update($request->all(),$id);
+        if ($createdPromotionVoucher) {
+            Toastr::success('PromotionVoucher updated successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+            return redirect()->route('admin.promotion_voucher.index');
+        }
+        Toastr::error('PromotionVoucher cannot be updated.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+        return redirect()->route('admin.promotion_voucher.index');
 
     }
 

@@ -295,7 +295,7 @@ function randomStringCodeGenerator($code, $length = 4) {
     return $generatedCode;
 }
 
-function generateBokkingCode( $existing_codes=null) {
+function generateBookingCode( $existing_codes=null) {
     //$company_code = 'LIG';
     //$company_code = config('app.company_code');
     
@@ -314,4 +314,38 @@ function generateBokkingCode( $existing_codes=null) {
    
    
     return $generatedCode;
+}
+
+
+function generateVoucherCode( $existing_codes=null) {
+ 
+    $prefix = '#';
+  
+    $generatedCode = randomStringCodeGenerator($prefix, 8);
+    if($existing_codes)
+    {
+        while(in_array($generatedCode, $existing_codes)){
+            $generatedCode = randomStringCodeGenerator($prefix, 8);
+        }
+    }
+   
+   
+    return $generatedCode;
+}
+
+
+
+function hasRole($user_id, $checkRole)
+{
+    $user = App\Modules\Models\User::find($user_id);
+    foreach ($user->roles as $role) {
+        if ($role->name == $checkRole)
+            return true;
+    }
+    return false;
+}
+
+function getSpacedTextAttribute($str)
+{
+    return ucwords(str_replace('_', ' ', $str));
 }

@@ -168,6 +168,12 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
 
         /*
+        * Settings Providers... 
+        */
+        
+        App\Providers\SettingServiceProvider::class,
+
+        /*
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,

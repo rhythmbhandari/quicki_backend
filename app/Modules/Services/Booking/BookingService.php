@@ -155,8 +155,10 @@ class BookingService extends Service
 
             $data['voucher'] = isset( $data['voucher'])? $data['voucher'] : null;
 
+     
+
             $existing_codes = Booking::pluck('trip_id')->toArray();
-            $data['trip_id'] = generateBokkingCode($existing_codes);
+            $data['trip_id'] = generateBookingCode($existing_codes);
             // dd($data['trip_id'], $existing_codes);
             // dd("booking data", $data);
 

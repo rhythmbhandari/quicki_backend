@@ -40,7 +40,17 @@ class Booking extends Model
         'updated_at', 'created_at', 'deleted_at'
     ];
 
-    protected $appends = ['status_text'];
+    protected $appends = ['status_text','distance_km','duration_min'];
+
+    public function getDistanceKmAttribute()
+    {
+        return floatval($this->distance/1000);
+    }
+
+    public function getDurationMinAttribute()
+    {
+        return floatval($this->duration/60);
+    }
 
     public function user()
     {

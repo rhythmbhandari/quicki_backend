@@ -47,7 +47,7 @@ class PromotionVoucher extends Model
         'created_at', 'updated_at', 'deleted_at'];
     
     protected $appends = [
-        'status_text', 'thumbnail_path', 'image_path', 'is_expired'
+        'status_text', 'thumbnail_path', 'image_path', 'is_expired', 'remaining_uses'
     ];
 
     function getIsExpiredAttribute(){
@@ -61,6 +61,11 @@ class PromotionVoucher extends Model
             return $this->path . '/'  . $this->image;
         else
             return 'assets/media/user_placeholder.png';
+    }
+
+    function getRemainingUsesAttribute()
+    {
+        return $this->max_uses - $this->uses;
     }
 
     function getStatusTextAttribute()

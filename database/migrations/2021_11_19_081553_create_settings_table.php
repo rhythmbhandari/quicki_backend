@@ -19,8 +19,11 @@ class CreateSettingsTable extends Migration
             $table->text('value')->nullable();
             $table->text('description')->nullable();
             $table->enum('required', ['1','0'])->nullable()->default('0');
-            $table->enum('group', ['general','products','banners', 'checkout', 'cart', 'header', 'footer', 'social', 'delivery_price' ,'others'])->nullable()->default('others');
+            // $table->enum('group', ['general','products','banners', 'checkout', 'cart', 'header', 'footer', 'social', 'delivery_price','surge' ,'others'])->nullable()->default('others');
+           
+            $table->string('group');
             $table->enum('data_type', ['text','image','link', 'integer', 'double', 'json', 'number','numeric', 'email', 'icon'])->nullable()->default('text');
+            
 
             $table->double('image_ratio')->nullable();
 
