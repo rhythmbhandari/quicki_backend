@@ -30,9 +30,16 @@ class HeatmapController extends Controller
 
     public function getBookingInfo($booking_id)
     {
-        $booking = Booking::finOrFail($booking_id);
-        dd("booking info with booking location will be fetched here!");
+        $booking = Booking::findOrFail($booking_id);
+        // dd("booking info with booking location will be fetched here!");
         return view('admin.heatmap.booking', compact('booking'));
+    }
+
+    public function getBookingData($booking_id)
+    {
+        // dd($booking_id);
+        $booking = Booking::findOrFail($booking_id);
+        return compact('booking');
     }
 
     /**

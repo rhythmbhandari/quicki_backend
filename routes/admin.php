@@ -63,6 +63,8 @@ Route::group([
     $router->get('rider/{rider_id}/clear_commission', [RiderController::class, 'clearCommission'])->name('rider.commission_clear');
     $router->get('rider/{rider_id}/make_payment', [RiderController::class, 'makePaymentModal'])->name('rider.make_payment_modal');
     $router->get('rider/{rider_id}/history', [RiderController::class, 'history'])->name('rider.history');
+    $router->get('active_rider_data', [RiderController::class, 'riderActiveLocationAjax'])->name('rider.active.location.data');
+    $router->get('rider/{rider_id}/detail', [RiderController::class, 'getRiderDetail'])->name('rider.detail');
     // $router->get('rider/{user_id}/transaction_data', [TransactionController::class, 'getRiderData'])->name('rider.transaction.data');
 
     //vehicle type
@@ -75,6 +77,7 @@ Route::group([
     $router->get('booking_data', [BookingController::class, 'getAllData'])->name('booking.data');
     $router->get('estimated_price', [BookingController::class, 'estimatedPriceAjax'])->name('booking.price');
     $router->get('booking_ajax', [BookingController::class, 'bookingAjax'])->name('booking.ajax');
+    $router->post('/booking/change_status', [BookingController::class, 'changeStatusAjax'])->name('booking.change.status');
 
     //SOS
     $router->resource('/sos', SosController::class);
@@ -90,5 +93,6 @@ Route::group([
     //heatmap routes
     $router->get('/heatmap/booking', [HeatmapController::class, 'bookingHeatMap'])->name('heatmap.booking');
     $router->get('/heatmap/booking/{booking_id}', [HeatmapController::class, 'getBookingInfo'])->name('heatmap.booking.info');
+    $router->get('/heatmap/booking_detail/{booking_id}', [HeatmapController::class, 'getBookingData'])->name('heatmap.booking.data');
     // $router->get('/heatmap/booking/', [HeatmapController::class, 'getRiderInfo'])->name('heatmap.booking');
 });
