@@ -31,9 +31,8 @@ class BookingController extends Controller
         $this->user_service = $user_service;
     }
 
-    public function sanitize(Request $request)
+    public function sanitizeAndReformat(Request $request)
     {
-
         if ($request->status == "pending") {
             $request->merge(['start_time' => null]);
             $request->merge(['end_time' => null]);
@@ -49,7 +48,15 @@ class BookingController extends Controller
             $request->merge(['end_time' => null]);
         }
 
-        return $request;
+        $data = $request->all();
+
+        $data['location']['origin']['latitude'] = $data['start_coordinate']['latitude'];
+        $data['location']['origin']['longitude'] = $data['start_coordinate']['longitude'];
+        $data['location']['destination']['latitude'] = $data['end_coordinate']['latitude'];
+        $data['location']['destination']['longitude'] = $data['end_coordinate']['longitude'];
+        $data['location']['origin']['name'] = $data['start_location'];
+        $data['location']['destination']['name'] = $data['end_location'];
+        return $data;
     }
 
     /**
@@ -114,7 +121,7 @@ class BookingController extends Controller
      */
     public function edit($id)
     {
-        $booking = $this->booking->find($id);
+        $booking = Booking::with('price_detail.promotion_voucher:id,code')->find($id);
         return view('admin.booking.edit', compact('booking'));
     }
 
@@ -126,25 +133,31 @@ class BookingController extends Controller
      */
     public function store(BookingRequest $request)
     {
-        $request = $this->sanitize($request);
-        //voucher
-        $data = $request->all();
+        // dd($booking, $booking_status, $data);
+        // dd($request->all());
+        $booking_status = $request->status;
+        // dd($request->all());
+        $data = $this->sanitizeAndReformat($request);
 
-        $data['location']['latitude_origin'] = $data['start_coordinate']['latitude'];
-        $data['location']['longitude_origin'] = $data['start_coordinate']['longitude'];
-        $data['location']['latitude_destination'] = $data['end_coordinate']['latitude'];
-        $data['location']['longitude_destination'] = $data['end_coordinate']['longitude'];
-        $data['origin'] = $data['start_location'];
-        $data['destination'] = $data['end_location'];
+        if ($booking_status != "pending")
+            $data['status'] = "pending";
+        //voucher
 
         $data['price'] = isset($data['price']) ? intval($data['price']) : 0; //$estimatedPrice['price_breakdown']['total_price'];
 
-        // dd($data);
         //BOOKING STORE
-        return DB::transaction(function () use ($request, $data) {
-            $createdBooking = $this->booking->create($request->only('user_id'), $data);
+        return DB::transaction(function () use ($request, $data, $booking_status) {
+            $createdBooking = $this->booking->create($request->user_id, $data);
             if ($createdBooking) {
-                Toastr::success('Booking created successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+
+                $has_error = $this->booking->updateBookingAdmin($createdBooking, $booking_status, $data);
+
+                if ($has_error) {
+                    Toastr::error('Booking cannot be created.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+                    return redirect()->route('admin.booking.index');
+                }
+
+                Toastr::success('Booking created successfully!.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
                 return redirect()->route('admin.booking.index');
             }
             Toastr::error('Booking cannot be created.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
@@ -220,21 +233,14 @@ class BookingController extends Controller
      */
     public function update(BookingRequest $request, $id)
     {
-        $request = $this->sanitize($request);
+        $booking_status = $request->status;
+        $data = $this->sanitizeAndReformat($request);
         $booking = Booking::findOrFail($id);
         $voucher = isset($booking->price_detail->promotion_voucher_id) ? $booking->price_detail->promotion_voucher->code : null;
 
-        $data = $request->all();
-        $data['location']['latitude_origin'] = $data['start_coordinate']['latitude'];
-        $data['location']['longitude_origin'] = $data['start_coordinate']['longitude'];
-        $data['location']['latitude_destination'] = $data['end_coordinate']['latitude'];
-        $data['location']['longitude_destination'] = $data['end_coordinate']['longitude'];
-        $data['origin'] = $data['start_location'];
-        $data['destination'] = $data['end_location'];
-
         $estimatedPrice = $this->booking->calculateEstimatedPrice(
-            $data['location']['latitude_origin'],
-            $data['location']['latitude_destination'],
+            $data['location']['origin']['latitude'],
+            $data['location']['destination']['longitude'],
             $request->vehicle_type_id,
             $request->distance,
             $request->duration,
@@ -244,13 +250,15 @@ class BookingController extends Controller
         );
         $data['price'] = $estimatedPrice['price_breakdown']['total_price'];
         //UPDATE STATUS
-        return DB::transaction(function () use ($data, $id) {
-            $updatedBooking = $this->booking->update($data, $id);
-            if ($updatedBooking) {
-                Toastr::success('Booking updated successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+        return DB::transaction(function () use ($booking, $booking_status, $data) {
+            $has_error = $this->booking->updateBookingAdmin($booking, $booking_status, $data);
+
+            if ($has_error) {
+                Toastr::error('Booking failed to update.', 'Failed to update!!!', ["positionClass" => "toast-bottom-right"]);
                 return redirect()->route('admin.booking.index');
             }
-            Toastr::success('Booking failed to update.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+
+            Toastr::success('Booking updated successfully!.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
             return redirect()->route('admin.booking.index');
         });
     }

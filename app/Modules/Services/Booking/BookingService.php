@@ -33,15 +33,15 @@ use App\Modules\Models\Rider;
 class BookingService extends Service
 {
     protected $booking,  $notification_service, $rider_location_service, $price_detail_service, $completed_trip_service;
-
-    function __construct(Booking $booking, 
-                        // LocationService $location_service, 
-                        CompletedTripService $completed_trip_service, 
-                        RiderLocationService $rider_location_service, 
-                        PriceDetailService $price_detail_service, 
-                        NotificationService $notification_service
-                        )
-    {
+    protected $statuses = ['pending', 'accepted', 'running', 'completed'];
+    function __construct(
+        Booking $booking,
+        // LocationService $location_service, 
+        CompletedTripService $completed_trip_service,
+        RiderLocationService $rider_location_service,
+        PriceDetailService $price_detail_service,
+        NotificationService $notification_service
+    ) {
         $this->booking = $booking;
         // $this->location_service = $location_service;
         $this->completed_trip_service = $completed_trip_service;
@@ -108,19 +108,15 @@ class BookingService extends Service
 
     function create($userId, array $data)
     {
-
-
+        // dd($userId, $data);
         try {
+
             $data['user_id'] = $userId;
             //default status = pending
 
             $data['status'] = isset($data['status']) ? $data['status'] : 'pending';
 
             //Parse the possible string values of latitudes and longitudes to double/float
-            // $data['location']['latitude_origin'] = floatval($data['location']['latitude_origin']);
-            // $data['location']['longitude_origin'] = floatval($data['location']['longitude_origin']);
-            // $data['location']['latitude_destination'] = floatval($data['location']['latitude_destination']);
-            // $data['location']['longitude_destination'] = floatval($data['location']['longitude_destination']);
             $data['location']['origin']['name'] = $data['location']['origin']['name'];
             $data['location']['origin']['latitude'] = floatval($data['location']['origin']['latitude']);
             $data['location']['origin']['longitude'] = floatval($data['location']['origin']['longitude']);
@@ -140,7 +136,6 @@ class BookingService extends Service
             $data['distance'] = intval($data['distance']);
             $data['duration'] = intval($data['duration']);
             $data['price'] = intval($data['price']);
-            // $data['location_id'] =intval( $data['location_id'] );
             $data['user_id'] = intval($data['user_id']);
             $data['rider_id'] = isset($data['rider_id']) ? intval($data['rider_id']) : null;
 
@@ -148,57 +143,41 @@ class BookingService extends Service
 
             $existing_codes = Booking::pluck('trip_id')->toArray();
             $data['trip_id'] = generateBokkingCode($existing_codes);
-            // dd($data['trip_id'], $existing_codes);
-            // dd("booking data", $data);
-
-
+            // dd($data, $userId);
             $createdBooking = $this->booking->create($data);
 
             if ($createdBooking) {
-                //CREATE LOCATION
-                // $createdLocation = $this->location_service->create($data['location']);
-                // dd($createdBooking, $createdLocation);
-                // if ($createdLocation) {
-                //     $createdBooking->location_id = intval($createdLocation->id);
-                //     $createdBooking->save();
-                    // return $createdBooking;
 
-                    
-                    //CREAT PRICE DETAIL
-                    $price_detail_data = $this->calculateEstimatedPrice(
-                                                    $data['location']['origin']['latitude'] , 
-                                                    $data['location']['origin']['longitude'] , 
-                                                    $data['vehicle_type_id'], 
-                                                    $data['distance'], 
-                                                    $data['duration'],
-                                                    $createdBooking->user_id,
-                                                    $data['voucher'],
-                                                    $createdBooking->id
-                                                );  
-                    $createdBooking->price = $price_detail_data['price_breakdown']['total_price'];
-                    $createdBooking->save();                            
-                   // $createdBooking->location = $createdLocation;
+                //CREAT PRICE DETAIL
+                $price_detail_data = $this->calculateEstimatedPrice(
+                    $data['location']['origin']['latitude'],
+                    $data['location']['origin']['longitude'],
+                    $data['vehicle_type_id'],
+                    $data['distance'],
+                    $data['duration'],
+                    $createdBooking->user_id,
+                    $data['voucher'],
+                    $createdBooking->id
+                );
+                $createdBooking->price = $price_detail_data['price_breakdown']['total_price'];
+                $createdBooking->save();
 
-                    $price_detail_data = $price_detail_data['price_breakdown'];
-                    
-                    $price_detail_data['booking_id'] = $createdBooking->id;
-                    //dd($createdBooking->toArray(), $price_detail_data);
-                    $this->price_detail_service->create($price_detail_data);
-                    
-                     //Send Notification
-                     $this->notification_service->send_firebase_notification( 
-                        [
-                            ['customer', $createdBooking->user_id ],
-                        ],
-                        "booking_created",
-                        "individual"
-                     );
+                $price_detail_data = $price_detail_data['price_breakdown'];
 
+                $price_detail_data['booking_id'] = $createdBooking->id;
+                $this->price_detail_service->create($price_detail_data);
 
-                    return $createdBooking;
+                //Send Notification
+                $this->notification_service->send_firebase_notification(
+                    [
+                        ['customer', $createdBooking->user_id],
+                    ],
+                    "booking_created",
+                    "individual"
+                );
+
+                return $createdBooking;
                 // }
-
-
 
             }
             return NULL;
@@ -217,10 +196,6 @@ class BookingService extends Service
             $data['status'] = isset($data['status']) ? $data['status'] : 'pending';
 
             //Parse the possible string values of latitudes and longitudes to double/float
-            // $data['location']['latitude_origin'] = floatval($data['location']['latitude_origin']);
-            // $data['location']['longitude_origin'] = floatval($data['location']['longitude_origin']);
-            // $data['location']['latitude_destination'] = floatval($data['location']['latitude_destination']);
-            // $data['location']['longitude_destination'] = floatval($data['location']['longitude_destination']);
             $data['location']['origin']['name'] = floatval($data['location']['origin']['name']);
             $data['location']['origin']['latitude'] = floatval($data['location']['origin']['latitude']);
             $data['location']['origin']['longitude'] = floatval($data['location']['origin']['longitude']);
@@ -243,15 +218,10 @@ class BookingService extends Service
             $data['user_id'] = intval($data['user_id']);
             $data['rider_id'] = isset($data['rider_id']) ? intval($data['rider_id']) : null;
 
-            // dd("booking data", $data);
-
-
             $this->booking->find($bookingId)->update($data);
             $updatedBooking = $this->booking->find($bookingId);
-            // dd($updatedBooking);
 
             if ($updatedBooking) {
-                // $createdLocation = $this->location_service->update($data['location'], $updatedBooking->location_id);
                 return $updatedBooking;
             }
 
@@ -272,17 +242,13 @@ class BookingService extends Service
             $booking = Booking::findOrFail($booking_id);
             $booking->status = $new_status;
 
-
             //NOTIFICATION DATA
-
-
             if ($booking->save()) {
                 if ($new_status == "accepted") {
                     $booking->rider_id = intval($data['optional_data']['rider_id']);
 
-                    $rider_location = RiderLocation::where('rider_id',$booking->rider_id)->first();
-                    if(isset($rider_location))
-                    {
+                    $rider_location = RiderLocation::where('rider_id', $booking->rider_id)->first();
+                    if (isset($rider_location)) {
                         $rider_location->availability = "unavailable";
                         $rider_location->save();
                     }
@@ -325,9 +291,8 @@ class BookingService extends Service
                     }
 
                     //Make the rider available again
-                    $rider_location = RiderLocation::where('rider_id',$booking->rider_id)->first();
-                    if(isset($rider_location))
-                    {
+                    $rider_location = RiderLocation::where('rider_id', $booking->rider_id)->first();
+                    if (isset($rider_location)) {
                         $rider_location->availability = "unavailable";
                         $rider_location->save();
                     }
@@ -338,9 +303,8 @@ class BookingService extends Service
                     //CREATE COMPLTED TRIP RECORD for COMPLETED STATUS
                     $completed_trip_data = $booking->toArray();
                     $completed_trip_data['booking_id'] = intval($booking->id);
-                  
-                    if( isset($data['optional_data']['location']) && isset($data['optional_data']['distance'])  )
-                    {
+
+                    if (isset($data['optional_data']['location']) && isset($data['optional_data']['distance'])) {
 
                         $completed_trip_data['location']['origin']['name'] = $data['optional_data']['location']['origin']['name'];
                         $completed_trip_data['location']['origin']['latitude'] = floatval($data['optional_data']['location']['origin']['latitude']);
@@ -369,13 +333,7 @@ class BookingService extends Service
                         $booking->id
                     );
                     $final_price = 0;
-                    // $final_price = $this->calculate_final_price(
-                    //     $booking->vehicle_type_id,
-                    //     $booking->price,
-                    //     $booking->duration,
-                    //     $new_duration
-                    // );
-                    // dd($price_detail_data);
+
                     $final_price = $price_detail_data['price_breakdown']['total_price'];
                     $completed_trip_data['price'] = $final_price;
 
@@ -407,9 +365,8 @@ class BookingService extends Service
                     }
 
                     //Make the rider available again
-                    $rider_location = RiderLocation::where('rider_id',$booking->rider_id)->first();
-                    if(isset($rider_location))
-                    {
+                    $rider_location = RiderLocation::where('rider_id', $booking->rider_id)->first();
+                    if (isset($rider_location)) {
                         $rider_location->availability = "unavailable";
                         $rider_location->save();
                     }
@@ -430,15 +387,15 @@ class BookingService extends Service
                     //CREAT PRICE DETAIL
                     $price_detail_data = $this->calculateEstimatedPrice(
 
-                                                    $booking->location['origin']['latitude'], 
-                                                    $booking->location['origin']['longitude'], 
-                                                    $booking->vehicle_type_id, 
-                                                    $booking->distance,  
-                                                    $booking->duration, 
-                                                    $booking->user_id,  
-                                                    $voucher,
-                                                    $booking->id
-                                                );  
+                        $booking->location['origin']['latitude'],
+                        $booking->location['origin']['longitude'],
+                        $booking->vehicle_type_id,
+                        $booking->distance,
+                        $booking->duration,
+                        $booking->user_id,
+                        $voucher,
+                        $booking->id
+                    );
                     $price_detail_data = $price_detail_data['price_breakdown'];
                     $price_detail_data['completed_trip_id'] =   $booking->createdCompletedTrip->id;
                     $this->price_detail_service->create($price_detail_data);
@@ -462,6 +419,39 @@ class BookingService extends Service
         }
     }
 
+    public function updateBookingAdmin($booking, $booking_status, $data)
+    {
+        $error = false;
+        $updated_booking = $booking;
+        $update_data = null;
+        while ($updated_booking->status != $booking_status) {
+            $update_data = null;
+            if ($booking_status != "cancelled") {
+                $new_status = $this->statuses[array_search($updated_booking->status, $this->statuses) + 1];
+                $update_data = $this->generateUpdateData($data, $new_status, $updated_booking);
+            } else {
+                $new_status = "cancelled";
+                $update_data = $this->generateUpdateData($data, $new_status, $updated_booking);
+            }
+            if (!$updated_booking = $this->update_status($update_data))
+                $error = true;
+        }
+        // dd($error);
+        return $error;
+    }
+
+    public function generateUpdateData($data, $new_status, $booking)
+    {
+        $update_data = [
+            "booking_id" => $booking->id,
+            "new_status" => $new_status,
+            "optional_data" => [
+                "rider_id" => (isset($data['rider_id'])) ? $data['rider_id'] : null
+            ]
+        ];
+        return $update_data;
+    }
+
 
     public function getTimeDiffInSeconds($start, $end)
     {
@@ -481,11 +471,11 @@ class BookingService extends Service
     {
 
 
-        try{
-            $booking = $this->booking->where('user_id',$userId)->where(function($query){
-                $query->where('status','pending')
-                ->orWhere('status','accepted')
-                ->orWhere('status','running');
+        try {
+            $booking = $this->booking->where('user_id', $userId)->where(function ($query) {
+                $query->where('status', 'pending')
+                    ->orWhere('status', 'accepted')
+                    ->orWhere('status', 'running');
             })->with('price_detail')->first();
 
             return $booking;
@@ -498,10 +488,10 @@ class BookingService extends Service
     public function active_rider_booking($riderId)
     {
 
-        try{
-            $booking = $this->booking->where('rider_id',$riderId)->where(function($query){
-                $query->where('status','accepted')
-                ->orWhere('status','running');
+        try {
+            $booking = $this->booking->where('rider_id', $riderId)->where(function ($query) {
+                $query->where('status', 'accepted')
+                    ->orWhere('status', 'running');
             })->with('price_detail')->first();
             return $booking;
         } catch (Exception $e) {
@@ -536,16 +526,16 @@ class BookingService extends Service
 
 
 
-    public function calculateEstimatedPrice($origin_latitude, 
-                                            $origin_longitude, 
-                                            $vehicle_type_id, 
-                                            $distance, 
-                                            $duration,
-                                            $user_id=null,
-                                            $voucher=null, 
-                                            $booking_id=null
-                                            )
-    {
+    public function calculateEstimatedPrice(
+        $origin_latitude,
+        $origin_longitude,
+        $vehicle_type_id,
+        $distance,
+        $duration,
+        $user_id = null,
+        $voucher = null,
+        $booking_id = null
+    ) {
         // dd($booking_id,Booking::find($booking_id));
         $distance = $distance / 1000;        //convert the distance in meters to kilometers
 
@@ -727,7 +717,7 @@ class BookingService extends Service
 
         $estimated_price = $this->getDiscountAmount($estimated_price, $user_id, $voucher);
 
-    //    dd($estimated_price);
+        //    dd($estimated_price);
         return $estimated_price;
     }
 

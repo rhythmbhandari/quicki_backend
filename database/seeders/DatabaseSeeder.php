@@ -16,21 +16,21 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $this->call([
-           // RoleSeeder::class,
-           // UserSeeder::class,
-           // RiderSeeder::class,
-          //  RoleUserSeeder::class,
-         
-          //  OtpSeeder::class,
+            // RoleSeeder::class,
+            // UserSeeder::class,
+            // RiderSeeder::class,
+            //  RoleUserSeeder::class,
+
+            //  OtpSeeder::class,
             // VehicleSeeder::class,
 
 
-           //VehicleTypeSeeder::class,
-          //In server, first seed vehicle type, then import users and then seed these
+            // VehicleTypeSeeder::class,
+            //In server, first seed vehicle type, then import users and then seed these
             SuggestionSeeder::class,
             PermissionSeeder::class,
             RoleHasPermissionSeeder::class,
-     
+
             ShiftSeeder::class,
             PromotionVoucherSeeder::class,
         ]);
