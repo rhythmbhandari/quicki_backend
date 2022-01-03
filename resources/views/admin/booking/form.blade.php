@@ -30,7 +30,8 @@ $status = ['pending', 'accepted', 'running', 'completed', 'cancelled'];
                             @if(isset($booking->rider))
                             <option value="{{$booking->rider->id}}" selected>{{$booking->rider->user->name}}</option>
                             @elseif(old('rider_id'))
-                            <option value="{{old('rider_id')}}">Old value {{old('rider_id')}}</option>
+                            <option value="{{old('rider_id')}}">
+                                {{\App\Modules\Models\Rider::find(old('rider_id'))->user->name}}</option>
                             @endif
                         </select>
                         <span class="text-danger" id="rider_selection_error"></span>
@@ -179,7 +180,7 @@ $status = ['pending', 'accepted', 'running', 'completed', 'cancelled'];
                 </div>
 
                 <div class="form-group mt-8">
-                    <h3>Stoppage</h3>
+                    {{-- <h3>Stoppage</h3> --}}
                     <div id="sortable">
                         {{-- <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 1
                         </li> --}}
@@ -240,6 +241,14 @@ $status = ['pending', 'accepted', 'running', 'completed', 'cancelled'];
                     <div class="col-6">
                         <input class="form-control" type="number" name="passenger_number"
                             value="{{old('passenger_number', isset($booking->passenger_number) ? $booking->passenger_number : '')}}" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-6 col-form-label">Voucher Code</label>
+                    <div class="col-6">
+                        <input class="form-control" type="text" name="voucher"
+                            value="{{old('voucher', isset($booking->price_detail->promotion_voucher) ? $booking->price_detail->promotion_voucher->code : '')}}" />
                     </div>
                 </div>
 

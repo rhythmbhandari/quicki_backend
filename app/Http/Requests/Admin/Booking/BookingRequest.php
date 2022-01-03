@@ -42,8 +42,8 @@ class BookingRequest extends FormRequest
             'start_location' => 'required',
             'end_location' => 'required',
             'start_coordinate.longitude' => 'required',
-            'start_time' => 'required_if:status,running|required_if:status,completed|date',
-            'end_time' => 'required_if:status,completed|date|after:start_time',
+            'start_time' => 'required_if:status,running|required_if:status,completed|date', //validation for before end_date remaining.
+            'end_time' => 'required_if:status,completed|date',
             'start_coordinate.latitude' => 'required',
             'end_coordinate.longitude' => 'required',
             'end_coordinate.latitude' => 'required',
