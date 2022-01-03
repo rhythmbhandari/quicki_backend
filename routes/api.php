@@ -79,7 +79,8 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   
   $router->post('/booking/create', [BookingController::class, 'store'])->name('booking.store');
   $router->post('/booking/change_status', [BookingController::class, 'change_status'])->name('booking.change_status');
-  $router->get('/booking/{booking_id}/payment', [PaymentController::class, 'getPaymentFromBooking'])->name('user.booking.payment');     
+  $router->get('/booking/{booking_id}/payment', [PaymentController::class, 'getPaymentFromBooking'])->name('user.booking.payment');    
+  $router->get('/booking/{booking_id}/timed_out', [BookingController::class, 'timed_out'])->name('user.booking.tied_out');  
   $router->get('/booking/{booking_id}', [BookingController::class, 'getBooking'])->name('user.booking.show');         ///TO BE 
   $router->get('/user/booking/active', [BookingController::class, 'getActiveUserBooking'])->name('user.booking.active');
   $router->get('/rider/booking/active', [BookingController::class, 'getActiveRiderBooking'])->name('rider.booking.active');

@@ -2104,76 +2104,6 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
 
 /***/ }),
 
-/***/ "./resources/js/pusher.js":
-/*!********************************!*\
-  !*** ./resources/js/pusher.js ***!
-  \********************************/
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-
-var sos_message = document.getElementById('sos_message');
-var event_message = document.getElementById('event_message'); // var window_echo = window.Echo;
-
-window.Echo.channel('sos').listen('.event_created', function (e) {
-  console.log(e);
-  event_message.innerHTML += '<h3> SOS: ' + e.title + ' </h3> \
-                              <p>' + e.message + '</p>\
-                              <p>By: ' + e.user_name + ' (' + e.user_type + ')</p>';
-}).listen('.sos_created', function (ev) {
-  console.log(ev);
-  sos_message.innerHTML += '<h3> SOS: ' + ev.title + ' </h3> \
-                              <p>' + ev.message + '</p>\
-                              <p>By: ' + ev.user_name + ' (' + ev.user_type + ')</p>';
-}); // window.Echo.channel('event')
-// .listen('.message', (e) => {
-//   console.log(e);
-//   event_message.innerHTML += '<h3> EVENT: '+e.title+' </h3> \
-//                               <p>'+e.message+'</p>\
-//                               <p>By: '+e.user_name+' ('+ e.user_type +')</p>';
-// });
-// const sos_channel = window.Echo.channel('sos')
-// sos_channel.listen('.event_created_message', e => {
-//   console.log(e);
-//   event_message.innerHTML += '<h3> SOS: '+e.title+' </h3> \
-//                           <p>'+e.message+'</p>\
-//                           <p>By: '+e.user_name+' ('+ e.user_type +')</p>';
-// });
-// window.Echo.channel('sos').listen('.message', e => {
-//       console.log(e);
-//   sos_message.innerHTML += '<h3> SOS: '+e.title+' </h3> \
-//                               <p>'+e.message+'</p>\
-//                               <p>By: '+e.user_name+' ('+ e.user_type +')</p>';
-// });
-// const eventsTolisten = [
-//   '.sos_created_message',
-//   '.event_create_message',
-// ]
-// eventsTolisten.forEach(event => {
-//   sos_channel.listen(event, e => {
-//     (socket_body = {
-//       name: event,
-//       data: e.data
-//     }) => {
-//       event_message.innerHTML += '<h3> EVENT: '+e.title+' </h3> \
-//                                    <p>'+e.message+'</p>\
-//                                    <p>By: '+e.user_name+' ('+ e.user_type +')</p>';
-//     }
-//   })
-// })
-// handleSocketEvents(socket_body=null)
-// {
-//   if(socket_body != null)
-//   {
-//     console.log(e);
-//     event_message.innerHTML += '<h3> EVENT: '+e.title+' </h3> \
-//                               <p>'+e.message+'</p>\
-//                               <p>By: '+e.user_name+' ('+ e.user_type +')</p>';
-//   }
-// }
-
-/***/ }),
-
 /***/ "./node_modules/laravel-echo/dist/echo.js":
 /*!************************************************!*\
   !*** ./node_modules/laravel-echo/dist/echo.js ***!
@@ -20970,19 +20900,6 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 /***/ }),
 
-/***/ "./resources/css/app.css":
-/*!*******************************!*\
-  !*** ./resources/css/app.css ***!
-  \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
-
-/***/ }),
-
 /***/ "./node_modules/process/browser.js":
 /*!*****************************************!*\
   !*** ./node_modules/process/browser.js ***!
@@ -25787,42 +25704,7 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = __webpack_modules__;
-/******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/chunk loaded */
-/******/ 	(() => {
-/******/ 		var deferred = [];
-/******/ 		__webpack_require__.O = (result, chunkIds, fn, priority) => {
-/******/ 			if(chunkIds) {
-/******/ 				priority = priority || 0;
-/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
-/******/ 				deferred[i] = [chunkIds, fn, priority];
-/******/ 				return;
-/******/ 			}
-/******/ 			var notFulfilled = Infinity;
-/******/ 			for (var i = 0; i < deferred.length; i++) {
-/******/ 				var [chunkIds, fn, priority] = deferred[i];
-/******/ 				var fulfilled = true;
-/******/ 				for (var j = 0; j < chunkIds.length; j++) {
-/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
-/******/ 						chunkIds.splice(j--, 1);
-/******/ 					} else {
-/******/ 						fulfilled = false;
-/******/ 						if(priority < notFulfilled) notFulfilled = priority;
-/******/ 					}
-/******/ 				}
-/******/ 				if(fulfilled) {
-/******/ 					deferred.splice(i--, 1)
-/******/ 					var r = fn();
-/******/ 					if (r !== undefined) result = r;
-/******/ 				}
-/******/ 			}
-/******/ 			return result;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -25872,68 +25754,39 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 		};
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/jsonp chunk loading */
-/******/ 	(() => {
-/******/ 		// no baseURI
-/******/ 		
-/******/ 		// object to store loaded and loading chunks
-/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = {
-/******/ 			"/js/pusher": 0,
-/******/ 			"css/app": 0
-/******/ 		};
-/******/ 		
-/******/ 		// no chunk on demand loading
-/******/ 		
-/******/ 		// no prefetching
-/******/ 		
-/******/ 		// no preloaded
-/******/ 		
-/******/ 		// no HMR
-/******/ 		
-/******/ 		// no HMR manifest
-/******/ 		
-/******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
-/******/ 		
-/******/ 		// install a JSONP callback for chunk loading
-/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
-/******/ 			var [chunkIds, moreModules, runtime] = data;
-/******/ 			// add "moreModules" to the modules object,
-/******/ 			// then flag all "chunkIds" as loaded and fire callback
-/******/ 			var moduleId, chunkId, i = 0;
-/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
-/******/ 				for(moduleId in moreModules) {
-/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
-/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
-/******/ 					}
-/******/ 				}
-/******/ 				if(runtime) var result = runtime(__webpack_require__);
-/******/ 			}
-/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
-/******/ 			for(;i < chunkIds.length; i++) {
-/******/ 				chunkId = chunkIds[i];
-/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 					installedChunks[chunkId][0]();
-/******/ 				}
-/******/ 				installedChunks[chunkIds[i]] = 0;
-/******/ 			}
-/******/ 			return __webpack_require__.O(result);
-/******/ 		}
-/******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunk"] = self["webpackChunk"] || [];
-/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
-/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
-/******/ 	})();
-/******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/js/pusher.js")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/css/app.css")))
-/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
-/******/ 	
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!****************************************************!*\
+  !*** ./resources/js/booking_timed_out_listener.js ***!
+  \****************************************************/
+__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
+window.Echo.channel('booking').listen('.booking_timed_out', function (e) {
+  console.log(e, "booking timed out");
+  Swal.fire({
+    icon: 'warning',
+    title: e.title,
+    html: '<div >' + e.message + '</div>',
+    showConfirmButton: true,
+    position: 'bottom-end',
+    width: 400,
+    padding: '2em',
+    showCloseButton: true,
+    color: 'black',
+    toast: true,
+    timer: 10000,
+    timerProgressBar: true // background: '#89D1A3',
+
+  }).then(function (result) {
+    if (result.isConfirmed) {
+      console.log('adsas');
+      window.location = "/admin/heatmap/booking?booking_id=" + e.booking_id;
+    }
+  });
+});
+})();
+
 /******/ })()
 ;

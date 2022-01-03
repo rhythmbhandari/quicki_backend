@@ -131,11 +131,22 @@
 
 
         map.addListener("dragend", () => {
-            console.log("api called!")
             plotRiderData(map)
         });
+        
 
+
+        // var params = new URLSearchParams(window.location.search);
+        // var booking_id = null;
+        // if(params.has('booking_id'))
+        //     booking_id = params.get('booking_id');
+            
+        // if(booking_id != null)
+        //     $("#booking_id").select2().val(booking_id).trigger("change");
+            
     }
+
+
 
     //updating active riders every 5 seconds..
     window.setInterval(function(){
@@ -267,6 +278,8 @@
     }
 
 
+   
+
     function plotRiderData(map) {
         // console.log("rider data is being fetched!!!!")
         let data = {}
@@ -287,6 +300,8 @@
             success: function(result){
                 console.log(result, "rider location fetched!!")
                 let new_riders = {};
+
+                console.log("printing rider locations", result)
 
                 //create marker of rider_id that are new
                 result.nearest_rider.map(new_rider=> {
@@ -394,4 +409,15 @@
         $('#booking_id').val(null).trigger('change')
     }
 </script>
+
+{{-- @if( isset($_GET['booking_id']) )
+ <script>
+     var booking_id = "<?php echo $_GET['booking_id']; ?>";
+
+     $("#booking_id").select2().val(booking_id).trigger("change");
+
+// alert('asdsada '+booking_id);
+</script>
+@endif --}}
+
 @endsection

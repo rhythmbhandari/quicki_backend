@@ -63,12 +63,12 @@ class BookingController extends Controller
     *                   },
     *                   "location": {
     *                       "origin":{
-    *                           "name": "Sanepa, Lalitpur",
+    *                           "name": "Lagankhel, Lalitpur",
     *                           "latitude": 27.687012,
     *                           "longitude": 85.304359
     *                       },
     *                       "destination":{
-    *                           "name": "New Baneshwor, Kathmandu",
+    *                           "name": "Thapagaon, Kathmandu",
     *                           "latitude": 28.234325,
     *                           "longitude": 87.12313
     *                       }
@@ -114,16 +114,16 @@ class BookingController extends Controller
     *                           "created_at": "2021-12-27T05:40:03.000000Z",
     *                           "id": 2,
     *                           "location": {
-    *                               "origin":{
-    *                                   "name": "Sanepa, Lalitpur",
-    *                                   "latitude": 27.687012,
-    *                                   "longitude": 85.304359
-    *                               },
-    *                               "destination":{
-    *                                   "name": "New Baneshwor, Kathmandu",
-    *                                   "latitude": 28.234325,
-    *                                   "longitude": 87.12313
-    *                               }
+    *                                "origin": {
+    *                                     "name": "Sanepa, Lalitpur",
+    *                                     "latitude": 27.665898,
+    *                                     "longitude":  85.325540
+    *                                   },
+    *                                   "destination": {
+    *                                     "name": "New Baneshwor, Kathmandu",
+    *                                     "latitude": 27.691248,
+    *                                     "longitude": 85.332710
+    *                                   }
     *                           },
     *                           "status_text": "Pending"
     *                       }
@@ -467,10 +467,10 @@ class BookingController extends Controller
                 
                 // if($new_status == "accepted")
                 // {
-                    $pending_rider_booking = Booking::where('rider_id', $rider_id)->where(function($query) {
-                        $query->where('status','accepted')
-                        ->orWhere('status','running');
-                    })->first();
+                    // $pending_rider_booking = Booking::where('rider_id', $rider_id)->where(function($query) {
+                    //     $query->where('status','accepted')
+                    //     ->orWhere('status','running');
+                    // })->first();
                     //check availability of the rider
                     $rider_location = RiderLocation::where('rider_id',$rider_id)->first();
                     if(isset($rider_location))
@@ -480,7 +480,22 @@ class BookingController extends Controller
                             $response = ['message' => 'The rider is currently unavailable!'];
                             return response($response, 422);
                         }
+                        if($rider_location->rider->status != "active")
+                        {
+                            $response = ['message' => 'The rider is currently inactive!'];
+                            return response($response, 422);
+                        }
+                       
                     }
+                    else{
+                        $response = ['message' => 'The rider is currently unavailable!'];
+                        return response($response, 422);
+                    }
+                    // $rider = Rider::select('id','status')->where('id',$rider_id)->first();
+                    // if($rider->status != "active")
+                    // {
+                       
+                    // }
 
                     // if($pending_rider_booking)
                     // {
@@ -852,9 +867,9 @@ class BookingController extends Controller
      *      @OA\MediaType(
      *         mediaType="application/json",
      *         @OA\Schema(
-     *             example={
-     *                 "origin_latitude":27.68716904, 
-     *                 "origin_longitude":85.3042161,
+     *             example={ 
+     *                 "origin_latitude": 27.665898, 
+     *                 "origin_longitude":85.325540,
      *                 "distance":2000,
      *                  "duration":300,
      *                  "voucher":"#9816810976C",
@@ -993,6 +1008,67 @@ class BookingController extends Controller
         }
     }
 
+
+
+
+
+    /**
+    * @OA\Get(
+    *   path="/api/booking/{booking_id}/timed_out",
+    *   tags={"Booking"},
+    *   summary="Booking Timed Out",
+    *   security={{"bearerAuth":{}}},
+    *
+    *      @OA\Parameter(
+    *         name="booking_id",
+    *         in="path",
+    *         description="Booking ID",
+    *         required=true,
+    *      ),
+    *
+    *      @OA\Response(
+    *        response=200,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example={
+    *                     "message": "Admin notified successfully! Wait for the response! "
+    *                   }
+    *                 )
+    *           )
+    *      ),
+        *
+    *      @OA\Response(
+    *          response=422,
+    *          description="Booking not found!",
+    *             @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+    *      ),
+    *
+    *)
+    **/
+    function timed_out($booking_id)
+    {
+        $booking = Booking::find($booking_id);
+        if(!$booking)
+        { 
+            $response = ['message' => 'Booking not found!'];;
+            return response($response, 422);
+        }
+
+        // if($booking->status != 'pending')
+        // {
+        //     $response = ['message' => 'Booking is not longer pending!'];;
+        //     return response($response, 422);
+        // }
+
+
+        $this->booking->notify_booking_timed_out($booking_id);
+
+
+    }
 
 
     public function testFunction()
