@@ -63,29 +63,7 @@ class SettingServiceProvider extends ServiceProvider
             }
 
 
-            //SETTING MAIL CONFIGS
-            /*
-            if($email_setting = Setting::where('key','site_email')->first())
-            {
-                $from_email = isset($email_setting->value) ? $email_setting->value : config('app.email');
-                $from_name = ($name_setting = Setting::where('key','site_name')->first()) ? $name_setting->value : config('app.name');
-                // $config = array(
-                //     // 'driver'     => $mail->driver,
-                //     // 'host'       => config(''),
-                //     // 'port'       => $mail->port,
-                //     'from'       => array('address' => $from_email, 'name' => $from_name),
-                //     // 'encryption' => $mail->encryption,
-                //     // 'username'   => $mail->username,
-                //     // 'password'   => $mail->password,
-                //     // 'sendmail'   => '/usr/sbin/sendmail -bs',
-                //     // 'pretend'    => false,
-                // );
-                //Config::set('mail', $config);
-
-                $from = array('address' => $from_email, 'name' => $from_name);
-                Config::set('mail.from', $from);
-            }   */
-
+  
            
         }
     }

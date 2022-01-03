@@ -69,21 +69,7 @@ class PaymentController extends Controller
     *                   @OA\Schema(      
     *                   example={
     *                       "message": "Payment Updated Successflly!",
-    *                       "sos": {
-    *                           "title": "Help!",
-    *                           "message": "The customer is a wanted criminal!",
-    *                           "booking_id": 1,
-    *                           "location": {
-    *                               "name": "Sanepa, Lalitpur",
-    *                               "latitude": 27.1234,
-    *                               "longitude": 85.3434
-    *                           },
-    *                           "created_by_id": 1,
-    *                           "created_by_type": "rider",
-    *                           "updated_at": "2021-12-21T05:55:18.000000Z",
-    *                           "created_at": "2021-12-21T05:55:18.000000Z",
-    *                           "id": 1
-    *                       }
+    *                         "payment": {"id": 5, "completed_trip_id": 5, "commission_amount": 15, "original_commission": null, "payment_status": "unpaid", "commission_payment_status": "unpaid", "deleted_at": null, "created_at": "2021-12-30T10:11:05.000000Z", "updated_at":" 2021-12-30T10:11:05.000000Z", "customer_payment_status": "unpaid","transactions":{}}
     *                   }
     *                 )
     *           )
@@ -177,22 +163,8 @@ class PaymentController extends Controller
     *               mediaType="application/json",
     *                   @OA\Schema(      
     *                   example={
-    *                       "message": "Sos created successfully!",
-    *                       "sos": {
-    *                           "title": "Help!",
-    *                           "message": "The customer is a wanted criminal!",
-    *                           "booking_id": 1,
-    *                           "location": {
-    *                               "name": "Sanepa, Lalitpur",
-    *                               "latitude": 27.1234,
-    *                               "longitude": 85.3434
-    *                           },
-    *                           "created_by_id": 1,
-    *                           "created_by_type": "rider",
-    *                           "updated_at": "2021-12-21T05:55:18.000000Z",
-    *                           "created_at": "2021-12-21T05:55:18.000000Z",
-    *                           "id": 1
-    *                       }
+    *                       "message": "Success!",
+    *                         "payment": {"id": 5, "completed_trip_id": 5, "commission_amount": 15, "original_commission": null, "payment_status": "unpaid", "commission_payment_status": "unpaid", "deleted_at": null, "created_at": "2021-12-30T10:11:05.000000Z", "updated_at":" 2021-12-30T10:11:05.000000Z", "customer_payment_status": "unpaid","transactions":{}}
     *                   }
     *                 )
     *           )
@@ -253,22 +225,8 @@ class PaymentController extends Controller
     *               mediaType="application/json",
     *                   @OA\Schema(      
     *                   example={
-    *                       "message": "Sos created successfully!",
-    *                       "sos": {
-    *                           "title": "Help!",
-    *                           "message": "The customer is a wanted criminal!",
-    *                           "booking_id": 1,
-    *                           "location": {
-    *                               "name": "Sanepa, Lalitpur",
-    *                               "latitude": 27.1234,
-    *                               "longitude": 85.3434
-    *                           },
-    *                           "created_by_id": 1,
-    *                           "created_by_type": "rider",
-    *                           "updated_at": "2021-12-21T05:55:18.000000Z",
-    *                           "created_at": "2021-12-21T05:55:18.000000Z",
-    *                           "id": 1
-    *                       }
+    *                       "message": "Success!",
+    *                        "payment": {"id": 5, "completed_trip_id": 5, "commission_amount": 15, "original_commission": null, "payment_status": "unpaid", "commission_payment_status": "unpaid", "deleted_at": null, "created_at": "2021-12-30T10:11:05.000000Z", "updated_at":" 2021-12-30T10:11:05.000000Z", "customer_payment_status": "unpaid","transactions":{}}
     *                   }
     *                 )
     *           )

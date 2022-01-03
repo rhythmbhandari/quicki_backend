@@ -134,6 +134,12 @@ class UserService extends Service
 
             $user = User::findOrFail($userId);
             $old_email =  $user->email;
+
+            // if(isset($data['location']))
+            // {
+            //     $data['location']
+            // }
+
             $user->update($data);
 
             //case for email change

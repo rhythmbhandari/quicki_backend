@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 use Throwable;
+use App\Modules\Models\Event;
+use App\Events\BookingTimedOut;
 
 //services
 // use App\Modules\Services\Location\LocationService;
@@ -141,9 +143,11 @@ class BookingService extends Service
 
             $data['voucher'] = isset($data['voucher']) ? $data['voucher'] : null;
 
+     
+
             $existing_codes = Booking::pluck('trip_id')->toArray();
             $data['trip_id'] = generateBokkingCode($existing_codes);
-            // dd($data, $userId);
+
             $createdBooking = $this->booking->create($data);
 
             if ($createdBooking) {
@@ -849,6 +853,42 @@ class BookingService extends Service
     {
         // dd($origin_latitude, $origin_longitude, $vehicle_type_id);
         return $this->rider_location_service->getNearbyAvailableUsers($origin_latitude, $origin_longitude, $vehicle_type_id);
+    }
+
+
+    public function notify_booking_timed_out($bookingId)
+    {
+      
+            $booking = Booking::with('user:id,first_name,last_name,image')->where('id',$bookingId)->first();
+            // $booking = Booking::find($bookingId);
+
+                        // dd($booking->user->toArray());
+            
+            //Send pusher/echo broadcast notification to all admins
+            $title = "Booking Timed Out" ;
+            $message = "Booking request timed out made by ".$booking->user->name.' '.$booking->created_at->diffForHumans();;
+            event(
+                new BookingTimedOut( 
+                    $title,
+                    $message, 
+                    $bookingId,
+                    $booking->user->name
+                )
+                );
+
+            //Create Notification sent via pusher broadcast
+            $this->notification_service->create(
+                [
+                    'recipient_id'=>null,
+                    'recipient_type'=>'admin',
+                    'recipient_device_token'=>null,
+                    'recipient_quantity_type'=>'all',
+                    'notification_type'=>'customer_ignored',
+                    'title'=> $title, 
+                    'message'=> $message, 
+                ]
+            );
+
     }
 
 

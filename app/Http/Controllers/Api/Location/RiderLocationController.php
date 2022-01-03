@@ -47,8 +47,8 @@ class RiderLocationController extends Controller
     *         @OA\Schema(
     *             
     *             example={
-    *                  "latitude":27.687169,
-    *                  "longitude":85.304219,
+    *                  "latitude": 27.691248,
+    *                  "longitude":85.332710,
     *              }
     *         )
     *     )

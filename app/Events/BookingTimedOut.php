@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CustomerIgnored implements ShouldBroadcast
+class BookingTimedOut implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -26,7 +26,7 @@ class CustomerIgnored implements ShouldBroadcast
         $this->title = $title;
         $this->message = $message;
         $this->user_name = $user_name;
-        $this->booking_id = $sos_id;
+        $this->booking_id = $booking_id;
     }
 
     /**
@@ -37,12 +37,12 @@ class CustomerIgnored implements ShouldBroadcast
     public function broadcastOn()
     {
         // return new PrivateChannel('channel-name');
-        return new Channel('customer_ignored');
+        return new Channel('booking');
     }
 
     public function broadcastAs()
     {
-        return 'message';
+        return 'booking_timed_out';
     }
 
 }

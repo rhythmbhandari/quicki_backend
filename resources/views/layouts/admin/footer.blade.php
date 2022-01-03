@@ -25,6 +25,7 @@
 <!-- toastr and notification -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{asset('/js/sos_events_listener.js')}}"></script>
+<script src="{{asset('/js/booking_timed_out_listener.js')}}"></script>
 
 <!-- custom scripts -->
 <script src="{{asset('assets/admin/js/my-script.js')}}"></script>

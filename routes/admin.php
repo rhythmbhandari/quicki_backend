@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\Booking\BookingController;
 use App\Http\Controllers\Admin\Payment\TransactionController;
 use App\Http\Controllers\Admin\Heatmap\HeatmapController;
 use App\Http\Controllers\Admin\Sos\SosController;
+use App\Http\Controllers\Admin\Setting\SettingController; 
 use App\Http\Controllers\Admin\PromotionVoucher\PromotionVoucherController;
 use Inertia\Inertia;
 
@@ -98,7 +99,16 @@ Route::group([
     // $router->get('/heatmap/booking/', [HeatmapController::class, 'getRiderInfo'])->name('heatmap.booking');
 
      //promotion_voucher
+     $router->get('promotion_voucher/generate', [PromotionVoucherController::class, 'getGeneratedCode'])->name('voucher_code.generate');
      $router->resource('/promotion_voucher', PromotionVoucherController::class);
      $router->get('promotion_voucher_data', [PromotionVoucherController::class, 'getAllData'])->name('promotion_voucher.data');
+
+
+    //---------------------------------------------------------------------------------------------------------
+    //  SETTING RESOURCE ROUTES
+    //---------------------------------------------------------------------------------------------------------
+    $router->get('/settings/{group}/loadSettingForms', [SettingController::class, 'loadSettingForms'])->name('setting.loadSettingForms');
+    $router->resource('setting', SettingController::class);
+
 
 });

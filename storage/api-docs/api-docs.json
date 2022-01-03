@@ -916,12 +916,12 @@
                                     ],
                                     "location": {
                                         "origin": {
-                                            "name": "Sanepa, Lalitpur",
+                                            "name": "Lagankhel, Lalitpur",
                                             "latitude": 27.687012,
                                             "longitude": 85.304359
                                         },
                                         "destination": {
-                                            "name": "New Baneshwor, Kathmandu",
+                                            "name": "Thapagaon, Kathmandu",
                                             "latitude": 28.234325,
                                             "longitude": 87.12313
                                         }
@@ -969,13 +969,13 @@
                                             "location": {
                                                 "origin": {
                                                     "name": "Sanepa, Lalitpur",
-                                                    "latitude": 27.687012,
-                                                    "longitude": 85.304359
+                                                    "latitude": 27.665898,
+                                                    "longitude": 85.32554
                                                 },
                                                 "destination": {
                                                     "name": "New Baneshwor, Kathmandu",
-                                                    "latitude": 28.234325,
-                                                    "longitude": 87.12313
+                                                    "latitude": 27.691248,
+                                                    "longitude": 85.33271
                                                 }
                                             },
                                             "status_text": "Pending"
@@ -996,12 +996,6 @@
                     },
                     "422": {
                         "description": "The given data was invalid!",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {}
                         }
@@ -1488,8 +1482,8 @@
                         "application/json": {
                             "schema": {
                                 "example": {
-                                    "origin_latitude": 27.68716904,
-                                    "origin_longitude": 85.3042161,
+                                    "origin_latitude": 27.665898,
+                                    "origin_longitude": 85.32554,
                                     "distance": 2000,
                                     "duration": 300,
                                     "voucher": "#9816810976C"
@@ -1605,6 +1599,48 @@
                     },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/booking/{booking_id}/timed_out": {
+            "get": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Booking Timed Out",
+                "operationId": "9173c168777f4abe1a2ac68ff2ad7625",
+                "parameters": [
+                    {
+                        "name": "booking_id",
+                        "in": "path",
+                        "description": "Booking ID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Admin notified successfully! Wait for the response! "
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Booking not found!",
                         "content": {
                             "application/json": {}
                         }
@@ -3082,8 +3118,8 @@
                         "application/json": {
                             "schema": {
                                 "example": {
-                                    "latitude": 27.687169,
-                                    "longitude": 85.304219
+                                    "latitude": 27.691248,
+                                    "longitude": 85.33271
                                 }
                             }
                         }
@@ -3925,20 +3961,18 @@
                                 "schema": {
                                     "example": {
                                         "message": "Payment Updated Successflly!",
-                                        "sos": {
-                                            "title": "Help!",
-                                            "message": "The customer is a wanted criminal!",
-                                            "booking_id": 1,
-                                            "location": {
-                                                "name": "Sanepa, Lalitpur",
-                                                "latitude": 27.1234,
-                                                "longitude": 85.3434
-                                            },
-                                            "created_by_id": 1,
-                                            "created_by_type": "rider",
-                                            "updated_at": "2021-12-21T05:55:18.000000Z",
-                                            "created_at": "2021-12-21T05:55:18.000000Z",
-                                            "id": 1
+                                        "payment": {
+                                            "id": 5,
+                                            "completed_trip_id": 5,
+                                            "commission_amount": 15,
+                                            "original_commission": null,
+                                            "payment_status": "unpaid",
+                                            "commission_payment_status": "unpaid",
+                                            "deleted_at": null,
+                                            "created_at": "2021-12-30T10:11:05.000000Z",
+                                            "updated_at": " 2021-12-30T10:11:05.000000Z",
+                                            "customer_payment_status": "unpaid",
+                                            "transactions": []
                                         }
                                     }
                                 }
@@ -3990,21 +4024,19 @@
                             "application/json": {
                                 "schema": {
                                     "example": {
-                                        "message": "Sos created successfully!",
-                                        "sos": {
-                                            "title": "Help!",
-                                            "message": "The customer is a wanted criminal!",
-                                            "booking_id": 1,
-                                            "location": {
-                                                "name": "Sanepa, Lalitpur",
-                                                "latitude": 27.1234,
-                                                "longitude": 85.3434
-                                            },
-                                            "created_by_id": 1,
-                                            "created_by_type": "rider",
-                                            "updated_at": "2021-12-21T05:55:18.000000Z",
-                                            "created_at": "2021-12-21T05:55:18.000000Z",
-                                            "id": 1
+                                        "message": "Success!",
+                                        "payment": {
+                                            "id": 5,
+                                            "completed_trip_id": 5,
+                                            "commission_amount": 15,
+                                            "original_commission": null,
+                                            "payment_status": "unpaid",
+                                            "commission_payment_status": "unpaid",
+                                            "deleted_at": null,
+                                            "created_at": "2021-12-30T10:11:05.000000Z",
+                                            "updated_at": " 2021-12-30T10:11:05.000000Z",
+                                            "customer_payment_status": "unpaid",
+                                            "transactions": []
                                         }
                                     }
                                 }
@@ -4056,21 +4088,19 @@
                             "application/json": {
                                 "schema": {
                                     "example": {
-                                        "message": "Sos created successfully!",
-                                        "sos": {
-                                            "title": "Help!",
-                                            "message": "The customer is a wanted criminal!",
-                                            "booking_id": 1,
-                                            "location": {
-                                                "name": "Sanepa, Lalitpur",
-                                                "latitude": 27.1234,
-                                                "longitude": 85.3434
-                                            },
-                                            "created_by_id": 1,
-                                            "created_by_type": "rider",
-                                            "updated_at": "2021-12-21T05:55:18.000000Z",
-                                            "created_at": "2021-12-21T05:55:18.000000Z",
-                                            "id": 1
+                                        "message": "Success!",
+                                        "payment": {
+                                            "id": 5,
+                                            "completed_trip_id": 5,
+                                            "commission_amount": 15,
+                                            "original_commission": null,
+                                            "payment_status": "unpaid",
+                                            "commission_payment_status": "unpaid",
+                                            "deleted_at": null,
+                                            "created_at": "2021-12-30T10:11:05.000000Z",
+                                            "updated_at": " 2021-12-30T10:11:05.000000Z",
+                                            "customer_payment_status": "unpaid",
+                                            "transactions": []
                                         }
                                     }
                                 }

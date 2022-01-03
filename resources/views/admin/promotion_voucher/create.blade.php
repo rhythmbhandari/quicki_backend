@@ -17,7 +17,7 @@
 @endsection
 
 @section('content')
-<form action="{{route('admin.promotion_voucher.store')}}" class="custom-validation" method="post"
+<form action="{{route('admin.promotion_voucher.store')}}" class="custom-validation promoForm" method="post"
 	enctype="multipart/form-data">
 	@csrf
 	@include('admin.promotion_voucher.form')
