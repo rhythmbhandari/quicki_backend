@@ -1,5 +1,6 @@
 {
     "/js/pusher.js": "/js/pusher.js",
     "/js/sos_events_listener.js": "/js/sos_events_listener.js",
+    "/js/booking_timed_out_listener.js": "/js/booking_timed_out_listener.js",
     "/css/app.css": "/css/app.css"
 }
