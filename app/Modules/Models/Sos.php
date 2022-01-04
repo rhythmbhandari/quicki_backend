@@ -5,7 +5,7 @@ namespace App\Modules\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Carbon\Carbon;
 
 //models
 use App\Modules\Models\User;
@@ -24,12 +24,16 @@ class Sos extends Model
 
     protected $fillable = ([
         'created_by_id', 'created_by_type', 'booking_id', 'location', 'status', 'action_taken', 'message', 'title',
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at', 'updated_at', 'deleted_at','read_at'
     ]);
 
 
-    protected $appends = ['status_text'];
+    protected $appends = ['status_text','five_minutes_old'];
 
+    function getFiveMinutesOldAttribute()
+    {
+        return ($this->updated_at->diffInMinutes(Carbon::now()) < 5) ;
+    }
 
     /**
      * Gets the user model of the creator of the sos!

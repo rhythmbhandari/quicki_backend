@@ -36,6 +36,25 @@
 		<!--end::Page-->
 	</div>
 	@endif
+
+	<audio id="notificationAudio">
+	<source src="/notification/notification.mp3" type="audio/mpeg">
+	Your browser does not support the audio element.
+	</audio>
+	<button onclick="playNotificationAudio()" id="btnPlayNotificationAudio" type="button">Play Audio</button>
+
+	<audio id="sosAudio">
+	<source src="/notification/sos.mp3" type="audio/mpeg">
+	Your browser does not support the audio element.
+	</audio>
+	<button onclick="playSosAudio()" id="btnPlaySosAudio" type="button">Play Audio</button>
+
+	<audio id="eventAudio">
+	<source src="/notification/event.mp3" type="audio/mpeg">
+	Your browser does not support the audio element.
+	</audio>
+	<button onclick="playEventAudio()" id="btnPlayEventAudio" type="button">Play Audio</button>
+
 	@include('layouts.admin.footer')
 </body>
 <!--end::Body-->

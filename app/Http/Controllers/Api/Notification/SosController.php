@@ -142,21 +142,22 @@ class SosController extends Controller
                         $request->message, 
                         $user->name, 
                         $request->created_by_type,
-                        $createdSos->id )
+                        $createdSos->id ,
+                        $user->thumbnail_path)
                     );
 
                 //Create Notification sent via pusher broadcast
-                $this->notification_service->create(
-                    [
-                        'recipient_id'=>null,
-                        'recipient_type'=>'admin',
-                        'recipient_device_token'=>null,
-                        'recipient_quantity_type'=>'all',
-                        'notification_type'=>'sos_create',
-                        'title'=> $request->title, 
-                        'message'=>  $request->message, 
-                    ]
-                );
+                // $this->notification_service->create(
+                //     [
+                //         'recipient_id'=>null,
+                //         'recipient_type'=>'admin',
+                //         'recipient_device_token'=>null,
+                //         'recipient_quantity_type'=>'all',
+                //         'notification_type'=>'sos_create',
+                //         'title'=> $request->title, 
+                //         'message'=>  $request->message, 
+                //     ]
+                // );
 
 
                 $response = ['message' => 'Sos created and sent successfully!',  "sos"=>$createdSos];
@@ -279,21 +280,23 @@ class SosController extends Controller
                             $request->message, 
                             $user->name, 
                             $request->created_by_type,
-                            $createdSos->id )
+                            $createdSos->id ,
+                            $user->thumbnail_path
+                            )
                         );
     
                     //Create Notification sent via pusher broadcast
-                    $this->notification_service->create(
-                        [
-                            'recipient_id'=>null,
-                            'recipient_type'=>'admin',
-                            'recipient_device_token'=>null,
-                            'recipient_quantity_type'=>'all',
-                            'notification_type'=>'sos_create',
-                            'title'=> $request->title, 
-                            'message'=>  $request->message, 
-                        ]
-                    );
+                    // $this->notification_service->create(
+                    //     [
+                    //         'recipient_id'=>null,
+                    //         'recipient_type'=>'admin',
+                    //         'recipient_device_token'=>null,
+                    //         'recipient_quantity_type'=>'all',
+                    //         'notification_type'=>'sos_create',
+                    //         'title'=> $request->title, 
+                    //         'message'=>  $request->message, 
+                    //     ]
+                    // );
 
                     
                 $response = ['message' => 'Sos created successfully!',  "sos"=>$createdSos];
