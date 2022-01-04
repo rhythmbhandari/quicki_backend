@@ -235,8 +235,8 @@ class RiderLocationController extends Controller
     *         @OA\Schema(
     *             
     *             example={
-    *                  "origin_latitude":27.6871690,
-    *                  "origin_longitude":85.3042190,
+    *                  "origin_latitude":27.68737946321937,
+    *                  "origin_longitude":85.30350757899798,
     *                  "vehicle_type_id":1,
     *              }
     *         )
