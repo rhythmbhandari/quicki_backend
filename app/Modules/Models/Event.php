@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 //models
 use App\Modules\Models\User;
 use App\Modules\Models\Sos;
-
+use Carbon\Carbon;
 class Event extends Model
 {
     use HasFactory, SoftDeletes;
@@ -23,13 +23,17 @@ class Event extends Model
 
     protected $fillable = ([
         'created_by_id', 'created_by_type', 'message', 'sos_id',
-        'created_at', 'updated_at' ,'deleted_at'
+        'created_at', 'updated_at' ,'deleted_at','read_at'
     ]);
 
     protected $appends = [
-       
+       'five_minutes_old'
     ];
 
+    function getFiveMinutesOldAttribute()
+    {
+        return ($this->updated_at->diffInMinutes(Carbon::now()) < 5) ;
+    }
    
     /**
      * Gets the user model of the creator of the sos event!

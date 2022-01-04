@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\Booking\BookingController;
 use App\Http\Controllers\Admin\Payment\TransactionController;
 use App\Http\Controllers\Admin\Heatmap\HeatmapController;
 use App\Http\Controllers\Admin\Sos\SosController;
+use App\Http\Controllers\Admin\Notification\NotificationController;
 use App\Http\Controllers\Admin\Setting\SettingController; 
 use App\Http\Controllers\Admin\PromotionVoucher\PromotionVoucherController;
 use Inertia\Inertia;
@@ -81,11 +82,12 @@ Route::group([
     $router->get('booking_ajax', [BookingController::class, 'bookingAjax'])->name('booking.ajax');
     $router->post('/booking/change_status', [BookingController::class, 'changeStatusAjax'])->name('booking.change.status');
 
-    //SOS
+    //SOS AND NOTIFICATION
     $router->resource('/sos', SosController::class);
     $router->get('sos_data', [SosController::class, 'getAllData'])->name('sos.data');
-    $router->get('/sos/event/{id}', [SOSController::class, 'eventcreate'])->name('sos-detail.create');
-    $router->post('/sos/event/{id}', [SOSController::class, 'eventstore'])->name('sos-detail.store');
+    $router->get('/sos/event/{id}', [SosController::class, 'eventcreate'])->name('sos-detail.create');
+    $router->post('/sos/event/{id}', [SosController::class, 'eventstore'])->name('sos-detail.store');
+    $router->get('/notification/latest/{notification_type}', [NotificationController::class, 'getLatestNotification'])->name('notification.latest');
     // $router->get('vehicle_type_ajax', [VehicleTypeController::class, 'vehicleTypeAjax'])->name('vehicle_type.ajax');
 
     //transaction

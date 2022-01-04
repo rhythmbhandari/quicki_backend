@@ -825,7 +825,7 @@ INSERT INTO `role_user` (`id`, `user_id`, `role_id`, `created_at`, `updated_at`)
 (175, 134, 3, '2021-12-25 20:45:29', '2021-12-25 20:45:29');
 
 INSERT INTO `vehicles` (`id`, `slug`, `rider_id`, `vehicle_type_id`, `vehicle_number`, `image`, `make_year`, `vehicle_color`, `brand`, `capacity`, `model`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'ba-99-pa-5544', 3, 1, 'BA 99 PA 5544', '5c80cab1a30c684fbead9470816779307f720f73.jpg', '2021', 'black', 'Honda', 1, 'Shine', 'in_active', NULL, '2021-11-28 06:16:59', '2021-12-23 13:28:21'),
+(1, 'ba-99-pa-5544', 1, 1, 'BA 99 PA 5544', '5c80cab1a30c684fbead9470816779307f720f73.jpg', '2021', 'black', 'Honda', 1, 'Shine', 'in_active', NULL, '2021-11-28 06:16:59', '2021-12-23 13:28:21'),
 (2, 'ba-99-pa-5544-2', 3, 1, 'BA 99 PA 5544', NULL, '2016', 'black', 'TVS', 1, 'Apache 160R', 'active', NULL, '2021-11-29 11:39:52', '2021-11-29 11:39:52'),
 (3, 'ba-99-pa-5544-3', 4, 1, 'BA 99 PA 5544', NULL, '2016', 'black', 'TVS', 1, 'Apache 160R', 'active', NULL, '2021-11-29 13:41:01', '2021-11-29 13:41:01'),
 (4, 'ba-99-pa-5544-4', 5, 1, 'BA 99 PA 5544', NULL, '2016', 'black', 'TVS', 1, 'Apache 160R', 'active', NULL, '2021-12-02 14:02:04', '2021-12-02 14:02:04'),
