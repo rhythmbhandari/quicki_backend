@@ -36,6 +36,20 @@ class HeatmapController extends Controller
     public function getBookingData($booking_id)
     {
         $booking = Booking::findOrFail($booking_id);
+
+        $notifications = $booking->notifications;
+        if($notifications)
+        {
+            foreach($notifications as $notification)
+            {
+                if(!$notification->read_at)
+                {   
+                    $notification->read_at = Carbon::now();
+                    $notification->save();
+                }
+            }
+        }
+
         return compact('booking');
     }
 }

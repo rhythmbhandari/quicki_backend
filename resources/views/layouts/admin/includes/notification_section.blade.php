@@ -5,13 +5,14 @@
         
     
     <!--begin::Item-->
-    <a href="{{ ($notification->notification_type == 'customer_ignored')?'/admin/heatmap/booking?booking_id='.$notification->booking_id :'#' }}" class="navi-item">
+    <a href="{{ ($notification->notification_type == 'customer_ignored')? route('admin.notification.read',$notification->id) :'#' }}" class="navi-item">
         <div class="navi-link">
             <div class="navi-icon mr-2">
                 <i class="flaticon2-line-chart text-success"></i>
             </div>
             <div class="navi-text">
-                <div class=" @if(!$notification->read_at )) font-weight-bolder @endif @if($notification->notification_type == 'customer_ignored') text-danger @endif">{{$notification->message}}</div>
+                <div class=" @if(!$notification->read_at )) font-weight-bolder @endif ">{{$notification->message}}
+                    <span class="text-primary bg bg-light-danger px-1 rounded">active</span></div>
                 <div class="text-muted">{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$notification->updated_at)->diffForHumans() }}</div>
             </div>
         </div>
