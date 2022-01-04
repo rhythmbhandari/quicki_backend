@@ -32,7 +32,7 @@ class ValidateDoubleRule implements Rule
         //Check if the value is double
         try{
            // return ($test = floatval($value))?true:false;
-           return preg_match("/^[0-9]+(\.[0-9]{1,10})?$/",$value)?true:false;
+           return preg_match("/^[0-9]+(\.[0-9]{1,20})?$/",$value)?true:false;
         }catch(Throwable $e){
             return false;
         }
