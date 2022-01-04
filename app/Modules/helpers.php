@@ -298,7 +298,8 @@ function randomStringCodeGenerator($code, $length = 4)
 }
 
 
-function generateBookingCode( $existing_codes=null) {
+function generateBookingCode($existing_codes = null)
+{
 
     //$company_code = 'LIG';
     //$company_code = config('app.company_code');
@@ -320,19 +321,19 @@ function generateBookingCode( $existing_codes=null) {
 }
 
 
-function generateVoucherCode( $existing_codes=null) {
- 
+function generateVoucherCode($existing_codes = null)
+{
+
     $prefix = '#';
-  
+
     $generatedCode = randomStringCodeGenerator($prefix, 8);
-    if($existing_codes)
-    {
-        while(in_array($generatedCode, $existing_codes)){
+    if ($existing_codes) {
+        while (in_array($generatedCode, $existing_codes)) {
             $generatedCode = randomStringCodeGenerator($prefix, 8);
         }
     }
-   
-   
+
+
     return $generatedCode;
 }
 

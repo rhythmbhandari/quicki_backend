@@ -53,3 +53,11 @@
 <button type="button" id="showHistory" class="btn btn-warning" style="width: 200px;" data-toggle="tooltip"
         data-placement="top" data-original-title="Switch">Show History</button>
 @endif
+
+@if(!empty($mapRoute))
+<a href="{{$mapRoute}}">
+        <button type="button" class="btn btn-icon-toggle" data-toggle="tooltip" title="Map"><i
+                        class="far fa-map-marked-alt"></i>
+        </button>
+</a>
+@endif

@@ -101,8 +101,9 @@ class BookingService extends Service
                 $editRoute = route('admin.booking.edit', $booking->id);
                 $deleteRoute = '';
                 $optionRoute = '';
+                $mapRoute = '/admin/map/dispatcher?booking_id=' . $booking->id;
                 $optionRouteText = '';
-                return getTableHtml($booking, 'actions', $editRoute, $deleteRoute, $optionRoute, $optionRouteText);
+                return getTableHtml($booking, 'actions', $editRoute, $deleteRoute, $optionRoute, $optionRouteText, "", $mapRoute);
             })->rawColumns(['image', 'status', 'actions', 'booking', 'vehicle_type'])
             ->make(true);
     }
@@ -143,10 +144,10 @@ class BookingService extends Service
 
             $data['voucher'] = isset($data['voucher']) ? $data['voucher'] : null;
 
-     
+
 
             $existing_codes = Booking::pluck('trip_id')->toArray();
-            $data['trip_id'] = generateBokkingCode($existing_codes);
+            $data['trip_id'] = generateBookingCode($existing_codes);
 
             $createdBooking = $this->booking->create($data);
 
@@ -858,6 +859,7 @@ class BookingService extends Service
 
     public function notify_booking_timed_out($bookingId)
     {
+
       
             $booking = Booking::with('user:id,first_name,last_name,image')->where('id',$bookingId)->first();
             // $booking = Booking::find($bookingId);
@@ -890,6 +892,36 @@ class BookingService extends Service
                 ]
             );
 
+
+        $booking = Booking::with('user:id,first_name,last_name,image')->where('id', $bookingId)->first();
+        // $booking = Booking::find($bookingId);
+
+        // dd($booking->user->toArray());
+
+        //Send pusher/echo broadcast notification to all admins
+        $title = "Booking Timed Out";
+        $message = "Booking request timed out made by " . $booking->user->name . ' ' . $booking->created_at->diffForHumans();;
+        event(
+            new BookingTimedOut(
+                $title,
+                $message,
+                $bookingId,
+                $booking->user->name
+            )
+        );
+
+        //Create Notification sent via pusher broadcast
+        $this->notification_service->create(
+            [
+                'recipient_id' => null,
+                'recipient_type' => 'admin',
+                'recipient_device_token' => null,
+                'recipient_quantity_type' => 'all',
+                'notification_type' => 'customer_ignored',
+                'title' => $title,
+                'message' => $message,
+            ]
+        );
     }
 
 

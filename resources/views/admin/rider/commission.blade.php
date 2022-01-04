@@ -150,7 +150,7 @@
                 <!--- SPINNER : Ends -->
 
                 <div id="showModalContent">
-                    Test content
+                    <!-- pre-loader here -->
                 </div>
 
 
@@ -345,8 +345,6 @@
             event.preventDefault();
             // removePaymentValidationErrors();
             var id = $(this).data('id');
-            console.log("hellow world wooo!", id);
-            // console.log(pid);
             var url = '{{ route('admin.rider.make_payment_modal', ':id') }}';
             url = url.replace(':id', id);
             $.ajax({
@@ -356,20 +354,8 @@
                 before: function() {
                     $('#test').addClass('show');
                     $('#test').style.display = "block";
-                    console.log("hlw?")
                 },
                 success: function(data) {
-                    console.log("hlw friend")
-                    // console.log($('#modal').classList)
-                    // console.log("successfully fetched modal form content ", data);
-                    // $('#modalBody').removeClass('overlay overlay-block rounded  overlay-wrapper');
-                    // $('#modalBody').find(".overlay-layer").addClass('d-none');
-
-                    // $('#modalLabel').html(' <h2 class="text-info"> Make Payment </h2> ');
-
-                    // //All the Details goes here!
-                    // //console.log('Make Payment',data);
-
                     $('#showModalContent').html(data.content);
                 },
                 error: function(data) {

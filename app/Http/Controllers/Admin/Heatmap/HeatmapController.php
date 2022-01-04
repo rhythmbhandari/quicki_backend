@@ -23,77 +23,19 @@ class HeatmapController extends Controller
         $this->user_service = $user_service;
     }
 
-    public function bookingHeatMap()
+    public function dispatcherShow()
     {
-        return view('admin.heatmap.booking');
+        return view('admin.map.dispatcher');
     }
 
-    public function getBookingInfo($booking_id)
+    public function heatmapShow()
     {
-        $booking = Booking::findOrFail($booking_id);
-        // dd("booking info with booking location will be fetched here!");
-        return view('admin.heatmap.booking', compact('booking'));
+        return view('admin.map.heatmap');
     }
 
     public function getBookingData($booking_id)
     {
-        // dd($booking_id);
         $booking = Booking::findOrFail($booking_id);
         return compact('booking');
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Location  $location
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Location $location)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Location  $location
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Location $location)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Location  $location
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Location $location)
-    {
-        //
     }
 }

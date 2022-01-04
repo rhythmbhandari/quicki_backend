@@ -98,6 +98,16 @@ abstract class Service
         return false;
     }
 
+    function arePointsNear($checkPoint, $centerPoint, $km)
+    {
+        // dd($checkPoint, $centerPoint["lat"]);
+        $ky = 40000 / 360;
+        $kx = cos(pi() * $centerPoint['lat'] / 180.0) * $ky;
+        $dx = abs($centerPoint['lng'] - $checkPoint['lng']) * $kx;
+        $dy = abs($centerPoint['lat'] - $checkPoint['lat']) * $ky;
+        return sqrt($dx * $dx + $dy * $dy) <= $km;
+    }
+
     public function uploadFromAjax(UploadedFile $file, $width = 320, $height = 320)
     {
         if (!is_dir('uploads'))

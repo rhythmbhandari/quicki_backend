@@ -114,7 +114,7 @@ class RiderController extends Controller
         $centerPoint = ['lat' => 27.687169, 'lng' => 85.304219]; //default center_point
         //if center_point present fetch all riders near to that rider.
         if (isset($request->center_point)) {
-            $active_riders = RiderLocation::with('rider.vehicle.vehicle_type:id,name')->select('rider_id', 'longitude', 'latitude')->where('status', 'active')->get();
+            $active_riders = RiderLocation::with('rider.vehicle.vehicle_type:id,name')->select('rider_id', 'longitude', 'latitude')->where('status', 'active')->where('availability', 'available')->get();
             $centerPoint = $request->center_point;
         }
 
@@ -122,7 +122,7 @@ class RiderController extends Controller
             if ($this->rider->arePointsNear(
                 $centerPoint,
                 ['lat' => $rider->latitude, 'lng' => $rider->longitude],
-                10
+                50
             )) {
                 array_push($nearest_rider, $rider);
             };
@@ -193,7 +193,7 @@ class RiderController extends Controller
             $data['location']['work'] = $data['work'];
         }
 
-        dd($data);
+        // dd($data);
 
         return DB::transaction(function () use ($request, $data) {
             if ($user = $this->rider->riderCreate($data)) {
@@ -342,7 +342,19 @@ class RiderController extends Controller
 
     function clearCommission($rider_id)
     {
-        $rider = Rider::with('user')->find($rider_id);
-        dd("hlw rider commission wil be cleared!");
+        $rider = Rider::with('user', 'completed_trips')->find($rider_id);
+        $total_commission = getTotalCommissions($rider);
+        $total_paid = getTotalPaid($rider->user);
+
+        $commission_due = $total_commission - $total_paid;
+        if ($commission_due > 0) {
+            $data['amount'] = $commission_due;
+            $data['trasaction_date'] = Carbon::now();
+            $data['creditor_type'] = 'rider';
+            $data['creditor_id'] = $rider_id;
+            $data['debtor_type'] = 'admin';
+            // $data['']
+        }
+        // dd("hlw rider commission wil be cleared!");
     }
 }
