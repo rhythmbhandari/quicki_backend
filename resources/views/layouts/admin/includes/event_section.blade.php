@@ -5,13 +5,13 @@
         
     
     <!--begin::Item-->
-    <a href="#" class="navi-item">
+    <a href="{{route('admin.sos.read',$event->sos->id)}}" class="navi-item">
         <div class="navi-link">
             <div class="navi-icon mr-2">
                 <i class="flaticon2-line-chart text-success"></i>
             </div>
             <div class="navi-text">
-                <div class=" @if(!$event->read_at )) font-weight-bolder @endif @if($event->sos->status != 'closed') text-danger @endif ">{{$event->message}}</div>
+                <div class=" @if(!$event->read_at  )) font-weight-bolder @endif ">{{$event->message}}</div>
                 <div class="text-muted">{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$event->updated_at)->diffForHumans() }}</div>
             </div>
         </div>

@@ -13,6 +13,7 @@ use App\Modules\Services\Sos\SosService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Modules\Services\Notification\NotificationService;
+use Carbon\Carbon;
 
 class NotificationController extends Controller
 {
@@ -34,7 +35,10 @@ class NotificationController extends Controller
         if($notification_type=="notification")
         {
                 $notifications = Notification::where('recipient_type','admin')
-                ->where('read_at',NULL)
+                ->where(function ($query) {
+                    $query->where('read_at',NULL)
+                        ->orWhereRelation('booking','status','==', 'pending');
+                })
                 ->orderBy('created_at','desc')->get();
         }
         else if($notification_type == "sos")
@@ -60,9 +64,21 @@ class NotificationController extends Controller
         else
         {
             
-            $notifications = Notification::where('recipient_type','admin')->where('read_at',NULL)->orderByDesc('created_at')->get();
-            $sos = Sos::where('created_by_type','!=','admin')->where('status','!=','closed')->where('read_at',NULL)->orderBy('created_at','desc')->get();
-            $events = Event::where('created_by_type','!=','admin')->whereRelation('sos','status','!=','closed')->where('read_at',NULL)->orderBy('created_at','desc')->get();
+            $notifications = Notification::where('recipient_type','admin')
+                ->where('read_at',NULL)
+                ->orderBy('created_at','desc')->get();
+                $sos = Sos::where('created_by_type','!=','admin')->where('status','!=','closed')
+                ->where(function ($query) {
+                    $query->where('read_at',NULL)
+                        ->orWhere('status','!=', 'closed');
+                })
+                ->orderBy('created_at','desc')->get();
+            $events = Event::where('created_by_type','!=','admin')
+            ->where(function ($query) {
+                $query->where('read_at',NULL)
+                    ->orWhereRelation('sos','status','!=', 'closed');
+            })
+            ->orderBy('created_at','desc')->get();
 
         }
         // dd($notifications, $sos, $events);
@@ -94,13 +110,32 @@ class NotificationController extends Controller
         return response($response, 200);
 
 
-
-  
-
     }
 
-    function read_notification( $model_type="all",$quantity="all",$specific_id=null ){
 
+
+    public function read_booking_notification($notification_id ){
+        $notification = Notification::findOrFail($notification_id);
+
+        if(!$notification->read_at)
+        {   
+            $notification->read_at = Carbon::now();
+            $notification->save();
+        }
+       
+        return redirect()->route('admin.map.dispatcher', ['booking_id'=>$notification->booking_id]);
+    }
+
+    public function read_sos($sos_id){
+        $sos = Sos::findOrFail($sos_id);
+
+        return redirect()->route('admin.sos-detail.create', $sos->id);
+    }
+
+    public function read_event($event_id){
+        $event = Event::findOrFail($event_id);
+
+        return redirect()->route('admin.sos-detail.create', $event->sos->id);
     }
 
 

@@ -12,7 +12,7 @@ use App\Modules\Services\Sos\SosService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Modules\Services\Notification\NotificationService;
-
+use Carbon\Carbon;
 class SosController extends Controller
 {
     protected $sos, $notification_service;
@@ -64,6 +64,12 @@ class SosController extends Controller
     public function eventcreate($id)
     {
         $sos = SOS::with('booking')->find($id);
+        if(!$sos->read_at)
+        {
+            $sos->read_at = Carbon::now();
+            $sos->save();
+        }
+        
 
         if ($sos->created_by_type == 'rider')
             $sos_creator = Rider::find($sos->created_by_id)->user;
@@ -75,10 +81,18 @@ class SosController extends Controller
         $events = Event::where('sos_id', $id)->get();
 
         foreach ($events as $event) {
+            if(!$event->read_at)
+            {
+                $event->read_at = Carbon::now();
+                $event->save();
+            }
+            
+
             if ($event->created_by_type == 'rider')
                 $event_creator = Rider::find($event->created_by_id);
             else
                 $event_creator = User::find($event->created_by_id);
+
 
             $event->user = $event_creator;
         }

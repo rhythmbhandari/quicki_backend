@@ -93,6 +93,11 @@ Route::group([
     $router->get('/notification/latest/{notification_type}', [NotificationController::class, 'getLatestNotification'])->name('notification.latest');
     // $router->get('vehicle_type_ajax', [VehicleTypeController::class, 'vehicleTypeAjax'])->name('vehicle_type.ajax');
 
+    //Read Notifications
+    $router->get('/notification/{notification_id}/read', [NotificationController::class, 'read_booking_notification'])->name('notification.read');
+    $router->get('/sos/{sos_id}/read', [NotificationController::class, 'read_sos'])->name('sos.read');
+    $router->get('/event/{event_id}/read', [NotificationController::class, 'read_event'])->name('event.read');
+
     //transaction
     $router->resource('/transaction', TransactionController::class);
     $router->get('transaction_data', [TransactionController::class, 'getAllData'])->name('transaction.data');

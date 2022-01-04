@@ -25767,23 +25767,30 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js"); // const 
 var msg_card_body_el = document.querySelector('.msg_card_body');
 window.Echo.channel('sos').listen('.event_created', function (e) {
   console.log(e, "sos event");
-  var sos_id = SOS_ID;
-  document.getElementById('btnPlayEventAudio').click();
+  var sos_id = SOS_ID; // document.getElementById('btnPlayEventAudio').click();
+
+  playEventAudio();
   getNotification('event');
   Swal.fire({
     icon: 'warning',
     title: e.title,
     html: '<div >' + e.message + ' by ' + e.user_name + ' (' + e.user_type + ')!</div>',
-    showConfirmButton: false,
+    showConfirmButton: true,
+    closeOnClickOutside: false,
     position: 'bottom-end',
     width: 400,
     padding: '2em',
     showCloseButton: true,
     color: 'black',
     toast: true,
-    timer: 3000,
+    timer: 10000,
     timerProgressBar: true // background: '#89D1A3',
 
+  }).then(function (result) {
+    if (result.isConfirmed) {
+      console.log('adsasa');
+      window.location = "/admin/event/" + e.event_id + "/read";
+    }
   });
 
   if (e.sos_id == sos_id) {
@@ -25805,36 +25812,45 @@ window.Echo.channel('sos').listen('.event_created', function (e) {
   //                             <p>By: '+e.user_name+' ('+ e.user_type +')</p>';
 
 }).listen('.sos_created', function (ev) {
-  console.log(ev);
-  document.getElementById('btnPlaySosAudio').click();
+  console.log(ev); // document.getElementById('btnPlaySosAudio').click();
+
+  playSosAudio();
   getNotification('sos');
   Swal.fire({
     icon: 'warning',
     title: ev.title,
     html: '<div >' + ev.message + ' by ' + ev.user_name + ' (' + ev.user_type + ')</div>',
-    showConfirmButton: false,
+    showConfirmButton: true,
     position: 'bottom-end',
     // imageUrl: '/'+ev.user_thumbnail_path,
     // imageSize:'150x150',
     width: 400,
     padding: '2em',
     showCloseButton: true,
+    closeOnClickOutside: false,
     color: 'black',
     toast: true,
-    timer: 3000,
+    timer: 10000,
     timerProgressBar: true // background: '#89D1A3',
 
+  }).then(function (result) {
+    if (result.isConfirmed) {
+      console.log('adsasa');
+      window.location = "/admin/sos/" + ev.sos_id + "/read";
+    }
   });
 });
 window.Echo.channel('booking').listen('.booking_timed_out', function (e) {
-  console.log(e, "booking timed out");
-  document.getElementById('btnPlayNotificationAudio').click();
+  console.log(e, "booking timed out"); // document.getElementById('btnPlayNotificationAudio').click();
+
+  playNotificationAudio();
   getNotification('notification');
   Swal.fire({
     icon: 'warning',
     title: e.title,
     html: '<div >' + e.message + '</div>',
     showConfirmButton: true,
+    closeOnClickOutside: false,
     position: 'bottom-end',
     width: 400,
     padding: '2em',
@@ -25847,7 +25863,7 @@ window.Echo.channel('booking').listen('.booking_timed_out', function (e) {
   }).then(function (result) {
     if (result.isConfirmed) {
       console.log('adsasa');
-      window.location = "/admin/heatmap/booking?booking_id=" + e.booking_id;
+      window.location = "/admin/map/dispatcher?booking_id=" + e.booking_id;
     }
   });
 });
