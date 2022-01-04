@@ -103,8 +103,12 @@
                             <th class="notexport">ID</th>
                             <th>S.No.</th>
                             <th class="notexport">Transaction Date</th>
+                            <th>Creditor First Name</th>
+                            <th>Creditor Last Name</th>
                             <th class="notexport">Creditor</th>
                             <th class="notexport">Creditor Type</th>
+                            <th>Debtor First Name</th>
+                            <th>Debtor Last Name</th>
                             <th class="notexport">Debtor</th>
                             <th class="notexport">Debtor Type</th>
                             <th>Payment Mode</th>
@@ -207,40 +211,50 @@
                             "data": "transaction_date"
                         },
                         {
-                            "data": "creditor"
+                            "data": "creditor_first_name",
+                            name:'creditor.first_name',
+                            visible:false
+                        },
+                        {
+                            "data": "creditor_last_name",
+                            name:'creditor.last_name',
+                            visible:false
+                        },
+                        {
+                            "data": "creditor",
+                            render: function(data, type, row, meta) {
+                                return row.creditor_first_name + ' ' + row.creditor_last_name;
+
+                            }
                         },
                         {
                             "data": "creditor_type"
                         },
                         {
-                            "data": "debtor"
+                            "data": "debtor_first_name",
+                            name:'debtor.first_name',
+                            visible: false
+                        },
+                        {
+                            "data": "debtor_last_name",
+                            name:'debtor.last_name',
+                            visible: false
+                        },
+                        {
+                            "data": "debtor",
+                            render: function(data, type, row, meta) {
+                                return row.debtor_first_name + ' ' + row.debtor_last_name;
+                            }
                         },
                         {
                             "data": "debtor_type"
                         },
-                        // {
-                        //     "data": "purpose",
-                        //     "render": function(data, type, row) {
-                        //         if(data == 'customer') {
-                        //             return "ride payment"
-                        //         }
-                        //         if(data == 'rider' || data == 'admin') {
-                        //             return "commission payment"
-                        //         }
-                        //         return "N/A";
-                        //     }
-                        // },
                         {
                             "data": "payment_mode"
                         },
                         {
                             "data": "amount"
                         }
-                        // {
-                        //     "data": "actions",
-                        //     orderable: false,
-                        //     searchable: false
-                        // },
                     ],
                     columnDefs: [{
                         targets: -1,

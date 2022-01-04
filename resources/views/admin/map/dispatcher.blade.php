@@ -57,6 +57,8 @@
                             }, 'vehicle_type' => function ($q) {
                             $q->select('id', 'name');
                             }])->find($_GET['booking_id'])}}
+
+                            @if (isset($selectedBooking->rider))
                             <option value="{{$_GET['booking_id']}}" selected>{{'ID: ' . $selectedBooking->id . ' /
                                 Origin: ' . $selectedBooking->location['origin']['name'] . ' / Destination: ' .
                                 $selectedBooking->location['origin']['name'] . ' / Status: ' . $selectedBooking->status
@@ -64,6 +66,13 @@
                                 $selectedBooking->user->first_name . ' ' . $selectedBooking->user->last_name . ' /
                                 Rider: ' . $selectedBooking->rider->user->first_name . ' ' .
                                 $selectedBooking->rider->user->last_name}}</option>
+                            @else
+                            <option value="{{$_GET['booking_id']}}" selected>{{'ID: ' . $selectedBooking->id . ' /
+                                Origin: ' . $selectedBooking->location['origin']['name'] . ' / Destination: ' .
+                                $selectedBooking->location['origin']['name'] . ' / Status: ' . $selectedBooking->status
+                                . ' / Vehicle Type: ' . $selectedBooking->vehicle_type->name . ' / Customer: ' .
+                                $selectedBooking->user->first_name . ' ' . $selectedBooking->user->last_name}}</option>
+                            @endif
                             @endif
                         </select>
                     </div>

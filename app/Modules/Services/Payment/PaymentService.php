@@ -84,6 +84,16 @@ class PaymentService extends Service
             ->make(true);
     }
 
+    function clearRiderCommission($rider)
+    {
+        $due_payments = Payment::whereIn('completed_trip_id', $rider->completed_trips->pluck('id'))->where('commission_payment_status', 'unpaid')->get();
+
+        foreach ($due_payments as $due) {
+            $due['commission_payment_status'] = 'paid';
+            $due->save();
+        }
+    }
+
 
     function create(array $data)
     {
@@ -111,26 +121,25 @@ class PaymentService extends Service
     {
         $payment = Payment::find($paymentId);
 
-        try{
+        try {
             $completed_trip = $payment->completed_trip;
 
-            $debtor_id = isset($completed_trip->rider_id) ? Rider::select('user_id')->where('id',$completed_trip->rider_id)->first()->user_id : $completed_trip->rider_id;
+            $debtor_id = isset($completed_trip->rider_id) ? Rider::select('user_id')->where('id', $completed_trip->rider_id)->first()->user_id : $completed_trip->rider_id;
 
             //Create transaction table
             $createdTransaction = $this->transaction_service->create([
-                'amount'=>$completed_trip->price,
-                'transaction_date'=> Carbon::now(),
-                'creditor_type'=>'customer',
-                'creditor_id'=>$completed_trip->user_id,
-                'debtor_type'=>'rider',
-                'debtor_id'=>$debtor_id,
-                'payment_mode'=>'offline'
+                'amount' => $completed_trip->price,
+                'transaction_date' => Carbon::now(),
+                'creditor_type' => 'customer',
+                'creditor_id' => $completed_trip->user_id,
+                'debtor_type' => 'rider',
+                'debtor_id' => $debtor_id,
+                'payment_mode' => 'offline'
             ]);
 
 
             //Update payment table
-            if($createdTransaction)
-            {
+            if ($createdTransaction) {
                 // PaymentTransaction::create([
                 //     'payment_id'=>$paymentId,
                 //     'transaction_id'=>$createdTransaction->id
@@ -142,12 +151,8 @@ class PaymentService extends Service
             }
 
             return false;
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             return false;
         }
-
     }
-  
 }
