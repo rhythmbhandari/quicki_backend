@@ -4,7 +4,7 @@
         <!--begin::Logo-->
         <a href="{{route('admin.dashboard') }}" class="brand-logo">
             <h3 class="text-white">
-             
+
                 {{ config('app.name', 'Puryaideu V2') }}</h3>
         </a>
         <!--end::Logo-->
@@ -34,7 +34,7 @@
     </div>
     <!--end::Brand-->
     <img src="{{asset('assets/media/logo.png')}}" alt="logo" class="m-auto mt-3"
-     style="height:50px !important;width:50px !important;margin-top:15px !important">
+        style="height:50px !important;width:50px !important;margin-top:15px !important">
     <!--begin::Aside Menu-->
     <div class="aside-menu-wrapper flex-column-fluid" id="kt_aside_menu_wrapper">
         <!--begin::Menu Container-->
@@ -199,19 +199,26 @@
                     str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
                     aria-haspopup="true">
                     <a href="" class="menu-link menu-toggle">
-                        <i class="menu-icon fas fa-users"></i>
-                        <span class="menu-text">Heatmap</span><i class="menu-arrow"></i>
+                        <i class="menu-icon fas fa-map-marked-alt"></i>
+                        <span class="menu-text">Maps</span><i class="menu-arrow"></i>
                     </a>
                     <div class="menu-submenu">
                         <span class="menu-arrow"></span>
                         <ul class="menu-subnav">
                             {{-- @can('role-view') --}}
-                            <li class="menu-item {{request()->is('admin/heatmap/booking') || request()->is('admin/heatmap/booking/*')
+                            <li class="menu-item {{request()->is('admin/map/dispatcher') || request()->is('admin/map/dispatcher/*')
                                 ? " menu-item-active" : "" }}" aria-haspopup="true">
-                                <a href="{{route('admin.heatmap.booking')}}" class="menu-link"><i
+                                <a href="{{route('admin.map.dispatcher')}}" class="menu-link"><i
                                         class="menu-bullet menu-bullet-dot">
                                         <span></span>
-                                    </i><span class="menu-text">Booking Heatmap</span></a>
+                                    </i><span class="menu-text">Dispatcher</span></a>
+                            </li>
+                            <li class="menu-item {{request()->is('admin/heatmap/') || request()->is('admin/heatmap/*')
+                                ? " menu-item-active" : "" }}" aria-haspopup="true">
+                                <a href="{{route('admin.map.heatmap')}}" class="menu-link"><i
+                                        class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i><span class="menu-text">Heatmap</span></a>
                             </li>
                         </ul>
                     </div>

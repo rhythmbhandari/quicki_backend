@@ -14,7 +14,7 @@ use App\Http\Controllers\Admin\Booking\BookingController;
 use App\Http\Controllers\Admin\Payment\TransactionController;
 use App\Http\Controllers\Admin\Heatmap\HeatmapController;
 use App\Http\Controllers\Admin\Sos\SosController;
-use App\Http\Controllers\Admin\Setting\SettingController; 
+use App\Http\Controllers\Admin\Setting\SettingController;
 use App\Http\Controllers\Admin\PromotionVoucher\PromotionVoucherController;
 use Inertia\Inertia;
 
@@ -79,6 +79,7 @@ Route::group([
     $router->get('booking_data', [BookingController::class, 'getAllData'])->name('booking.data');
     $router->get('estimated_price', [BookingController::class, 'estimatedPriceAjax'])->name('booking.price');
     $router->get('booking_ajax', [BookingController::class, 'bookingAjax'])->name('booking.ajax');
+    $router->get('nearest_pending_ajax', [BookingController::class, 'getNearestPendingBookingAjax'])->name('pending_booking.ajax');
     $router->post('/booking/change_status', [BookingController::class, 'changeStatusAjax'])->name('booking.change.status');
 
     //SOS
@@ -93,15 +94,14 @@ Route::group([
     $router->get('transaction_data', [TransactionController::class, 'getAllData'])->name('transaction.data');
 
     //heatmap routes
-    $router->get('/heatmap/booking', [HeatmapController::class, 'bookingHeatMap'])->name('heatmap.booking');
-    $router->get('/heatmap/booking/{booking_id}', [HeatmapController::class, 'getBookingInfo'])->name('heatmap.booking.info');
-    $router->get('/heatmap/booking_detail/{booking_id}', [HeatmapController::class, 'getBookingData'])->name('heatmap.booking.data');
-    // $router->get('/heatmap/booking/', [HeatmapController::class, 'getRiderInfo'])->name('heatmap.booking');
+    $router->get('/map/heatmap', [HeatmapController::class, 'heatmapShow'])->name('map.heatmap');
+    $router->get('/map/dispatcher', [HeatmapController::class, 'dispatcherShow'])->name('map.dispatcher');
+    $router->get('/map/dispatcher/booking_detail/{booking_id}', [HeatmapController::class, 'getBookingData'])->name('heatmap.dispatcher.booking_data');
 
-     //promotion_voucher
-     $router->get('promotion_voucher/generate', [PromotionVoucherController::class, 'getGeneratedCode'])->name('voucher_code.generate');
-     $router->resource('/promotion_voucher', PromotionVoucherController::class);
-     $router->get('promotion_voucher_data', [PromotionVoucherController::class, 'getAllData'])->name('promotion_voucher.data');
+    //promotion_voucher
+    $router->get('promotion_voucher/generate', [PromotionVoucherController::class, 'getGeneratedCode'])->name('voucher_code.generate');
+    $router->resource('/promotion_voucher', PromotionVoucherController::class);
+    $router->get('promotion_voucher_data', [PromotionVoucherController::class, 'getAllData'])->name('promotion_voucher.data');
 
 
     //---------------------------------------------------------------------------------------------------------
@@ -109,6 +109,4 @@ Route::group([
     //---------------------------------------------------------------------------------------------------------
     $router->get('/settings/{group}/loadSettingForms', [SettingController::class, 'loadSettingForms'])->name('setting.loadSettingForms');
     $router->resource('setting', SettingController::class);
-
-
 });

@@ -103,6 +103,26 @@ class BookingController extends Controller
         return compact('results');
     }
 
+    function getNearestPendingBookingAjax(Request $request)
+    {
+        // dd($request->all());
+        $nearest_booking = [];
+        if ($request->has('center_point')) {
+            $bookings = Booking::select('location')->where('status', 'pending')->get();
+            foreach ($bookings as $item) {
+                if ($this->booking->arePointsNear(
+                    $request->center_point,
+                    ['lat' => $item->location['origin']['latitude'], 'lng' => $item->location['origin']['longitude']],
+                    50
+                )) {
+                    array_push($nearest_booking, ['lat' => $item->location['origin']['latitude'], 'lng' => $item->location['origin']['longitude']]);
+                };
+            }
+        }
+
+        return compact('nearest_booking');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

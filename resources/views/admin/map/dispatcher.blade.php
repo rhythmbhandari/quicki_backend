@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', 'Booking Heatmap')
+@section('title', 'Booking Dispatcher')
 
 @section('breadcrumb')
 <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
@@ -8,19 +8,17 @@
         <a href="{{route('admin.dashboard') }}" class="text-muted">Dashboard</a>
     </li>
     <li class="breadcrumb-item text-active">
-        <a href="#" class="text-active">Booking Heatmap</a>
+        <a href="#" class="text-active">Booking Dispatcher</a>
     </li>
 </ul>
 @endsection
 
-{{-- @section('actionButton')
-<a href="{{ route('admin.permission.create') }}" class="btn btn-primary font-weight-bolder fas fa-plus">
-    Create Permission
-</a>
-@endsection --}}
-
 @section('page-specific-styles')
 <style>
+    .select2 {
+        width: 100% !important;
+    }
+
     .rider_info_img {
         width: 50px;
         height: 50px;
@@ -40,23 +38,36 @@
         <div class="card card-custom gutter-b">
             <div class="card-header flex-wrap py-3">
                 <div class="card-title">
-                    <h3 class="card-title">Heatmap</h3>
+                    <h3 class="card-title">Dispatcher</h3>
                 </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
 
                 <div class="form-group row align-items-end">
-                    <div class="col-11">
+                    <div class="col-10">
                         <label>Booking ID:</label>
                         <select class="form-control" name="booking_id" id="booking_id">
                             <option value="">Select Booking ID</option>
-                            @if (isset($booking_id))
-                            <option value="{{$booking_id}}" selected>{{$booking_id}}</option>
+                            @if (isset($_GET['booking_id']))
+                            {{$selectedBooking = \App\Modules\Models\Booking::with(['user' => function ($q) {
+                            $q->select('id', 'first_name', 'last_name');
+                            }, 'rider.user' => function ($q) {
+                            $q->select('id', 'first_name', 'last_name');
+                            }, 'vehicle_type' => function ($q) {
+                            $q->select('id', 'name');
+                            }])->find($_GET['booking_id'])}}
+                            <option value="{{$_GET['booking_id']}}" selected>{{'ID: ' . $selectedBooking->id . ' /
+                                Origin: ' . $selectedBooking->location['origin']['name'] . ' / Destination: ' .
+                                $selectedBooking->location['origin']['name'] . ' / Status: ' . $selectedBooking->status
+                                . ' / Vehicle Type: ' . $selectedBooking->vehicle_type->name . ' / Customer: ' .
+                                $selectedBooking->user->first_name . ' ' . $selectedBooking->user->last_name . ' /
+                                Rider: ' . $selectedBooking->rider->user->first_name . ' ' .
+                                $selectedBooking->rider->user->last_name}}</option>
                             @endif
                         </select>
                     </div>
-                    <div class="col-1" style="display: flex;">
+                    <div class="col" style="display: flex;">
                         <button onclick="clearSelection()" class="btn btn-danger"
                             style="margin-left: auto !important; width: 100%"><i
                                 class="fa fa-trash mr-2"></i>Clear</button>
@@ -109,8 +120,6 @@
         vehicle_type: null
     }
 
-    let centerChangeTimeout;
-
     let map, directionService, directionsRenderer, markers = {}, infowindow, infowindowContent = "";
 
     function initMap() {
@@ -133,17 +142,8 @@
         map.addListener("dragend", () => {
             plotRiderData(map)
         });
-        
 
-
-        // var params = new URLSearchParams(window.location.search);
-        // var booking_id = null;
-        // if(params.has('booking_id'))
-        //     booking_id = params.get('booking_id');
-            
-        // if(booking_id != null)
-        //     $("#booking_id").select2().val(booking_id).trigger("change");
-            
+        $('#booking_id').trigger('change')
     }
 
 
@@ -211,13 +211,14 @@
 
     function initiateMaping() {
         //close any infowindow incase open
+        // console.log("something triggered!")
         infowindow.close()
 
         booking_id = $('#booking_id').val();
 
         if(booking_id) {
             $.ajax({
-                url: "/admin/heatmap/booking_detail/" + booking_id, success: function(result){
+                url: "/admin/map/dispatcher/booking_detail/" + booking_id, success: function(result){
                     let booking = result.booking
                     console.log(result.booking.rider_id, "printing rider data for verification!")
                     bookingData.origin = {lat: booking.location.origin.latitude, lng: booking.location.origin.longitude}
@@ -251,7 +252,7 @@
             plotRiderData(map)
         }
         
-        console.log(booking_id, "printing booking id")
+        // console.log(booking_id, "printing booking id")
 
         
     }
@@ -372,7 +373,7 @@
 
     function generateRiderContent() {
 
-        console.log(riderData.thumbnail_path, "printing thumail path")
+        // console.log(riderData.thumbnail_path, "printing thumail path")
         let content = '<div id="content">' +
         '<div class=""><img class="rider_info_img" src="/'+ riderData.thumbnail_path +'" /></div>'+
         '<div id="siteNotice">' +
@@ -384,8 +385,6 @@
         "</div>" +
         "</div>"
 
-        // content = content.replace()
-        // href="{{route('admin.heatmap.booking')}}"
 
         if(bookingData.status && bookingData.status == "pending") {
             content += `<div><button id="btnAssignRider" onclick="assignRider(${bookingData.id}, ${riderData.id})" class="btn btn-success">
@@ -402,7 +401,7 @@
             'url' : '{{route('admin.booking.ajax')}}',
             'dataType': 'json'
         }
-    });
+    })
 
     function clearSelection() {
         console.log("data cleared!")
@@ -410,14 +409,6 @@
     }
 </script>
 
-{{-- @if( isset($_GET['booking_id']) )
- <script>
-     var booking_id = "<?php echo $_GET['booking_id']; ?>";
 
-     $("#booking_id").select2().val(booking_id).trigger("change");
-
-// alert('asdsada '+booking_id);
-</script>
-@endif --}}
 
 @endsection
