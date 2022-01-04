@@ -8,6 +8,7 @@ use App\Modules\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Kamaln7\Toastr\Facades\Toastr;
 use App\Modules\Services\Document\DocumentService;
+use App\Modules\Services\Payment\TransactionService;
 use Carbon\Carbon;
 
 //services
@@ -19,18 +20,22 @@ use App\Http\Requests\Admin\Rider\RiderRequest;
 use App\Modules\Models\Rider;
 use App\Modules\Models\RiderLocation;
 use App\Modules\Models\User;
+use App\Modules\Services\Payment\PaymentService;
+use Auth;
 
 class RiderController extends Controller
 {
 
 
-    protected $rider, $user_service, $document_service;
+    protected $rider, $user_service, $document_service, $transaction_service, $payment_service;
 
-    public function __construct(RiderService $rider, UserService $user_service, DocumentService $document_service)
+    public function __construct(RiderService $rider, UserService $user_service, DocumentService $document_service, TransactionService $transaction_service, PaymentService $payment_service)
     {
         $this->rider = $rider;
         $this->user_service = $user_service;
         $this->document_service = $document_service;
+        $this->transaction_service = $transaction_service;
+        $this->payment_service = $payment_service;
     }
 
     public function index()
@@ -351,9 +356,23 @@ class RiderController extends Controller
             $data['amount'] = $commission_due;
             $data['trasaction_date'] = Carbon::now();
             $data['creditor_type'] = 'rider';
-            $data['creditor_id'] = $rider_id;
+            $data['creditor_id'] = $rider->user->id;
             $data['debtor_type'] = 'admin';
-            // $data['']
+            $data['debtor_id'] = Auth::id();
+            $data['payment_mode'] = 'offline';
+
+            return DB::transaction(function () use ($data, $rider) {
+                $createdTransaction = $this->transaction_service->create($data);
+
+                if ($createdTransaction) {
+                    $this->payment_service->clearRiderCommission($rider);
+                    Toastr::success('Commission cleared.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+                    return redirect()->route('admin.rider.commission');
+                }
+
+                Toastr::error('Commission failed to clear.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+                return redirect()->route('admin.rider.commission');
+            });
         }
         // dd("hlw rider commission wil be cleared!");
     }
