@@ -46,7 +46,7 @@ class User extends Authenticatable
         'google_id', 'facebook_id', 'image', 'device_token', 'social_image_url', 'location', 'gender',
         'created_at', 'updated_at', 'deleted_at', 'last_updated_by', 'last_deleted_by'
     ];
-    protected $appends = ['name', 'status_text', 'thumbnail_path', 'image_path'];
+    protected $appends = ['name', 'status_text', 'thumbnail_path', 'image_path', 'thumb_url'];
 
     function getNameAttribute()
     {
@@ -70,6 +70,15 @@ class User extends Authenticatable
             return 'assets/media/user_placeholder.png';
     }
 
+
+    function getThumbUrlAttribute()
+    {
+        if ($this->image) 
+        return asset($this->path .  '/' . $this->image);
+            // return $this->path .  '/thumb/' . $this->image;
+        else
+            return asset('assets/media/user_placeholder.png');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

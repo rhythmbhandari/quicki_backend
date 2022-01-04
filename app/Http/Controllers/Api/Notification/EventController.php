@@ -127,7 +127,7 @@ class EventController extends Controller
     
             if($createdEvent)
             {
-
+                
                 //Send pusher/echo broadcast notification
                 event(
                     new EventCreated( 
@@ -136,22 +136,23 @@ class EventController extends Controller
                         $user->name, 
                         $request->created_by_type,
                         $sos->id,
-                        $createdEvent->id 
+                        $createdEvent->id ,
+                        $user->thumbnail_path
                         )
                     );
 
                 //Create Notification sent via pusher broadcast
-                $this->notification_service->create(
-                    [
-                        'recipient_id'=>null,
-                        'recipient_type'=>'admin',
-                        'recipient_device_token'=>null,
-                        'recipient_quantity_type'=>'all',
-                        'notification_type'=>'event_create',
-                        'title'=> 'Sos: '.$sos->title, 
-                        'message'=>  $request->message, 
-                    ]
-                );
+                // $this->notification_service->create(
+                //     [
+                //         'recipient_id'=>null,
+                //         'recipient_type'=>'admin',
+                //         'recipient_device_token'=>null,
+                //         'recipient_quantity_type'=>'all',
+                //         'notification_type'=>'event_create',
+                //         'title'=> 'Sos: '.$sos->title, 
+                //         'message'=>  $request->message, 
+                //     ]
+                // );
 
 
                 $response = ['message' => 'Event created and sent successfully!',  "event"=>$createdEvent];
@@ -264,22 +265,23 @@ class EventController extends Controller
                          $user->name, 
                          $request->created_by_type,
                          $sos->id,
-                         $createdEvent->id 
+                         $createdEvent->id ,
+                         $user->thumbnail_path
                          )
                      );
  
                  //Create Notification sent via pusher broadcast
-                 $this->notification_service->create(
-                     [
-                         'recipient_id'=>null,
-                         'recipient_type'=>'admin',
-                         'recipient_device_token'=>null,
-                         'recipient_quantity_type'=>'all',
-                         'notification_type'=>'event_create',
-                         'title'=> 'Sos: '.$sos->title, 
-                         'message'=>  $request->message, 
-                     ]
-                 );
+                //  $this->notification_service->create(
+                //      [
+                //          'recipient_id'=>null,
+                //          'recipient_type'=>'admin',
+                //          'recipient_device_token'=>null,
+                //          'recipient_quantity_type'=>'all',
+                //          'notification_type'=>'event_create',
+                //          'title'=> 'Sos: '.$sos->title, 
+                //          'message'=>  $request->message, 
+                //      ]
+                //  );
  
  
                  $response = ['message' => 'Event created and sent successfully!',  "event"=>$createdEvent];

@@ -14,14 +14,14 @@ class EventCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $title, $message, $event_id, $sos_id, $user_name, $user_type ;
+    public $title, $message, $event_id, $sos_id, $user_name, $user_type,$user_thumbnail_path ;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct( $title, $message, $user_name=null, $user_type=null,  $sos_id=null,   $event_id=null  )
+    public function __construct( $title, $message, $user_name=null, $user_type=null,  $sos_id=null,   $event_id=null, $user_thumbnail_path=null  )
     {
         $this->title = $title;
         $this->message = $message;
@@ -29,6 +29,7 @@ class EventCreated implements ShouldBroadcast
         $this->user_type = $user_type;
         $this->event_id = $event_id;
         $this->sos_id = $sos_id;
+        $this->user_thumbnail_path = $user_thumbnail_path;
     }
 
     /**

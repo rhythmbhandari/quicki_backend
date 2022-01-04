@@ -916,14 +916,14 @@
                                     ],
                                     "location": {
                                         "origin": {
-                                            "name": "Lagankhel, Lalitpur",
-                                            "latitude": 27.687012,
-                                            "longitude": 85.304359
+                                            "latitude": 27.7278388,
+                                            "longitude": 85.37820680000002,
+                                            "name": "Jorpati, Nepal"
                                         },
                                         "destination": {
-                                            "name": "Thapagaon, Kathmandu",
-                                            "latitude": 28.234325,
-                                            "longitude": 87.12313
+                                            "latitude": 27.6515356,
+                                            "longitude": 85.327837,
+                                            "name": "Satdobato, Lalitpur, Nepal"
                                         }
                                     }
                                 }
@@ -968,14 +968,14 @@
                                             "id": 2,
                                             "location": {
                                                 "origin": {
-                                                    "name": "Sanepa, Lalitpur",
-                                                    "latitude": 27.665898,
-                                                    "longitude": 85.32554
+                                                    "latitude": 27.7278388,
+                                                    "longitude": 85.37820680000002,
+                                                    "name": "Jorpati, Nepal"
                                                 },
                                                 "destination": {
-                                                    "name": "New Baneshwor, Kathmandu",
-                                                    "latitude": 27.691248,
-                                                    "longitude": 85.33271
+                                                    "latitude": 27.6515356,
+                                                    "longitude": 85.327837,
+                                                    "name": "Satdobato, Lalitpur, Nepal"
                                                 }
                                             },
                                             "status_text": "Pending"
@@ -1032,14 +1032,14 @@
                                         "cancel_message": "Timeout or somethin!",
                                         "location": {
                                             "origin": {
-                                                "name": "Sanepa, Lalitpur",
-                                                "latitude": 27.687012,
-                                                "longitude": 85.304359
+                                                "latitude": 27.7278388,
+                                                "longitude": 85.37820680000002,
+                                                "name": "Jorpati, Nepal"
                                             },
                                             "destination": {
-                                                "name": "Maitighar, Kathmandu",
-                                                "latitude": 27.693587,
-                                                "longitude": 85.320443
+                                                "latitude": 27.6515356,
+                                                "longitude": 85.327837,
+                                                "name": "Satdobato, Lalitpur, Nepal"
                                             }
                                         },
                                         "distance": 5600
@@ -1094,14 +1094,14 @@
                                             "distance": 5600,
                                             "location": {
                                                 "origin": {
-                                                    "name": "Sanepa, Lalitpur",
-                                                    "latitude": 27.687012,
-                                                    "longitude": 85.304359
+                                                    "latitude": 27.7278388,
+                                                    "longitude": 85.37820680000002,
+                                                    "name": "Jorpati, Nepal"
                                                 },
                                                 "destination": {
-                                                    "name": "Maitighar, Kathmandu",
-                                                    "latitude": 27.693587,
-                                                    "longitude": 85.320443
+                                                    "latitude": 27.6515356,
+                                                    "longitude": 85.327837,
+                                                    "name": "Satdobato, Lalitpur, Nepal"
                                                 }
                                             },
                                             "duration": 6,
@@ -1249,14 +1249,14 @@
                                             "updated_at": "2021-12-14T08:52:35.000000Z",
                                             "location": {
                                                 "origin": {
-                                                    "name": "Sanepa, Lalitpur",
-                                                    "latitude": 27.687012,
-                                                    "longitude": 85.304359
+                                                    "latitude": 27.7278388,
+                                                    "longitude": 85.37820680000002,
+                                                    "name": "Jorpati, Nepal"
                                                 },
                                                 "destination": {
-                                                    "name": "Maitighar, Kathmandu",
-                                                    "latitude": 27.693587,
-                                                    "longitude": 85.320443
+                                                    "latitude": 27.6515356,
+                                                    "longitude": 85.327837,
+                                                    "name": "Satdobato, Lalitpur, Nepal"
                                                 }
                                             },
                                             "price_detail": {
@@ -1345,14 +1345,14 @@
                                             "updated_at": "2021-12-14T08:52:35.000000Z",
                                             "location": {
                                                 "origin": {
-                                                    "name": "Sanepa, Lalitpur",
-                                                    "latitude": 27.687012,
-                                                    "longitude": 85.304359
+                                                    "latitude": 27.7278388,
+                                                    "longitude": 85.37820680000002,
+                                                    "name": "Jorpati, Nepal"
                                                 },
                                                 "destination": {
-                                                    "name": "New Baneshwor, Kathmandu",
-                                                    "latitude": 28.234325,
-                                                    "longitude": 87.12313
+                                                    "latitude": 27.6515356,
+                                                    "longitude": 85.327837,
+                                                    "name": "Satdobato, Lalitpur, Nepal"
                                                 }
                                             },
                                             "price_detail": {
@@ -1439,14 +1439,14 @@
                                                 "id": 3,
                                                 "location": {
                                                     "origin": {
-                                                        "name": "Sanepa, Lalitpur",
-                                                        "latitude": 27.687012,
-                                                        "longitude": 85.304359
+                                                        "latitude": 27.7278388,
+                                                        "longitude": 85.37820680000002,
+                                                        "name": "Jorpati, Nepal"
                                                     },
                                                     "destination": {
-                                                        "name": "New Baneshwor, Kathmandu",
-                                                        "latitude": 28.234325,
-                                                        "longitude": 87.12313
+                                                        "latitude": 27.6515356,
+                                                        "longitude": 85.327837,
+                                                        "name": "Satdobato, Lalitpur, Nepal"
                                                     }
                                                 }
                                             }
@@ -1678,14 +1678,14 @@
                                                     "booking_id": 15,
                                                     "location": {
                                                         "origin": {
-                                                            "name": "Sanepa, Lalitpur",
-                                                            "latitude": 27.687012,
-                                                            "longitude": 85.304359
+                                                            "latitude": 27.7278388,
+                                                            "longitude": 85.37820680000002,
+                                                            "name": "Jorpati, Nepal"
                                                         },
                                                         "destination": {
-                                                            "name": "New Baneshwor, Kathmandu",
-                                                            "latitude": 28.234325,
-                                                            "longitude": 87.12313
+                                                            "latitude": 27.6515356,
+                                                            "longitude": 85.327837,
+                                                            "name": "Satdobato, Lalitpur, Nepal"
                                                         }
                                                     },
                                                     "start_time": "2021-12-23 13:52:00",
@@ -1882,14 +1882,16 @@
                                                     "rider_id": 1,
                                                     "booking_id": 1,
                                                     "location": {
-                                                        "id": 1,
-                                                        "longitude_origin": 85.123423,
-                                                        "latitude_origin": 27.123456,
-                                                        "longitude_destination": 86.12313,
-                                                        "latitude_destination": 27.234325,
-                                                        "deleted_at": null,
-                                                        "created_at": "2021-12-22T10:59:05.000000Z",
-                                                        "updated_at": "2021-12-22T10:59:05.000000Z"
+                                                        "origin": {
+                                                            "latitude": 27.7278388,
+                                                            "longitude": 85.37820680000002,
+                                                            "name": "Jorpati, Nepal"
+                                                        },
+                                                        "destination": {
+                                                            "latitude": 27.6515356,
+                                                            "longitude": 85.327837,
+                                                            "name": "Satdobato, Lalitpur, Nepal"
+                                                        }
                                                     },
                                                     "start_time": "2021-12-23 13:45:28",
                                                     "end_time": "2021-12-23 13:45:35",
@@ -1989,14 +1991,14 @@
                                                     "booking_id": 15,
                                                     "location": {
                                                         "origin": {
-                                                            "name": "Sanepa, Lalitpur",
-                                                            "latitude": 27.687012,
-                                                            "longitude": 85.304359
+                                                            "latitude": 27.7278388,
+                                                            "longitude": 85.37820680000002,
+                                                            "name": "Jorpati, Nepal"
                                                         },
                                                         "destination": {
-                                                            "name": "New Baneshwor, Kathmandu",
-                                                            "latitude": 28.234325,
-                                                            "longitude": 87.12313
+                                                            "latitude": 27.6515356,
+                                                            "longitude": 85.327837,
+                                                            "name": "Satdobato, Lalitpur, Nepal"
                                                         }
                                                     },
                                                     "start_time": "2021-12-23 13:52:00",
@@ -2155,14 +2157,14 @@
                                                     "booking_id": 15,
                                                     "location": {
                                                         "origin": {
-                                                            "name": "Sanepa, Lalitpur",
-                                                            "latitude": 27.687012,
-                                                            "longitude": 85.304359
+                                                            "latitude": 27.7278388,
+                                                            "longitude": 85.37820680000002,
+                                                            "name": "Jorpati, Nepal"
                                                         },
                                                         "destination": {
-                                                            "name": "New Baneshwor, Kathmandu",
-                                                            "latitude": 28.234325,
-                                                            "longitude": 87.12313
+                                                            "latitude": 27.6515356,
+                                                            "longitude": 85.327837,
+                                                            "name": "Satdobato, Lalitpur, Nepal"
                                                         }
                                                     },
                                                     "start_time": "2021-12-23 13:52:00",
@@ -2358,14 +2360,14 @@
                                                     "booking_id": 1,
                                                     "location": {
                                                         "origin": {
-                                                            "name": "Sanepa, Lalitpur",
-                                                            "latitude": 27.687012,
-                                                            "longitude": 85.304359
+                                                            "latitude": 27.7278388,
+                                                            "longitude": 85.37820680000002,
+                                                            "name": "Jorpati, Nepal"
                                                         },
                                                         "destination": {
-                                                            "name": "New Baneshwor, Kathmandu",
-                                                            "latitude": 28.234325,
-                                                            "longitude": 87.12313
+                                                            "latitude": 27.6515356,
+                                                            "longitude": 85.327837,
+                                                            "name": "Satdobato, Lalitpur, Nepal"
                                                         }
                                                     },
                                                     "start_time": "2021-12-23 13:45:28",
@@ -2521,14 +2523,16 @@
                                                         "updated_at": "2021-12-23T08:07:06.000000Z"
                                                     },
                                                     "location": {
-                                                        "id": 15,
-                                                        "longitude_origin": 85.123423,
-                                                        "latitude_origin": 27.123456,
-                                                        "longitude_destination": 86.12313,
-                                                        "latitude_destination": 27.234325,
-                                                        "deleted_at": null,
-                                                        "created_at": "2021-12-23T07:30:57.000000Z",
-                                                        "updated_at": "2021-12-23T07:30:57.000000Z"
+                                                        "origin": {
+                                                            "latitude": 27.7278388,
+                                                            "longitude": 85.37820680000002,
+                                                            "name": "Jorpati, Nepal"
+                                                        },
+                                                        "destination": {
+                                                            "latitude": 27.6515356,
+                                                            "longitude": 85.327837,
+                                                            "name": "Satdobato, Lalitpur, Nepal"
+                                                        }
                                                     },
                                                     "rider": {
                                                         "id": 1,
@@ -2741,14 +2745,14 @@
                                             "booking_id": 5,
                                             "location": {
                                                 "origin": {
-                                                    "name": "Sanepa, Lalitpur",
-                                                    "latitude": 27.687012,
-                                                    "longitude": 85.304359
+                                                    "latitude": 27.7278388,
+                                                    "longitude": 85.37820680000002,
+                                                    "name": "Jorpati, Nepal"
                                                 },
                                                 "destination": {
-                                                    "name": "New Baneshwor, Kathmandu",
-                                                    "latitude": 28.234325,
-                                                    "longitude": 87.12313
+                                                    "latitude": 27.6515356,
+                                                    "longitude": 85.327837,
+                                                    "name": "Satdobato, Lalitpur, Nepal"
                                                 }
                                             },
                                             "start_time": "2021-12-27 13:48:48",
@@ -2801,14 +2805,14 @@
                                                 "rider_id": 1,
                                                 "location": {
                                                     "origin": {
-                                                        "name": "Sanepa, Lalitpur",
-                                                        "latitude": 27.687012,
-                                                        "longitude": 85.304359
+                                                        "latitude": 27.7278388,
+                                                        "longitude": 85.37820680000002,
+                                                        "name": "Jorpati, Nepal"
                                                     },
                                                     "destination": {
-                                                        "name": "New Baneshwor, Kathmandu",
-                                                        "latitude": 28.234325,
-                                                        "longitude": 87.12313
+                                                        "latitude": 27.6515356,
+                                                        "longitude": 85.327837,
+                                                        "name": "Satdobato, Lalitpur, Nepal"
                                                     }
                                                 },
                                                 "start_time": "2021-12-27 13:48:48",
@@ -3362,13 +3366,16 @@
                                                 "created_at": "2021-11-27T20:02:56.000000Z",
                                                 "updated_at": "2021-11-27T20:02:56.000000Z",
                                                 "location": {
-                                                    "id": 10,
-                                                    "longitude_origin": 27.123456,
-                                                    "latitude_origin": 85.123423,
-                                                    "longitude_destination": 27.234325,
-                                                    "latitude_destination": 86.12313,
-                                                    "created_at": "2021-11-27T20:02:56.000000Z",
-                                                    "updated_at": "2021-11-27T20:02:56.000000Z"
+                                                    "origin": {
+                                                        "latitude": 27.7278388,
+                                                        "longitude": 85.37820680000002,
+                                                        "name": "Jorpati, Nepal"
+                                                    },
+                                                    "destination": {
+                                                        "latitude": 27.6515356,
+                                                        "longitude": 85.327837,
+                                                        "name": "Satdobato, Lalitpur, Nepal"
+                                                    }
                                                 }
                                             }
                                         ]

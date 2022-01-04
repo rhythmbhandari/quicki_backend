@@ -14,6 +14,7 @@ use App\Modules\Models\CompletedTrip;
 use App\Modules\Models\VehicleType;
 use App\Modules\Models\BookingPayment;
 use App\Modules\Models\PriceDetail;
+use App\Modules\Models\Notification;
 
 class Booking extends Model
 {
@@ -95,5 +96,10 @@ class Booking extends Model
     public function review()
     {
         return $this->hasOne(Review::class);
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
     }
 }

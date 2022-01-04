@@ -89,7 +89,7 @@
 					<div class="btn btn-icon btn-clean btn-dropdown btn-lg mr-1 pulse pulse-primary">
 						<span class="svg-icon svg-icon-xl svg-icon-primary">
 							<!--begin::Svg Icon | path:assets/media/svg/icons/Code/Compiling.svg-->
-							<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+							<svg  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 								width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
 								<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
 									<rect x="0" y="0" width="24" height="24" />
@@ -101,8 +101,11 @@
 										fill="#000000" />
 								</g>
 							</svg>
+						
 							<!--end::Svg Icon-->
 						</span>
+						<span id="notificationCount" class=" font-weight-bolder bg bg-danger px-2 text-light mr-2 mb-3" style="border-radius:50%"></span>
+						{{-- <sup class=" text-danger mr-2"><i class="flaticon2-bell text-danger font-size-h6"></i></sup> --}}
 						<span class="pulse-ring"></span>
 					</div>
 				</div>
@@ -116,6 +119,7 @@
 							<!--begin::Title-->
 							<h4 class="d-flex flex-center rounded-top">
 								<span class="text-white">User Notifications</span>
+							
 								{{-- @if(auth()->user()->unReadNotifications->count())
 								<span class="btn btn-text btn-success btn-sm font-weight-bold btn-font-md ml-2">
 									{{auth()->user()->unReadNotifications->count()}}
@@ -130,10 +134,19 @@
 								role="tablist">
 								<li class="nav-item">
 									<a class="nav-link active show" data-toggle="tab"
-										href="#topbar_notifications_booking">Booking Logs</a>
+										href="#topbar_notifications_booking" id="bookingNotificationTitle">Booking Logs
+										<span id="bookingNotificationCount" class="ml-1 bg bg-danger px-2  mr-2 text-light " style="border-radius:50%;"></span>
+									</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" data-toggle="tab" href="#topbar_notifications_events">Events</a>
+									<a class="nav-link" data-toggle="tab" href="#topbar_notifications_sos" id="sosNotificationTitle">Sos
+										<span id="sosNotificationCount" class="ml-1 bg bg-danger px-2  mr-2 text-light " style="border-radius:50%;"></span>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" data-toggle="tab" href="#topbar_notifications_events" id="eventNotificationTitle">Events
+										<span id="eventNotificationCount" class="ml-1 bg bg-danger px-2  mr-2 text-light " style="border-radius:50%;"></span>
+									</a>
 								</li>
 								{{-- <li class="nav-item">
 									<a class="nav-link" data-toggle="tab" href="#topbar_notifications_logs">Logs</a>
@@ -147,18 +160,34 @@
 							<!--begin::Tabpane-->
 							<div class="tab-pane active" id="topbar_notifications_booking" role="tabpanel">
 								<!--begin::Scroll-->
-								<div class="navi navi-hover scroll my-4" id="bookingNotification" data-scroll="true"
+								<div class="navi navi-hover scroll my-4 px-2" id="bookingNotification" data-scroll="true"
 									data-height="300" data-mobile-height="200">
+
+									<h3 class="text-danger">NOTIFICATIONS</h3>
 
 								</div>
 								<!--end::Scroll-->
 							</div>
 							<!--end::Tabpane-->
 							<!--begin::Tabpane-->
+							<div class="tab-pane" id="topbar_notifications_sos" role="tabpanel">
+								<!--begin::Nav-->
+								<div class="navi navi-hover scroll my-4 px-2" id="sosNotification" data-scroll="true"
+									data-height="300" data-mobile-height="200">
+
+									<h3 class="text-danger">SOS</h3>
+
+								</div>
+								<!--end::Nav-->
+							</div>
+							<!--end::Tabpane-->
+							<!--begin::Tabpane-->
 							<div class="tab-pane" id="topbar_notifications_events" role="tabpanel">
 								<!--begin::Nav-->
-								<div class="navi navi-hover scroll my-4" id="eventNotification" data-scroll="true"
+								<div class="navi navi-hover scroll my-4 px-2" id="eventNotification" data-scroll="true"
 									data-height="300" data-mobile-height="200">
+
+									<h3 class="text-danger">EVENTS</h3>
 
 								</div>
 								<!--end::Nav-->
@@ -180,7 +209,7 @@
 				<!--end::Dropdown-->
 			</div>
 			<!--end::Notifications-->
-			<div class="topbar-item mr-2">
+			<div class="topbar-item mr-2 ml-2">
 				<a href="{{route('admin.logout')}}" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5"><i
 						class="flaticon-logout"></i></a>
 			</div>

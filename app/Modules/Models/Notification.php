@@ -5,9 +5,11 @@ namespace App\Modules\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 //models
 use App\Modules\Models\User;
+use App\Modules\Models\Booking;
 
 class Notification extends Model
 {
@@ -16,6 +18,7 @@ class Notification extends Model
 
     protected $casts = [
         'recipient_id' => 'integer',
+        'booking_id'=>'integer'
     ];
 
     /**Allowed values for notification_types: 
@@ -28,12 +31,17 @@ class Notification extends Model
 
     protected $fillable = ([
         'recipient_id', 'recipient_type', 'recipient_device_token', 'recipient_quantity_type' ,'notification_type','read_at', 'message','image','title',
-        'created_at', 'updated_at' ,'deleted_at'
+        'booking_id','created_at', 'updated_at' ,'deleted_at'
     ]);
 
     protected $appends = [
-        'thumbnail_path', 'image_path', 
+        'thumbnail_path', 'image_path', 'five_minutes_old'
     ];
+
+    function getFiveMinutesOldAttribute()
+    {
+        return ($this->updated_at->diffInMinutes(Carbon::now()) < 5) ;
+    }
 
     function getImagePathAttribute()
     {
@@ -58,6 +66,9 @@ class Notification extends Model
     //     return $this->belongsTo(User::class,'recipient_id');
     // }
 
-
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class);
+    }
 
 }
