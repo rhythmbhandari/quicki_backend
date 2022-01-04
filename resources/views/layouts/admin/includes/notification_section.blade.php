@@ -24,6 +24,6 @@
 </div>
 <!--begin::Action-->
 <div class="d-flex flex-center pt-7">
-    <a href="{{route('admin.sos.index')}}" class="btn btn-light-primary font-weight-bold text-center">See All</a>
+    <a href="{{route('admin.map.dispatcher')}}" class="btn btn-light-primary font-weight-bold text-center">See All</a>
 </div>
 <!--end::Action-->
