@@ -132,12 +132,13 @@
     <div class="card-body">
         <div class="card card-custom card-stretch gutter-b">
 
-
-            <div class="card card-custom mb-2 p-1">
+            <!--begin::SOS MAP-->
+            {{-- <div class="card card-custom mb-2 p-1">
                 <div class="card-body p-0">
                     <div class="col bg bg-light-success" style="height: 300px;" id="sosMap"></div>
                 </div>
-            </div>
+            </div> --}}
+              <!--end::SOS MAP-->
 
             <!--begin::Header-->
             <div class="card-header align-items-center border-0 mt-4">
