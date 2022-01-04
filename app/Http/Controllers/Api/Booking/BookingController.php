@@ -61,18 +61,7 @@ class BookingController extends Controller
     *                       {"name":"Sanepa, Lalitpur", "latitude":27.1234,"longitude":85.3434},
     *                       {"name":"New Baneshwor, Kathmandu", "latitude":28.3454,"longitude":87.1234},
     *                   },
-    *                   "location": {
-    *                       "origin":{
-    *                           "name": "Lagankhel, Lalitpur",
-    *                           "latitude": 27.687012,
-    *                           "longitude": 85.304359
-    *                       },
-    *                       "destination":{
-    *                           "name": "Thapagaon, Kathmandu",
-    *                           "latitude": 28.234325,
-    *                           "longitude": 87.12313
-    *                       }
-    *                   }
+    *                   "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}}
     *               }
     *         )
     *     )
@@ -113,18 +102,7 @@ class BookingController extends Controller
     *                           "updated_at": "2021-12-27T05:40:03.000000Z",
     *                           "created_at": "2021-12-27T05:40:03.000000Z",
     *                           "id": 2,
-    *                           "location": {
-    *                                "origin": {
-    *                                     "name": "Sanepa, Lalitpur",
-    *                                     "latitude": 27.665898,
-    *                                     "longitude":  85.325540
-    *                                   },
-    *                                   "destination": {
-    *                                     "name": "New Baneshwor, Kathmandu",
-    *                                     "latitude": 27.691248,
-    *                                     "longitude": 85.332710
-    *                                   }
-    *                           },
+    *                            "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}},
     *                           "status_text": "Pending"
     *                       }
     *                   }
@@ -224,18 +202,7 @@ class BookingController extends Controller
     *                       "cancelled_by_id":1,
     *                       "cancelled_by_type":"customer",
     *                       "cancel_message":"Timeout or somethin!",
-    *                       "location": {
-    *                           "origin":{
-    *                               "name": "Sanepa, Lalitpur",
-    *                               "latitude": 27.687012,
-    *                               "longitude": 85.304359
-    *                           },
-    *                           "destination":{
-    *                               "name": "Maitighar, Kathmandu",
-    *                               "latitude": 27.693587,
-    *                               "longitude": 85.320443
-    *                           }
-    *                       }, 
+    *                       "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}}, 
     *                       "distance":5600
     *                   },
     *               }
@@ -286,18 +253,7 @@ class BookingController extends Controller
     *                             }
     *                           },
     *                           "distance": 5600,
-    *                           "location": {
-    *                               "origin":{
-    *                                   "name": "Sanepa, Lalitpur",
-    *                                   "latitude": 27.687012,
-    *                                   "longitude": 85.304359
-    *                               },
-    *                               "destination":{
-    *                                    "name": "Maitighar, Kathmandu",
-    *                                   "latitude": 27.693587,
-    *                                   "longitude": 85.320443
-    *                               }
-    *                           },
+    *                            "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}},
     *                           "duration": 6,
     *                           "passenger_number": 1,
     *                           "profile_img_user": null,
@@ -596,18 +552,7 @@ class BookingController extends Controller
     *                           "deleted_at": null,
     *                           "created_at": "2021-12-14T08:12:21.000000Z",
     *                           "updated_at": "2021-12-14T08:52:35.000000Z",
-    *                           "location": {
-    *                             "origin": {
-    *                               "name": "Sanepa, Lalitpur",
-    *                               "latitude": 27.687012,
-    *                               "longitude": 85.304359
-    *                             },
-    *                             "destination": {
-    *                               "name": "Maitighar, Kathmandu",
-    *                               "latitude": 27.693587,
-    *                               "longitude": 85.320443
-    *                             }
-    *                           },
+    *                            "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}},
     *                           "price_detail": {
     *                               "id": 7,
     *                               "booking_id": 24,
@@ -699,18 +644,7 @@ class BookingController extends Controller
      *                           "deleted_at": null,
      *                           "created_at": "2021-12-14T08:12:21.000000Z",
      *                           "updated_at": "2021-12-14T08:52:35.000000Z",
-     *                           "location": {
-     *                               "origin":{
-     *                                   "name": "Sanepa, Lalitpur",
-     *                                   "latitude": 27.687012,
-     *                                   "longitude": 85.304359
-     *                               },
-     *                               "destination":{
-     *                                   "name": "New Baneshwor, Kathmandu",
-     *                                   "latitude": 28.234325,
-     *                                   "longitude": 87.12313
-     *                               }
-     *                           },
+     *                            "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}},
      *                           "price_detail": {
      *                               "id": 7,
      *                               "booking_id": 24,
@@ -808,18 +742,7 @@ class BookingController extends Controller
      *                               "updated_at": "2021-11-17T06:46:13.000000Z",
      *                               "created_at": "2021-11-17T06:46:13.000000Z",
      *                               "id": 3,
-     *                              "location": {
-     *                                   "origin":{
-     *                                       "name": "Sanepa, Lalitpur",
-     *                                       "latitude": 27.687012,
-     *                                       "longitude": 85.304359
-     *                                   },
-     *                                   "destination":{
-     *                                       "name": "New Baneshwor, Kathmandu",
-     *                                       "latitude": 28.234325,
-     *                                       "longitude": 87.12313
-     *                                   }
-     *                               },
+     *                               "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}},
      *                             }
      *                           },
      *                   }

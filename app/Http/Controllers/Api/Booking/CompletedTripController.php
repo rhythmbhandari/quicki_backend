@@ -54,18 +54,7 @@ class CompletedTripController extends Controller
     *                                   "user_id": 2,
     *                                   "rider_id": 1,
     *                                   "booking_id": 15,    
-    *                                    "location": {
-    *                                        "origin":{
-    *                                            "name": "Sanepa, Lalitpur",
-    *                                            "latitude": 27.687012,
-    *                                            "longitude": 85.304359
-    *                                        },
-    *                                        "destination":{
-    *                                            "name": "New Baneshwor, Kathmandu",
-    *                                            "latitude": 28.234325,
-    *                                            "longitude": 87.12313
-    *                                        }
-    *                                    },
+    *                                     "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}},
     *                                   "start_time": "2021-12-23 13:52:00",
     *                                   "end_time": "2021-12-23 13:52:06",
     *                                   "origin": "Sanepa, Lalitpur",
@@ -281,18 +270,7 @@ class CompletedTripController extends Controller
     *                               "user_id": 3,
     *                               "rider_id": 1,
     *                               "booking_id": 1,
-    *                                "location": {
-    *                                    "origin":{
-    *                                        "name": "Sanepa, Lalitpur",
-    *                                        "latitude": 27.687012,
-    *                                        "longitude": 85.304359
-    *                                    },
-    *                                    "destination":{
-    *                                        "name": "New Baneshwor, Kathmandu",
-    *                                        "latitude": 28.234325,
-    *                                        "longitude": 87.12313
-    *                                    }
-    *                                },
+    *                                 "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}},
     *                               "start_time": "2021-12-23 13:45:28",
     *                               "end_time": "2021-12-23 13:45:35",
     *                               "origin": "Sanepa, Lalitpur",
@@ -342,16 +320,7 @@ class CompletedTripController extends Controller
     *                               "deleted_at": null,
     *                               "created_at": "2021-12-22T05:14:05.000000Z",
     *                               "updated_at": "2021-12-23T02:15:35.000000Z",
-    *                               "location": {
-    *                                 "id": 1,
-    *                                 "longitude_origin": 85.123423,
-    *                                 "latitude_origin": 27.123456,
-    *                                 "longitude_destination": 86.12313,
-    *                                 "latitude_destination": 27.234325,
-    *                                 "deleted_at": null,
-    *                                 "created_at": "2021-12-22T10:59:05.000000Z",
-    *                                 "updated_at": "2021-12-22T10:59:05.000000Z"
-    *                               },
+    *                                "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}},
     *                               "user": {
     *                                 "id": 3,
     *                                 "first_name": "Kakashi",
@@ -399,18 +368,7 @@ class CompletedTripController extends Controller
     *                               "user_id": 2,
     *                               "rider_id": 1,
     *                               "booking_id": 15,
-    *                               "location": {
-    *                                   "origin":{
-    *                                       "name": "Sanepa, Lalitpur",
-    *                                       "latitude": 27.687012,
-    *                                       "longitude": 85.304359
-    *                                   },
-    *                                   "destination":{
-    *                                       "name": "New Baneshwor, Kathmandu",
-    *                                       "latitude": 28.234325,
-    *                                       "longitude": 87.12313
-    *                                   }
-    *                               },
+    *                                "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}},
     *                               "start_time": "2021-12-23 13:52:00",
     *                               "end_time": "2021-12-23 13:52:06",
     *                               "origin": "Sanepa, Lalitpur",
@@ -589,18 +547,7 @@ class CompletedTripController extends Controller
     *                               "user_id": 2,
     *                               "rider_id": 1,
     *                               "booking_id": 15,
-    *                               "location": {
-    *                                   "origin":{
-    *                                       "name": "Sanepa, Lalitpur",
-    *                                       "latitude": 27.687012,
-    *                                       "longitude": 85.304359
-    *                                   },
-    *                                   "destination":{
-    *                                       "name": "New Baneshwor, Kathmandu",
-    *                                       "latitude": 28.234325,
-    *                                       "longitude": 87.12313
-    *                                   }
-    *                               },
+    *                                "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}},
     *                               "start_time": "2021-12-23 13:52:00",
     *                               "end_time": "2021-12-23 13:52:06",
     *                               "origin": "Sanepa, Lalitpur",
@@ -827,18 +774,7 @@ class CompletedTripController extends Controller
     *                                   "user_id": 3,
     *                                   "rider_id": 1,
     *                                   "booking_id": 1,
-    *                                    "location": {
-    *                                        "origin":{
-    *                                            "name": "Sanepa, Lalitpur",
-    *                                            "latitude": 27.687012,
-    *                                            "longitude": 85.304359
-    *                                        },
-    *                                        "destination":{
-    *                                            "name": "New Baneshwor, Kathmandu",
-    *                                            "latitude": 28.234325,
-    *                                            "longitude": 87.12313
-    *                                        }
-    *                                    },
+    *                                     "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}},
     *                                   "start_time": "2021-12-23 13:45:28",
     *                                   "end_time": "2021-12-23 13:45:35",
     *                                   "origin": "Sanepa, Lalitpur",
@@ -991,16 +927,7 @@ class CompletedTripController extends Controller
     *                                     "created_at": "2021-12-23T08:07:06.000000Z",
     *                                     "updated_at": "2021-12-23T08:07:06.000000Z"
     *                                   },
-    *                                   "location": {
-    *                                     "id": 15,
-    *                                     "longitude_origin": 85.123423,
-    *                                     "latitude_origin": 27.123456,
-    *                                     "longitude_destination": 86.12313,
-    *                                     "latitude_destination": 27.234325,
-    *                                     "deleted_at": null,
-    *                                     "created_at": "2021-12-23T07:30:57.000000Z",
-    *                                     "updated_at": "2021-12-23T07:30:57.000000Z"
-    *                                   },
+    *                                    "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}},
     *                                   "rider": {
     *                                     "id": 1,
     *                                     "user_id": 2,
@@ -1293,18 +1220,7 @@ class CompletedTripController extends Controller
     *                       "user_id": 2,
     *                       "rider_id": 1,
     *                       "booking_id": 5,
-    *                       "location": {
-    *                           "origin":{
-    *                               "name": "Sanepa, Lalitpur",
-    *                               "latitude": 27.687012,
-    *                               "longitude": 85.304359
-    *                           },
-    *                           "destination":{
-    *                               "name": "New Baneshwor, Kathmandu",
-    *                               "latitude": 28.234325,
-    *                               "longitude": 87.12313
-    *                           }
-    *                       },
+    *                        "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}},
     *                       "start_time": "2021-12-27 13:48:48",
     *                       "end_time": "2021-12-27 13:49:06",
     *                       "origin": "Sanepa, Lalitpur",
@@ -1353,18 +1269,7 @@ class CompletedTripController extends Controller
     *                         "user_id": 2,
     *                         "vehicle_type_id": 1,
     *                         "rider_id": 1,
-    *                          "location": {
-    *                              "origin":{
-    *                                  "name": "Sanepa, Lalitpur",
-    *                                  "latitude": 27.687012,
-    *                                  "longitude": 85.304359
-    *                              },
-    *                              "destination":{
-    *                                  "name": "New Baneshwor, Kathmandu",
-    *                                  "latitude": 28.234325,
-    *                                  "longitude": 87.12313
-    *                              }
-    *                          },
+    *                           "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}},
     *                         "start_time": "2021-12-27 13:48:48",
     *                         "end_time": "2021-12-27 13:49:06",
     *                         "origin": "Sanepa, Lalitpur",

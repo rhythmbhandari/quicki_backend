@@ -369,15 +369,7 @@ class RiderLocationController extends Controller
     *                         "deleted_at": null,
     *                         "created_at": "2021-11-27T20:02:56.000000Z",
     *                         "updated_at": "2021-11-27T20:02:56.000000Z",
-    *                         "location": {
-    *                           "id": 10,
-    *                           "longitude_origin": 27.123456,
-    *                           "latitude_origin": 85.123423,
-    *                           "longitude_destination": 27.234325,
-    *                           "latitude_destination": 86.12313,
-    *                           "created_at": "2021-11-27T20:02:56.000000Z",
-    *                           "updated_at": "2021-11-27T20:02:56.000000Z"
-    *                         }
+    *                         "location": {"origin":{"latitude":27.7278388,"longitude":85.37820680000002,"name":"Jorpati, Nepal"},"destination":{"latitude":27.6515356,"longitude":85.327837,"name":"Satdobato, Lalitpur, Nepal"}}
     *                       }
     *                     }
     *                   }  

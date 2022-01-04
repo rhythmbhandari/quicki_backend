@@ -876,7 +876,7 @@ class BookingService extends Service
             
             //Send pusher/echo broadcast notification to all admins
             $title = "Booking Timed Out" ;
-            $message = "Booking request timed out made by ".$booking->user->name.' '.$booking->created_at->diffForHumans();;
+            $message = "Booking request timed out by ".$booking->user->name.' made on '.$booking->created_at->toDayDateTimeString();;
             event(
                 new BookingTimedOut( 
                     $title,
@@ -896,6 +896,7 @@ class BookingService extends Service
                     'notification_type'=>'customer_ignored',
                     'title'=> $title, 
                     'message'=> $message, 
+                    'booking_id'=>$bookingId
                 ]
             );
 
