@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\Heatmap\HeatmapController;
 use App\Http\Controllers\Admin\Sos\SosController;
 use App\Http\Controllers\Admin\NewsletterSubscription\NewsletterController;
 use App\Http\Controllers\Admin\NewsletterSubscription\SubscriberController;
+use App\Http\Controllers\Admin\Ckeditor\CkeditorController;
 
 use App\Http\Controllers\Admin\Notification\NotificationController;
 use App\Http\Controllers\Admin\Setting\SettingController; 
@@ -39,6 +40,8 @@ Route::group([
     'as' => 'admin.', 'middleware' =>  ['admin'], 'prefix' => 'admin' // 'middleware' => ['role:ROLE_CANDIDATE'],
 ], function ($router) {
     $router->get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    $router->post('ckeditor/upload',  [CkeditorController::class,'upload'])->name('ckeditor.upload');
 
     //user
     $router->resource('/user', UserController::class);
@@ -129,4 +132,6 @@ Route::group([
     $router->get('newsletter_date', [NewsletterController::class, 'getAllData'])->name('newsletter.data');
     $router->resource('subscriber', SubscriberController::class);
     $router->get('subscriber_date', [SubscriberController::class, 'getAllData'])->name('subscriber.data');
+    $router->resource('sent_newsletter', SentNewsletterController::class);
+    $router->get('newsletter/{rider_id}/sent', [SentNewsletterController::class, 'history'])->name('newsletter.sent');
 });

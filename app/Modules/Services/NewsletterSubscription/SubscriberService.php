@@ -48,7 +48,7 @@ class SubscriberService extends Service
                     
                 })
                 ->editColumn('actions', function (Subscriber $subscriber) {
-                    $editRoute = '';//route('admin.subscriber.edit', $subscriber->id);
+                    $editRoute = route('admin.subscriber.edit', $subscriber->id);
                     $deleteRoute = '';
                     $optionRoute = '';
                     $mapRoute = '';
@@ -64,10 +64,10 @@ class SubscriberService extends Service
     function create($data)
     {
         try {
-            $data['status'] = isset($data['status'])?$data['status'] : 'active';
-            $createdRiderLocation = $this->rider_location->create($data);
-            if($createdRiderLocation)
-                return $createdRiderLocation;
+            $data['subscribed'] = isset( $data['subscribed']) ?   intval($data['subscribed']): 0;
+            $createdSubscriber = $this->subscriber->create($data);
+            if($createdSubscriber)
+                return $createdSubscriber;
         }
         catch(Exception $e){
             return NULL;
@@ -75,15 +75,13 @@ class SubscriberService extends Service
         return NULL;
     }
 
-    function update($riderLocationId, $data)
+    function update( $data,$subscriberId)
     {
         try {
         
-            $data['status'] = isset($data['status'])?$data['status'] : 'active';
-            $rider_location= RiderLocation::findOrFail($riderLocationId);
-            $updatedRiderLocation = $rider_location->update($data);
-            //dd($updatedRiderLocation);
-            return $updatedRiderLocation;
+            $subscriber= Subscriber::findOrFail($subscriberId);
+            $updatedSubscriber = $subscriber->update($data);
+            return $updatedSubscriber;
 
         } catch (Exception $e) {
             //$this->logger->error($e->getMessage());

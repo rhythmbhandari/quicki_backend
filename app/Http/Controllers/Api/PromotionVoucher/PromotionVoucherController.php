@@ -41,7 +41,7 @@ class PromotionVoucherController extends Controller
 
       /**
     * @OA\Get(
-    *   path="/api/{user_type}/promotion_voucher/{promotion_voucher_id}/check",
+    *   path="/api/{user_type}/promotion_voucher/{promotion_voucher_code}/check",
     *   tags={"Promotion Voucher"},
     *   summary="Check if the user is eligible to use the promotion voucher",
     *   security={{"bearerAuth":{}}},
@@ -55,9 +55,9 @@ class PromotionVoucherController extends Controller
     *
     *
     *      @OA\Parameter(
-    *         name="promotion_voucher_id",
+    *         name="promotion_voucher_code",
     *         in="path",
-    *         description="Promotion Voucher Id",
+    *         description="Promotion Voucher Code",
     *         required=true,
     *      ),
     *
@@ -158,7 +158,7 @@ class PromotionVoucherController extends Controller
     *      ),
     *)
     **/
-    public function checkPromotionVoucher($user_type, $promotion_voucher_id)
+    public function checkPromotionVoucher($user_type, $promotion_voucher_code)
     {
         $user = Auth::user();
         $user_id = $user->id;
@@ -169,9 +169,17 @@ class PromotionVoucherController extends Controller
             return response($response, 403);
         }
 
+        
 
 
-        $promotion_voucher = PromotionVoucher::find($promotion_voucher_id);
+        // $promotion_voucher = PromotionVoucher::find($promotion_voucher_id);
+        $promotion_voucher = PromotionVoucher::where('code',$promotion_voucher_code)->first();
+
+        if(!$promotion_voucher)
+        {
+            $response = ['message' => 'PromotionVoucher not found!'];
+            return response($response, 404);
+        }
 
         if($promotion_voucher->user_type == "rider" && $user_type != "rider")
         {

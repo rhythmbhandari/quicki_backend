@@ -17,11 +17,11 @@ use App\Modules\Models\User;
 
 use App\Modules\Services\NewsletterSubscription\NewsletterService;
 
-class NewsletterController extends Controller
+class SentNewsletterController extends Controller
 {
-    protected $newsletter;
-    function __construct(NewsletterService $newsletter) {
-        $this->newsletter = $newsletter;
+    protected $sent_sent_newsletter;
+    function __construct(SentNewsletterService $sent_newsletter) {
+        $this->sent_newsletter = $sent_newsletter;
     }
     /**
      * Display a listing of the resource.
@@ -30,13 +30,13 @@ class NewsletterController extends Controller
      */
     public function index()
     {
-        return view('admin.newsletter.index');
+        return view('admin.newsletter.sent_newsletter.index');
     }
 
     public function getAllData()
     {
         // dd('helloww');
-        return $this->newsletter->getAllData();
+        return $this->sent_sent_newsletter->getAllData();
     }
 
     /**
@@ -47,7 +47,7 @@ class NewsletterController extends Controller
     public function create()
     {
         
-        return view('admin.newsletter.create');
+        return view('admin.newsletter.sent_newsletter.create');
     }
 
 
@@ -61,54 +61,55 @@ class NewsletterController extends Controller
     public function edit($id)
     {
         $newsletter = Newsletter::findOrFail($id);
-        return view('admin.newsletter.edit', compact('newsletter'));
+        return view('admin.newsletter.sent_newsletter.edit',compact('newsletter'));
     }
 
  
     public function store(NewsletterRequest $request)
     { 
         return DB::transaction(function () use ($request) {
-            $createdNewsletter = $this->newsletter->create($request->except('image'));
+            $createdNewsletter = $this->sent_newsletter->create($request->except('image'));
             if ($createdNewsletter) {
                 if ($request->hasFile('image')) {
                     $this->uploadFile($request, $createdNewsletter);
                 }
                 Toastr::success('Newsletter created successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
-                return redirect()->route('admin.newsletter.index');
+                return redirect()->route('admin.sent_newsletter.index');
             }
             Toastr::error('Newsletter cannot be created.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
-            return redirect()->route('admin.newsletter.index');
+            return redirect()->route('admin.sent_newsletter.index');
         });
     }
 
 
     public function update(UpdateNewsletterRequest $request,$id)
     {
-        return DB::transaction(function () use ($request, $id) {
-            $updatedNewsletter = $this->newsletter->update($request->except('image','code'),$id);
-            if ($updatedNewsletter) {
-                if ($request->hasFile('image')) {
-                    $this->uploadFile($request, Newsletter::find($id));
-                }
-                Toastr::success('Newsletter updated successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
-                return redirect()->route('admin.newsletter.index');
-            }
-            Toastr::error('Newsletter cannot be updated.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
-            return redirect()->route('admin.newsletter.index');
-        });
+        return redirect()->route('admin.sent_newsletter.index');
+        // return DB::transaction(function () use ($request, $id) {
+        //     $updatedNewsletter = $this->sent_newsletter->update($request->except('image','code'),$id);
+        //     if ($updatedNewsletter) {
+        //         if ($request->hasFile('image')) {
+        //             $this->uploadFile($request, Newsletter::find($id));
+        //         }
+        //         Toastr::success('Newsletter updated successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+        //         return redirect()->route('admin.sent_newsletter.index');
+        //     }
+        //     Toastr::error('Newsletter cannot be updated.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+        //     return redirect()->route('admin.sent_newsletter.index');
+        // });
     }
 
 
 
-    function uploadFile(Request $request, $newsletter)
+    function uploadFile(Request $request, $sent_newsletter)
     {
         $file = $request->file('image');
-        $fileName = $this->newsletter->uploadFile($file);
-        if (!empty($newsletter->image))
-            $this->newsletter->__deleteImages($newsletter);
+        $fileName = $this->sent_newsletter->uploadFile($file);
+        if (!empty($sent_newsletter->image))
+            $this->sent_newsletter->__deleteImages($sent_newsletter);
 
         $data['image'] = $fileName;
-        $this->newsletter->updateImage($newsletter->id, $data);
+        $this->sent_newsletter->updateImage($sent_newsletter->id, $data);
     }
    
 }
