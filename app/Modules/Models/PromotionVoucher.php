@@ -60,7 +60,7 @@ class PromotionVoucher extends Model
         if ($this->image)
             return $this->path . '/'  . $this->image;
         else
-            return 'assets/media/user_placeholder.png';
+            return 'assets/media/noimage.png';
     }
 
     function getRemainingUsesAttribute()
@@ -78,7 +78,7 @@ class PromotionVoucher extends Model
         if ($this->image)
             return $this->path .  '/thumb/' . $this->image;
         else
-            return 'assets/media/user_placeholder.png';
+            return 'assets/media/noimage.png';
     }
 
     public function transactions()

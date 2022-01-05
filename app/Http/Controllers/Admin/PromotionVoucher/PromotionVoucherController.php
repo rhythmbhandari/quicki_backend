@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Kamaln7\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\DB;
 
 
 use App\Modules\Models\PromotionVoucher;
@@ -81,15 +82,19 @@ class PromotionVoucherController extends Controller
     public function store(PromotionVoucherRequest $request)
     {
 
-      
-            
-        $createdPromotionVoucher = $this->promotion_voucher->create($request->all());
-        if ($createdPromotionVoucher) {
-            Toastr::success('PromotionVoucher created successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+    
+        return DB::transaction(function () use ($request) {
+            $createdPromotionVoucher = $this->promotion_voucher->create($request->except('image'));
+            if ($createdPromotionVoucher) {
+                if ($request->hasFile('image')) {
+                    $this->uploadFile($request, $createdPromotionVoucher);
+                }
+                Toastr::success('PromotionVoucher created successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+                return redirect()->route('admin.promotion_voucher.index');
+            }
+            Toastr::error('PromotionVoucher cannot be created.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
             return redirect()->route('admin.promotion_voucher.index');
-        }
-        Toastr::error('PromotionVoucher cannot be created.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
-        return redirect()->route('admin.promotion_voucher.index');
+        });
     
        
     }
@@ -98,15 +103,30 @@ class PromotionVoucherController extends Controller
     public function update(UpdatePromotionVoucherRequest $request,$id)
     {
 
-        $createdPromotionVoucher = $this->promotion_voucher->update($request->all(),$id);
-        if ($createdPromotionVoucher) {
-            Toastr::success('PromotionVoucher updated successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+        return DB::transaction(function () use ($request, $id) {
+            $updatedPromotionVoucher = $this->promotion_voucher->update($request->except('image'),$id);
+            if ($updatedPromotionVoucher) {
+                if ($request->hasFile('image')) {
+                    $this->uploadFile($request, PromotionVoucher::find($id));
+                }
+                Toastr::success('PromotionVoucher updated successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+                return redirect()->route('admin.promotion_voucher.index');
+            }
+            Toastr::error('PromotionVoucher cannot be updated.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
             return redirect()->route('admin.promotion_voucher.index');
-        }
-        Toastr::error('PromotionVoucher cannot be updated.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
-        return redirect()->route('admin.promotion_voucher.index');
-
+        });
     }
 
+
+    function uploadFile(Request $request, $promotion_voucher)
+    {
+        $file = $request->file('image');
+        $fileName = $this->promotion_voucher->uploadFile($file);
+        if (!empty($promotion_voucher->image))
+            $this->promotion_voucher->__deleteImages($promotion_voucher);
+
+        $data['image'] = $fileName;
+        $this->promotion_voucher->updateImage($promotion_voucher->id, $data);
+    }
    
 }
