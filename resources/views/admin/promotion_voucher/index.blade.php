@@ -104,6 +104,7 @@
                             <th class="notexport">ID</th>
                             <th>S.No.</th>
                             <th>Title</th>
+                            <th>Image</th>
                             <th>Code</th>
                             <th>User Type</th>
                             <th>Type</th>
@@ -206,6 +207,9 @@
                         },
                         {
                             "data": "name"
+                        },
+                        {
+                            "data": "image"
                         },
                         {
                             "data": "code"

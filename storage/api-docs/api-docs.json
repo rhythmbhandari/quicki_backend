@@ -3258,8 +3258,8 @@
                         "application/json": {
                             "schema": {
                                 "example": {
-                                    "origin_latitude": 27.687169,
-                                    "origin_longitude": 85.304219,
+                                    "origin_latitude": 27.68737946321937,
+                                    "origin_longitude": 85.30350757899798,
                                     "vehicle_type_id": 1
                                 }
                             }
@@ -4118,6 +4118,226 @@
                         "description": "Validation Fail",
                         "content": {
                             "application/json": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/{user_type}/promotion_voucher/{promotion_voucher_id}/check": {
+            "get": {
+                "tags": [
+                    "Promotion Voucher"
+                ],
+                "summary": "Check if the user is eligible to use the promotion voucher",
+                "operationId": "1ba94439667765bf2aff5d15542dcb78",
+                "parameters": [
+                    {
+                        "name": "user_type",
+                        "in": "path",
+                        "description": "User Type (Allowed Values: 'customer' or 'rider'  )",
+                        "required": true
+                    },
+                    {
+                        "name": "promotion_voucher_id",
+                        "in": "path",
+                        "description": "Promotion Voucher Id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "promotion_voucher": {
+                                            "id": 2,
+                                            "slug": "test-rider-voucher",
+                                            "user_type": "rider",
+                                            "image": null,
+                                            "code": "#9816810976R",
+                                            "name": "TEST RIDER VOUCHER",
+                                            "description": "This is just a test voucher for riders!",
+                                            "uses": 0,
+                                            "max_uses": 50,
+                                            "max_uses_user": 1,
+                                            "type": "discount",
+                                            "worth": 10,
+                                            "is_fixed": true,
+                                            "eligible_user_ids": null,
+                                            "price_eligibility": [
+                                                {
+                                                    "price": 500,
+                                                    "worth": 10
+                                                },
+                                                {
+                                                    "price": 5000,
+                                                    "worth": 30
+                                                },
+                                                {
+                                                    "price": 10000,
+                                                    "worth": 60
+                                                }
+                                            ],
+                                            "distance_eligibility": [
+                                                {
+                                                    "distance": 5000,
+                                                    "worth": 10
+                                                },
+                                                {
+                                                    "distance": 10000,
+                                                    "worth": 30
+                                                },
+                                                {
+                                                    "distance": 20000,
+                                                    "worth": 50
+                                                }
+                                            ],
+                                            "starts_at": 1641291073,
+                                            "expires_at": 1643969473,
+                                            "status": "active",
+                                            "deleted_at": null,
+                                            "created_at": "2022-01-04T10:11:13.000000Z",
+                                            "updated_at": "2022-01-04T10:11:13.000000Z",
+                                            "status_text": "Active",
+                                            "thumbnail_path": "assets/media/user_placeholder.png",
+                                            "image_path": "assets/media/user_placeholder.png",
+                                            "is_expired": false,
+                                            "remaining_uses": 50
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Fail",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access"
+                    },
+                    "400": {
+                        "description": "Promotion expired/Failed!"
+                    },
+                    "404": {
+                        "description": "Promotion Voucher not found!"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/{user_type}/promotion_voucher/list": {
+            "get": {
+                "tags": [
+                    "Promotion Voucher"
+                ],
+                "summary": "Get the eligible promotion vouchers for the user",
+                "operationId": "fbc6812c6d4f69f7696c54efba8e527f",
+                "parameters": [
+                    {
+                        "name": "user_type",
+                        "in": "path",
+                        "description": "User Type (Allowed Values: 'customer' or 'rider'  )",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Success!",
+                                        "promotion_vouchers": [
+                                            {
+                                                "id": 2,
+                                                "slug": "test-rider-voucher",
+                                                "user_type": "rider",
+                                                "image": null,
+                                                "code": "#9816810976R",
+                                                "name": "TEST RIDER VOUCHER",
+                                                "description": "This is just a test voucher for riders!",
+                                                "uses": 0,
+                                                "max_uses": 50,
+                                                "max_uses_user": 1,
+                                                "type": "discount",
+                                                "worth": 10,
+                                                "is_fixed": true,
+                                                "eligible_user_ids": null,
+                                                "price_eligibility": [
+                                                    {
+                                                        "price": 500,
+                                                        "worth": 10
+                                                    },
+                                                    {
+                                                        "price": 5000,
+                                                        "worth": 30
+                                                    },
+                                                    {
+                                                        "price": 10000,
+                                                        "worth": 60
+                                                    }
+                                                ],
+                                                "distance_eligibility": [
+                                                    {
+                                                        "distance": 5000,
+                                                        "worth": 10
+                                                    },
+                                                    {
+                                                        "distance": 10000,
+                                                        "worth": 30
+                                                    },
+                                                    {
+                                                        "distance": 20000,
+                                                        "worth": 50
+                                                    }
+                                                ],
+                                                "starts_at": 1641291073,
+                                                "expires_at": 1643969473,
+                                                "status": "active",
+                                                "deleted_at": null,
+                                                "created_at": "2022-01-04T10:11:13.000000Z",
+                                                "updated_at": "2022-01-04T10:11:13.000000Z",
+                                                "status_text": "Active",
+                                                "thumbnail_path": "assets/media/user_placeholder.png",
+                                                "image_path": "assets/media/user_placeholder.png",
+                                                "is_expired": false,
+                                                "remaining_uses": 50
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
                         }
                     },
                     "403": {

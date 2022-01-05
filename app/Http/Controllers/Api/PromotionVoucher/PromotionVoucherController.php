@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 //models
 use App\Modules\Models\User;
@@ -19,6 +21,7 @@ use App\Modules\Models\PriceDetail;
 
 //services
 use App\Modules\Services\User\UserService;
+use App\Modules\Services\PromotionVoucher\PromotionVoucherService;
 // use App\Http\Modules\Services\User\TransactionService;
 
 class PromotionVoucherController extends Controller
@@ -44,22 +47,84 @@ class PromotionVoucherController extends Controller
     *   security={{"bearerAuth":{}}},
     *
     *      @OA\Parameter(
-    *         name="booking_id",
+    *         name="user_type",
     *         in="path",
-    *         description="Booking Id",
+    *         description="User Type (Allowed Values: 'customer' or 'rider'  )",
+    *         required=true,
+    *      ),
+    *
+    *
+    *      @OA\Parameter(
+    *         name="promotion_voucher_id",
+    *         in="path",
+    *         description="Promotion Voucher Id",
     *         required=true,
     *      ),
     *
     *
     *      @OA\Response(
-    *        response=201,
+    *        response=200,
     *        description="Success",
     *          @OA\MediaType(
     *               mediaType="application/json",
     *                   @OA\Schema(      
     *                   example={
     *                       "message": "Success!",
-    *                        "payment": {"id": 5, "completed_trip_id": 5, "commission_amount": 15, "original_commission": null, "payment_status": "unpaid", "commission_payment_status": "unpaid", "deleted_at": null, "created_at": "2021-12-30T10:11:05.000000Z", "updated_at":" 2021-12-30T10:11:05.000000Z", "customer_payment_status": "unpaid","transactions":{}}
+    *                       "promotion_voucher": {
+    *                           "id": 2,
+    *                           "slug": "test-rider-voucher",
+    *                           "user_type": "rider",
+    *                           "image": null,
+    *                           "code": "#9816810976R",
+    *                           "name": "TEST RIDER VOUCHER",
+    *                           "description": "This is just a test voucher for riders!",
+    *                           "uses": 0,
+    *                           "max_uses": 50,
+    *                           "max_uses_user": 1,
+    *                           "type": "discount",
+    *                           "worth": 10,
+    *                           "is_fixed": true,
+    *                           "eligible_user_ids": null,
+    *                           "price_eligibility": {
+    *                               {
+    *                                   "price": 500,
+    *                                   "worth": 10
+    *                               },
+    *                               {
+    *                                   "price": 5000,
+    *                                   "worth": 30
+    *                               },
+    *                               {
+    *                                   "price": 10000,
+    *                                   "worth": 60
+    *                               }
+    *                           },
+    *                           "distance_eligibility": {
+    *                               {
+    *                                   "distance": 5000,
+    *                                   "worth": 10
+    *                               },
+    *                               {
+    *                                   "distance": 10000,
+    *                                   "worth": 30
+    *                               },
+    *                               {
+    *                                   "distance": 20000,
+    *                                   "worth": 50
+    *                               }
+    *                           },
+    *                           "starts_at": 1641291073,
+    *                           "expires_at": 1643969473,
+    *                           "status": "active",
+    *                           "deleted_at": null,
+    *                           "created_at": "2022-01-04T10:11:13.000000Z",
+    *                           "updated_at": "2022-01-04T10:11:13.000000Z",
+    *                           "status_text": "Active",
+    *                           "thumbnail_path": "assets/media/user_placeholder.png",
+    *                           "image_path": "assets/media/user_placeholder.png",
+    *                           "is_expired": false,
+    *                           "remaining_uses": 50
+    *                       }
     *                   }
     *                 )
     *           )
@@ -77,6 +142,14 @@ class PromotionVoucherController extends Controller
     *          description="Forbidden Access",
     *      ),
     *      @OA\Response(
+    *          response=400,
+    *          description="Promotion expired/Failed!",
+    *      ),
+    *      @OA\Response(
+    *          response=404,
+    *          description="Promotion Voucher not found!",
+    *      ),
+    *      @OA\Response(
     *          response=500,
     *          description="Internal Server Error",
     *             @OA\MediaType(
@@ -85,101 +158,205 @@ class PromotionVoucherController extends Controller
     *      ),
     *)
     **/
-    public function checkPromotionVoucher($user_type, $booking_id)
+    public function checkPromotionVoucher($user_type, $promotion_voucher_id)
     {
         $user = Auth::user();
-
-        $estimated_price['price_breakdown']['promotion_voucher_id'] = null;
-        $estimated_price['price_breakdown']['discount_amount'] = 0;
-        $estimated_price['price_breakdown']['original_price'] =    $estimated_price['price_breakdown']['total_price'];
-        if ($voucher) {
-
-
-            $promotion_voucher = PromotionVoucher::where('code', $voucher)
-                ->where('user_type', 'customer')
-                ->where('status', 'active')
-                ->whereRaw("starts_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now()->format('Y-m-d H:i'))
-                ->whereRaw("expires_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now()->format('Y-m-d H:i'))
-                ->whereRaw('uses < max_uses')
-                ->first();
-            $user = User::find($user_id);
+        $user_id = $user->id;
+        //ROLE CHECK FOR ALREADY RIDER
+        if($user_type=="rider" && !$this->user_service->hasRole($user, 'rider') )
+        {
+            $response = ['message' => 'Forbidden Access!'];
+            return response($response, 403);
+        }
 
 
-            if ($promotion_voucher && $user) {
-                //CHECK FOR VARIOUS ELIGIBILITY FACTORS OF THE VOUCHER 
-                $used_promotion_vouchers = PriceDetail::whereHas('completed_trip', function (Builder $query) use ($user_id) {
+
+        $promotion_voucher = PromotionVoucher::find($promotion_voucher_id);
+
+        if($promotion_voucher->user_type == "rider" && $user_type != "rider")
+        {
+            $response = ['message' => 'Forbidden Access!'];
+            return response($response, 403);
+        }
+
+        if ($promotion_voucher && $user) {
+            $used_promotion_vouchers = 0;
+            //CHECK FOR VARIOUS ELIGIBILITY FACTORS OF THE VOUCHER 
+            if($user_type == "customer")
+            {
+                $used_promotion_vouchers = PriceDetail::where('promotion_voucher_id', $promotion_voucher->id)
+                ->whereHas('completed_trip', function (Builder $query) use ($user_id) {
                     $query->where('user_id', $user_id);
                     $query->whereStatus('completed');
-                })->where('promotion_voucher_id', $promotion_voucher->id)->pluck('id', 'promotion_voucher_id');
+                })->pluck('id', 'promotion_voucher_id');
+            }
+            else{
+                $used_promotion_vouchers = Transaction::where('creditor_type','rider')->where('creditor_id',$user_id)
+                                            ->where('promotion_voucher_id',$promotion_voucher->id)->pluck('id', 'promotion_voucher_id');
+            }
+            
+            // dd(count($used_promotion_vouchers),$promotion_voucher->max_uses_user);
+            //Check if the voucher still has uses left for the user
+            if (count($used_promotion_vouchers) < $promotion_voucher->max_uses_user) {
+                
+                $user_travelled_distance = CompletedTrip::where('user_id', $user_id)->where('status', 'completed')->sum('distance'); //in meters
+                $user_spent_price = CompletedTrip::where('user_id', $user_id)->where('status', 'completed')->sum('price');
 
-                //Check if the voucher still has uses left for the user
-                if (count($used_promotion_vouchers) < $promotion_voucher->max_uses_user) {
-                    $user_travelled_distance = CompletedTrip::where('user_id', $user_id)->where('status', 'completed')->sum('distance'); //in meters
-                    $user_spent_price = CompletedTrip::where('user_id', $user_id)->where('status', 'completed')->sum('price');
 
-                    $price_eligibility_allowance = 0;
-                    $distance_eligibility_allowance = 0;
-
-                    if (isset($promotion_voucher->price_eligibility)) {
-                        //dd('as',$promotion_voucher->price_eligibility);
-                        foreach ($promotion_voucher->price_eligibility as $price_range) {
-                            if ($user_spent_price >= $price_range['price'])
-                                $price_eligibility_allowance = intval($price_range['worth']);
-                        }
-                    }
-                    if (isset($promotion_voucher->distance_eligibility)) {
-                        foreach ($promotion_voucher->distance_eligibility as $distance_range) {
-                            if ($user_travelled_distance >= $distance_range['distance'])
-                                $distance_eligibility_allowance = intval($distance_range['worth']);
-                        }
-                    }
-
-                    $voucher_worth = $promotion_voucher->worth + $price_eligibility_allowance + $distance_eligibility_allowance;
-
-                    if (isset($promotion_voucher->eligible_user_ids)) {
-                        if (in_array($user_id, $promotion_voucher->eligible_user_ids)) {
-                            //APPLY DISCOUNT
-                            if (!$promotion_voucher->is_fixed) {
-                                $estimated_price['price_breakdown']['discount_amount'] =
-                                    $estimated_price['price_breakdown']['total_price'] * ($voucher_worth / 100);
-                            } else {
-                                $estimated_price['price_breakdown']['discount_amount'] = $voucher_worth;
-                            }
-                            $estimated_price['price_breakdown']['total_price'] =
-                                $estimated_price['price_breakdown']['total_price'] - $estimated_price['price_breakdown']['discount_amount'];
-
-                            $estimated_price['price_breakdown']['total_price'] = ($estimated_price['price_breakdown']['total_price'] >= 0) ?  $estimated_price['price_breakdown']['total_price'] : 0;
-                            $estimated_price['price_breakdown']['promotion_voucher_id'] = $promotion_voucher->id;
-                        } else {
-                            //DO NOT APPLY DISCOUNT
-                            $voucher_worth = 0;
-                        }
+                if (isset($promotion_voucher->eligible_user_ids)) {
+                    if (in_array($user_id, $promotion_voucher->eligible_user_ids)) {
+                        $response = ['message' => 'Success!','promotion_voucher'=>$promotion_voucher];
+                        return response($response, 200);
                     } else {
-                        //APPLY DISCOUNT
-                        if (!$promotion_voucher->is_fixed) {
-                            $estimated_price['price_breakdown']['discount_amount'] =
-                                $estimated_price['price_breakdown']['total_price'] * ($voucher_worth / 100);
-                        } else {
-                            $estimated_price['price_breakdown']['discount_amount'] = $voucher_worth;
-                        }
-                        $estimated_price['price_breakdown']['total_price'] =
-                            $estimated_price['price_breakdown']['total_price'] - $estimated_price['price_breakdown']['discount_amount'];
-
-                        $estimated_price['price_breakdown']['total_price'] = ($estimated_price['price_breakdown']['total_price'] >= 0) ?  $estimated_price['price_breakdown']['total_price'] : 0;
-                        $estimated_price['price_breakdown']['promotion_voucher_id'] = $promotion_voucher->id;
+                        $response = ['message' => 'Failed!'];
+                        return response($response, 400);
                     }
+                } else {
+                    $response = ['message' => 'Success!','promotion_voucher'=>$promotion_voucher];
+                    return response($response, 200);
                 }
             }
+            else{
+                $response = ['message' => 'PromotionVoucher expired!'];
+                return response($response, 400);
+            }
         }
-        return $estimated_price;
-
-        if(!$payment)
-        {
+        else{
             $response = ['message' => 'PromotionVoucher not found!'];
             return response($response, 404);
         }
-        $response = ['message' => 'Success!', 'payment'=>$payment];
-            return response($response, 200);
+
+        $response = ['message' => 'Something went wrong! Internal Server Error!'];
+            return response($response, 500);
+    }
+
+
+
+
+
+
+
+
+
+      /**
+    * @OA\Get(
+    *   path="/api/{user_type}/promotion_voucher/list",
+    *   tags={"Promotion Voucher"},
+    *   summary="Get the eligible promotion vouchers for the user",
+    *   security={{"bearerAuth":{}}},
+    *     @OA\Parameter(
+    *         name="user_type",
+    *         in="path",
+    *         description="User Type (Allowed Values: 'customer' or 'rider'  )",
+    *         required=true,
+    *      ),
+    *
+    *      @OA\Response(
+    *        response=200,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                   @OA\Schema(      
+    *                   example={
+    *                       "message": "Success!",
+    *                       "promotion_vouchers": {{
+    *                           "id": 2,
+    *                           "slug": "test-rider-voucher",
+    *                           "user_type": "rider",
+    *                           "image": null,
+    *                           "code": "#9816810976R",
+    *                           "name": "TEST RIDER VOUCHER",
+    *                           "description": "This is just a test voucher for riders!",
+    *                           "uses": 0,
+    *                           "max_uses": 50,
+    *                           "max_uses_user": 1,
+    *                           "type": "discount",
+    *                           "worth": 10,
+    *                           "is_fixed": true,
+    *                           "eligible_user_ids": null,
+    *                           "price_eligibility": {
+    *                               {
+    *                                   "price": 500,
+    *                                   "worth": 10
+    *                               },
+    *                               {
+    *                                   "price": 5000,
+    *                                   "worth": 30
+    *                               },
+    *                               {
+    *                                   "price": 10000,
+    *                                   "worth": 60
+    *                               }
+    *                           },
+    *                           "distance_eligibility": {
+    *                               {
+    *                                   "distance": 5000,
+    *                                   "worth": 10
+    *                               },
+    *                               {
+    *                                   "distance": 10000,
+    *                                   "worth": 30
+    *                               },
+    *                               {
+    *                                   "distance": 20000,
+    *                                   "worth": 50
+    *                               }
+    *                           },
+    *                           "starts_at": 1641291073,
+    *                           "expires_at": 1643969473,
+    *                           "status": "active",
+    *                           "deleted_at": null,
+    *                           "created_at": "2022-01-04T10:11:13.000000Z",
+    *                           "updated_at": "2022-01-04T10:11:13.000000Z",
+    *                           "status_text": "Active",
+    *                           "thumbnail_path": "assets/media/user_placeholder.png",
+    *                           "image_path": "assets/media/user_placeholder.png",
+    *                           "is_expired": false,
+    *                           "remaining_uses": 50
+    *                       }}
+    *                   }
+    *                 )
+    *           )
+    *      ),
+    *
+    *      @OA\Response(
+    *          response=403,
+    *          description="Forbidden Access",
+    *      ),
+    *      @OA\Response(
+    *          response=500,
+    *          description="Internal Server Error",
+    *             @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+    *      ),
+    *)
+    **/
+    function getPromotionVoucherList($user_type)
+    {
+        $user = Auth::user();
+        $user_id = $user->id;
+        //ROLE CHECK FOR ALREADY RIDER
+        if($user_type=="rider" && !$this->user_service->hasRole($user, 'rider') )
+        {
+            $response = ['message' => 'Forbidden Access!'];
+            return response($response, 403);
+        }
+
+        $promotion_vouchers = PromotionVoucher::where('user_type',$user_type)
+                                               ->orderBy('worth','desc')->take(5)->get();
+
+        $response = ['message' => 'Success!', 'promotion_vouchers'=>$promotion_vouchers];
+        return response($response, 200);
+
+
+        $response = ['message' => 'Something went wrong! Internal Server Error!'];
+        return response($response, 500);
     }
 
 }
+
+
+
+
+
