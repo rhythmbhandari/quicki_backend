@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\Booking\BookingController;
 use App\Http\Controllers\Admin\Payment\TransactionController;
 use App\Http\Controllers\Admin\Heatmap\HeatmapController;
 use App\Http\Controllers\Admin\Sos\SosController;
+use App\Http\Controllers\Admin\NewsletterSubscription\NewsletterController;
+use App\Http\Controllers\Admin\NewsletterSubscription\SubscriberController;
 
 use App\Http\Controllers\Admin\Notification\NotificationController;
 use App\Http\Controllers\Admin\Setting\SettingController; 
@@ -118,4 +120,13 @@ Route::group([
     //---------------------------------------------------------------------------------------------------------
     $router->get('/settings/{group}/loadSettingForms', [SettingController::class, 'loadSettingForms'])->name('setting.loadSettingForms');
     $router->resource('setting', SettingController::class);
+
+
+     //---------------------------------------------------------------------------------------------------------
+    //  NEWSLETTER and SUBSCRIBERS RESOURCE ROUTES
+    //---------------------------------------------------------------------------------------------------------
+    $router->resource('newsletter', NewsletterController::class);
+    $router->get('newsletter_date', [NewsletterController::class, 'getAllData'])->name('newsletter.data');
+    $router->resource('subscriber', SubscriberController::class);
+    $router->get('subscriber_date', [SubscriberController::class, 'getAllData'])->name('subscriber.data');
 });

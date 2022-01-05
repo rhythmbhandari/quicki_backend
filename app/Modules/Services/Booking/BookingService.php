@@ -746,8 +746,6 @@ class BookingService extends Service
 
             if ($promotion_voucher && $user) {
                 //CHECK FOR VARIOUS ELIGIBILITY FACTORS OF THE VOUCHER 
-
-
                 $used_promotion_vouchers = PriceDetail::whereHas('completed_trip', function (Builder $query) use ($user_id) {
                     $query->where('user_id', $user_id);
                     $query->whereStatus('completed');

@@ -193,7 +193,7 @@
                     </a>
                 </li>
 
-                <li class="menu-item menu-item-submenu {{ request()->is('admin/heatmap') || request()->is('admin/heatmap/*')||
+                <li class="menu-item menu-item-submenu  {{ request()->is('admin/heatmap') || request()->is('admin/heatmap/*')||
                     request()->is('admin/heatmap') || request()->is('admin/heatmap/*')
                     ? " menu-item-active menu-item-open" : "" }}" {{-- {{
                     str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
@@ -213,8 +213,8 @@
                                         <span></span>
                                     </i><span class="menu-text">Dispatcher</span></a>
                             </li>
-                            <li class="menu-item {{request()->is('admin/heatmap/') || request()->is('admin/heatmap/*')
-                                ? " menu-item-active" : "" }}" aria-haspopup="true">
+                            <li class="menu-item {{request()->is('admin/heatmap') || request()->is('admin/heatmap/*')
+                                ? " menu-item-active" : "" }} " aria-haspopup="true">
                                 <a href="{{route('admin.map.heatmap')}}" class="menu-link"><i
                                         class="menu-bullet menu-bullet-dot">
                                         <span></span>
@@ -224,6 +224,7 @@
                     </div>
                 </li>
 
+                 <!--PROMOTION VOUCHER-->
                 <li class="menu-item menu-item-submenu {{ request()->is('admin/promotion_voucher') || request()->is('admin/promotion_voucher/*')
                     ? " menu-item-active menu-item-open" : "" }}" {{-- {{
                     str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
@@ -235,6 +236,39 @@
                 </li>
 
 
+                <!--NEWSLETTER AND SUBSCRIPTION-->
+                <li class="menu-item menu-item-submenu {{ request()->is('admin/newsletter') || request()->is('admin/subscriber')||
+                    request()->is('admin/newsletter/*') || request()->is('admin/subscriber/*')
+                    ? " menu-item-active menu-item-open" : "" }}" {{-- {{
+                    str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
+                    aria-haspopup="true">
+                    <a href="" class="menu-link menu-toggle">
+                        <i class="menu-icon fas fa-map-marked-alt"></i>
+                        <span class="menu-text">Newsletter Subscription</span><i class="menu-arrow"></i>
+                    </a>
+                    <div class="menu-submenu">
+                        <span class="menu-arrow"></span>
+                        <ul class="menu-subnav">
+                            {{-- @can('role-view') --}}
+                            <li class="menu-item {{request()->is('admin/newsletter') || request()->is('admin/newsletter/*')
+                                ? " menu-item-active" : "" }}" aria-haspopup="true">
+                                <a href="{{route('admin.newsletter.index')}}" class="menu-link"><i
+                                        class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i><span class="menu-text">Newsletters</span></a>
+                            </li>
+                            <li class="menu-item {{request()->is('admin/subscriber') || request()->is('admin/subscriber/*')
+                                ? " menu-item-active" : "" }}" aria-haspopup="true">
+                                <a href="{{route('admin.subscriber.index')}}" class="menu-link"><i
+                                        class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i><span class="menu-text">Subscribers</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!--SETTINGS-->  
                 <li class="menu-item menu-item-submenu {{ request()->is('admin/setting') || request()->is('admin/setting/*')
                     ? " menu-item-active menu-item-open" : "" }}" {{-- {{
                     str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
