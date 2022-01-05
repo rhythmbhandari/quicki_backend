@@ -20,7 +20,7 @@ class Newsletter extends Model
     ];
 
     protected $fillable = ([
-        'title', 'body', 'image', 'deleted_at', 'created_at', 'updated_at'
+        'title', 'body','code', 'image', 'deleted_at', 'created_at', 'updated_at'
     ]);
 
     protected $appends = [

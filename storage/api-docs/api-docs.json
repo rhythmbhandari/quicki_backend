@@ -4137,13 +4137,13 @@
                 ]
             }
         },
-        "/api/{user_type}/promotion_voucher/{promotion_voucher_id}/check": {
+        "/api/{user_type}/promotion_voucher/{promotion_voucher_code}/check": {
             "get": {
                 "tags": [
                     "Promotion Voucher"
                 ],
                 "summary": "Check if the user is eligible to use the promotion voucher",
-                "operationId": "1ba94439667765bf2aff5d15542dcb78",
+                "operationId": "1358d8ba1da566da2823793fb7ed9c0b",
                 "parameters": [
                     {
                         "name": "user_type",
@@ -4152,9 +4152,9 @@
                         "required": true
                     },
                     {
-                        "name": "promotion_voucher_id",
+                        "name": "promotion_voucher_code",
                         "in": "path",
-                        "description": "Promotion Voucher Id",
+                        "description": "Promotion Voucher Code",
                         "required": true
                     }
                 ],

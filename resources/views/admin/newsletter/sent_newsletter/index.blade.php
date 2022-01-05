@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', 'Newsletter')
+@section('title', 'Subscriber')
 
 @section('breadcrumb')
 <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
@@ -8,14 +8,17 @@
         <a href="{{route('admin.dashboard') }}" class="text-muted">Dashboard</a>
     </li>
     <li class="breadcrumb-item text-active">
-        <a href="#" class="text-active">Newsletters</a>
+        <a href="{{route('admin.newsletter.index') }}" class="text-active">Newsletters</a>
+    </li>
+    <li class="breadcrumb-item text-active">
+        <a href="#" class="text-active">Sent Newsletter (Title: {{$newsletter->title}}) (Code: {{$newsletter->code}})</a>
     </li>
 </ul>
 @endsection
 
 @section('actionButton')
-<a href="{{ route('admin.newsletter.create') }}" class="btn btn-primary font-weight-bolder fas fa-plus">
-    Add Newsletter
+<a href="{{ route('admin.sent_newsletter.create') }}" class="btn btn-primary font-weight-bolder fas fa-plus">
+    Send Newsletter
 </a>
 @endsection
 
@@ -39,7 +42,7 @@
         <div class="card card-custom">
             <div class="card-header flex-wrap py-5">
                 <div class="card-title">
-                    <h3 class="card-label">Newsletter List</h3>
+                    <h3 class="card-label">Sent Newsletter List</h3>
                 </div>
                 <div class="card-toolbar">
                     <div class="dropdown dropdown-inline">
@@ -103,10 +106,8 @@
                         <tr>
                             <th class="notexport">ID</th>
                             <th>S.No.</th>
-                            <th>Code</th>
-                            <th>Title</th>
-                            <th>Image</th>
-                            <th>Created At</th>
+                            <th>Recipient Emails</th>
+                            <th>Sent At</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -150,7 +151,7 @@
                     ],
                     stateSave: true,
                     ajax: {
-                        url: "{{ route('admin.newsletter.data') }}",
+                        url: "{{ route('admin.subscriber.data') }}",
                     },
                     buttons: [
                         {
@@ -200,16 +201,16 @@
                             searchable: false
                         },
                         {
-                            "data": "code"
-                        },
-                        {
                             "data": "title"
                         },
                         {
-                            "data": "image"
+                            "data": "code"
                         },
                         {
-                            "data": "created_at"
+                            "data": "sent_to"
+                        },
+                        {
+                            "data": "sent_at"
                         },
                         {
                             "data": "actions",

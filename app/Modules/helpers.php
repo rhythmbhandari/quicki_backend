@@ -321,6 +321,29 @@ function generateBookingCode($existing_codes = null)
 }
 
 
+
+function generateNewsletterCode($existing_codes = null)
+{
+
+    //$company_code = 'LIG';
+    //$company_code = config('app.company_code');
+
+    $company_code = !empty(config('settings.site_code')) ? config('settings.site_code') : config('app.site_code');
+
+    //$generatedCode = $company_code. '-' .strtoupper('BK'.substr($brand_name,0,3));
+    $prefix = '#'.$company_code.'-NL';
+    // $generatedCode =  '#'; //$company_code.'-BK-';
+    $generatedCode = randomStringCodeGenerator($prefix, 6);
+    if ($existing_codes) {
+        while (in_array($generatedCode, $existing_codes)) {
+            $generatedCode = randomStringCodeGenerator($prefix, 6);
+        }
+    }
+
+
+    return $generatedCode;
+}
+
 function generateVoucherCode($existing_codes = null)
 {
 

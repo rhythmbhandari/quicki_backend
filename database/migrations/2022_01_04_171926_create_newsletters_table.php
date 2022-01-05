@@ -16,6 +16,7 @@ class CreateNewslettersTable extends Migration
         Schema::create('newsletters', function (Blueprint $table) {
             $table->id();
 
+            $table->string('code')->unique()->nullable();
             $table->string('title')->nullable();
             $table->text('body')->nullable();
             $table->string('image')->nullable();

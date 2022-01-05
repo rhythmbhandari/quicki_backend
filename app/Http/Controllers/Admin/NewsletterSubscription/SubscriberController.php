@@ -7,9 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Kamaln7\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\DB;
 
+use App\Http\Requests\Admin\NewsletterSubscription\SubscriberRequest;
+use App\Http\Requests\Admin\NewsletterSubscription\UpdateSubscriberRequest;
 
 use App\Modules\Models\Newsletter;
+use App\Modules\Models\Subscriber;
 use App\Modules\Models\User;
 
 use App\Modules\Services\NewsletterSubscription\SubscriberService;
@@ -44,7 +48,7 @@ class SubscriberController extends Controller
     public function create()
     {
         
-        return view('admin.subscriber.index');
+        return view('admin.subscriber.create');
     }
 
 
@@ -57,41 +61,38 @@ class SubscriberController extends Controller
      */
     public function edit($id)
     {
-        $users = User::get();
         $subscriber = Subscriber::findOrFail($id);
-        // $suggested_codes = ['asdasda', 'asdaccdads', 'asdasf'];
-        return view('admin.subscriber.edit', compact('subscriber','users'));
+        return view('admin.subscriber.edit', compact('subscriber'));
     }
 
  
     public function store(SubscriberRequest $request)
-    {
-
-      
-            
-        // $createdSubscriber = $this->subscriber->create($request->all());
-        // if ($createdSubscriber) {
-        //     Toastr::success('Subscriber created successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
-        //     return redirect()->route('admin.subscriber.index');
-        // }
-        // Toastr::error('Subscriber cannot be created.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
-        // return redirect()->route('admin.subscriber.index');
-    
-       
+    { 
+        return DB::transaction(function () use ($request) {
+            $createdSubscriber = $this->subscriber->create($request->except('image'));
+            if ($createdSubscriber) {
+                
+                Toastr::success('Subscriber created successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+                return redirect()->route('admin.subscriber.index');
+            }
+            Toastr::error('Subscriber cannot be created.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+            return redirect()->route('admin.subscriber.index');
+        });
     }
 
 
     public function update(UpdateSubscriberRequest $request,$id)
     {
-
-        // $createdSubscriber = $this->subscriber->update($request->all(),$id);
-        // if ($createdSubscriber) {
-        //     Toastr::success('Subscriber updated successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
-        //     return redirect()->route('admin.subscriber.index');
-        // }
-        // Toastr::error('Subscriber cannot be updated.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
-        // return redirect()->route('admin.subscriber.index');
-
+        // dd($request->all());
+        return DB::transaction(function () use ($request, $id) {
+            $updatedSubscriber = $this->subscriber->update($request->all(),$id);
+            if ($updatedSubscriber) {
+                Toastr::success('Subscriber updated successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+                return redirect()->route('admin.subscriber.index');
+            }
+            Toastr::error('Subscriber cannot be updated.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+            return redirect()->route('admin.subscriber.index');
+        });
     }
 
    

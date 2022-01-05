@@ -8,7 +8,7 @@
 		<a href="{{route('admin.dashboard') }}" class="text-muted">Dashboard</a>
 	</li>
 	<li class="breadcrumb-item text-muted">
-		<a href="{{ route('admin.promotion_voucher.index')}}" class="text-muted">promotion vouchers</a>
+		<a href="{{ route('admin.promotion_voucher.index')}}" class="text-muted">Promotion vouchers</a>
 	</li>
 	<li class="breadcrumb-item text-active">
 		<a href="#" class="text-active">Add</a>
