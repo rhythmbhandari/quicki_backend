@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\Notification\NotificationController;
 use App\Http\Controllers\Api\Notification\SosController;
 use App\Http\Controllers\Api\Notification\EventController;
 use App\Http\Controllers\Api\Payment\PaymentController;
+use App\Http\Controllers\Api\PromotionVoucher\PromotionVoucherController;
 
 
 /*
@@ -191,6 +192,13 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->post('/rider/sos/create', [SosController::class, 'rider_sos_store'])->name('rider.sos.store');
   $router->post('/user/sos/event/create', [EventController::class, 'user_event_store'])->name('user.event.store');
   $router->post('/rider/sos/event/create', [EventController::class, 'rider_event_store'])->name('rider.event.store');
+
+
+  //---------------------------------------------------------------------------------------------------------
+  //  PROMOTION VOUCHER 
+  //---------------------------------------------------------------------------------------------------------
+  $router->get('/{user_type}/promotion_voucher/list', [PromotionVoucherController::class, 'getPromotionVoucherList'])->name('promotion_voucher.getList');
+  $router->get('/{user_type}/promotion_voucher/{promotion_voucher_id}/check', [PromotionVoucherController::class, 'checkPromotionVoucher'])->name('promotion_voucher.check');
 
 
   
