@@ -19,8 +19,8 @@ use App\Modules\Services\Payment\PaymentService;
 //models
 use App\Modules\Models\Rider;
 use App\Modules\Models\User;
-use App\Modules\Models\Document;
-use App\Modules\Models\Payment;
+
+use Carbon\Carbon;
 
 class RiderService extends Service
 {
@@ -70,7 +70,7 @@ class RiderService extends Service
                 return $user->phone;
             })
             ->editColumn('status', function (User $user) {
-                return getTableHtml($user, 'status');
+                return getTableHtml($user->rider, 'status');
             })
             ->editColumn('actions', function (User $user) {
                 $editRoute = route('admin.rider.edit', $user->id);
@@ -203,7 +203,6 @@ class RiderService extends Service
     function riderCreate(array $data, $user = null)
     {
         try {
-            $data['status'] = (isset($data['status']) ?  $data['status'] : '') == 'on' ? 'active' : 'in_active';
 
             //CREATE USER
             $createdUser = $this->user_service->create($data);
@@ -211,7 +210,9 @@ class RiderService extends Service
             //dd($createdUser, 'creating rider user');
             if ($createdUser) {
                 $data['rider']['user_id'] = intval($createdUser->id);
-                $data['rider']['status'] = (isset($data['rider']['status']) ?  $data['rider']['status'] : '') == 'on' ? 'active' : 'in_active';
+                // dd($data['rider']['status']);
+                $data['rider']['status'] = (isset($data['rider']['status']) ?  $data['rider']['status'] : '') == 'on' ?  'active' : 'in_active';
+                $data['rider']['approved_at'] = (isset($data['rider']['approved_at']) ?  $data['rider']['approved_at'] : '') == 'on' ? Carbon::now() : null;
                 //CREATE RIDER
                 $createdRider = $this->rider->create($data['rider']);
                 if ($createdRider) {
@@ -220,11 +221,11 @@ class RiderService extends Service
                     //CREATE License
                     if (isset($data['license'])) {
                         $data['license']['documentable_id'] = intval($createdRider->id);
+                        $data['license']['type'] = 'license';
                         $data['license']['documentable_type'] = 'App\Modules\Models\Rider';
                         $createdDocument = $this->document_service->create($data['license']);
                         $createdRider->license =  $createdDocument;
                     }
-
 
                     //CREATE VEHICLE
                     $data['vehicle']['rider_id'] = intval($createdRider->id);
@@ -235,6 +236,7 @@ class RiderService extends Service
                         if (isset($data['insurance'])) {
                             $data['insurance']['documentable_id'] = intval($createdVehicle->id);
                             $data['insurance']['documentable_type'] = 'App\Modules\Models\Vehicle';
+                            $data['insurance']['type'] = 'insurance';
                             $createdDocument = $this->document_service->create($data['insurance']);
                             $createdVehicle->insurance =  $createdDocument;
                         }
@@ -243,6 +245,7 @@ class RiderService extends Service
                         if (isset($data['bluebook'])) {
                             $data['bluebook']['documentable_id'] = intval($createdVehicle->id);
                             $data['bluebook']['documentable_type'] = 'App\Modules\Models\Vehicle';
+                            $data['bluebook']['type'] = 'bluebook';
                             $createdDocument = $this->document_service->create($data['bluebook']);
                             $createdVehicle->bluebook =  $createdDocument;
                         }
@@ -263,7 +266,6 @@ class RiderService extends Service
     function riderUpdate(array $data, $id)
     {
         try {
-            $data['status'] = (isset($data['status']) ?  $data['status'] : '') == 'on' ? 'active' : 'in_active';
 
             //CREATE USER
             $updatedUser = $this->user_service->update($id, $data);
@@ -272,6 +274,7 @@ class RiderService extends Service
             if ($updatedUser) {
                 $data['rider']['user_id'] = intval($updatedUser->id);
                 $data['rider']['status'] = (isset($data['rider']['status']) ?  $data['rider']['status'] : '') == 'on' ? 'active' : 'in_active';
+                $data['rider']['approved_at'] = (isset($data['rider']['approved_at']) ?  $data['rider']['approved_at'] : '') == 'on' ? Carbon::now() : null;
                 //CREATE RIDER
                 $rider = $updatedUser->rider;
 
@@ -285,6 +288,13 @@ class RiderService extends Service
                             $document->update($data['license']);
                             $rider->license =  $document;
                         }
+                    }
+                    //rider doesn't have license created yet, so creating it.
+                    if (!isset($rider->license) && isset($data['license'])) {
+                        $data['license']['documentable_id'] = intval($rider->id);
+                        $data['license']['documentable_type'] = 'App\Modules\Models\Rider';
+                        $createdDocument = $this->document_service->create($data['license']);
+                        $rider->license =  $createdDocument;
                     }
 
                     //UPDATE VEHICLE
@@ -304,6 +314,23 @@ class RiderService extends Service
                                 $document->update($data['bluebook']);
                                 $vehicle->bluebook =  $document;
                             }
+                        }
+                        //creating insurance and bluebook if they dont exist...
+                        if (!isset($vehicle->insurance) && isset($data['insurance'])) {
+
+                            $data['insurance']['documentable_id'] = intval($vehicle->id);
+                            $data['insurance']['documentable_type'] = 'App\Modules\Models\Vehicle';
+                            $data['insurance']['type'] = 'insurance';
+                            $createdDocument = $this->document_service->create($data['insurance']);
+                            $vehicle->insurance =  $createdDocument;
+                        }
+                        if (!isset($vehicle->bluebook) && isset($data['bluebook'])) {
+                            $data['bluebook']['documentable_id'] = intval($vehicle->id);
+                            $data['bluebook']['type'] = 'bluebook';
+                            $data['bluebook']['documentable_type'] = 'App\Modules\Models\Vehicle';
+
+                            $createdDocument = $this->document_service->create($data['bluebook']);
+                            $vehicle->bluebook =  $createdDocument;
                         }
                     }
                     $rider->vehicle =  $vehicle;

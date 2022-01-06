@@ -163,32 +163,12 @@ class RiderController extends Controller
     public function store(RiderRequest $request)
     {
         $data = $request->except('image');
-        // dd($request->all());
-        $data['rider'] = $request->only('experience', 'trained', 'status', 'approved_at');
+        $data['rider'] = $request->rider;
         $data['vehicle'] = $request->only('vehicle_type_id', 'vehicle_number', 'brand', 'model', 'vehicle_color', 'make_year');
 
-        $data['status'] = (isset($data['status']) ?  $data['status'] : '') == 'on' ? 'active' : 'in_active';
-        $data['rider']['status'] = (isset($data['rider']['status']) ?  $data['rider']['status'] : '') == 'on' ? 'active' : 'in_active';
-        $data['rider']['approved_at'] = (isset($data['rider']['approved_at']) ?  $data['rider']['approved_at'] : '') == 'on' ? Carbon::now() : null;
-
-        if ($request->has(['license_issue_date', 'license_expiry_date', 'license_number'])) {
-            $data['license']['document_number'] = $request->license_number;
-            $data['license']['type'] = "license";
-            $data['license']['issue_date'] = $request->license_issue_date;
-            $data['license']['expiry_date'] = $request->license_expiry_date;
-        }
-        if ($request->has(['bluebook_issue_date', 'bluebook_expiry_date', 'bluebook_number'])) {
-            $data['bluebook']['document_number'] = $request->bluebook_number;
-            $data['bluebook']['type'] = "bluebook";
-            $data['bluebook']['issue_date'] = $request->bluebook_issue_date;
-            $data['bluebook']['expiry_date'] = $request->bluebook_expiry_date;
-        }
-        if ($request->has(['insurance_issue_date', 'insurance_expiry_date', 'insurance_number'])) {
-            $data['insurance']['document_number'] = $request->insurance_number;
-            $data['insurance']['type'] = "insurance";
-            $data['insurance']['issue_date'] = $request->insurance_issue_date;
-            $data['insurance']['expiry_date'] = $request->insurance_expiry_date;
-        }
+        $data['license'] = $request->license;
+        $data['bluebook'] = $request->bluebook;
+        $data['insurance'] = $request->insurance;
 
         if (
             isset($data['home']['name']) && isset($data['home']['latitude']) && isset($data['home']['longitude']) &&
@@ -197,8 +177,6 @@ class RiderController extends Controller
             $data['location']['home'] = $data['home'];
             $data['location']['work'] = $data['work'];
         }
-
-        // dd($data);
 
         return DB::transaction(function () use ($request, $data) {
             if ($user = $this->rider->riderCreate($data)) {
@@ -227,36 +205,16 @@ class RiderController extends Controller
         });
     }
 
-
     public function update(RiderRequest $request, $user_id)
     {
 
-        // dd($request->all());
         $data = $request->except('image');
-        $data['rider'] = $request->only('experience', 'trained', 'status');
+        $data['rider'] = $request->rider;
+        // $data['rider']['status'] = $request->rider['status'];
         $data['vehicle'] = $request->only('vehicle_type_id', 'vehicle_number', 'brand', 'model', 'vehicle_color', 'make_year');
-
-        $data['status'] = (isset($data['status']) ?  $data['status'] : '') == 'on' ? 'active' : 'in_active';
-        $data['rider']['status'] = (isset($data['rider']['status']) ?  $data['rider']['status'] : '') == 'on' ? 'active' : 'in_active';
-
-        if ($request->has(['license_issue_date', 'license_expiry_date', 'license_number'])) {
-            $data['license']['document_number'] = $request->license_number;
-            $data['license']['type'] = "license";
-            $data['license']['issue_date'] = $request->license_issue_date;
-            $data['license']['expiry_date'] = $request->license_expiry_date;
-        }
-        if ($request->has(['bluebook_issue_date', 'bluebook_expiry_date', 'bluebook_number'])) {
-            $data['bluebook']['document_number'] = $request->bluebook_number;
-            $data['bluebook']['type'] = "bluebook";
-            $data['bluebook']['issue_date'] = $request->bluebook_issue_date;
-            $data['bluebook']['expiry_date'] = $request->bluebook_expiry_date;
-        }
-        if ($request->has(['insurance_issue_date', 'insurance_expiry_date', 'insurance_number'])) {
-            $data['insurance']['document_number'] = $request->insurance_number;
-            $data['insurance']['type'] = "insurance";
-            $data['insurance']['issue_date'] = $request->insurance_issue_date;
-            $data['insurance']['expiry_date'] = $request->insurance_expiry_date;
-        }
+        $data['license'] = $request->license;
+        $data['bluebook'] = $request->bluebook;
+        $data['insurance'] = $request->insurance;
 
         if (
             isset($data['home']['name']) && isset($data['home']['latitude']) && isset($data['home']['longitude']) &&
@@ -267,6 +225,8 @@ class RiderController extends Controller
         }
 
         //UPDATE USER
+
+        // dd($data);
         return DB::transaction(function () use ($data, $user_id, $request) {
             $updatedUser = $this->rider->riderUpdate($data, $user_id);
 
@@ -274,9 +234,11 @@ class RiderController extends Controller
                 if ($request->hasFile('image')) {
                     $this->uploadFile($request, $updatedUser);
                 }
+
                 if (isset($updatedUser->rider->license) && $request->hasFile('license_image')) {
                     $this->uploadDocument($request, $updatedUser->rider->license);
                 }
+
                 if (isset($updatedUser->rider->vehicle->bluebook) && $request->hasFile('bluebook_image')) {
                     $this->uploadDocument($request, $updatedUser->rider->vehicle->bluebook);
                 }
@@ -316,6 +278,7 @@ class RiderController extends Controller
     {
 
         $file = $request->file($document->type . '_image');
+        // dd($file);
 
         $fileName = $this->document_service->uploadFile($file);
         if (!empty($document->image))
