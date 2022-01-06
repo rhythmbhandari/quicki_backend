@@ -16,6 +16,11 @@
 @endsection
 
 @section('page-specific-styles')
+<style>
+    .invoice-6 .invoice-6-container {
+        background-color: #1c0152;
+    }
+</style>
 <link href="{{asset('assets/admin/plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet"
     type="text/css" />
 <link href="{{asset('assets/admin/plugins/custom/lightbox/lightbox.css')}}" rel="stylesheet" type="text/css" />
@@ -126,7 +131,7 @@
     <!-- Modal Dialog:begins -->
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document" id="modalDialog">
         <!-- Modal Content:begins -->
-        <div class="modal-content" id="modalContent">
+        <div class="modal-content invoice-6" id="modalContent">
             <!--- SPINNER : Begins -->
             <div class="overlay-layer rounded bg-primary-o-20 d-none">
                 <div class="spinner spinner-track spinner-success spinner-lg"></div>
@@ -134,14 +139,16 @@
             <!--- SPINNER : Ends -->
             <!-- Modal Header:ends -->
             <div class="modal-header">
-                <h5 class="modal-title " id="modalLabel">Modal Title</h5>
+                <h5 class="modal-title " id="modalLabel">Rider Commission</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>
             </div>
             <!-- Modal Header:ends -->
             <!-- Modal Body:begins -->
-            <div class="modal-body" id="modalBody">
+            <div class="modal-body invoice-6-container bgi-size-contain bgi-no-repeat bgi-position-y-top bgi-position-x-center"
+                id="modalBody"
+                style="background-image: url('{{asset('assets/admin/media/svg/shapes/abstract-10.svg')}}');">
 
                 <!--- SPINNER : Begins -->
                 {{-- <div class="overlay-layer rounded bg-primary-o-20 d-none">
