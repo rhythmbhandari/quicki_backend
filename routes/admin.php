@@ -19,7 +19,7 @@ use App\Http\Controllers\Admin\NewsletterSubscription\SubscriberController;
 use App\Http\Controllers\Admin\Ckeditor\CkeditorController;
 
 use App\Http\Controllers\Admin\Notification\NotificationController;
-use App\Http\Controllers\Admin\Setting\SettingController; 
+use App\Http\Controllers\Admin\Setting\SettingController;
 
 use App\Http\Controllers\Admin\PromotionVoucher\PromotionVoucherController;
 use Inertia\Inertia;
@@ -89,6 +89,7 @@ Route::group([
     $router->get('booking_ajax', [BookingController::class, 'bookingAjax'])->name('booking.ajax');
     $router->get('nearest_pending_ajax', [BookingController::class, 'getNearestPendingBookingAjax'])->name('pending_booking.ajax');
     $router->post('/booking/change_status', [BookingController::class, 'changeStatusAjax'])->name('booking.change.status');
+    $router->get('/booking_location_by_type', [BookingController::class, 'getBookingByType'])->name('booking_by_type.ajax');
 
     //SOS AND NOTIFICATION
     $router->resource('/sos', SosController::class);

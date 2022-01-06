@@ -90,7 +90,7 @@ class BookingController extends Controller
             if (isset($object->rider))
                 array_push($results, [
                     'id' => $object['id'],
-                    'text' => 'ID: ' . $object->id . ' / Origin: ' . $object->location['origin']['name'] . ' / Destination: ' . $object->location['origin']['name'] . ' / Status: ' . $object->status . ' / Vehicle Type: ' . $object->vehicle_type->name . ' / Customer: ' . $object->user->first_name . ' ' . $object->user->last_name . ' / Rider: ' . $object->rider->user->first_name . ' ' . $object->rider->user->last_name,
+                    'text' => 'ID: ' . $object->id . ' / Origin: ' . $object->location['origin']['name'] . ' / Destination: ' . $object->location['destination']['name'] . ' / Status: ' . $object->status . ' / Vehicle Type: ' . $object->vehicle_type->name . ' / Customer: ' . $object->user->first_name . ' ' . $object->user->last_name . ' / Rider: ' . $object->rider->user->first_name . ' ' . $object->rider->user->last_name,
                     'booking_id' => $object->id
                 ]);
             else
@@ -101,6 +101,25 @@ class BookingController extends Controller
                 ]);
         }
         return compact('results');
+    }
+
+    function getBookingByType(Request $request)
+    {
+        $booking_loc = [
+            'pending' => [],
+            'accepted' => [],
+            'running' => [],
+            'completed' => [],
+            'cancelled' => []
+        ];
+        if ($request->has('status')) {
+            $bookingLocations = Booking::select('location', 'status')->where('status', $request->status)->get();
+
+            foreach ($bookingLocations as $location) {
+                array_push($booking_loc[$location->status], ['lat' => $location->location['origin']['latitude'], 'lng' => $location->location['origin']['longitude']]);
+            }
+        }
+        return compact('booking_loc');
     }
 
     function getNearestPendingBookingAjax(Request $request)

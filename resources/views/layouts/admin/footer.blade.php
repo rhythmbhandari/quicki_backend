@@ -12,6 +12,22 @@
         bike: '{{asset('assets/admin/icons/rider_map.svg')}}',
         car: '{{asset('assets/admin/icons/car_map.svg')}}'
     }
+
+    const colorCodes = {
+        'pending' : '#E3B809', //yellow
+        'accepted': '#FA3AA2', //pink
+        'running': 'blue',
+        'completed': '#57FA0D', //green
+        'cancelled': 'red'
+    }
+
+    const markerIcons = {
+        'pending': '{{asset('assets/admin/icons/pending.png')}}',
+        'accepted': '{{asset('assets/admin/icons/accepted.png')}}',
+        'running': '{{asset('assets/admin/icons/running.png')}}',
+        'completed': '{{asset('assets/admin/icons/completed.png')}}',
+        'cancelled': '{{asset('assets/admin/icons/cancelled.png')}}'
+    }
 </script>
 <!--begin::Global Theme Bundle(used by all pages)-->
 <script src="{{asset('assets/admin/plugins/global/plugins.bundle.js')}}"></script>
@@ -31,7 +47,7 @@
 
 <!-- custom scripts -->
 <script src="{{asset('assets/admin/js/my-script.js')}}"></script>
-  {{--
+{{--
 <script>
     var last_check = null;
     const audio = new Audio('/notification/notification.mp3');

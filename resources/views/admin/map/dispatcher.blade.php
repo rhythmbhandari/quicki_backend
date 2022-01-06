@@ -86,7 +86,39 @@
 
 
                 <div class="row">
-                    <div class="col" style="height: 80vh;" id="googleBookingMap"></div>
+                    <div class="col-10" style="height: 80vh;" id="googleBookingMap"></div>
+                    <div class="col-2 d-flex flex-column px-5">
+                        <div class="label-box mb-5">
+                            <i class="fas fa-wave-square mr-5" style="color: #E3B809"></i>
+                            Pending Booking
+                        </div>
+                        <div class="label-box mb-5">
+                            <i class="fas fa-wave-square mr-5" style="color: #FA3AA2"></i>
+                            Accepted Booking
+                        </div>
+                        <div class="label-box mb-5">
+                            <i class="fas fa-wave-square mr-5" style="color: blue"></i>
+                            Running Booking
+                        </div>
+                        <div class="label-box mb-5">
+                            <i class="fas fa-wave-square mr-5" style="color: #57FA0D"></i>
+                            Completed Booking
+                        </div>
+                        <div class="label-box mb-5">
+                            <i class="fas fa-wave-square mr-5" style="color: red"></i>
+                            Cancelled Booking
+                        </div>
+                        <div class="label-box mb-5">
+                            <img src="{{asset('assets/admin/icons/rider_map.svg')}}" class="mr-5"
+                                style="height: 30px;width: 20px;" alt="">
+                            Bike Rider
+                        </div>
+                        <div class="label-box mb-5">
+                            <img src="{{asset('assets/admin/icons/car_map.svg')}}" class="mr-5"
+                                style="height: 30px;width: 20px;" alt="">
+                            Vehicle Rider
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
 
@@ -283,12 +315,9 @@
             fail: (e) => {
                 reject(e);
             }
-        });
+            });
         })
     }
-
-
-   
 
     function plotRiderData(map) {
         // console.log("rider data is being fetched!!!!")
@@ -308,10 +337,7 @@
             url: "/admin/active_rider_data",
             data: data,
             success: function(result){
-                console.log(result, "rider location fetched!!")
                 let new_riders = {};
-
-                console.log("printing rider locations", result)
 
                 //create marker of rider_id that are new
                 result.nearest_rider.map(new_rider=> {
@@ -338,7 +364,6 @@
                                     infowindow.setContent("Failed to retrieve driver info!");
                                 }
                             }).catch((e)=> console.log(e))
-
                         })
                     }
 
@@ -349,15 +374,12 @@
                 for(rider_id in markers) {
                     if(rider_id in new_riders) {
                         markers[rider_id].setPosition(new google.maps.LatLng(new_riders[rider_id].lat, new_riders[rider_id].lng));
-
                     }
                     else {
                         markers[rider_id].setMap(null)
                         delete markers[rider_id]
                     }
                 }
-
-                // console.log("rider data fetch completed!")
             }
         });
     }
@@ -373,6 +395,13 @@
             })
             .then((response, status) => {
                 // $('#distance').val(response.routes[0].legs[0].distance.text);
+                // console.log(colorCodes[bookingData.status], "color code of current booking!!")
+                directionsRenderer.setOptions({
+                    polylineOptions: {
+                        strokeColor: colorCodes[bookingData.status]
+                    }
+                });
+
                 directionsRenderer.setDirections(response);
                 plotRiderData(map)
             }).catch((e) => console.log("Directions request failed due to " + e));
