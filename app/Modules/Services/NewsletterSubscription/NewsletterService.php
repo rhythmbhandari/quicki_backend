@@ -60,7 +60,16 @@ class NewsletterService extends Service
         try {
             $existing_codes = Newsletter::pluck('code')->toArray();
             $data['code'] = generateNewsletterCode($existing_codes);
-            $data['body'] = str_replace('../../..', url(''),$data['body'] );
+            // $data['body'] = str_replace('../../..', url(''),$data['body'] );
+
+            if(config('app.env') == 'production')
+            {
+                $data['body'] = str_replace('../..', url(''),$data['body'] );
+            }
+            else{
+                $data['body'] = str_replace('../../..', url(''),$data['body'] );
+            }
+
             $createdNewsletter = $this->newsletter->create($data);
             if($createdNewsletter)
                 return $createdNewsletter;
@@ -78,7 +87,15 @@ class NewsletterService extends Service
             // $parse = parse_url($url);
             // $domain = $parse['host']; // prints 'google.com'
             
-            $data['body'] = str_replace('../../..', url(''),$data['body'] );
+            // $data['body'] = str_replace('../../..', url(''),$data['body'] );
+
+            if(config('app.env') == 'production')
+            {
+                $data['body'] = str_replace('../..', url(''),$data['body'] );
+            }
+            else{
+                $data['body'] = str_replace('../../..', url(''),$data['body'] );
+            }
             // dd(  $data['body']  ,url(''));
             //$data['body'] = asset($data['body']);
             
