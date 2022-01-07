@@ -2,6 +2,10 @@
 <link href="vendor/select2/dist/css/select2.min.css" rel="stylesheet" />
 @endsection
 
+<?php 
+$statuses = ['active', 'in_active', 'blacklisted'];
+?>
+
 <div class="row" data-sticky-container>
     <div class="col-lg-6 col-xl-8">
         <div class="card card-custom gutter-b example example-compact">
@@ -225,16 +229,27 @@
             data-sticky-class="stickyjs">
             <div class="card-body">
                 <div class="form-group row">
-                    <label class="col-6 col-form-label">Status</label>
-                    <div class="col-6">
-                        <span class="switch switch-outline switch-icon switch-success">
-                            <label>
-                                <input type="checkbox" name="status" checked {{ old('status', isset($customer->status) ?
-                                $customer->status : '')=='active' ? 'checked':'' }} {{ (old('status') == 'on') ?
-                                'checked':'' }} />
-                                <span></span>
-                            </label>
-                        </span>
+                    <label class="col-4 col-form-label">Status</label>
+                    <div class="col-8">
+
+                        {{-- {{dd($rider['status'])}} --}}
+                        {{-- <input type="checkbox" name="rider[status]" {{ old('rider[status]', isset($rider['status'])
+                            ? $rider['status'] : '' )=='active' ? 'checked' :'' }} {{ (old('rider[status]')=='on' )
+                            ? 'checked' :'' }} />
+                        <span></span> --}}
+                        <select name="status" id="customer_status" style="width: 100%">
+                            <option value="{{old('status', isset($customer->status) ?
+                                    $customer->status: '')}}">
+                                {{ucwords(str_replace('_', '', old('status', isset($customer->status) ?
+                                $customer->status: '')))}}
+                            </option>
+                            @foreach ($statuses as $status)
+                            @if ($status != old('status', isset($customer->status) ?
+                            $customer->status: ''))
+                            <option value="{{$status}}">{{ucwords(str_replace('_', '', $status))}}</option>
+                            @endif
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -297,6 +312,12 @@
 
     $(".kt_select2").select2({
         placeholder: "Assign Role"
+    });
+
+    $("#customer_status").select2({
+        placeholder: "Select status",
+        minimumResultsForSearch: -1,
+        width: 'resolve'
     });
 
     //initialzing dom elements into variables

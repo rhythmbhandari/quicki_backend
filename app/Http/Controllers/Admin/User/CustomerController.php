@@ -70,7 +70,7 @@ class CustomerController extends Controller
 
         // dd($data);
 
-        $data['status'] = (isset($data['status']) ?  $data['status'] : '') == 'on' ? 'active' : 'in_active';
+        // $data['status'] = (isset($data['status']) ?  $data['status'] : '') == 'on' ? 'active' : 'in_active';
         if (
             isset($data['home']['name']) && isset($data['home']['latitude']) && isset($data['home']['longitude']) &&
             isset($data['work']['name']) && isset($data['work']['latitude']) && isset($data['work']['longitude'])
@@ -164,8 +164,6 @@ class CustomerController extends Controller
             $data['location']['home'] = $data['home'];
             $data['location']['work'] = $data['work'];
         }
-        $data['status'] = (isset($data['status']) ?  $data['status'] : '') == 'on' ? 'active' : 'in_active';
-
         return DB::transaction(function () use ($request, $data, $id) {
             if ($customer = $this->customer->update($id, $data)) {
 

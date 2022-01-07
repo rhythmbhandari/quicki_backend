@@ -1,7 +1,16 @@
 @section('page-specific-style')
+
+<style>
+    #rider_status {
+        width: 100% !important;
+    }
+</style>
 <link href="vendor/select2/dist/css/select2.min.css" rel="stylesheet" />
 @endsection
 
+<?php 
+$statuses = ['active', 'in_active', 'blacklisted'];
+?>
 <div class="row" data-sticky-container>
     <div class="col-lg-6 col-xl-8">
         <div class="card card-custom gutter-b example example-compact">
@@ -242,39 +251,25 @@
                     <div class="col">
                         <label>Experience</label>
 
-                        <input type="number" class="form-control @error('experience') is-invalid @enderror"
-                            placeholder="Enter Experience" name="experience"
-                            value="@if(isset($ruder['experience'])){{$rider['experience']}}@else{{old('experience')}}@endif" />
+                        <input type="number" class="form-control @error('rider[experience]') is-invalid @enderror"
+                            placeholder="Enter Experience" name="rider[experience]"
+                            value="@if(isset($rider['experience'])){{$rider['experience']}}@else{{old('rider[experience]')}}@endif" />
                         @error('experience')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                         @enderror
                     </div>
-                    {{-- <div class="col">
-                        <label>Trained<span class="text-danger">*</span>
-                        </label>
-                        <select class="form-control kt_select2" name="trained" id="">
-                            <option value="YES" @if (Input::old('title')=='YES' || isset($user->rider)) selected
-                                @endif>Yes</option>
-                            <option value="NO" @if (Input::old('title')=='NO' ) selected @endif>No</option>
-                        </select>
-                        @error('trained')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                        @enderror
-                    </div> --}}
                 </div>
 
                 <div class="form-group row">
                     <div class="col-6">
                         <label>License Issue Date<span class="text-danger">*</span></label>
                         <div class="input-group date">
-                            <input type="text" class="form-control @error('license_issue_date') is-invalid @enderror"
-                                id="license-start" readonly="readonly" name="license_issue_date"
+                            <input type="text" class="form-control @error('license[issue_date]') is-invalid @enderror"
+                                id="license-start" readonly="readonly" name="license[issue_date]"
                                 placeholder="Start date"
-                                value="{{old('license_issue_date',isset($rider['license']['issue_date']) ? $rider['license']['issue_date'] : '')}}"
+                                value="{{old('license[issue_date]',isset($rider['license']['issue_date']) ? $rider['license']['issue_date'] : '')}}"
                                 autocomplete="off" data-parsley-errors-container="#license-issue-errors" required>
                             <div class="input-group-append">
                                 <span class="input-group-text">
@@ -283,7 +278,7 @@
                             </div>
                         </div>
                         <div id="license-issue-errors"></div>
-                        @error('license_issue_date')
+                        @error('license[issue_date]')
                         <div class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </div>
@@ -295,10 +290,10 @@
                             <label>License Expire Date<span class="text-danger">*</span></label>
                             <div class="input-group date">
                                 <input type="text"
-                                    class="form-control @error('license_expiry_date') is-invalid @enderror"
-                                    id="license-expire" name="license_expiry_date" readonly="readonly"
+                                    class="form-control @error('license[expiry_date]') is-invalid @enderror"
+                                    id="license-expire" name="license[expiry_date]" readonly="readonly"
                                     placeholder="Select date"
-                                    value="{{old('license_expiry_date',isset($rider['license']['expiry_date']) ? $rider['license']['expiry_date'] : '')}}"
+                                    value="{{old('license[expiry_date]',isset($rider['license']['expiry_date']) ? $rider['license']['expiry_date'] : '')}}"
                                     autocomplete="off" data-parsley-errors-container="#license-expire-errors"
                                     required />
                                 <div class="input-group-append">
@@ -310,7 +305,7 @@
                         </div>
                         <div id="license-expire-errors"></div>
 
-                        @error('license_expiry_date')
+                        @error('license[expiry_date]')
                         <div class="text-danger">
                             {{$message}}
                         </div>
@@ -357,11 +352,11 @@
                         <label>License Number<span class="text-danger">*</span>
                         </label>
                         <input type="number" data-parsley-type="digits"
-                            class="form-control @error('license_number') is-invalid @enderror"
-                            placeholder="License number" name="license_number"
-                            value="@if(isset($rider['license'])){{$rider['license']['document_number']}}@else{{old('license_number')}}@endif"
+                            class="form-control @error('license[document_number]') is-invalid @enderror"
+                            placeholder="License number" name="license[document_number]"
+                            value="@if(isset($rider['license'])){{$rider['license']['document_number']}}@else{{old('license[document_number]')}}@endif"
                             required />
-                        @error('license_number')
+                        @error('license[document_number]')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -467,10 +462,10 @@
                     <div class="col-6">
                         <label>Bluebook Issue Date<span class="text-danger">*</span></label>
                         <div class="input-group date">
-                            <input type="text" class="form-control @error('bluebook_issue_date') is-invalid @enderror"
-                                id="bluebook-issue" name="bluebook_issue_date" readonly="readonly"
+                            <input type="text" class="form-control @error('bluebook[issue_date]') is-invalid @enderror"
+                                id="bluebook-issue" name="bluebook[issue_date]" readonly="readonly"
                                 placeholder="Select date"
-                                value="{{old('bluebook_issue_date',isset($vehicle['bluebook']['issue_date']) ? $vehicle['bluebook']['issue_date'] : '')}}"
+                                value="{{old('bluebook[issue_date]',isset($vehicle['bluebook']['issue_date']) ? $vehicle['bluebook']['issue_date'] : '')}}"
                                 autocomplete="off" data-parsley-errors-container="#bluebook-issue-errors" required />
                             <div class="input-group-append">
                                 <span class="input-group-text">
@@ -479,7 +474,7 @@
                             </div>
                         </div>
                         <div id="bluebook-issue-errors"></div>
-                        @error('bluebook_issue_date')
+                        @error('bluebook[issue_date]')
                         <div class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </div>
@@ -488,10 +483,10 @@
                     <div class="col-6">
                         <label>Bluebook Expire Date<span class="text-danger">*</span></label>
                         <div class="input-group date">
-                            <input type="text" class="form-control @error('bluebook_expiry_date') is-invalid @enderror"
-                                id="bluebook-expire" name="bluebook_expiry_date" readonly="readonly"
+                            <input type="text" class="form-control @error('bluebook[expiry_date]') is-invalid @enderror"
+                                id="bluebook-expire" name="bluebook[expiry_date]" readonly="readonly"
                                 placeholder="Select date"
-                                value="{{old('bluebook_expiry_date',isset($vehicle['bluebook']) ? $vehicle['bluebook']['expiry_date'] :'')}}"
+                                value="{{old('bluebook[expiry_date]',isset($vehicle['bluebook']) ? $vehicle['bluebook']['expiry_date'] :'')}}"
                                 autocomplete="off" data-parsley-errors-container="#bluebook-expire-errors" required />
                             <div class="input-group-append">
                                 <span class="input-group-text">
@@ -500,7 +495,7 @@
                             </div>
                         </div>
                         <div id="bluebook-expire-errors"></div>
-                        @error('bluebook_expire_date')
+                        @error('bluebook[expiry_date]')
                         <div class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </div>
@@ -546,11 +541,11 @@
                         <label>Bluebook Number<span class="text-danger">*</span>
                         </label>
                         <input type="number" data-parsley-type="digits"
-                            class="form-control @error('bluebook_number') is-invalid @enderror"
-                            placeholder="Bluebook number" name="bluebook_number"
-                            value="@if(isset($vehicle['bluebook'])){{$vehicle['bluebook']['document_number']}}@else{{old('bluebook_number')}}@endif"
+                            class="form-control @error('bluebook[document_number]') is-invalid @enderror"
+                            placeholder="Bluebook number" name="bluebook[document_number]"
+                            value="@if(isset($vehicle['bluebook'])){{$vehicle['bluebook']['document_number']}}@else{{old('bluebook[document_number]')}}@endif"
                             required />
-                        @error('bluebook_number')
+                        @error('bluebook[document_number]')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -563,10 +558,10 @@
                     <div class="col-6">
                         <label>Insurance Issue Date<span class="text-danger">*</span></label>
                         <div class="input-group date">
-                            <input type="text" class="form-control @error('insurance_issue_date') is-invalid @enderror"
-                                id="insurance-issue" name="insurance_issue_date" readonly="readonly"
+                            <input type="text" class="form-control @error('insurance[issue_date]') is-invalid @enderror"
+                                id="insurance-issue" name="insurance[issue_date]" readonly="readonly"
                                 placeholder="Select date"
-                                value="{{old('insurance_issue_date',isset($vehicle['insurance']['issue_date']) ? $vehicle['insurance']['issue_date'] : '')}}"
+                                value="{{old('insurance[issue_date]',isset($vehicle['insurance']['issue_date']) ? $vehicle['insurance']['issue_date'] : '')}}"
                                 autocomplete="off" data-parsley-errors-container="#insurance-issue-errors" required />
                             <div class="input-group-append">
                                 <span class="input-group-text">
@@ -584,10 +579,11 @@
                     <div class="col-6">
                         <label>Insurance Expire Date<span class="text-danger">*</span></label>
                         <div class="input-group date">
-                            <input type="text" class="form-control @error('insurance_expiry_date') is-invalid @enderror"
-                                id="insurance-expire" name="insurance_expiry_date" readonly="readonly"
+                            <input type="text"
+                                class="form-control @error('insurance[expiry_date]') is-invalid @enderror"
+                                id="insurance-expire" name="insurance[expiry_date]" readonly="readonly"
                                 placeholder="Select date"
-                                value="{{old('insurance_expiry_date',isset($vehicle['insurance']) ? $vehicle['insurance']['expiry_date'] :'')}}"
+                                value="{{old('insurance[expiry_date]',isset($vehicle['insurance']) ? $vehicle['insurance']['expiry_date'] : '')}}"
                                 autocomplete="off" data-parsley-errors-container="#insurance-expire-errors" required />
                             <div class="input-group-append">
                                 <span class="input-group-text">
@@ -595,7 +591,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div id="insurance-expire-errors"></div>
+                        <div id="insurance[expiry_date]"></div>
                         @error('insurance_expire_date')
                         <div class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -641,11 +637,11 @@
                         <label>Insurance Number<span class="text-danger">*</span>
                         </label>
                         <input type="number" data-parsley-type="digits"
-                            class="form-control @error('insurance_number') is-invalid @enderror"
-                            placeholder="Bluebook number" name="insurance_number"
-                            value="@if(isset($vehicle['insurance'])){{$vehicle['insurance']['document_number']}}@else{{old('insurance_number')}}@endif"
+                            class="form-control @error('insurance[document_number]') is-invalid @enderror"
+                            placeholder="Bluebook number" name="insurance[document_number]"
+                            value="@if(isset($vehicle['insurance'])){{$vehicle['insurance']['document_number']}}@else{{old('insurance[document_number]')}}@endif"
                             required />
-                        @error('insurance_number')
+                        @error('insurance[document_number]')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -657,22 +653,30 @@
             </div>
         </div>
     </div>
+
+    <?php
+    // dd($vehicle);
+    ?>
     <div class="col-lg-4 col-xl-3">
         <div class="card card-custom sticky" data-sticky="true" data-margin-top="140" data-sticky-for="1023"
             data-sticky-class="stickyjs">
             <div class="card-body">
                 <div class="form-group row">
-                    <label class="col-6 col-form-label">Status</label>
-                    <div class="col-6">
-                        <span class="switch switch-outline switch-icon switch-success">
-                            <label>
-                                {{-- {{dd($user['status'])}} --}}
-                                <input type="checkbox" name="status" {{ old('status', isset($rider['status']) ?
-                                    $rider['status'] : '' )=='active' ? 'checked' :'' }} {{ (old('status')=='on' )
-                                    ? 'checked' :'' }} />
-                                <span></span>
-                            </label>
-                        </span>
+                    <label class="col-4 col-form-label">Status</label>
+                    <div class="col-8">
+                        <select name="rider[status]" id="rider_status" style="width: 100%">
+                            <option value="{{old('rider[status]', isset($rider['status']) ?
+                                    $rider['status']: '')}}">
+                                {{ucwords(str_replace('_', '', old('rider[status]', isset($rider['status']) ?
+                                $rider['status']: '')))}}
+                            </option>
+                            @foreach ($statuses as $status)
+                            @if ($status != old('rider[status]', isset($rider['status']) ?
+                            $rider['status']: ''))
+                            <option value="{{$status}}">{{ucwords(str_replace('_', '', $status))}}</option>
+                            @endif
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -680,9 +684,9 @@
                     <div class="col-6">
                         <span class="switch switch-outline switch-icon switch-success">
                             <label>
-                                <input type="checkbox" name="approved_at" {{ old('approved_at',
+                                <input type="checkbox" name="rider[approved_at]" {{ old('rider[approved_at]',
                                     isset($rider['approved_at']) ? $rider['approved_at'] : null )==null ? '' :'checked'
-                                    }} {{ (old('approved_at')=='on' ) ? 'checked' :'' }} />
+                                    }} {{ (old('rider[approved_at]')=='on' ) ? 'checked' :'' }} />
                                 <span></span>
                             </label>
                         </span>
@@ -753,6 +757,12 @@
             'url' : '{{route('admin.vehicle_type.ajax')}}',
             'dataType': 'json'
         }
+    });
+
+    $("#rider_status").select2({
+        placeholder: "Select status",
+        minimumResultsForSearch: -1,
+        width: 'resolve'
     });
 
     $("#license-start, #license-expire ,#bluebook-issue, #bluebook-expire, #insurance-issue, #insurance-expire").datepicker({

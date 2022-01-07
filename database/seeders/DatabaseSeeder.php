@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             //  OtpSeeder::class,
             // VehicleSeeder::class,
 
+
             SettingSeeder::class,
            VehicleTypeSeeder::class,
 
