@@ -33,7 +33,7 @@ class NewsletterMail extends Mailable implements ShouldQueue
     public function build()
     {
         $newsletter = $this->newsletter;
-        return $this->subject(config('app.name').': Newsteller')
+        return $this->subject(config('app.name').': Newsletter')
                     ->view('admin.email.newsletter_template',compact('newsletter'));
     }
 }
