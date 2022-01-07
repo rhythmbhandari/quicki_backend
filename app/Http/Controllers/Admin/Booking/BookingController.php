@@ -83,7 +83,8 @@ class BookingController extends Controller
             $q->select('id', 'first_name', 'last_name');
         }, 'vehicle_type' => function ($q) {
             $q->select('id', 'name');
-        }])->simplePaginate(10);
+        }])->orderBy('updated_at','desc')->simplePaginate(10);
+        // }])->simplePaginate(10);
         // dd($query->toArray());
         $results = array();
         foreach ($query as $object) {
