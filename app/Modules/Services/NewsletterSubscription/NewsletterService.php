@@ -62,13 +62,13 @@ class NewsletterService extends Service
             $data['code'] = generateNewsletterCode($existing_codes);
             // $data['body'] = str_replace('../../..', url(''),$data['body'] );
 
-            if(config('app.env') == 'production')
-            {
-                $data['body'] = str_replace('../..', url(''),$data['body'] );
-            }
-            else{
-                $data['body'] = str_replace('../../..', url(''),$data['body'] );
-            }
+            // if(config('app.env') == 'production')
+            // {
+            //     $data['body'] = str_replace('../..', url(''),$data['body'] );
+            // }
+            // else{
+            //     $data['body'] = str_replace('../../..', url(''),$data['body'] );
+            // }
 
             $createdNewsletter = $this->newsletter->create($data);
             if($createdNewsletter)
@@ -89,13 +89,13 @@ class NewsletterService extends Service
             
             // $data['body'] = str_replace('../../..', url(''),$data['body'] );
 
-            if(config('app.env') == 'production')
-            {
-                $data['body'] = str_replace('../..', url(''),$data['body'] );
-            }
-            else{
-                $data['body'] = str_replace('../../..', url(''),$data['body'] );
-            }
+            // if(config('app.env') == 'production')
+            // {
+            //     $data['body'] = str_replace('../..', url(''),$data['body'] );
+            // }
+            // else{
+            //     $data['body'] = str_replace('../../..', url(''),$data['body'] );
+            // }
             // dd(  $data['body']  ,url(''));
             //$data['body'] = asset($data['body']);
             

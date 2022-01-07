@@ -212,6 +212,9 @@
             automatic_uploads: true,
             images_upload_url: "{{route('admin.ckeditor.upload', ['_token' => csrf_token() ])}}", //'/uploads/ckeditor',
             file_picker_types: 'image',
+            relative_urls : false,
+            remove_script_host : false,
+            convert_urls : true,
             file_picker_callback: function(cb, value, meta) {
                 var input = document.createElement('input');
                 input.setAttribute('type', 'file');
@@ -228,7 +231,8 @@
                     //     blobCache.add(blobInfo);
                     //     cb(blobInfo.blobUri(), { title: file.name });
                     // };
-                    // reader.readAsDataURL(file);
+                    reader.readAsDataURL(file);
+                    // console.log('BASE URL: ',getBase64(file));
                 };
                 input.click();
             },
