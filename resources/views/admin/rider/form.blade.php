@@ -1,7 +1,16 @@
 @section('page-specific-style')
+
+<style>
+    #rider_status {
+        width: 100% !important;
+    }
+</style>
 <link href="vendor/select2/dist/css/select2.min.css" rel="stylesheet" />
 @endsection
 
+<?php 
+$statuses = ['active', 'in_active', 'blacklisted'];
+?>
 <div class="row" data-sticky-container>
     <div class="col-lg-6 col-xl-8">
         <div class="card card-custom gutter-b example example-compact">
@@ -251,20 +260,6 @@
                         </span>
                         @enderror
                     </div>
-                    {{-- <div class="col">
-                        <label>Trained<span class="text-danger">*</span>
-                        </label>
-                        <select class="form-control kt_select2" name="trained" id="">
-                            <option value="YES" @if (Input::old('title')=='YES' || isset($user->rider)) selected
-                                @endif>Yes</option>
-                            <option value="NO" @if (Input::old('title')=='NO' ) selected @endif>No</option>
-                        </select>
-                        @error('trained')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                        @enderror
-                    </div> --}}
                 </div>
 
                 <div class="form-group row">
@@ -588,7 +583,7 @@
                                 class="form-control @error('insurance[expiry_date]') is-invalid @enderror"
                                 id="insurance-expire" name="insurance[expiry_date]" readonly="readonly"
                                 placeholder="Select date"
-                                value="{{old('insurance[expiry_date]',isset($vehicle['insurance']) ? $vehicle['insurance']['expiry_date'] :'')}}"
+                                value="{{old('insurance[expiry_date]',isset($vehicle['insurance']) ? $vehicle['insurance']['expiry_date'] : '')}}"
                                 autocomplete="off" data-parsley-errors-container="#insurance-expire-errors" required />
                             <div class="input-group-append">
                                 <span class="input-group-text">
@@ -667,17 +662,21 @@
             data-sticky-class="stickyjs">
             <div class="card-body">
                 <div class="form-group row">
-                    <label class="col-6 col-form-label">Status</label>
-                    <div class="col-6">
-                        <span class="switch switch-outline switch-icon switch-success">
-                            <label>
-                                {{-- {{dd($rider['status'])}} --}}
-                                <input type="checkbox" name="rider[status]" {{ old('rider[status]',
-                                    isset($rider['status']) ? $rider['status'] : '' )=='active' ? 'checked' :'' }} {{
-                                    (old('rider[status]')=='on' ) ? 'checked' :'' }} />
-                                <span></span>
-                            </label>
-                        </span>
+                    <label class="col-4 col-form-label">Status</label>
+                    <div class="col-8">
+                        <select name="rider[status]" id="rider_status" style="width: 100%">
+                            <option value="{{old('rider[status]', isset($rider['status']) ?
+                                    $rider['status']: '')}}">
+                                {{ucwords(str_replace('_', '', old('rider[status]', isset($rider['status']) ?
+                                $rider['status']: '')))}}
+                            </option>
+                            @foreach ($statuses as $status)
+                            @if ($status != old('rider[status]', isset($rider['status']) ?
+                            $rider['status']: ''))
+                            <option value="{{$status}}">{{ucwords(str_replace('_', '', $status))}}</option>
+                            @endif
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -758,6 +757,12 @@
             'url' : '{{route('admin.vehicle_type.ajax')}}',
             'dataType': 'json'
         }
+    });
+
+    $("#rider_status").select2({
+        placeholder: "Select status",
+        minimumResultsForSearch: -1,
+        width: 'resolve'
     });
 
     $("#license-start, #license-expire ,#bluebook-issue, #bluebook-expire, #insurance-issue, #insurance-expire").datepicker({

@@ -66,6 +66,10 @@ function getLabel($status)
             $label = 'label label-lg font-weight-bold label-light-danger label-inline';
             break;
 
+        case 'blacklisted':
+            $label = 'label label-lg font-weight-bold label-light-warning label-inline';
+            break;
+
         case 'visible':
             $label = 'label label-lg font-weight-bold label-light-success label-inline';
             break;
@@ -301,9 +305,6 @@ function randomStringCodeGenerator($code, $length = 4)
 function generateBookingCode($existing_codes = null)
 {
 
-    //$company_code = 'LIG';
-    //$company_code = config('app.company_code');
-
     $company_code = !empty(config('settings.site_code')) ? config('settings.site_code') : config('app.site_code');
 
     //$generatedCode = $company_code. '-' .strtoupper('BK'.substr($brand_name,0,3));
@@ -332,7 +333,6 @@ function generateVoucherCode($existing_codes = null)
             $generatedCode = randomStringCodeGenerator($prefix, 8);
         }
     }
-
 
     return $generatedCode;
 }

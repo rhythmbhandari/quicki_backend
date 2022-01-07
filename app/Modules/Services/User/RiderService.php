@@ -170,7 +170,6 @@ class RiderService extends Service
             //dd($createdUser, 'creating rider user');
             if ($createdUser) {
                 $data['rider']['user_id'] = intval($createdUser->id);
-                $data['rider']['status'] = isset($data['rider']['status']) ? $data['rider']['status'] : 'in_active';
                 //CREATE RIDER
                 $createdRider = $this->rider->create($data['rider']);
                 if ($createdRider) {
@@ -210,8 +209,6 @@ class RiderService extends Service
             //dd($createdUser, 'creating rider user');
             if ($createdUser) {
                 $data['rider']['user_id'] = intval($createdUser->id);
-                // dd($data['rider']['status']);
-                $data['rider']['status'] = (isset($data['rider']['status']) ?  $data['rider']['status'] : '') == 'on' ?  'active' : 'in_active';
                 $data['rider']['approved_at'] = (isset($data['rider']['approved_at']) ?  $data['rider']['approved_at'] : '') == 'on' ? Carbon::now() : null;
                 //CREATE RIDER
                 $createdRider = $this->rider->create($data['rider']);
@@ -265,6 +262,7 @@ class RiderService extends Service
 
     function riderUpdate(array $data, $id)
     {
+        // dd($data);
         try {
 
             //CREATE USER
@@ -273,7 +271,6 @@ class RiderService extends Service
             //dd($updatedUser, 'creating rider user');
             if ($updatedUser) {
                 $data['rider']['user_id'] = intval($updatedUser->id);
-                $data['rider']['status'] = (isset($data['rider']['status']) ?  $data['rider']['status'] : '') == 'on' ? 'active' : 'in_active';
                 $data['rider']['approved_at'] = (isset($data['rider']['approved_at']) ?  $data['rider']['approved_at'] : '') == 'on' ? Carbon::now() : null;
                 //CREATE RIDER
                 $rider = $updatedUser->rider;
