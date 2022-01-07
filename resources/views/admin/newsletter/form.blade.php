@@ -129,24 +129,112 @@
 <script src="{{asset('assets/admin/js/pages/features/miscellaneous/sticky-panels.js')}}"></script>
 <script src="{{asset('assets/admin/js/pages/crud/forms/widgets/bootstrap-datepicker.js')}}"></script>
 <script src="{{asset('assets/admin/plugins/custom/lightbox/lightbox.js')}}"></script>
-<script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script>
+{{-- <script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script> --}}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
-    /*********** CKEDITOR:begins ****************/
+    /*********** CKEDITOR:begins ***************
     initializeCKEditor();
     function initializeCKEditor(){
-        // ClassicEditor
-        // .create( document.querySelector( '#descriptionck' ) )
-        // .catch( error => {
-        //     console.error( error );
-        // } );
         CKEDITOR.replace('body', {
             height:'200px',
             filebrowserUploadUrl: "{{route('admin.ckeditor.upload', ['_token' => csrf_token() ])}}",
             filebrowserUploadMethod: 'form'
         });
     }
-    /*********** CKEDITOR:ends ****************/
+    ********** CKEDITOR:ends ****************/
 </script>
+
+
+<script src="https://cdn.tiny.cloud/1/nnd7pakaxqr7isf3oqefsdlew1jsidgl78umfeus6tg21ng0/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+<script>
+
+    var templates =[
+            {
+            title: 'My Template 1',
+            description: 'This is my template1.',
+            content: ' <header class="bg bg-info text-light text-center" style="height:200px;width:100%"> \
+                        Header1 \
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quidem voluptatibus earum at placeat accusantium pariatur non maxime, dolore debitis numquam? \
+                    </header>\
+                    <footer class="bg bg-danger text-light text-center" style="height:200px;width:100%"> \
+                        Footer1 \
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum similique repudiandae minus modi, suscipit mollitia pariatur provident possimus exercitationem ad labore numquam ullam tempora! Necessitatibus voluptatem ullam optio ratione sapiente. \
+                    </footer2> \
+                '
+            },
+            {
+                title: 'My Template 2',
+                description: 'This is my template2.',
+                content: ' <header class="bg bg-info text-light text-center" style="height:200px;width:100%"> \
+                            Header2 \
+                        </header> \
+                        <footer class="bg bg-danger text-light text-center" style="height:200px;width:100%"> \
+                            Footer2 \
+                        </footer2> \
+                    '
+            },
+            {
+                title: 'My Template 3',
+                description: 'This is my template3.',
+                content: ' <header class="bg bg-info text-light text-center" style="height:200px;width:100%"> \
+                                Header3 \
+                            </header> \
+                        <footer class="bg bg-danger text-light text-center" style="height:200px;width:100%"> \
+                            Footer3 \
+                        </footer2> \
+                    '
+            }
+        ];
+
+        tinymce.init({
+            selector: '#body',
+
+            image_class_list: [
+            {title: 'img-responsive', value: 'img-responsive'},
+            ],
+            height: 500,
+            setup: function (editor) {
+                editor.on('init change', function () {
+                    editor.save();
+                });
+            },
+            plugins: [
+                "advlist autolink lists link image charmap print preview anchor ",
+                "searchreplace visualblocks code  fullscreen",
+                "insertdatetime template  media table contextmenu paste imagetools",
+                "a11ychecker advcode casechange export formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker"
+            ],
+            toolbar: ["insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image ",
+            "a11ycheck addcomment showcomments casechange checklist code export formatpainter pageembed permanentpen table" ],
+            image_title: true,
+            automatic_uploads: true,
+            images_upload_url: "{{route('admin.ckeditor.upload', ['_token' => csrf_token() ])}}", //'/uploads/ckeditor',
+            file_picker_types: 'image',
+            file_picker_callback: function(cb, value, meta) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+                input.onchange = function() {
+                    var file = this.files[0];
+                    var reader = new FileReader();
+                    // reader.readAsDataURL(file);
+                    // reader.onload = function () {
+                    //     var id = 'blobid' + (new Date()).getTime();
+                    //     var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                    //     var base64 = reader.result.split(',')[1];
+                    //     var blobInfo = blobCache.create(id, file, base64);
+                    //     blobCache.add(blobInfo);
+                    //     cb(blobInfo.blobUri(), { title: file.name });
+                    // };
+                    // reader.readAsDataURL(file);
+                };
+                input.click();
+            },
+            templates: '/assets/admin/js/newsletter/templates.json'
+        });
+</script>
+
+
 @endsection

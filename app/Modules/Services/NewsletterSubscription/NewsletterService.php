@@ -8,6 +8,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 use App\Modules\Models\Newsletter;
 use App\Modules\Models\Subscriber;
+use Illuminate\Support\Facades\URL;
 
 //services
 use App\Modules\Services\User\RiderService;
@@ -41,12 +42,12 @@ class NewsletterService extends Service
                     return getTableHtml($newsletter, 'image');
                 })
                 ->editColumn('actions', function (Newsletter $newsletter) {
-                    $editRoute = route('admin.newsletter.edit', $newsletter->id);;
+                    $editRoute = route('admin.newsletter.edit', $newsletter->id);
                     $deleteRoute = '';
-                    $optionRoute = '';
+                    $showRoute = route('admin.newsletter.show', $newsletter->id);;
                     $mapRoute = '';
                     $optionRouteText = '';
-                    return getTableHtml($newsletter, 'actions', $editRoute, $deleteRoute, $optionRoute, $optionRouteText, "", $mapRoute);
+                    return getTableHtml($newsletter, 'actions', $editRoute, $deleteRoute, $showRoute, $optionRouteText, "", $mapRoute);
                 })->rawColumns(['image','created_at', 'actions', 'title'])
                 ->make(true);
         }
@@ -59,6 +60,7 @@ class NewsletterService extends Service
         try {
             $existing_codes = Newsletter::pluck('code')->toArray();
             $data['code'] = generateNewsletterCode($existing_codes);
+            $data['body'] = str_replace('../../..', url(''),$data['body'] );
             $createdNewsletter = $this->newsletter->create($data);
             if($createdNewsletter)
                 return $createdNewsletter;
@@ -69,12 +71,18 @@ class NewsletterService extends Service
         return NULL;
     }
 
-    function update( $data,$newsletterId)
+    function update($data,$newsletterId)
     {
         try {
-        
+            // $url = url('');
+            // $parse = parse_url($url);
+            // $domain = $parse['host']; // prints 'google.com'
             
-            $newsletter= Subscriber::findOrFail($newsletterId);
+            $data['body'] = str_replace('../../..', url(''),$data['body'] );
+            // dd(  $data['body']  ,url(''));
+            //$data['body'] = asset($data['body']);
+            
+            $newsletter= Newsletter::findOrFail($newsletterId);
             $updatedNewsletter = $newsletter->update($data);
             return $updatedNewsletter;
 

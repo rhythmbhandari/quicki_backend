@@ -130,9 +130,29 @@ Route::group([
     //  NEWSLETTER and SUBSCRIBERS RESOURCE ROUTES
     //---------------------------------------------------------------------------------------------------------
     $router->resource('newsletter', NewsletterController::class);
-    $router->get('newsletter_date', [NewsletterController::class, 'getAllData'])->name('newsletter.data');
+    $router->get('newsletter_data', [NewsletterController::class, 'getAllData'])->name('newsletter.data');
     $router->resource('subscriber', SubscriberController::class);
-    $router->get('subscriber_date', [SubscriberController::class, 'getAllData'])->name('subscriber.data');
-    $router->resource('sent_newsletter', SentNewsletterController::class);
-    $router->get('newsletter/{rider_id}/sent', [SentNewsletterController::class, 'history'])->name('newsletter.sent');
+    $router->get('subscriber_data', [SubscriberController::class, 'getAllData'])->name('subscriber.data');
+    $router->patch('newsletter/{newsletter_id}/send', [NewsletterController::class, 'send_newsletter'])->name('newsletter.send');
+
+    
+    $router->get('/newsletter/templates/{template_number}',function($template_number){
+        switch($template_number)
+        {
+            case "1":
+                return view('admin.email.templates.1')->render();
+                break;
+            case "2":
+                return view('admin.email.templates.2')->render();
+                break;
+            case "3":
+                return view('admin.email.templates.3')->render();
+                break;
+            default:
+                return null;
+        }
+    });
+    // $router->resource('sent_newsletter', SentNewsletterController::class);
+    // $router->get('newsletter/{rider_id}/sent', [SentNewsletterController::class, 'history'])->name('newsletter.sent');
+    // $router
 });

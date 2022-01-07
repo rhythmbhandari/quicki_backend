@@ -8,11 +8,15 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Kamaln7\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\DB;
+use Mail;
+use App\Mail\NewsletterMail;
+use Illuminate\Contracts\Bus\Dispatcher;
 
 use App\Http\Requests\Admin\NewsletterSubscription\NewsletterRequest;
 use App\Http\Requests\Admin\NewsletterSubscription\UpdateNewsletterRequest;
 
 use App\Modules\Models\Newsletter;
+use App\Modules\Models\Subscriber;
 use App\Modules\Models\User;
 
 use App\Modules\Services\NewsletterSubscription\NewsletterService;
@@ -64,6 +68,17 @@ class NewsletterController extends Controller
         return view('admin.newsletter.edit', compact('newsletter'));
     }
 
+    public function show($id)
+    {
+        $recipient_emails = null;
+        $user_emails = User::pluck('email')->toArray();
+        $subscriber_emails = Subscriber::where('subscribed',1)->pluck('email')->toArray();
+        $recipient_emails = array_unique(array_merge($user_emails, $subscriber_emails));
+
+        $newsletter = Newsletter::findOrFail($id);
+        return view('admin.newsletter.show', compact('newsletter','recipient_emails'));
+    }
+
  
     public function store(NewsletterRequest $request)
     { 
@@ -98,6 +113,60 @@ class NewsletterController extends Controller
         });
     }
 
+
+
+    public function send_newsletter($newsletter_id)
+    {
+        try{
+            // $job = (new \App\Jobs\SendNewsletterMail($newsletter_id))
+            // ->delay(now()->addSeconds(2)); 
+            // dispatch($job);
+
+            // $emails = array_unique(array_merge(
+            //     Subscriber::where('subscribed',true)->pluck('email')->toArray(), User::where('email','!=',NULL)->pluck('email')->toArray()
+            // ));
+
+            /**** DEPLOYING EACH MAIL IN QUEUE IN THE JOBS TABLE which will execute when queue is working! */
+            $emails = ['amit.karn98@gmail.com','bishant345@gmail.com','suzitmaharjan666@gmail.com','rhythm@letitgrownepal.com'
+            ,'amit@letitgrownepal.com','bishant@letitgrownepal.com'];
+            $newsletter = Newsletter::find($newsletter_id);
+            $body = $newsletter->body;
+    
+            $total_recipients = count($emails);
+            $success = 0;
+            $failed = 0;
+            foreach($emails as $email)
+            {
+                try{
+                    Mail::to($email)->send(new NewsletterMail($newsletter));
+                    $success++;
+                }
+                catch(Exception $e) {
+                    $failed++;
+                }
+            }
+            $message = $success. ' out of '. $total_recipients.' mails queued for delivery!';
+            if($failed > 0)
+                $message .= ' '.$failed.' failed to deliver!';
+    
+            if($success == 0)
+            {
+                Toastr::error($message.' Newsletter cannot be sent. ', 'Oops !!! ', ["positionClass" => "toast-bottom-right"]);
+            }
+            else{
+                Toastr::success($message, ' Success !!! ', ["positionClass" => "toast-bottom-right"]);
+            }
+            
+        }
+        catch(Exception $e)
+        {
+            Toastr::error(' Something went wrong while sending mails!!! ','Oppss!'. ["positionClass" => "toast-bottom-right"]);
+        }
+        return redirect()->route('admin.newsletter.index');
+        
+       
+        
+    }
 
 
     function uploadFile(Request $request, $newsletter)

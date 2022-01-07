@@ -50,7 +50,7 @@ class CreateUsersTable extends Migration
              $table->json('location')->nullable()->comment('Format: { home:{ name:"sanepa,lalitpur",latitude:27.343,longitude:85.3423 } ,work:{ name:"sanepa,lalitpur",latitude:27.343,longitude:85.3423 }  }  ');
            
 
-            $table->enum('status',['active','in_active'])->nullable();
+            $table->enum('status',['active','in_active'])->default('active')->nullable();
 
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('last_logged_in')->nullable();
