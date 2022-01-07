@@ -346,8 +346,8 @@ function generateNewsletterCode($existing_codes = null)
 
 function generateVoucherCode($existing_codes = null)
 {
-
-    $prefix = '#';
+    $company_code = !empty(config('settings.site_code')) ? config('settings.site_code') : config('app.site_code');
+    $prefix = '';
 
     $generatedCode = randomStringCodeGenerator($prefix, 8);
     if ($existing_codes) {
