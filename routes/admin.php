@@ -14,6 +14,9 @@ use App\Http\Controllers\Admin\Booking\BookingController;
 use App\Http\Controllers\Admin\Payment\TransactionController;
 use App\Http\Controllers\Admin\Heatmap\HeatmapController;
 use App\Http\Controllers\Admin\Sos\SosController;
+use App\Http\Controllers\Admin\NewsletterSubscription\NewsletterController;
+use App\Http\Controllers\Admin\NewsletterSubscription\SubscriberController;
+use App\Http\Controllers\Admin\Ckeditor\CkeditorController;
 
 use App\Http\Controllers\Admin\Notification\NotificationController;
 use App\Http\Controllers\Admin\Setting\SettingController;
@@ -37,6 +40,8 @@ Route::group([
     'as' => 'admin.', 'middleware' =>  ['admin'], 'prefix' => 'admin' // 'middleware' => ['role:ROLE_CANDIDATE'],
 ], function ($router) {
     $router->get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    $router->post('ckeditor/upload',  [CkeditorController::class,'upload'])->name('ckeditor.upload');
 
     //user
     $router->resource('/user', UserController::class);
@@ -94,6 +99,11 @@ Route::group([
     $router->get('/notification/latest/{notification_type}', [NotificationController::class, 'getLatestNotification'])->name('notification.latest');
     // $router->get('vehicle_type_ajax', [VehicleTypeController::class, 'vehicleTypeAjax'])->name('vehicle_type.ajax');
 
+    //Read Notifications
+    $router->get('/notification/{notification_id}/read', [NotificationController::class, 'read_booking_notification'])->name('notification.read');
+    $router->get('/sos/{sos_id}/read', [NotificationController::class, 'read_sos'])->name('sos.read');
+    $router->get('/event/{event_id}/read', [NotificationController::class, 'read_event'])->name('event.read');
+
     //transaction
     $router->resource('/transaction', TransactionController::class);
     $router->get('transaction_data', [TransactionController::class, 'getAllData'])->name('transaction.data');
@@ -114,4 +124,35 @@ Route::group([
     //---------------------------------------------------------------------------------------------------------
     $router->get('/settings/{group}/loadSettingForms', [SettingController::class, 'loadSettingForms'])->name('setting.loadSettingForms');
     $router->resource('setting', SettingController::class);
+
+
+     //---------------------------------------------------------------------------------------------------------
+    //  NEWSLETTER and SUBSCRIBERS RESOURCE ROUTES
+    //---------------------------------------------------------------------------------------------------------
+    $router->resource('newsletter', NewsletterController::class);
+    $router->get('newsletter_data', [NewsletterController::class, 'getAllData'])->name('newsletter.data');
+    $router->resource('subscriber', SubscriberController::class);
+    $router->get('subscriber_data', [SubscriberController::class, 'getAllData'])->name('subscriber.data');
+    $router->patch('newsletter/{newsletter_id}/send', [NewsletterController::class, 'send_newsletter'])->name('newsletter.send');
+
+    
+    $router->get('/newsletter/templates/{template_number}',function($template_number){
+        switch($template_number)
+        {
+            case "1":
+                return view('admin.email.templates.1')->render();
+                break;
+            case "2":
+                return view('admin.email.templates.2')->render();
+                break;
+            case "3":
+                return view('admin.email.templates.3')->render();
+                break;
+            default:
+                return null;
+        }
+    });
+    // $router->resource('sent_newsletter', SentNewsletterController::class);
+    // $router->get('newsletter/{rider_id}/sent', [SentNewsletterController::class, 'history'])->name('newsletter.sent');
+    // $router
 });

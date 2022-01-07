@@ -5,6 +5,7 @@ namespace App\Modules\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DateTimeInterface;
 
 use App\Modules\Models\Rider;
 use App\Modules\Models\User;
@@ -41,7 +42,29 @@ class Booking extends Model
         'updated_at', 'created_at', 'deleted_at'
     ];
 
+    /**
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param  \DateTimeInterface  $date
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
+
     protected $appends = ['status_text','distance_km','duration_min'];
+
+    // public function getCreatedAtUtcAttribute()
+    // {
+    //     return $this->created_at->format('Y-m-d H:i:s');
+    // }
+
+    public function getUpdatedAtUtcAttribute()
+    {
+        return $this->updated_at->format('Y-m-d H:i:s');
+    }
+
 
     public function getDistanceKmAttribute()
     {

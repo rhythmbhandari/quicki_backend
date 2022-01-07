@@ -132,6 +132,14 @@
     <div class="card-body">
         <div class="card card-custom card-stretch gutter-b">
 
+            <!--begin::SOS MAP-->
+            {{-- <div class="card card-custom mb-2 p-1">
+                <div class="card-body p-0">
+                    <div class="col bg bg-light-success" style="height: 300px;" id="sosMap"></div>
+                </div>
+            </div> --}}
+              <!--end::SOS MAP-->
+
             <!--begin::Header-->
             <div class="card-header align-items-center border-0 mt-4">
                 <h3 class="card-title align-items-start flex-column">
@@ -282,8 +290,59 @@
 
 
     @section('page-specific-scripts')
+
+    <script async
+    src="https://maps.googleapis.com/maps/api/js?libraries=geometry,places&key={{config('app.map_key')}}&callback=initMap"
+    type="text/javascript"></script>
+
+    
     <script>
         SOS_ID = " {{  isset($sos) ? $sos->id : "" }} ";
+/*
+        //MAP INITIALIZATION
+            
+        let bookingData = {
+        id: null,
+            origin: null,
+            destination: null,
+            status: null,
+            vehicle_type: null,
+            rider_id: null
+        }
+        let riderData = {
+            id: null,
+            name: null,
+            thumbnail_path: null,
+            phone: null,
+            vehicle_type: null
+        }
 
+        let map, directionService, directionsRenderer, markers = {}, infowindow, infowindowContent = "";
+
+
+        function initMap() {
+            //map initialization
+            map = new google.maps.Map(document.getElementById("sosMap"), {
+                center: { lat: 27.6731828, lng: 85.406599 },
+                zoom: 13,
+            });
+
+            plotRiderData(map)
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+
+            infowindow = new google.maps.InfoWindow({
+                content: infowindowContent
+            })
+
+
+            map.addListener("dragend", () => {
+                plotRiderData(map)
+            });
+
+            $('#booking_id').trigger('change')
+        }
+*/
     </script>
     @endsection

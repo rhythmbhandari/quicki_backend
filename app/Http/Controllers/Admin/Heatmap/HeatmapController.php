@@ -7,6 +7,7 @@ use App\Modules\Models\Rider;
 use App\Modules\Models\Booking;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 //services
 use App\Modules\Services\Booking\BookingService;
@@ -36,6 +37,20 @@ class HeatmapController extends Controller
     public function getBookingData($booking_id)
     {
         $booking = Booking::findOrFail($booking_id);
+
+        $notifications = $booking->notifications;
+        if($notifications)
+        {
+            foreach($notifications as $notification)
+            {
+                if(!$notification->read_at)
+                {   
+                    $notification->read_at = Carbon::now();
+                    $notification->save();
+                }
+            }
+        }
+
         return compact('booking');
     }
 }
