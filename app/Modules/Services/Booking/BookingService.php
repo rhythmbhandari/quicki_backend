@@ -746,8 +746,6 @@ class BookingService extends Service
 
             if ($promotion_voucher && $user) {
                 //CHECK FOR VARIOUS ELIGIBILITY FACTORS OF THE VOUCHER 
-
-
                 $used_promotion_vouchers = PriceDetail::whereHas('completed_trip', function (Builder $query) use ($user_id) {
                     $query->where('user_id', $user_id);
                     $query->whereStatus('completed');
@@ -893,35 +891,7 @@ class BookingService extends Service
             );
 
 
-        $booking = Booking::with('user:id,first_name,last_name,image')->where('id', $bookingId)->first();
-        // $booking = Booking::find($bookingId);
 
-        // dd($booking->user->toArray());
-
-        //Send pusher/echo broadcast notification to all admins
-        $title = "Booking Timed Out";
-        $message = "Booking request timed out made by " . $booking->user->name . ' ' . $booking->created_at->diffForHumans();;
-        event(
-            new BookingTimedOut(
-                $title,
-                $message,
-                $bookingId,
-                $booking->user->name
-            )
-        );
-
-        //Create Notification sent via pusher broadcast
-        $this->notification_service->create(
-            [
-                'recipient_id' => null,
-                'recipient_type' => 'admin',
-                'recipient_device_token' => null,
-                'recipient_quantity_type' => 'all',
-                'notification_type' => 'customer_ignored',
-                'title' => $title,
-                'message' => $message,
-            ]
-        );
     }
 
 

@@ -33,6 +33,9 @@ class PromotionVoucherService extends Service
             ->editColumn('name', function (PromotionVoucher $promotion_voucher) {
                 return $promotion_voucher->name;
             })
+            ->editColumn('image', function (PromotionVoucher $promotion_voucher) {
+                return getTableHtml($promotion_voucher, 'image');
+            })
             ->editColumn('code', function (PromotionVoucher $promotion_voucher) {
                 return $promotion_voucher->code;
             })
@@ -68,7 +71,7 @@ class PromotionVoucherService extends Service
                 $optionRouteText = '';
                 return getTableHtml($promotion_voucher, 'actions', $editRoute, $deleteRoute, $optionRoute, $optionRouteText);
             })
-            ->rawColumns(['name','user_type','code','type','worth','remaining_uses','starts_at','expires_at', 'status', 'actions'])
+        ->rawColumns(['name','user_type', 'image','code','type','worth','remaining_uses','starts_at','expires_at', 'status', 'actions'])
             ->make(true);
     }
 
@@ -146,5 +149,39 @@ class PromotionVoucherService extends Service
         }
     }
 
+
+
+    function uploadFile($file)
+    {
+        if (!empty($file)) {
+            $this->uploadPath = 'uploads/promotion_voucher';
+            return $fileName = $this->uploadFromAjax($file);
+        }
+    }
+
+    public function __deleteImages($promotion_voucher)
+    {
+        try {
+            if (is_file($promotion_voucher->image_path))
+                unlink($promotion_voucher->image_path);
+
+            if (is_file($promotion_voucher->thumbnail_path))
+                unlink($promotion_voucher->thumbnail_path);
+        } catch (\Exception $e) {
+        }
+    }
+
+    public function updateImage($promotionVoucherId, array $data)
+    {
+        try {
+            $promotion_voucher = $this->promotion_voucher->find($promotionVoucherId);
+            $promotion_voucher = $promotion_voucher->update($data);
+
+            return $promotion_voucher;
+        } catch (Exception $e) {
+            //$this->logger->error($e->getMessage());
+            return false;
+        }
+    }
 
 }

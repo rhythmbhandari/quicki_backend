@@ -52,6 +52,7 @@ class CreateUsersTable extends Migration
 
             $table->enum('status', ['active', 'in_active', 'blacklisted'])->nullable();
 
+
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('last_logged_in')->nullable();
             $table->integer('no_of_logins')->nullable();
