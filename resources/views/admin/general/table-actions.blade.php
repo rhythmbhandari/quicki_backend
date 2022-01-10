@@ -10,8 +10,21 @@
 @endif
 
 @if(!empty($optionalMenuRoute))
+@if(isset($object->notification_type) && $object->notification_type=="push_notification")
+<a href="{{$optionalMenuRoute}}"><button type="button" id="btnPushNotification" class="btn btn-icon-toggle" data-toggle="tooltip"  title="Push Notification"
+        data-placement="top" data-original-title="Send Notification"
+        data-id="{{$object->id}}"     data-recipient_type="{{$object->recipient_type}}"
+        ><i class="fas fa-paper-plane"></i></button></a>
+@elseif($optionalMenuRoute=="promotion_voucher_notification")
+<a href="#"><button type="button" id="btnPushVoucherNotification" class="btn btn-icon-toggle" title="Push Voucher Notification"
+        data-toggle="modal" data-target="#modalVoucherNotification"
+        data-placement="top" data-original-title="Push Voucher  Notification"
+        data-id="{{$object->id}}"  
+        ><i class="flaticon-bell"></i></button></a>
+@else
 <a href="{{$optionalMenuRoute}}"><button type="button" class="btn btn-icon-toggle" data-toggle="tooltip"
                 data-placement="top" data-original-title="Manage"><i class="fas fa-paper-plane"></i></button></a>
+@endif
 @endif
 
 @if(!empty($optionalMenuText))

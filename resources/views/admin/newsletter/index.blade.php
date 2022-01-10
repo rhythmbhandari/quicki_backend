@@ -141,9 +141,10 @@
 
                 // begin first table
                 var table1 = table.DataTable({
-                    responsive: true,
+                    responsive: false,
                     searchDelay: 500,
                     processing: true,
+                    scrollX:true,
                     serverSide: true,
                     order: [
                         [0, 'desc']
@@ -264,5 +265,13 @@
         /******/
     })();
     //# sourceMappingURL=basic.js.map
+
+
+
+    
+
+
+
+
 </script>
 @endsection

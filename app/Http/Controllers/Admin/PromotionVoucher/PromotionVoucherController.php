@@ -8,12 +8,17 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Kamaln7\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\DB;
+use App\Jobs\PushNotification;
+use Carbon\Carbon;
+use File;
 
 
 use App\Modules\Models\PromotionVoucher;
 use App\Modules\Models\User;
+use App\Modules\Models\Notification;
 use App\Http\Requests\Admin\PromotionVoucher\PromotionVoucherRequest;
 use App\Http\Requests\Admin\PromotionVoucher\UpdatePromotionVoucherRequest;
+use App\Http\Requests\Admin\PromotionVoucher\VoucherNotificationRequest;
 
 use App\Modules\Services\PromotionVoucher\PromotionVoucherService;
 use App\Modules\Services\Notification\NotificationService;
@@ -117,16 +122,120 @@ class PromotionVoucherController extends Controller
         });
     }
 
+    public function get_voucher_notification($promotion_voucher_id)
+    {
+        $promotion_voucher = PromotionVoucher::findOrFail($promotion_voucher_id);
+        $voucher_code = $promotion_voucher->code;
 
-    function uploadFile(Request $request, $promotion_voucher)
+        $related_notification = Notification::where('message','LIKE','%'.$voucher_code.'%')->latest()->first();
+    //   dd($related_notification->toArray());
+        $result['voucher_notification_section'] = view('admin.promotion_voucher.includes.voucher_notification_section',compact('related_notification','promotion_voucher'))->render();
+        return $result;
+        //dd($related_notifications->toArray());
+    }
+
+    public function save_voucher_notification(VoucherNotificationRequest $request, $promotion_voucher_id)
+    {
+        // dd($request->all(),$promotion_voucher_id);
+        $promotion_voucher = PromotionVoucher::findOrFail($promotion_voucher_id);
+        $voucher_code = $promotion_voucher->code;
+        $related_notification = Notification::where('message','LIKE','%'.$voucher_code.'%')->latest()->first();
+        
+        $createdNotification = 0;
+
+        // dd($related_notification);
+        if($related_notification)  //UPDATE EXISTING NOTIFICATION
+        {
+            $id = $related_notification->id;
+            $createdNotification = DB::transaction(function () use ($request, $id) {
+                $updatedNotification = $this->notification_service->update($request->except('image','code','recipient_type','recipient_quantity_type'),$id);
+                if ($updatedNotification) {
+                    if ($request->hasFile('image')) {
+                        $this->uploadFile($request, Notification::find($id), "notification");
+                    }
+                    Toastr::success('Voucher Notification updated successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+                    return $updatedNotification = Notification::find($id);
+                }
+                Toastr::error('Voucher Notification cannot be updated.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+                return null;
+            }); 
+        }
+        else{ //CREATE NEW NOTIFICATION
+            $createdNotification = DB::transaction(function () use ($request,  $promotion_voucher ) {
+                $request['recipient_quantity_type'] = "all";
+                $createdNotification =   $this->notification_service->create($request->except('image'));
+                if ($createdNotification) {
+
+                    if ($request->hasFile('image')) {
+                        // dd("image");
+                        $this->uploadFile($request, $createdNotification, "notification");
+                    } else {
+                        if(  !empty($promotion_voucher->image))
+                        {
+                            // dd('yes');
+                            $newFileName =  sprintf("%s.%s",  sha1($promotion_voucher->image . time()),".webp" );
+                            File::copy($promotion_voucher->image_path, public_path('uploads/notification/'. $newFileName));
+                            File::copy($promotion_voucher->thumbnail_path, public_path('uploads/notification/thumb/'. $newFileName));
+                            $createdNotification->image =   $newFileName;
+                            $createdNotification->save();
+                            // dd();
+                        }
+                    }
+                    // dd('no');
+                    Toastr::success('Voucher Notification created successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+                   return $createdNotification = Notification::find($id);
+                }
+                Toastr::error('Voucher Notification cannot be created.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+                return null;
+            });
+        }
+
+        if( $createdNotification && $request['send_notification'] == 1)
+        {
+            $job = new PushNotification($createdNotification->id, $this->notification_service);
+            dispatch($job);
+            Toastr::success('Notifications sent successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+        }
+        return redirect()->route('admin.notification.index');
+
+    }
+
+    public function push_voucher_notification($promotion_voucher_id)
+    {
+        $promotion_voucher = PromotionVoucher::findOrFail($promotion_voucher_id);
+        $voucher_code = $promotion_voucher->code;
+
+        $related_notifications = Notification::where('body','LIKE',$voucher_code)->get();
+
+        dd($related_notifications->toArray());
+
+    }
+
+
+
+    function uploadFile(Request $request, $object, $service_type="promotion_voucher")
     {
         $file = $request->file('image');
-        $fileName = $this->promotion_voucher->uploadFile($file);
-        if (!empty($promotion_voucher->image))
-            $this->promotion_voucher->__deleteImages($promotion_voucher);
+        if($service_type=="notification")
+        {
+            $fileName = $this->notification_service->uploadFile($file);
+            if (!empty($object->image))
+                $this->notification_service->__deleteImages($object);
+    
+            $data['image'] = $fileName;
+            $this->notification_service->updateImage($object->id, $data);
+        }
+        else
+        {
+            $fileName = $this->promotion_voucher->uploadFile($file);
+            if (!empty($object->image))
+                $this->promotion_voucher->__deleteImages($object);
+    
+            $data['image'] = $fileName;
+            $this->promotion_voucher->updateImage($object->id, $data);
+        }
+      
 
-        $data['image'] = $fileName;
-        $this->promotion_voucher->updateImage($promotion_voucher->id, $data);
     }
    
 }

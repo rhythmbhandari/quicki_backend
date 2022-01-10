@@ -24,6 +24,7 @@
 <link href="{{asset('assets/admin/plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet"
     type="text/css" />
 <link href="{{asset('assets/admin/plugins/custom/lightbox/lightbox.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{asset('css/dropify.css')}}" rel="stylesheet" type="text/css" />
 <style>
     #tableData tbody tr:hover {
         background: #cff5ff;
@@ -33,10 +34,31 @@
 @endsection
 
 @section('content')
+  
 <div class="d-flex flex-column-fluid">
+
+
     <!--begin::Container-->
     <div class="container">
         <div class="card card-custom">
+
+            {{-- @if($errors->any())
+            <div class="text-danger shadow p-2 mx-auto my-2  rounded">
+                <div class="text-danger">Couldn't save/update notification because of following validation fails:</div> --}}
+                
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+        
+            {{-- </div>
+            @endif --}}
+
             <div class="card-header flex-wrap py-5">
                 <div class="card-title">
                     <h3 class="card-label">Promotion Voucher List</h3>
@@ -126,10 +148,42 @@
     </div>
     <!--end::Container-->
 </div>
+
+
+
+<!-- NOTIFICATION DETAIL MODAL: begins -->
+<div class="modal fade" id="modalVoucherNotification" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center text-muted" id="exampleModalLabel"><i class="flaticon-bell font-size-h2 text-danger mr-2"></i> Promotion Voucher Notification Details</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div data-scroll="true" data-height="550">
+                  <div id="voucherNotificationSection"></div>
+                <div>
+            </div>
+            {{-- <div class="modal-footer">
+                <button type="button" class="btn btn-light-danger font-weight-bold text-denger" data-dismiss="modal"><i class="ki ki-close mr-2 text-danget"></i>Close</button>
+                <button type="button" class="btn btn-primary font-weight-bold"><i class="fas fa-save text-light mr-2"></i>  Save Notification</button>
+                <button type="button" class="btn btn-success font-weight-bold"><i class="fas fa-paper-plane text-light mr-2"></i>Save and Send Notification</button>
+            </div> --}}
+        </div>
+    </div>
+</div>
+<!-- NOTIFICATION DETAIL MODAL: ends -->
+
+
 @endsection
 @section('page-specific-scripts')
 <script src="{{asset('assets/admin/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+<script src="{{ asset('assets/admin/plugins/custom/parsleyjs/parsley.min.js') }}"></script>
 <script src="{{asset('assets/admin/plugins/custom/lightbox/lightbox.js')}}"></script>
+<script src="{{ asset('assets/admin/js/pages/crud/file-upload/image-input.js') }}"></script>
+<script src="{{ asset('/js/libs/dropify/dropify.min.js') }}"></script>
 <script>
     /******/
     (() => { // webpackBootstrap
@@ -147,9 +201,10 @@
 
                 // begin first table
                 var table1 = table.DataTable({
-                    responsive: true,
+                    responsive: false,
                     searchDelay: 500,
                     processing: true,
+                    scrollX:true,
                     serverSide: true,
                     order: [
                         [0, 'desc']
@@ -288,5 +343,74 @@
         /******/
     })();
     //# sourceMappingURL=basic.js.map
+
+
+
+    $(document).ready(function() {
+            $('.dropify').dropify();
+        });
+
+
+    $('body').on('click','#btnPushVoucherNotification',function(e){
+        e.preventDefault();
+        
+        var id =  $(this).data('id');
+        var url = '{{ route('admin.promotion_voucher.notification.get', ':id' ) }}';
+        url = url.replace(':id',id);
+
+        $.ajax({
+            type: 'GET',
+            url: url,
+            beforeSend: function() {},
+            success: function(data) {
+                $('#voucherNotificationSection').html(data.voucher_notification_section);
+                $('.dropify').dropify();
+            },
+            error: function(data) {
+                console.log('ERROR refreshing voucher code!')
+            },
+        });
+
+        //Open a modal for displaying push notification infos
+
+        // var recipient_type =  $(this).data('recipient_type');
+
+        // var url = '{{ route('admin.notification.push', ':id') }}';
+        // url = url.replace(":id", id);
+        // console.log('URL: ',url);
+      
+
+        // var text = "All users will be notified and the notification will no longer be editable!";
+        // if(recipient_type != "all");
+        // text = "All "+recipient_type+"s will be notified and the notification will no longer be editable!";
+
+        // Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: text,
+        //     // icon: 'warning',
+        //     customClass: {
+        //         icon: 'icon-right'
+        //     },
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'Yes, push notification!'
+        // }).then((result) => {
+        //     if (result.isConfirmed) {
+        //         window.location.href = url;
+        //     }
+        // })
+
+
+    });
+
+    $('body').on('click','#btnSaveSendNotification',function(e){
+        e.preventDefault();
+        $('#sendNotification').val(1);
+        $('#btnSaveNotification').click();
+
+    });
+
+
 </script>
 @endsection

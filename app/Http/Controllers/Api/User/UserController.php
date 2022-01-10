@@ -197,11 +197,15 @@ class UserController extends Controller
         // $user = ($user_id != null) ? User::findOrFail($user_id) : Auth::user();
 
         $user = null;
-        if($user_id == null)
+        if($user_id == null  )
         {
             $user = Auth::user();
-            $user->device_token = $request->header('device_token');
-            $user->save();
+            if( $request->header('device_token') != null )
+            {
+                $user->device_token = $request->header('device_token');
+                $user->save();
+            }
+           
         }
         else{
             $user = User::find($user_id);

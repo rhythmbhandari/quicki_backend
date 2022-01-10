@@ -68,7 +68,7 @@ class PromotionVoucherService extends Service
                 $deleteRoute = '';
                 // $deleteRoute = route('admin.vendor.destroy',$customer->id);
                 $optionRoute = '';
-                $optionRouteText = '';
+                $optionRouteText = "promotion_voucher_notification";
                 return getTableHtml($promotion_voucher, 'actions', $editRoute, $deleteRoute, $optionRoute, $optionRouteText);
             })
         ->rawColumns(['name','user_type', 'image','code','type','worth','remaining_uses','starts_at','expires_at', 'status', 'actions'])

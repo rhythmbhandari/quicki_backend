@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Notification;
 
+
+use App\Http\Requests\Admin\Notification\NotificationRequest;
+use App\Http\Requests\Admin\Notification\UpdateNotificationRequest;
+use Illuminate\Support\Facades\DB;
+use Kamaln7\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Log;
+
 use App\Http\Controllers\Controller;
 use App\Modules\Models\Booking;
 use App\Modules\Models\Sos;
@@ -14,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Modules\Services\Notification\NotificationService;
 use Carbon\Carbon;
+use App\Jobs\PushNotification;
 
 class NotificationController extends Controller
 {
@@ -138,6 +146,130 @@ class NotificationController extends Controller
         return redirect()->route('admin.sos-detail.create', $event->sos->id);
     }
 
+
+    public function index()
+    {
+        return view('admin.notification.index');
+    }
+
+    public function all_notification_index()
+    {
+        return view('admin.notification.all.index');
+    }
+
+
+    public function getPushNotificationData()
+    {
+        return $this->notification_service->getAllData("push_notification");
+    }
+
+    public function getAllNotificationData()
+    {
+        return $this->notification_service->getAllData();
+    }
+
+    public function show($id)
+    {
+        echo "SHOW NOTIFICATION";
+    }
+
+    public function create()
+    {
+        return view('admin.notification.create');
+    }
+
+    public function edit($id)
+    {
+        $notification = Notification::findOrFail($id);
+        return view('admin.notification.edit', compact('notification'));
+    }
+
+
+    //STORES only the push_notification notifications 
+    public function store(NotificationRequest $request)
+    {
+        // dd($request->all());
+      
+        return DB::transaction(function () use ($request) {
+            $request['recipient_quantity_type'] = "all";
+            $createdNotification =   $this->notification_service->create($request->except('image'));
+            if ($createdNotification) {
+                if ($request->hasFile('image')) {
+                    $this->uploadFile($request, $createdNotification);
+                }
+                Toastr::success('Notification created successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+                return redirect()->route('admin.notification.index');
+            }
+            Toastr::error('Notification cannot be created.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+            return redirect()->route('admin.notification.index');
+        });
+    }
+
+    
+    public function update(UpdateNotificationRequest $request,$id)
+    {
+        // return redirect()->route('admin.notification.index');
+        return DB::transaction(function () use ($request, $id) {
+            $updatedNotification = $this->notification_service->update($request->except('image','code','recipient_type','recipient_quantity_type'),$id);
+            if ($updatedNotification) {
+                if ($request->hasFile('image')) {
+                    $this->uploadFile($request, Notification::find($id));
+                }
+                Toastr::success('Notification updated successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+                return redirect()->route('admin.notification.index');
+            }
+            Toastr::error('Notification cannot be updated.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+            return redirect()->route('admin.notification.index');
+        }); 
+    }
+
+    public function destroy($id)
+    {
+        // return redirect()->route('admin.notification.index');
+        return DB::transaction(function () use ($id) {
+            $result['deleted'] = false;
+            $deletedNotification = $this->notification_service->delete($id);
+            if ($deletedNotification) {
+             
+                Toastr::success('Notification deleted successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+                $result['deleted'] = true;
+                return $results['url'] = route('admin.notification.index');
+            }
+            Toastr::error('Notification cannot be deleted.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+             return $results['url']  = route('admin.notification.index');
+        }); 
+    }
+
+    public function push_notification($notification_id)
+    {
+      
+
+
+        $job = new PushNotification($notification_id, $this->notification_service);
+        dispatch($job);
+
+        Toastr::success('Notifications sent successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+        return redirect()->route('admin.notification.index');
+
+    }
+
+
+    // public function show()
+    // {
+    //     return view('admin.notification.show');
+    // }
+
+    function uploadFile(Request $request, $notification)
+    {
+        $file = $request->file('image');
+        $fileName = $this->notification_service->uploadFile($file);
+        if (!empty($notification->image))
+            $this->notification_service->__deleteImages($notification);
+
+        $data['image'] = $fileName;
+        $this->notification_service->updateImage($notification->id, $data);
+    }
+   
 
 }
 

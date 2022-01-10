@@ -30,7 +30,7 @@ class Notification extends Model
      */
 
     protected $fillable = ([
-        'recipient_id', 'recipient_type', 'recipient_device_token', 'recipient_quantity_type' ,'notification_type','read_at', 'message','image','title',
+        'recipient_id','code', 'recipient_type', 'recipient_device_token', 'recipient_quantity_type' ,'notification_type','read_at', 'message','image','title',
         'booking_id','created_at', 'updated_at' ,'deleted_at'
     ]);
 

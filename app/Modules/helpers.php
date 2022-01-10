@@ -117,6 +117,45 @@ function getLabel($status)
         case 'completed':
             $label = 'label label-lg font-weight-bold label-light-success label-inline';
             break;
+
+        case 'push_notification':
+            $label = 'label label-lg font-weight-bold label-light-info label-inline';
+            break;
+        case 'booking_created':
+            $label = 'label label-lg font-weight-bold label-light-primary label-inline';
+            break;
+        case 'booking_cancelled':
+            $label = 'label label-lg font-weight-bold label-light-danger label-inline';
+            break;
+        case 'booking_completed':
+            $label = 'label label-lg font-weight-bold label-light-success label-inline';
+            break;
+        case 'booking_running':
+            $label = 'label label-lg font-weight-bold label-light-primary label-inline';
+            break;
+        case 'booking_accepted':
+            $label = 'label label-lg font-weight-bold label-light-warning label-inline';
+            break;
+        case 'customer_ignored':
+            $label = 'label label-lg font-weight-bold label-light-danger label-inline';
+            break;
+
+        case 'rider':
+            $label = 'label label-lg font-weight-bold label-light-warning label-inline';
+            break;
+        
+        case 'customer':
+            $label = 'label label-lg font-weight-bold label-light-primary label-inline';
+            break;
+        
+          
+        case 'admin':
+            $label = 'label label-lg font-weight-bold label-light-success label-inline';
+            break;
+                
+        case 'all':
+            $label = 'label label-lg font-weight-bold label-light-success label-inline';
+            break;
     }
 
     return $label;
@@ -332,12 +371,48 @@ function generateNewsletterCode($existing_codes = null)
     $company_code = !empty(config('settings.site_code')) ? config('settings.site_code') : config('app.site_code');
 
     //$generatedCode = $company_code. '-' .strtoupper('BK'.substr($brand_name,0,3));
-    $prefix = '#'.$company_code.'-NL';
+    $prefix = '#'.$company_code.'NL';
     // $generatedCode =  '#'; //$company_code.'-BK-';
     $generatedCode = randomStringCodeGenerator($prefix, 6);
     if ($existing_codes) {
         while (in_array($generatedCode, $existing_codes)) {
             $generatedCode = randomStringCodeGenerator($prefix, 6);
+        }
+    }
+
+
+    return $generatedCode;
+}
+
+function generateNotificationCode($existing_codes = null)
+{
+
+    $company_code = !empty(config('settings.site_code')) ? config('settings.site_code') : config('app.site_code');
+
+    $prefix = '#'.$company_code.'NF';
+    // $generatedCode =  '#'; //$company_code.'-BK-';
+    $generatedCode = randomStringCodeGenerator($prefix, 6);
+    if ($existing_codes) {
+        while (in_array($generatedCode, $existing_codes)) {
+            $generatedCode = randomStringCodeGenerator($prefix, 6);
+        }
+    }
+
+
+    return $generatedCode;
+}
+
+function generateTransactionCode($existing_codes = null)
+{
+
+    $company_code = !empty(config('settings.site_code')) ? config('settings.site_code') : config('app.site_code');
+
+    $prefix = '#'.$company_code;
+    // $generatedCode =  '#'; //$company_code.'-BK-';
+    $generatedCode = randomStringCodeGenerator($prefix, 7);
+    if ($existing_codes) {
+        while (in_array($generatedCode, $existing_codes)) {
+            $generatedCode = randomStringCodeGenerator($prefix, 7);
         }
     }
 

@@ -24,7 +24,7 @@ class Transaction extends Model
                         'promotion_voucher_id'=>'integer',
                         ];
 
-    protected $fillable = ['transaction_date','amount','creditor_type','creditor_id','debtor_type','debtor_id','payment_mode', 'promotion_voucher_id',
+    protected $fillable = ['code','transaction_date','amount','creditor_type','creditor_id','debtor_type','debtor_id','payment_mode', 'promotion_voucher_id',
                             'payment_gateway_type','payment_gateway_user_id','payment_gateway_transaction_amount','payment_gateway_transaction_id',
                             'type','description',
                             'created_at','updated_at','deleted_at'];

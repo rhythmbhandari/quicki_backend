@@ -2902,6 +2902,7 @@
                                 "example": {
                                     "documentable_type": "rider",
                                     "documentable_id": 1,
+                                    "name": "License",
                                     "type": "license",
                                     "document_number": "546352",
                                     "issue_date": "2000/01/01",
@@ -2924,6 +2925,7 @@
                                             "documentable_type": "rider",
                                             "documentable_id": "1",
                                             "type": "passport",
+                                            "name": "License",
                                             "document_number": "456457",
                                             "issue_date": "2000\\/01\\/03",
                                             "image": null,
@@ -2987,6 +2989,7 @@
                                 "example": {
                                     "type": "license",
                                     "document_number": "546352",
+                                    "name": "License",
                                     "issue_date": "2000/01/01",
                                     "expiry_date": "2000/01/01",
                                     "image": "file()"
@@ -3008,6 +3011,7 @@
                                             "documentable_type": "rider",
                                             "documentable_id": 1,
                                             "type": "citizenship",
+                                            "name": "Citizenship",
                                             "document_number": "456457",
                                             "issue_date": "2000-01-03",
                                             "expiry_date": null,
@@ -3079,6 +3083,7 @@
                                             "documentable_type": "rider",
                                             "documentable_id": 1,
                                             "type": "citizenship",
+                                            "name": "Citizenship",
                                             "document_number": "456457",
                                             "issue_date": "2000-01-03",
                                             "expiry_date": null,

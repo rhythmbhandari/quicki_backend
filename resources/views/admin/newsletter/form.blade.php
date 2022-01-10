@@ -150,43 +150,43 @@
 
 <script>
 
-    var templates =[
-            {
-            title: 'My Template 1',
-            description: 'This is my template1.',
-            content: ' <header class="bg bg-info text-light text-center" style="height:200px;width:100%"> \
-                        Header1 \
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quidem voluptatibus earum at placeat accusantium pariatur non maxime, dolore debitis numquam? \
-                    </header>\
-                    <footer class="bg bg-danger text-light text-center" style="height:200px;width:100%"> \
-                        Footer1 \
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum similique repudiandae minus modi, suscipit mollitia pariatur provident possimus exercitationem ad labore numquam ullam tempora! Necessitatibus voluptatem ullam optio ratione sapiente. \
-                    </footer2> \
-                '
-            },
-            {
-                title: 'My Template 2',
-                description: 'This is my template2.',
-                content: ' <header class="bg bg-info text-light text-center" style="height:200px;width:100%"> \
-                            Header2 \
-                        </header> \
-                        <footer class="bg bg-danger text-light text-center" style="height:200px;width:100%"> \
-                            Footer2 \
-                        </footer2> \
-                    '
-            },
-            {
-                title: 'My Template 3',
-                description: 'This is my template3.',
-                content: ' <header class="bg bg-info text-light text-center" style="height:200px;width:100%"> \
-                                Header3 \
-                            </header> \
-                        <footer class="bg bg-danger text-light text-center" style="height:200px;width:100%"> \
-                            Footer3 \
-                        </footer2> \
-                    '
-            }
-        ];
+    // var templates =[
+    //         {
+    //         title: 'My Template 1',
+    //         description: 'This is my template1.',
+    //         content: ' <header class="bg bg-info text-light text-center" style="height:200px;width:100%"> \
+    //                     Header1 \
+    //                     Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quidem voluptatibus earum at placeat accusantium pariatur non maxime, dolore debitis numquam? \
+    //                 </header>\
+    //                 <footer class="bg bg-danger text-light text-center" style="height:200px;width:100%"> \
+    //                     Footer1 \
+    //                     Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum similique repudiandae minus modi, suscipit mollitia pariatur provident possimus exercitationem ad labore numquam ullam tempora! Necessitatibus voluptatem ullam optio ratione sapiente. \
+    //                 </footer2> \
+    //             '
+    //         },
+    //         {
+    //             title: 'My Template 2',
+    //             description: 'This is my template2.',
+    //             content: ' <header class="bg bg-info text-light text-center" style="height:200px;width:100%"> \
+    //                         Header2 \
+    //                     </header> \
+    //                     <footer class="bg bg-danger text-light text-center" style="height:200px;width:100%"> \
+    //                         Footer2 \
+    //                     </footer2> \
+    //                 '
+    //         },
+    //         {
+    //             title: 'My Template 3',
+    //             description: 'This is my template3.',
+    //             content: ' <header class="bg bg-info text-light text-center" style="height:200px;width:100%"> \
+    //                             Header3 \
+    //                         </header> \
+    //                     <footer class="bg bg-danger text-light text-center" style="height:200px;width:100%"> \
+    //                         Footer3 \
+    //                     </footer2> \
+    //                 '
+    //         }
+    //     ];
 
         tinymce.init({
             selector: '#body',

@@ -877,7 +877,7 @@ class BookingService extends Service
                 );
 
             //Create Notification sent via pusher broadcast
-            $this->notification_service->create(
+            return $this->notification_service->create(
                 [
                     'recipient_id'=>null,
                     'recipient_type'=>'admin',

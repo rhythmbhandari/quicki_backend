@@ -108,6 +108,8 @@ class TransactionService extends Service
             $data['debtor_id'] =  intval($data['debtor_id']);
             //creditor type
             //debtor type
+            $existing_codes = Transaction::pluck('code')->toArray();
+            $data['code'] = generateTransactionCode($existing_codes);
 
             $data['payment_gateway_transaction_amount']
                 =  ($data['payment_mode'] == 'online') ? floatval($data['payment_gateway_transaction_amount']) : null;

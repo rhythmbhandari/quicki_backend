@@ -980,6 +980,11 @@ class BookingController extends Controller
             $response = ['message' => 'Booking not found!'];;
             return response($response, 422);
         }
+        if($booking->status != "pending")
+        {
+            $response = ['message' => 'Booking is no longer pending!'];;
+            return response($response, 422);
+        }
 
         // if($booking->status != 'pending')
         // {
@@ -988,8 +993,12 @@ class BookingController extends Controller
         // }
 
 
-        $this->booking->notify_booking_timed_out($booking_id);
-
+        $adminNotified = $this->booking->notify_booking_timed_out($booking_id);
+        if($adminNotified)
+        {
+            $response = ['message' => 'Admin Notified Successfully!'];;
+            return response($response, 200);
+        }
 
     }
 

@@ -23,15 +23,25 @@ $(document).on("click", ".item-delete", function () {
     }).then(function (e) {
         if (e.value === true) {
             $.ajax({
-                type: 'GET',
+                // type: 'GET',
+                type: 'DELETE',
                 url: $button.data("url"),
                 dataType: 'JSON',
                 success: function (results) {
-                    Swal.fire("Done!", "record has been deleted");
+                    console.log(results);
+                    Swal.fire("Done!", "Record has been deleted! " + results.url );
                     $row.addClass("danger").fadeOut();
+                    window.location.href = results.url;
+
                 },
                 error: function (results) {
-                    Swal.fire("Error!", "failed to delete record");
+                    if(results.deleted)
+                        window.location.href = results.url;
+                    else{
+                        // Swal.fire("Error!", "Failed to delete record!");
+                        location.reload();
+                    }
+                        
                 }
             });
         } else {

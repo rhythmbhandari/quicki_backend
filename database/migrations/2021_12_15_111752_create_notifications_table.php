@@ -18,6 +18,7 @@ class CreateNotificationsTable extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique()->nullable();
 
             $table->string('title')->nullable();
             $table->text('message');

@@ -5,7 +5,10 @@ namespace App\Modules\Services\Notification;
 use Illuminate\Http\Request;
 use App\Modules\Services\Service;
 use App\Modules\Services\Notification\FirebaseNotificationService;
+use Yajra\DataTables\Facades\DataTables;
 use Config;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 //models
 use App\Modules\Models\Notification;
@@ -153,6 +156,9 @@ class NotificationService extends Service
         try {
             $data['recipient_id'] = isset($data['recipient_id'])  ? intval($data['recipient_id']) : null;
 
+            $existing_codes = Notification::pluck('code')->toArray();
+            $data['code'] = generateNotificationCode($existing_codes);
+
             $createdNotification = $this->notification->create($data);
 
             if ($createdNotification)
@@ -163,12 +169,39 @@ class NotificationService extends Service
         return NULL;
     }
 
+    function update($data,$notificationId)
+    {
+        try {
+            
+            $notification= Notification::findOrFail($notificationId);
+            $updatedNotification = $notification->update($data);
+            return $updatedNotification;
+
+        } catch (Exception $e) {
+            //$this->logger->error($e->getMessage());
+            return null;
+        }
+    }
+
+
+    public function delete($notificationId)
+    {
+        // dd('delete');
+        try {
+
+            $notification = Notification::findOrFail($notificationId);
+            return $deleted = $notification->delete();
+      
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
 
     public function send_firebase_notification($recipients = null, $notification_type = "push_notification", $recipient_quantity_type = "individual", $message=null)
     {
         $device_tokens = null;
 
-        
         $title = $this->push_notification_messages['default']['default']['title'];
         $body = $this->push_notification_messages['default']['default']['body'];
         $sound = "default";
@@ -186,8 +219,6 @@ class NotificationService extends Service
             $body = $message['body'];
         }
        
-
-
         if ($recipients) {
             //STORE NOTIFICATIONS TO NOTIFICATION TABLE
             if ($recipient_quantity_type != "all") {
@@ -204,27 +235,17 @@ class NotificationService extends Service
                     if ($device_token)
                         $device_tokens[] = $device_token = $device_token->device_token;
 
-                    // $title = $this->push_notification_messages['default'][$recipient_type]['title'];
-                    // $body = $this->push_notification_messages['default'][$recipient_type]['body'];
-
-                    // if($notification_type != "push_notification")
-                    // {
-                    //     $title = $this->default_notification_messages[$notification_type][$recipient_type]['title'];
-                    //     $body = $this->default_notification_messages[$notification_type][$recipient_type]['body'];
-                    // }
-
-
-                    $this->notification->create(
-                        [
-                            "recipient_id" => $recipient_id,
-                            "recipient_type" => $recipient_type,
-                            "recipient_device_token" => $device_token,
-                            "recipient_quantity_type" => $recipient_quantity_type,
-                            "notification_type" => $notification_type,
-                            "title" => $title,
-                            "message" => $body
-                        ],
-                    );
+      
+                    $create_data =  [
+                        "recipient_id" => $recipient_id,
+                        "recipient_type" => $recipient_type,
+                        "recipient_device_token" => $device_token,
+                        "recipient_quantity_type" => $recipient_quantity_type,
+                        "notification_type" => $notification_type,
+                        "title" => $title,
+                        "message" => $body
+                    ];
+                    $this->create($create_data);
                 }
             } else {
 
@@ -233,7 +254,7 @@ class NotificationService extends Service
                     $recipient_id = $recipient[1];
 
                     $device_token = null;
-                    if ($recipient_type == "rider") {
+                  if ($recipient_type == "rider") {
                         $device_token = Rider::select('device_token')->where('id', $recipient_id)->first();
                     } else {
                         $device_token = User::select('device_token')->where('id', $recipient_id)->first();
@@ -243,24 +264,19 @@ class NotificationService extends Service
                     $device_tokens[] = $device_token->device_token;
                 }
 
-                // $title = $this->push_notification_messages['default']['default']['title'];
-                // $body = $this->push_notification_messages['default']['default']['body'];
-                // if($notification_type != "push_notification")
-                // {
-                //     $title = $this->default_notification_messages[$notification_type]["default"]['title'];
-                //     $body = $this->default_notification_messages[$notification_type]["default"]['body'];
-                // }
-                $this->notification->create(
-                    [
-                        "recipient_id" => null,
-                        "recipient_type" => null,
-                        "recipient_device_token" => null,
-                        "recipient_quantity_type" => $recipient_quantity_type,
-                        "notification_type" => $notification_type,
-                        "title" => $title,
-                        "message" => $body
-                    ],
-                );
+                
+                $create_data =  [
+                    "recipient_id" => null,
+                    "recipient_type" => null,
+                    "recipient_device_token" => null,
+                    "recipient_quantity_type" => $recipient_quantity_type,
+                    "notification_type" => $notification_type,
+                    "title" => $title,
+                    "message" => $body
+                ];
+                
+                $this->create($create_data);
+
             }
 
 
@@ -281,13 +297,114 @@ class NotificationService extends Service
 
             return $response;
         }
+        
+    }
+
+
+    public function push_notification($notification_id)
+    {
+        $notification = Notification::findOrFail($notification_id);
+
+        $device_tokens = null;
+        $recipient_type = null;
+        if($notification->recipient_type == "customer") {
+            $recipient_type = "customer";
+            $device_tokens = User::where('device_token','!=',NULL)
+                                // ->where('status','active')
+                                ->pluck('device_token')->toArray();
+        }
+        else if($notification->recipient_type == "rider") {
+            $recipient_type =  "rider";
+            $device_tokens = Rider::where('device_token','!=',NULL)
+            ->pluck('device_token')->toArray();
+        }
+        else{
+            $recipient_type = "all";
+            $customer_tokens = User::where('device_token','!=',NULL)
+            ->pluck('device_token')->toArray();
+            $rider_tokens = Rider::where('device_token','!=',NULL)
+            ->pluck('device_token')->toArray();
+
+            $device_tokens = array_merge($customer_tokens , $rider_tokens);
+        }
+
+        $response = $this->firebase_notification_service->send(
+            [
+                "title" => $notification->title,
+                "body" => $notification->message,
+                "sound"=> "default",
+                "imageUrl" =>  $this->imageUrl,
+                // "icon"=>$icon 
+            ],
+            $device_tokens,
+            [
+                'data' => $notification->notification_type
+            ]
+        );
+
+        Log::channel('custom')->critical(
+            'PUSH NOTIFICATION :: DATETIME=>'.Carbon::now()->toDayDateTimeString(). ' :: RECIPIENT TYPE=> '.$recipient_type.
+            ':: FIREBASE RESPONSE=> '.$response
+        );
+
+        $notification->read_at = Carbon::now();
+        $notification->updated_at = Carbon::now();
+        $notification->save();
+
+        return $response;
+
     }
 
 
 
+    /*For DataTable*/
+    public function  getAllData($filter = null)
+    {
+        $query = $this->notification->where('notification_type','!=','push_notification')->orderBy('created_at','desc')->get();
+        
+        // dd('asdads', $filter);
+        if($filter)
+        {
+            // dd('asdads', $filter);
+            if($filter == "push_notification")
+                $query = $this->notification->where('notification_type','push_notification')->orderBy('created_at','desc')->get();
+        }
+           
 
+        return DataTables::of($query)
+            ->addIndexColumn()
+            ->addColumn('code', function (Notification $notification) {
+                return $notification->code;
+                // return route('admin.notification.destroy', $notification->id);
+            })
+            ->addColumn('title', function (Notification $notification) {
+                return $notification->title;
+            })
+            ->editColumn('image', function(Notification $notification){
+                return getTableHtml($notification, 'image');
+            })
+            ->addColumn('message', function (Notification $notification) {
+                return $notification->message;
+            })
+            ->addColumn('notification_type', function (Notification $notification) {
+                return  '<span class="'.getLabel($notification->notification_type).'">'. $notification->notification_type .'</span>';
+            })
+            ->addColumn('recipient_type', function (Notification $notification) {
+                return '<span class="'.getLabel($notification->recipient_type).'">'. $notification->recipient_type .'</span>';
+            })
+            ->editColumn('actions', function (Notification $notification) {
+                // $editRoute = ($notification->notification_type=="push_notification" && (!$notification->read_at) )?route('admin.notification.edit', $notification->id):'';
+                $editRoute = ($notification->notification_type=="push_notification" )?route('admin.notification.edit', $notification->id):'';
+                $deleteRoute = ($notification->notification_type=="push_notification" )?route('admin.notification.destroy', $notification->id):'';
+                $showRoute = '';//route('admin.notification.show', $notification->id);
+                $mapRoute = '';
+                $optionRouteText = ($notification->notification_type=="push_notification")?route('admin.notification.push', $notification->id):'';
+                return getTableHtml($notification, 'actions', $editRoute, $deleteRoute, $showRoute, $optionRouteText, "", $mapRoute);
+            })->rawColumns([ 'code', 'image','notification_type', 'recipient_type','message', 'actions', 'title'])
+            ->make(true);
+    }
 
-
+    
 
 
 

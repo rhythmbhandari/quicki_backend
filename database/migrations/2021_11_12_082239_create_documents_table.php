@@ -19,6 +19,7 @@ class CreateDocumentsTable extends Migration
             $table->morphs('documentable'); // for vehicles, riders and users 
             $table->string('type')->nullable()->comment('bluebook, passport, license or citizenship');
             $table->string('document_number')->nullable();
+            $table->string('name')->nullable();
             $table->date('issue_date')->nullable();
             $table->date('expiry_date')->nullable();
             $table->date('verified_at')->nullable();

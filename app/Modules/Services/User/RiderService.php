@@ -210,6 +210,8 @@ class RiderService extends Service
             if ($createdUser) {
                 $data['rider']['user_id'] = intval($createdUser->id);
                 $data['rider']['approved_at'] = (isset($data['rider']['approved_at']) ?  $data['rider']['approved_at'] : '') == 'on' ? Carbon::now() : null;
+                $data['status'] = (isset($data['status']) ?  $data['status'] : '') == 'on' ? 'active' : 'in_active';
+                
                 //CREATE RIDER
                 $createdRider = $this->rider->create($data['rider']);
                 if ($createdRider) {

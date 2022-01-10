@@ -594,6 +594,7 @@
                 console.log('ERROR refreshing voucher code!')
             },
         });
+        e.returnValue = true;
     });
 </script>
 @endif

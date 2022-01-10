@@ -23,7 +23,7 @@ class CreateRiderLocationsTable extends Migration
             $table->double('longitude');
             $table->double('latitude');
             $table->foreignId('rider_id')->nullable()->constrained("riders")->cascadeOnUpdate()->cascadeOnDelete();
-            $table->enum('status',['active', 'in_active'])->nullable();
+            $table->enum('status',['active', 'in_active'])->nullable()->default('in_active');
 
             //Determines whether the rider is available or is busy with some active booking
             $table->enum('availability',['available', 'unavailable'])->nullable()->default('available');

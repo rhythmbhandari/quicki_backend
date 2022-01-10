@@ -318,8 +318,12 @@ class RiderController extends Controller
                 return response($response, 403);
             }
             $rider = $user->rider;
-            $rider->device_token = $request->header('device_token');
-            $rider->save();
+            if( $request->header('device_token') != null )
+            {
+                $rider->device_token = $request->header('device_token');
+                $rider->save();
+            }
+            
         }
         else{
             $rider = Rider::find($rider_id);

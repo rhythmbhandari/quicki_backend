@@ -243,7 +243,7 @@
                     str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
                     aria-haspopup="true">
                     <a href="" class="menu-link menu-toggle">
-                        <i class="menu-icon fas fa-map-marked-alt"></i>
+                        <i class="menu-icon flaticon2-mail-1"></i>
                         <span class="menu-text">Newsletter Subscription</span><i class="menu-arrow"></i>
                     </a>
                     <div class="menu-submenu">
@@ -267,6 +267,41 @@
                         </ul>
                     </div>
                 </li>
+
+
+                <!--NOTIFICATIONS AND CAMPAIGNS-->
+                <li class="menu-item menu-item-submenu {{ request()->is('admin/notification') || request()->is('admin/notification/*') 
+                || request()->is('admin/all_notification') || request()->is('admin/all_notification/*') 
+                ? " menu-item-active menu-item-open" : "" }}" {{-- {{
+                str_contains(Route::currentRouteName(), "admin.dashboard" ) ? "menu-item-active" : "" }}" --}}
+                aria-haspopup="true">
+                    <a href="" class="menu-link menu-toggle">
+                        <i class="menu-icon flaticon-bell"></i>
+                        <span class="menu-text">Notification</span><i class="menu-arrow"></i>
+                    </a>
+                    <div class="menu-submenu">
+                        <span class="menu-arrow"></span>
+                        <ul class="menu-subnav">
+                            {{-- @can('role-view') --}}
+                            <li class="menu-item {{request()->is('admin/notification') || request()->is('admin/notification/*')
+                                ? " menu-item-active" : "" }}" aria-haspopup="true">
+                                <a href="{{route('admin.notification.index')}}" class="menu-link"><i
+                                        class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i><span class="menu-text">Push Notifications</span></a>
+                            </li>
+                            <li class="menu-item {{request()->is('admin/all_notification') || request()->is('admin/all_notification/*')
+                                ? " menu-item-active" : "" }}" aria-haspopup="true">
+                                <a href="{{route('admin.notification.all')}}" class="menu-link"><i
+                                        class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i><span class="menu-text">All Notifications</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+     
 
                 <!--SETTINGS-->  
                 <li class="menu-item menu-item-submenu {{ request()->is('admin/setting') || request()->is('admin/setting/*')

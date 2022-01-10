@@ -53,6 +53,7 @@ class DocumentController extends Controller
     *             example={
     *                  "documentable_type":"rider",
     *                  "documentable_id":1,
+    *                  "name":"License",
     *                  "type":"license",
     *                  "document_number":"546352",
     *                  "issue_date":"2000/01/01",
@@ -69,7 +70,7 @@ class DocumentController extends Controller
     *          @OA\MediaType(
     *               mediaType="application/json",
     *                   @OA\Schema(      
-    *                   example={"message":"Document created successfully!","document":{"documentable_type":"rider","documentable_id":"1","type":"passport","document_number":"456457","issue_date":"2000\/01\/03","image":null,"reason":"pending","updated_at":"2021-11-18T06:38:39.000000Z","created_at":"2021-11-18T06:38:39.000000Z","id":2,"thumbnail_path":"assets\/media\/noimage.png","image_path":"assets\/media\/noimage.png"}}
+    *                   example={"message":"Document created successfully!","document":{"documentable_type":"rider","documentable_id":"1","type":"passport","name":"License","document_number":"456457","issue_date":"2000\/01\/03","image":null,"reason":"pending","updated_at":"2021-11-18T06:38:39.000000Z","created_at":"2021-11-18T06:38:39.000000Z","id":2,"thumbnail_path":"assets\/media\/noimage.png","image_path":"assets\/media\/noimage.png"}}
     *                 )
     *           )
     *      ),
@@ -166,6 +167,7 @@ class DocumentController extends Controller
     *             example={
     *                  "type":"license",
     *                  "document_number":"546352",
+    *                  "name":"License",
     *                  "issue_date":"2000/01/01",
     *                  "expiry_date":"2000/01/01",
     *                  "image":"file()",
@@ -180,7 +182,7 @@ class DocumentController extends Controller
     *          @OA\MediaType(
     *               mediaType="application/json",
     *                   @OA\Schema(      
-    *                   example={"message":"Document updated Successfully!","document":{"id":2,"documentable_type":"rider","documentable_id":1,"type":"citizenship","document_number":"456457","issue_date":"2000-01-03","expiry_date":null,"verified_at":null,"reason":"pending","image":null,"deleted_at":null,"created_at":"2021-11-18T06:38:39.000000Z","updated_at":"2021-11-18T06:43:32.000000Z","thumbnail_path":"assets\/media\/noimage.png","image_path":"assets\/media\/noimage.png"}}
+    *                   example={"message":"Document updated Successfully!","document":{"id":2,"documentable_type":"rider","documentable_id":1,"type":"citizenship","name":"Citizenship","document_number":"456457","issue_date":"2000-01-03","expiry_date":null,"verified_at":null,"reason":"pending","image":null,"deleted_at":null,"created_at":"2021-11-18T06:38:39.000000Z","updated_at":"2021-11-18T06:43:32.000000Z","thumbnail_path":"assets\/media\/noimage.png","image_path":"assets\/media\/noimage.png"}}
     *                 )
     *           )
     *      ),
@@ -270,7 +272,7 @@ class DocumentController extends Controller
     *          @OA\MediaType(
     *               mediaType="application/json",
     *                   @OA\Schema(      
-    *                   example={"message":"Success!","document":{"id":2,"documentable_type":"rider","documentable_id":1,"type":"citizenship","document_number":"456457","issue_date":"2000-01-03","expiry_date":null,"verified_at":null,"reason":"pending","image":null,"deleted_at":null,"created_at":"2021-11-18T06:38:39.000000Z","updated_at":"2021-11-18T06:43:32.000000Z","thumbnail_path":"assets\/media\/noimage.png","image_path":"assets\/media\/noimage.png"}}
+    *                   example={"message":"Success!","document":{"id":2,"documentable_type":"rider","documentable_id":1,"type":"citizenship","name":"Citizenship",  "document_number":"456457","issue_date":"2000-01-03","expiry_date":null,"verified_at":null,"reason":"pending","image":null,"deleted_at":null,"created_at":"2021-11-18T06:38:39.000000Z","updated_at":"2021-11-18T06:43:32.000000Z","thumbnail_path":"assets\/media\/noimage.png","image_path":"assets\/media\/noimage.png"}}
     *                 )
     *           )
     *      ),

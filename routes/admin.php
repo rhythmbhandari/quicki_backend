@@ -98,6 +98,14 @@ Route::group([
     $router->post('/sos/event/{id}', [SosController::class, 'eventstore'])->name('sos-detail.store');
     $router->get('/notification/latest/{notification_type}', [NotificationController::class, 'getLatestNotification'])->name('notification.latest');
     // $router->get('vehicle_type_ajax', [VehicleTypeController::class, 'vehicleTypeAjax'])->name('vehicle_type.ajax');
+    
+    //PUSH NOTIFICATION
+    $router->resource('/notification',  NotificationController::class);
+    $router->get('push_notification_data', [NotificationController::class, 'getPushNotificationData'])->name('push_notification.data');
+    $router->get('notification/{notification_id}/push', [NotificationController::class, 'push_notification'])->name('notification.push');
+    $router->get('all_notification', [NotificationController::class, 'all_notification_index'])->name('notification.all');
+    $router->get('all_notification_data', [NotificationController::class, 'getAllNotificationData'])->name('all_notification.data');
+    //Push Promotion Voucher Notification
 
     //Read Notifications
     $router->get('/notification/{notification_id}/read', [NotificationController::class, 'read_booking_notification'])->name('notification.read');
@@ -115,6 +123,12 @@ Route::group([
 
     //promotion_voucher
     $router->get('promotion_voucher/generate', [PromotionVoucherController::class, 'getGeneratedCode'])->name('voucher_code.generate');
+    $router->get('promotion_voucher/{promotion_voucher_id}/notification', [PromotionVoucherController::class, 'get_voucher_notification'])->name('promotion_voucher.notification.get');
+    $router->put('promotion_voucher/{promotion_voucher_id}/notification/save', [PromotionVoucherController::class, 'save_voucher_notification'])->name('promotion_voucher.notification.save');
+    $router->post('promotion_voucher/{promotion_voucher_id}/notification/update', [PromotionVoucherController::class, 'update_voucher_notification'])->name('promotion_voucher.notification.update');
+    $router->get('promotion_voucher/{promotion_voucher_id}/notification/push', [PromotionVoucherController::class, 'push_voucher_notification'])->name('promotion_voucher.notification.push');
+    $router->post('promotion_voucher/{promotion_voucher_id}/notification/save_push', [PromotionVoucherController::class, 'save_push_voucher_notification'])->name('promotion_voucher.notification.save_push');
+    $router->post('promotion_voucher/{promotion_voucher_id}/notification/update_push', [PromotionVoucherController::class, 'update_push_voucher_notification'])->name('promotion_voucher.notification.update_push');
     $router->resource('/promotion_voucher', PromotionVoucherController::class);
     $router->get('promotion_voucher_data', [PromotionVoucherController::class, 'getAllData'])->name('promotion_voucher.data');
 
