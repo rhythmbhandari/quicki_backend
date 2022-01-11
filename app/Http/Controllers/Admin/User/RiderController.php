@@ -22,6 +22,8 @@ use App\Modules\Models\RiderLocation;
 use App\Modules\Models\User;
 use App\Modules\Services\Payment\PaymentService;
 use Auth;
+use Illuminate\Database\Query\JoinClause;
+use Illuminate\Database\Eloquent\Builder;
 
 class RiderController extends Controller
 {
@@ -89,7 +91,7 @@ class RiderController extends Controller
     {
         $query = Rider::with(['user' => function ($q) {
             $q->select('id', 'first_name', 'last_name');
-        }])->simplePaginate(10);
+        }])->whereRelation('user', 'first_name', 'LIKE', '%' . $request->q . '%')->simplePaginate(10);
         // dd($query->toArray());
         $results = array();
         foreach ($query as $object) {
@@ -100,39 +102,88 @@ class RiderController extends Controller
             ]);
         }
 
-        return compact('results');
+        $morePages = true;
+        $pagination_obj = json_encode($query);
+        if (empty($query->nextPageUrl())) {
+            $morePages = false;
+        }
+
+        $pagination = array(
+            "more" => !is_null($query->toArray()['next_page_url'])
+        );
+
+        // $pagination = [
+        //     'more' => !is_null($query->toArray()['next_page_url'])
+        // ];
+        return compact('results', 'pagination');
     }
 
     function riderActiveLocationAjax(Request $request)
     {
+        // $query = RiderLocation::with('rider.vehicle.vehicle_type:id,name')->select('rider_id', 'longitude', 'latitude')
+        //     ->where('availability', 'available')->where('status', 'active');
 
-        $nearest_rider = [];
+        $query = DB::table('rider_locations')
+            ->join('riders', 'riders.id', '=', 'rider_locations.rider_id')
+            ->join('vehicles', 'vehicles.rider_id', '=', 'riders.id')
+            ->select('rider_locations.rider_id', 'rider_locations.longitude', 'rider_locations.latitude', 'vehicles.vehicle_type_id')
+            ->where('rider_locations.availability', 'available')->where('rider_locations.status', 'active')->distinct();
+
+        $total_available = RiderLocation::where('availability', 'available')->count();
+        $total_active = RiderLocation::where('status', 'active')->count();
+
+        //if rider_id is set fetch only rider_id and return...
         if (isset($request->rider_id)) {
-            $active_rider = RiderLocation::with('rider.vehicle.vehicle_type:id,name')->select('rider_id', 'longitude', 'latitude')
-                ->where('rider_id', $request->rider_id)->first();
-            array_push($nearest_rider, $active_rider);
+            $nearest_rider = [];
+            $active_rider = $query->where('rider_locations.rider_id', $request->rider_id)->first();
+            if ($active_rider == null)
+                $nearest_rider = null;
+            else
+                array_push($nearest_rider, $active_rider);
 
-            return compact('nearest_rider');
+            return compact('nearest_rider', 'total_available', 'total_active');
         }
 
         $active_riders = [];
+
+        if ($request->has('cust_id')) {
+            //not fetching rider if cust is rider himself!!
+            $cust_rider = User::find($request->cust_id)->rider;
+            if ($cust_rider) {
+                $query->where('rider_locations.rider_id', '<>', $cust_rider->id);
+            }
+        }
+
+        if ($request->has('vehicle_type')) {
+            $query->where('vehicles.vehicle_type_id', $request->vehicle_type);
+            // $data = $query->get();
+            // $param = $request->all();
+            // return compact('data', 'param');
+        }
+
+        $active_riders = $query->get();
+
+        $nearest_rider = [];
         $centerPoint = ['lat' => 27.687169, 'lng' => 85.304219]; //default center_point
         //if center_point present fetch all riders near to that rider.
-        if (isset($request->center_point)) {
-            $active_riders = RiderLocation::with('rider.vehicle.vehicle_type:id,name')->select('rider_id', 'longitude', 'latitude')->where('status', 'active')->where('availability', 'available')->get();
+        if ($request->has('center_point')) {
             $centerPoint = $request->center_point;
         }
 
         foreach ($active_riders as $rider) {
             if ($this->rider->arePointsNear(
                 $centerPoint,
-                ['lat' => $rider->latitude, 'lng' => $rider->longitude],
-                50
+                ['lat' => $rider->latitude, 'lng' => $rider->longitude]
             )) {
                 array_push($nearest_rider, $rider);
-            };
+            }
         }
-        return compact('nearest_rider');
+
+        if (sizeof($nearest_rider) == 0) {
+            $nearest_rider = null;
+        }
+
+        return compact('nearest_rider', 'total_available', 'total_active');
     }
 
     function getRiderDetail($rider_id)

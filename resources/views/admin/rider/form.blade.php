@@ -131,24 +131,6 @@ $statuses = ['active', 'in_active', 'blacklisted'];
                 </div>
                 @endif
 
-                {{-- <div class="form-group">
-                    <label>Roles</label>
-                    <select class="form-control kt_select2" id="payment_as_per" name="roles[]" multiple>
-                        @foreach ($roles as $role)
-                        <option value="{{$role->id}}" @isset($assignedRoles) {{ in_array($role->id, $assignedRoles) ?
-                            "selected" : '' }} @endisset>{{$role->name}}</option>
-                        @endforeach
-                    </select>
-                    @error('status')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                    @enderror
-                    </label>
-                </div> --}}
-
-                <!-- Rider Detail Form Starts -->
-
                 <div class="form-group">
                     <div class="col-md-12">
                         <div class="card card-custom gutter-b">
@@ -351,7 +333,7 @@ $statuses = ['active', 'in_active', 'blacklisted'];
                     <div class="col-6 mt-5">
                         <label>License Number<span class="text-danger">*</span>
                         </label>
-                        <input type="number" data-parsley-type="digits"
+                        <input type="text" data-parsley-type="digits"
                             class="form-control @error('license[document_number]') is-invalid @enderror"
                             placeholder="License number" name="license[document_number]"
                             value="@if(isset($rider['license'])){{$rider['license']['document_number']}}@else{{old('license[document_number]')}}@endif"
@@ -540,7 +522,7 @@ $statuses = ['active', 'in_active', 'blacklisted'];
                     <div class="col-6 mt-5">
                         <label>Bluebook Number<span class="text-danger">*</span>
                         </label>
-                        <input type="number" data-parsley-type="digits"
+                        <input type="text" data-parsley-type="digits"
                             class="form-control @error('bluebook[document_number]') is-invalid @enderror"
                             placeholder="Bluebook number" name="bluebook[document_number]"
                             value="@if(isset($vehicle['bluebook'])){{$vehicle['bluebook']['document_number']}}@else{{old('bluebook[document_number]')}}@endif"
@@ -636,7 +618,7 @@ $statuses = ['active', 'in_active', 'blacklisted'];
                     <div class="col-6 mt-5">
                         <label>Insurance Number<span class="text-danger">*</span>
                         </label>
-                        <input type="number" data-parsley-type="digits"
+                        <input type="text" data-parsley-type="digits"
                             class="form-control @error('insurance[document_number]') is-invalid @enderror"
                             placeholder="Bluebook number" name="insurance[document_number]"
                             value="@if(isset($vehicle['insurance'])){{$vehicle['insurance']['document_number']}}@else{{old('insurance[document_number]')}}@endif"

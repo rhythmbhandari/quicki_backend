@@ -86,7 +86,16 @@
 
 
                 <div class="row">
-                    <div class="col-10" style="height: 80vh;" id="googleBookingMap"></div>
+                    <div class="col-10">
+                        <div class="d-flex justify-content-between mx-5">
+                            <div class="col-6">Riders currently shown: <span id="currently_shown"></span></div>
+                            <div class="col-3">Available Riders: <span id="available_riders"></span></div>
+                            <div class="col-3">Active Riders: <span id="active_riders"></span></div>
+                        </div>
+                        <div class="row m-5" id="googleBookingMap" style="height: 50vh;">
+
+                        </div>
+                    </div>
                     <div class="col-2 d-flex flex-column px-5">
                         <div class="label-box mb-5">
                             <i class="fas fa-wave-square mr-5" style="color: #E3B809"></i>
@@ -143,6 +152,18 @@
     type="text/javascript"></script>
 
 <script>
+    const toaster = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+
     /** Variable Initializations **/
     let bookingData = {
         id: null,
@@ -150,7 +171,8 @@
         destination: null,
         status: null,
         vehicle_type: null,
-        rider_id: null
+        rider_id: null,
+        cust_id: null
     }
 
     let riderData = {
@@ -161,7 +183,7 @@
         vehicle_type: null
     }
 
-    let map, directionService, directionsRenderer, markers = {}, infowindow, infowindowContent = "";
+    let map, directionService, directionsRenderer, markers = {}, infowindow, infowindowContent = "", map_center;
 
     function initMap() {
         //map initialization
@@ -174,6 +196,18 @@
         directionsService = new google.maps.DirectionsService();
         directionsRenderer = new google.maps.DirectionsRenderer();
         directionsRenderer.setMap(map);
+        var scan_radius = "{{ !empty(config('settings.scan_radius')) ? config('settings.scan_radius')*1000 : '5000'}}";
+        scan_radius = parseInt(scan_radius);
+        map_center = new google.maps.Circle({
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#FF0000",
+            fillOpacity: 0.1,
+            map,
+            center: { lat: 27.6731828, lng: 85.406599 },
+            radius: scan_radius ,
+        });
 
         infowindow = new google.maps.InfoWindow({
             content: infowindowContent
@@ -182,6 +216,18 @@
 
         map.addListener("dragend", () => {
             plotRiderData(map)
+        });
+
+        map.addListener("drag", () => {
+
+            if(bookingData.status == null) {
+                map_center.setCenter(new google.maps.LatLng(map.getCenter().lat(), map.getCenter().lng()))
+            }
+            else {
+                map_center.setCenter(new google.maps.LatLng(bookingData.origin.lat, bookingData.origin.lng))
+            }
+
+            // console.log("map got dragged", map.getCenter().lat(), map.getCenter().lng())
         });
 
         $('#booking_id').trigger('change')
@@ -213,7 +259,7 @@
         if (result.isConfirmed) {
             $.ajax({
                 type: "POST",
-                url: "/admin/booking/change_status",
+                url: "/admin/change_booking_status_ajax",
                 data: {
                     "_token": "{{csrf_token()}}",
                     "booking_id": bookingData.id,
@@ -225,20 +271,20 @@
                 success: function(res) {
                     //re-render booking data
                     initiateMaping()
-                    Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                        }
-                    }).fire({
-                        icon: 'success',
-                        title: 'Booking Updated Successfully!'
+                    // console.log(res, "change status message!!")
+                    if(res.result.status == "failed") {
+                        toaster.fire({
+                        icon: 'error',
+                        title: res.result.message
                     })
+                    }
+                    else {
+                        toaster.fire({
+                        icon: 'success',
+                        title: res.result.message
+                    })
+                    }
+
 
                 },
                 fail: function(e) {
@@ -267,9 +313,17 @@
                     bookingData.status = booking.status
                     bookingData.id = booking.id
                     bookingData.rider_id = booking.rider_id
-                    bookingData.vehicle_type = booking.vehicle_type
+                    bookingData.vehicle_type = booking.vehicle_type_id
+                    bookingData.cust_id = booking.user_id
 
-                    console.log(bookingData, "updated bookingData")
+                    if(bookingData.status == null) {
+                        map_center.setCenter(new google.maps.LatLng(map.getCenter().lat(), map.getCenter().lng()))
+                    }
+                    else {
+                        map_center.setCenter(new google.maps.LatLng(bookingData.origin.lat, bookingData.origin.lng))
+                    }
+
+                    // console.log(bookingData, "updated bookingData")
                     // bookingData.vehicle_type = 
 
                     calculateAndDisplayRoute(directionsService, directionsRenderer)
@@ -329,59 +383,91 @@
         if(bookingData.status == "pending") {
             data['center_point'] = bookingData.origin
             data['vehicle_type'] = bookingData.vehicle_type
+            data['cust_id'] = bookingData.cust_id
         }
-        if(bookingData.status == "accepted") {
+        if(bookingData.status == "accepted" ||
+        bookingData.status == "running" ||
+        bookingData.status == "completed"
+        ) {
             data['rider_id'] = bookingData.rider_id 
         }
         $.ajax({
             url: "/admin/active_rider_data",
             data: data,
             success: function(result){
-                let new_riders = {};
+                $('#available_riders').html(result.total_available)
+                $('#active_riders').html(result.total_active)
 
-                //create marker of rider_id that are new
-                result.nearest_rider.map(new_rider=> {
-                    new_riders[new_rider.rider_id] = {lat: new_rider.latitude, lng: new_rider.longitude};
-                    let vehicle_icon = (new_rider.rider.vehicle.vehicle_type_id == 1) ? ICONS.bike : ICONS.car
-                    if(!(new_rider.rider_id in markers)) {
-                        markers[new_rider.rider_id] = new google.maps.Marker({
-                            position: {lat: new_rider.latitude, lng: new_rider.longitude}, 
-                            map,
-                            icon: vehicle_icon
-                        })
-
-                        markers[new_rider.rider_id].addListener("click", () => {
-                            getRiderInfo(new_rider.rider_id).then(response => {
-                                // console.log(response)
-                                if(response) {
-                                    infowindow.setContent(generateRiderContent())
-                                    infowindow.open({
-                                        anchor: markers[new_rider.rider_id],
-                                        map,
-                                        shouldFocus: false
-                                    })
-                                } else {
-                                    infowindow.setContent("Failed to retrieve driver info!");
-                                }
-                            }).catch((e)=> console.log(e))
-                        })
-                    }
-
-                })
-
-                //update marker that are still present in new riderlist and delete those
-                //that aren't
-                for(rider_id in markers) {
-                    if(rider_id in new_riders) {
-                        markers[rider_id].setPosition(new google.maps.LatLng(new_riders[rider_id].lat, new_riders[rider_id].lng));
-                    }
-                    else {
+                if(result.nearest_rider == null) {
+                    //remove all rider markers
+                    for(rider_id in markers) {
                         markers[rider_id].setMap(null)
                         delete markers[rider_id]
                     }
+
+                    $('#currently_shown').html("0")
                 }
+                else {
+                    updateRiderMarkers(result.nearest_rider);
+                    $('#currently_shown').html(result.nearest_rider.length)
+                }
+                
             }
         });
+    }
+
+    //update rider markers
+    function updateRiderMarkers(new_riders_data) {
+        let new_riders = {};
+
+        //create marker of rider_id that are new
+        new_riders_data.map(new_rider=> {
+            //storing newly created rider location in new_riders.
+            new_riders[new_rider.rider_id] = {lat: new_rider.latitude, lng: new_rider.longitude};
+            let vehicle_icon = ICONS.bike;
+            if(new_rider.vehicle_type_id == 2) {
+                vehicle_icon = ICONS.car
+            }
+            if(new_rider.vehicle_type_id == 3) {
+                vehicle_icon = ICONS.rickshaw;
+            }
+            if(!(new_rider.rider_id in markers)) {
+                markers[new_rider.rider_id] = new google.maps.Marker({
+                    position: {lat: new_rider.latitude, lng: new_rider.longitude}, 
+                    map,
+                    icon: vehicle_icon
+                })
+
+                markers[new_rider.rider_id].addListener("click", () => {
+                    getRiderInfo(new_rider.rider_id).then(response => {
+                        // console.log(response)
+                        if(response) {
+                            infowindow.setContent(generateRiderContent())
+                            infowindow.open({
+                                anchor: markers[new_rider.rider_id],
+                                map,
+                                shouldFocus: false
+                            })
+                        } else {
+                            infowindow.setContent("Failed to retrieve driver info!");
+                        }
+                    }).catch((e)=> console.log(e))
+                })
+            }
+
+        })
+
+        //update marker that are still present in new riderlist and delete those
+        //that aren't
+        for(rider_id in markers) {
+            if(rider_id in new_riders) {
+                markers[rider_id].setPosition(new google.maps.LatLng(new_riders[rider_id].lat, new_riders[rider_id].lng));
+            }
+            else {
+                markers[rider_id].setMap(null)
+                delete markers[rider_id]
+            }
+        }
     }
 
     // direction service
