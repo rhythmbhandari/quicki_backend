@@ -10,7 +10,8 @@
 
     const ICONS = {
         bike: '{{asset('assets/admin/icons/rider_map.svg')}}',
-        car: '{{asset('assets/admin/icons/car_map.svg')}}'
+        car: '{{asset('assets/admin/icons/car_map.svg')}}',
+        rickshaw: '{{asset('assets/admin/icons/rickshaw.png')}}',
     }
 
     const colorCodes = {

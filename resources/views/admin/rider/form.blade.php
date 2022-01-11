@@ -333,7 +333,7 @@ $statuses = ['active', 'in_active', 'blacklisted'];
                     <div class="col-6 mt-5">
                         <label>License Number<span class="text-danger">*</span>
                         </label>
-                        <input type="number" data-parsley-type="digits"
+                        <input type="text" data-parsley-type="digits"
                             class="form-control @error('license[document_number]') is-invalid @enderror"
                             placeholder="License number" name="license[document_number]"
                             value="@if(isset($rider['license'])){{$rider['license']['document_number']}}@else{{old('license[document_number]')}}@endif"
@@ -522,7 +522,7 @@ $statuses = ['active', 'in_active', 'blacklisted'];
                     <div class="col-6 mt-5">
                         <label>Bluebook Number<span class="text-danger">*</span>
                         </label>
-                        <input type="number" data-parsley-type="digits"
+                        <input type="text" data-parsley-type="digits"
                             class="form-control @error('bluebook[document_number]') is-invalid @enderror"
                             placeholder="Bluebook number" name="bluebook[document_number]"
                             value="@if(isset($vehicle['bluebook'])){{$vehicle['bluebook']['document_number']}}@else{{old('bluebook[document_number]')}}@endif"
@@ -618,7 +618,7 @@ $statuses = ['active', 'in_active', 'blacklisted'];
                     <div class="col-6 mt-5">
                         <label>Insurance Number<span class="text-danger">*</span>
                         </label>
-                        <input type="number" data-parsley-type="digits"
+                        <input type="text" data-parsley-type="digits"
                             class="form-control @error('insurance[document_number]') is-invalid @enderror"
                             placeholder="Bluebook number" name="insurance[document_number]"
                             value="@if(isset($vehicle['insurance'])){{$vehicle['insurance']['document_number']}}@else{{old('insurance[document_number]')}}@endif"
