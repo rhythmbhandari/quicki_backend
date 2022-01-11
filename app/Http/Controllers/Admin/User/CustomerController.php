@@ -127,11 +127,14 @@ class CustomerController extends Controller
 
     function customerAjax(Request $request)
     {
-
-        $query = User::with('rider')->select('id', 'first_name', 'last_name')->when($request->q, function ($query) use ($request) {
-            $q = $request->q;
-            return $query->where('name', 'LIKE', "%" . $q . "%");
-        })->simplePaginate(10);
+        // dd($request->all());
+        $query = User::with('rider')->select('id', 'first_name', 'last_name')
+            ->when($request->q, function ($query) use ($request) {
+                $q = $request->q;
+                $query = $query->where('first_name', 'LIKE', "%" . $q . "%");
+                $query = $query->orWhere('last_name', 'LIKE', "%" . $q . "%");
+                return $query;
+            })->simplePaginate(10);
         // dd($query->toArray());
         $results = array();
         foreach ($query as $object) {
@@ -141,10 +144,21 @@ class CustomerController extends Controller
                 'rider_id' => ($object->rider) ? $object->rider->id : null
             ]);
         }
+
+        $morePages = true;
+        $pagination_obj = json_encode($query);
+        if (empty($query->nextPageUrl())) {
+            $morePages = false;
+        }
+
+        $pagination = array(
+            "more" => !is_null($query->toArray()['next_page_url'])
+        );
+
         // $pagination = [
         //     'more' => !is_null($query->toArray()['next_page_url'])
         // ];
-        return compact('results');
+        return compact('results', 'pagination');
     }
 
     /**
