@@ -83,9 +83,8 @@ class BookingController extends Controller
             $q->select('id', 'first_name', 'last_name');
         }, 'vehicle_type' => function ($q) {
             $q->select('id', 'name');
-        }])->orderBy('updated_at','desc')->simplePaginate(10);
-        // }])->simplePaginate(10);
-        // dd($query->toArray());
+        }])->orderBy('updated_at', 'desc')->simplePaginate(10);
+
         $results = array();
         foreach ($query as $object) {
             if (isset($object->rider))
@@ -101,7 +100,21 @@ class BookingController extends Controller
                     'booking_id' => $object->id
                 ]);
         }
-        return compact('results');
+
+        $morePages = true;
+        $pagination_obj = json_encode($query);
+        if (empty($query->nextPageUrl())) {
+            $morePages = false;
+        }
+
+        $pagination = array(
+            "more" => !is_null($query->toArray()['next_page_url'])
+        );
+
+        // $pagination = [
+        //     'more' => !is_null($query->toArray()['next_page_url'])
+        // ];
+        return compact('results', 'pagination');
     }
 
     function getBookingByType(Request $request)
@@ -239,6 +252,7 @@ class BookingController extends Controller
         $result["status"] = "failed";
 
         $booking = Booking::find($request->booking_id);
+
         if ($booking) {
             if ($request->new_status == "accepted") {
                 //check if status is pending
@@ -253,7 +267,7 @@ class BookingController extends Controller
                 })->first();
 
                 if ($pending_rider_booking) {
-                    $result = ['message' => 'The rider already has an active booking!'];
+                    $result['message'] = ['The rider already has an active booking!'];
                     return compact('result');
                 }
 

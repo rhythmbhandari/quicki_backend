@@ -253,11 +253,14 @@ $status = ['pending', 'accepted', 'running', 'completed', 'cancelled'];
                 </div>
 
                 <div class="d-flex justify-content-between">
+                    <label class="">Estimated Distance</label>
+                    <span id="estimated_distance"> 0</span>
+                </div>
+
+                <div class="d-flex justify-content-between">
                     <label class="">Estimated Duration</label>
                     <span id="estimated_duration"> 0</span>
                 </div>
-
-
 
                 <div class="d-flex justify-content-between">
                     <label class="">Estimated Price</label>
@@ -381,7 +384,6 @@ $status = ['pending', 'accepted', 'running', 'completed', 'cancelled'];
         console.log("selected rider ID ", e.params.data.user_id)
         console.log($('#customer').find(':selected'), " customer selected!")
         if(e.params.data.user_id == $('#customer').find(':selected').val()) {
-            console.log("hlw?")
             $('#rider_selection_error').html("Rider cannot be same as customer")
             $('#rider').val(null).trigger('change')
         }
@@ -746,7 +748,7 @@ $status = ['pending', 'accepted', 'running', 'completed', 'cancelled'];
                 let totalDuration = 0; //stored in sec
                 response.routes[0].legs.forEach(leg => {
                     console.log("printing the leg ", leg)
-                    totalDistance += leg.distance.value / 1000;
+                    totalDistance += leg.distance.value;
                     totalDuration += leg.duration.value;
                 });
                 formData.distance = totalDistance
@@ -756,6 +758,7 @@ $status = ['pending', 'accepted', 'running', 'completed', 'cancelled'];
                 $("#duration").val(totalDuration)
 
                 $("#estimated_duration").html(millisecondsToStr(totalDuration*1000))
+                $("#estimated_distance").html(totalDistance + " m")
 
                 formData.origin_latitude = start.lat
                 formData.origin_longitude = start.lng

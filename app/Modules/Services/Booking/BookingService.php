@@ -420,7 +420,199 @@ class BookingService extends Service
             }
             return NULL;
         } catch (Exception $e) {
+            dd($e);
+        }
+    }
+
+    function update_status_admin(array $data)
+    {
+        // dd("DATA: ",$data['optional_data']);
+        try {
+            $booking_id = intval($data['booking_id']);
+            $new_status = $data['new_status'];
+
+            $booking = Booking::findOrFail($booking_id);
+            $booking->status = $new_status;
+
+            //NOTIFICATION DATA
+            if ($booking->save()) {
+                if ($new_status == "accepted") {
+                    $booking->rider_id = intval($data['optional_data']['rider_id']);
+
+                    $rider_location = RiderLocation::where('rider_id', $booking->rider_id)->first();
+                    if (isset($rider_location)) {
+                        $rider_location->availability = "unavailable";
+                        $rider_location->save();
+                    }
+
+                    if ($booking->save()) {
+                        //Send Notification
+                        $this->notification_service->send_firebase_notification(
+                            [
+                                ['customer', $booking->user_id],
+                                ['rider', $booking->rider_id]
+                            ],
+                            "booking_accepted",
+                            "some"
+                        );
+
+
+                        return $booking;
+                    }
+                } else if ($new_status == "running") {
+                    $booking->rider_id = intval($data['optional_data']['rider_id']);
+                    $booking->start_time = Carbon::now();
+                    $booking->save();
+
+                    //Send Notification
+                    $this->notification_service->send_firebase_notification(
+                        [
+                            ['customer', $booking->user_id],
+                            ['rider', $booking->rider_id]
+                        ],
+                        "booking_running",
+                        "some"
+                    );
+
+                    return $booking;
+                } else if ($new_status == "completed") {
+                    $booking->rider_id = intval($data['optional_data']['rider_id']);
+                    if (!$booking->start_time) {
+                        $booking->start_time = Carbon::now();
+                        $booking->end_time = Carbon::now();
+                    } else {
+                        $booking->end_time = Carbon::now();
+                    }
+
+                    //Make the rider available again
+                    $rider_location = RiderLocation::where('rider_id', $booking->rider_id)->first();
+                    if (isset($rider_location)) {
+                        $rider_location->availability = "unavailable";
+                        $rider_location->save();
+                    }
+
+
+                    $booking->save();
+
+                    //CREATE COMPLTED TRIP RECORD for COMPLETED STATUS
+                    $completed_trip_data = $booking->toArray();
+                    $completed_trip_data['booking_id'] = intval($booking->id);
+
+                    if (isset($data['optional_data']['location']) && isset($data['optional_data']['distance'])) {
+
+                        $completed_trip_data['location']['origin']['name'] = $data['optional_data']['location']['origin']['name'];
+                        $completed_trip_data['location']['origin']['latitude'] = floatval($data['optional_data']['location']['origin']['latitude']);
+                        $completed_trip_data['location']['origin']['longitude'] = floatval($data['optional_data']['location']['origin']['longitude']);
+                        $completed_trip_data['location']['destination']['name'] = $data['optional_data']['location']['destination']['name'];
+                        $completed_trip_data['location']['destination']['latitude'] = floatval($data['optional_data']['location']['destination']['latitude']);
+                        $completed_trip_data['location']['destination']['longitude'] = floatval($data['optional_data']['location']['destination']['longitude']);
+
+                        $completed_trip_data['distance'] = $data['optional_data']['distance'];
+
+                        //dd('reached here');
+                    }
+                    //dd('did',$data);
+                    //RECALCULATE THE BOOKING PRICE WITH UPDATED DURATION
+                    $new_duration = $this->getTimeDiffInSeconds($booking->start_time, $booking->end_time);
+                    $completed_trip_data['duration'] = $new_duration;
+                    $voucher = isset($booking->price_detail->promotion_voucher_id) ? $booking->price_detail->promotion_voucher->code : null;
+                    $price_detail_data = $this->calculateEstimatedPrice(
+                        $completed_trip_data['location']['origin']['latitude'],
+                        $completed_trip_data['location']['origin']['longitude'],
+                        $booking->vehicle_type_id,
+                        $completed_trip_data['distance'],
+                        $new_duration,
+                        $booking->user_id,
+                        $voucher,
+                        $booking->id
+                    );
+                    $final_price = 0;
+
+                    $final_price = $price_detail_data['price_breakdown']['total_price'];
+                    $completed_trip_data['price'] = $final_price;
+
+                    $booking->createdCompletedTrip = $this->completed_trip_service->create($completed_trip_data);
+
+                    //CREAT PRICE DETAIL
+                    $price_detail_data = $price_detail_data['price_breakdown'];
+                    $price_detail_data['completed_trip_id'] =   $booking->createdCompletedTrip->id;
+                    $this->price_detail_service->create($price_detail_data);
+
+                    //Send Notification
+                    $this->notification_service->send_firebase_notification(
+                        [
+                            ['customer', $booking->user_id],
+                            ['rider', $booking->rider_id]
+                        ],
+                        "booking_completed",
+                        "some"
+                    );
+
+                    return $booking;
+                } else if ($new_status == "cancelled") {
+                    $booking->rider_id = intval($data['optional_data']['rider_id']);
+                    if (!$booking->start_time) {
+                        $booking->start_time = Carbon::now();
+                        $booking->end_time = Carbon::now();
+                    } else {
+                        $booking->end_time = Carbon::now();
+                    }
+
+                    //Make the rider available again
+                    $rider_location = RiderLocation::where('rider_id', $booking->rider_id)->first();
+                    if (isset($rider_location)) {
+                        $rider_location->availability = "unavailable";
+                        $rider_location->save();
+                    }
+
+
+                    $booking->save();
+
+
+                    //CREATE COMPLTED TRIP RECORD for CANCELLED STATUS
+                    $cancelled_trip_data = $booking->toArray();
+                    $cancelled_trip_data['booking_id'] = intval($booking->id);
+
+
+                    $booking->createdCompletedTrip = $this->completed_trip_service->create($cancelled_trip_data);
+
+                    $voucher = isset($booking->price_detail->promotion_voucher_id) ? $booking->price_detail->promotion_voucher->code : null;
+                    // dd($booking, $voucher);
+                    //CREAT PRICE DETAIL
+                    $price_detail_data = $this->calculateEstimatedPrice(
+
+                        $booking->location['origin']['latitude'],
+                        $booking->location['origin']['longitude'],
+                        $booking->vehicle_type_id,
+                        $booking->distance,
+                        $booking->duration,
+                        $booking->user_id,
+                        $voucher,
+                        $booking->id
+                    );
+                    $price_detail_data = $price_detail_data['price_breakdown'];
+                    $price_detail_data['completed_trip_id'] =   $booking->createdCompletedTrip->id;
+                    $this->price_detail_service->create($price_detail_data);
+
+                    //Send Notification
+                    $this->notification_service->send_firebase_notification(
+                        [
+                            ['customer', $booking->user_id],
+                            ['rider', $booking->rider_id]
+                        ],
+                        "booking_cancelled",
+                        "some"
+                    );
+
+                    return $booking;
+                } else {
+                    return $booking;
+                }
+            }
+            // dd("booking failed to be saved!!");
             return NULL;
+        } catch (Exception $e) {
+            return null;
         }
     }
 
@@ -429,17 +621,22 @@ class BookingService extends Service
         $error = false;
         $updated_booking = $booking;
         $update_data = null;
-        while ($updated_booking->status != $booking_status) {
+        while (array_search($updated_booking->status, $this->statuses) <= array_search($booking_status, $this->statuses)) {
             $update_data = null;
             if ($booking_status != "cancelled") {
-                $new_status = $this->statuses[array_search($updated_booking->status, $this->statuses) + 1];
+                $new_status = ($updated_booking->status == $booking_status) ? $booking_status : $this->statuses[array_search($updated_booking->status, $this->statuses) + 1];
                 $update_data = $this->generateUpdateData($data, $new_status, $updated_booking);
             } else {
                 $new_status = "cancelled";
                 $update_data = $this->generateUpdateData($data, $new_status, $updated_booking);
             }
-            if (!$updated_booking = $this->update_status($update_data))
+
+            // dd($update_data);
+            if (!$updated_booking = $this->update_status_admin($update_data))
                 $error = true;
+
+            if ($updated_booking->status == $booking_status)
+                break;
         }
         // dd($error);
         return $error;
@@ -858,6 +1055,7 @@ class BookingService extends Service
     public function notify_booking_timed_out($bookingId)
     {
 
+
       
             $booking = Booking::with('user:id,first_name,last_name,image')->where('id',$bookingId)->first();
             // $booking = Booking::find($bookingId);
@@ -892,6 +1090,37 @@ class BookingService extends Service
 
 
 
+
+        $booking = Booking::with('user:id,first_name,last_name,image')->where('id', $bookingId)->first();
+        // $booking = Booking::find($bookingId);
+
+        // dd($booking->user->toArray());
+
+        //Send pusher/echo broadcast notification to all admins
+        $title = "Booking Timed Out";
+        $message = "Booking request timed out by " . $booking->user->name . ' made on ' . $booking->created_at->toDayDateTimeString();;
+        event(
+            new BookingTimedOut(
+                $title,
+                $message,
+                $bookingId,
+                $booking->user->name
+            )
+        );
+
+        //Create Notification sent via pusher broadcast
+        $this->notification_service->create(
+            [
+                'recipient_id' => null,
+                'recipient_type' => 'admin',
+                'recipient_device_token' => null,
+                'recipient_quantity_type' => 'all',
+                'notification_type' => 'customer_ignored',
+                'title' => $title,
+                'message' => $message,
+                'booking_id' => $bookingId
+            ]
+        );
     }
 
 

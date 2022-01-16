@@ -40,8 +40,8 @@ Route::group([
     'as' => 'admin.', 'middleware' =>  ['admin'], 'prefix' => 'admin' // 'middleware' => ['role:ROLE_CANDIDATE'],
 ], function ($router) {
     $router->get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
-    $router->post('ckeditor/upload',  [CkeditorController::class,'upload'])->name('ckeditor.upload');
+
+    $router->post('ckeditor/upload',  [CkeditorController::class, 'upload'])->name('ckeditor.upload');
 
     //user
     $router->resource('/user', UserController::class);
@@ -88,7 +88,7 @@ Route::group([
     $router->get('estimated_price', [BookingController::class, 'estimatedPriceAjax'])->name('booking.price');
     $router->get('booking_ajax', [BookingController::class, 'bookingAjax'])->name('booking.ajax');
     $router->get('nearest_pending_ajax', [BookingController::class, 'getNearestPendingBookingAjax'])->name('pending_booking.ajax');
-    $router->post('/booking/change_status', [BookingController::class, 'changeStatusAjax'])->name('booking.change.status');
+    $router->post('/change_booking_status_ajax', [BookingController::class, 'changeStatusAjax'])->name('booking.change.status');
     $router->get('/booking_location_by_type', [BookingController::class, 'getBookingByType'])->name('booking_by_type.ajax');
 
     //SOS AND NOTIFICATION
@@ -140,7 +140,7 @@ Route::group([
     $router->resource('setting', SettingController::class);
 
 
-     //---------------------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------------------
     //  NEWSLETTER and SUBSCRIBERS RESOURCE ROUTES
     //---------------------------------------------------------------------------------------------------------
     $router->resource('newsletter', NewsletterController::class);
@@ -149,10 +149,9 @@ Route::group([
     $router->get('subscriber_data', [SubscriberController::class, 'getAllData'])->name('subscriber.data');
     $router->patch('newsletter/{newsletter_id}/send', [NewsletterController::class, 'send_newsletter'])->name('newsletter.send');
 
-    
-    $router->get('/newsletter/templates/{template_number}',function($template_number){
-        switch($template_number)
-        {
+
+    $router->get('/newsletter/templates/{template_number}', function ($template_number) {
+        switch ($template_number) {
             case "1":
                 return view('admin.email.templates.1')->render();
                 break;

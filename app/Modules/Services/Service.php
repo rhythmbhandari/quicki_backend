@@ -98,14 +98,15 @@ abstract class Service
         return false;
     }
 
-    function arePointsNear($checkPoint, $centerPoint, $km)
+    function arePointsNear($checkPoint, $centerPoint)
     {
         // dd($checkPoint, $centerPoint["lat"]);
         $ky = 40000 / 360;
         $kx = cos(pi() * $centerPoint['lat'] / 180.0) * $ky;
         $dx = abs($centerPoint['lng'] - $checkPoint['lng']) * $kx;
         $dy = abs($centerPoint['lat'] - $checkPoint['lat']) * $ky;
-        return sqrt($dx * $dx + $dy * $dy) <= $km;
+        $scan_radius =  !empty(config('settings.scan_radius')) ? config('settings.scan_radius') : 5000;
+        return sqrt($dx * $dx + $dy * $dy) <= $scan_radius;
     }
 
     public function uploadFromAjax(UploadedFile $file, $width = 320, $height = 320)
