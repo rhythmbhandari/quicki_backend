@@ -727,6 +727,7 @@ class CompletedTripController extends Controller
                                         ->where('status',$booking_status)
                                         ->whereRelation('booking','vehicle_type_id',$vehicle_type_id)
                                         ->with('payment')
+                                        ->with('price_detail')
                                         ->with('booking.review')
                                         ->orderByDesc('created_at')
                                         ->with('rider')->paginate(5);
@@ -1050,6 +1051,7 @@ class CompletedTripController extends Controller
                                         ->whereRelation('booking','vehicle_type_id',$vehicle_type_id)
                                         ->with('booking:id,status,trip_id')
                                         ->with('booking.review')
+                                        ->with('price_detail')
                                         ->with('payment')
                                         ->orderByDesc('created_at')
                                         ->with('rider')->paginate(5);
