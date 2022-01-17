@@ -402,14 +402,22 @@ class BookingController extends Controller
                 $response = ['message' => 'No active booking found!'];
                 return response($response, 404);
             }
-        } else if ($booking && $booking->vehicle_type_id == 4) //IF AMBULANCE
+        } 
+        else if ($booking && $booking->vehicle_type_id == 4) //IF AMBULANCE
         {
-            if ($request['new_status'] = 'accepted') {
+            if ($request->new_status == 'accepted') {
+                if ($booking->status != 'pending') {
+                    $response = ['message' => 'The booking is no longer available!'];
+                    return response($response, 400);
+                }
+            }
+            if ($request['new_status'] == 'running') {
                 $request['new_status'] = 'completed';
                 $booking->rider_id = $request['optional_data']['rider_id'];
                 $booking->save();
             }
-        } else {
+        } 
+        else {
         }
 
         //UPDATE STATUS
