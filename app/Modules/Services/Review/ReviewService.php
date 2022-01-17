@@ -32,7 +32,7 @@ class ReviewService extends Service
             $data['user_id'] = isset($data['user_id']) ? intval($data['user_id']) : $booking->user_id ;
             $data['rider_id'] = isset($data['rider_id']) ? intval($data['rider_id']) : $booking->rider_id ;
             $data['booking_id'] = intval($booking->id);
-            $data['rate']   = isset($data['rate']) ? intval($data['rate']) : 3 ;
+            $data['rate']   = isset($data['rate']) ? floattval($data['rate']) : 3 ;
             //default status = pending
             
             $createdReview = $this->review->create($data);

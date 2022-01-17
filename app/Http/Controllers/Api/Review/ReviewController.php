@@ -208,7 +208,7 @@ class ReviewController extends Controller
         $result['average_rating'] = 0;
         $result['reviews'] = [];
 
-        $result['average_rating'] = intval(Review::where('user_id',$user->id)->where('reviewed_by_role','!=','customer')->avg('rate') )  ;
+        $result['average_rating'] = floatval(Review::where('user_id',$user->id)->where('reviewed_by_role','!=','customer')->avg('rate') )  ;
         $result['reviews'] = Review::where('user_id',$user->id)->where('reviewed_by_role','!=','customer')->get();
 
         $response = ['message' => 'Success!', 'data'=>$result];
@@ -290,7 +290,7 @@ class ReviewController extends Controller
         $result['average_rating'] = 0;
         $result['reviews'] = [];
 
-        $result['average_rating'] =   intval(Review::where('rider_id',$rider->id)->where('reviewed_by_role','!=','rider')->avg('rate'))  ;
+        $result['average_rating'] =   floatval(Review::where('rider_id',$rider->id)->where('reviewed_by_role','!=','rider')->avg('rate'))  ;
         $result['reviews'] = Review::where('rider_id',$rider->id)->where('reviewed_by_role','!=','rider')->get();
 
         $response = ['message' => 'Success!', 'data'=>$result];

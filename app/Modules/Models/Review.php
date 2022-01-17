@@ -18,7 +18,7 @@ class Review extends Model
         'booking_id' => 'integer',
         'rider_id' => 'integer',
         'user_id' => 'integer',
-        'rate' => 'integer'
+        'rate' => 'float'
     ];
 
     protected $fillable = [
