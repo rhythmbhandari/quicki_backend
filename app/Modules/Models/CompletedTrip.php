@@ -25,6 +25,8 @@ class CompletedTrip extends Model
         'rider_id'=>'integer',
         'booking_id'=>'integer',
         'cancelled_by_id'=>'integer',
+        'distance'=>'integer',
+        'duration'=>'integer',
         'price'=>'integer',
         'location'=>'array'
     ];

@@ -891,7 +891,7 @@ class BookingService extends Service
             if (isset($old_duration) && $duration > $old_duration) {
                 $estimated_price['price_breakdown']['price_per_min'] = 0;
                 $estimated_price['price_breakdown']['price_per_min_after_base'] = $vehicle_type->price_per_min;
-                $estimated_price['price_breakdown']['duration_charge'] =  ($duration - $old_duration)  * $duration / 60;
+                $estimated_price['price_breakdown']['duration_charge'] =   (($duration - $old_duration) / 60) * $vehicle_type->price_per_min ;
                 $estimated_price['price_breakdown']['price_after_duration']  =  $estimated_price['price_breakdown']['price_after_app_charge'] + $estimated_price['price_breakdown']['duration_charge'];
             } else {
                 $estimated_price['price_breakdown']['price_per_min'] = 0;
@@ -904,7 +904,7 @@ class BookingService extends Service
 
             $estimated_price['price_breakdown']['price_per_min'] = $vehicle_type->price_per_min;
             $estimated_price['price_breakdown']['price_per_min_after_base'] = $vehicle_type->price_per_min;
-            $estimated_price['price_breakdown']['duration_charge'] = ($vehicle_type->price_per_min * $duration / 60);
+            $estimated_price['price_breakdown']['duration_charge'] = ($vehicle_type->price_per_min * ($duration / 60));
             $estimated_price['price_breakdown']['price_after_duration']  =  $estimated_price['price_breakdown']['price_after_app_charge'] + $estimated_price['price_breakdown']['duration_charge'];
         }
 
