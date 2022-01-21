@@ -12,6 +12,9 @@ use App\Events\SosCreated;
 */
 include 'admin.php';
 
+Route::get('/test', function () {
+    return request()->getHost();
+});
 
 
 /*

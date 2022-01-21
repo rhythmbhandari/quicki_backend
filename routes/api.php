@@ -88,6 +88,7 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->get('/user/booking/history', [CompletedTripController::class, 'getUserTrips'])->name('user.booking.history');
   $router->get('/rider/booking/history', [CompletedTripController::class, 'getRiderTrips'])->name('rider.booking.history');
   $router->get('/completed_trip/{completed_trip_id}', [CompletedTripController::class, 'getCompletedTrip'])->name('user.completed_trip.show');  
+  $router->get('/user/{user_type}/services/used', [BookingController::class, 'check_used_service'])->name('user.services.used');   
 
   $router->get('/{user_type}/total_distance', [CompletedTripController::class, 'getTotalDistance'])->name('completed_trip.total_distance');
   $router->get('/{user_type}/total_trips', [CompletedTripController::class, 'getTotalTrips'])->name('completed_trip.total_trips');

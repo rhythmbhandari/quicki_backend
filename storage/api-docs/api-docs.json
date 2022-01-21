@@ -1653,6 +1653,51 @@
                 ]
             }
         },
+        "/api/user/{user_type}/services/used": {
+            "get": {
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Used Services",
+                "operationId": "4c0510d4b42f8deae8f3400bec776790",
+                "parameters": [
+                    {
+                        "name": "user_type",
+                        "in": "path",
+                        "description": "User Type (Allowed values: customer or rider)",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "message": "Admin notified successfully! Wait for the response! "
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden Access!"
+                    },
+                    "422": {
+                        "description": "Invalid User Type!",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/user/booking/history": {
             "get": {
                 "tags": [

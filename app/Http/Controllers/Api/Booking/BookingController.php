@@ -1011,6 +1011,113 @@ class BookingController extends Controller
     }
 
 
+
+
+
+    
+    /**
+    * @OA\Get(
+    *   path="/api/user/{user_type}/services/used",
+    *   tags={"Booking"},
+    *   summary="Used Services",
+    *   security={{"bearerAuth":{}}},
+    *
+    *      @OA\Parameter(
+    *         name="user_type",
+    *         in="path",
+    *         description="User Type (Allowed values: customer or rider)",
+    *         required=true,
+    *      ),
+    *
+    *      @OA\Response(
+    *        response=200,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                @OA\Schema(      
+    *                   example={
+    *                     "message": "Admin notified successfully! Wait for the response! "
+    *                   }
+    *                 )
+    *           )
+    *      ),
+    *
+    *         @OA\Response(
+    *             response=403,
+    *             description="Forbidden Access!"
+    *         ),
+    *      @OA\Response(
+    *          response=422,
+    *          description="Invalid User Type!",
+    *             @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+    *      ),
+    *
+    *)
+    **/
+    function check_used_service($user_type)
+    {
+      
+        // if(!($user_type=="customer" || $user_type=="rider"))
+        // {
+        //     $response = ['message' => 'Invalid User Type!'];;
+        //     return response($response, 422);
+        // }
+
+        $user = Auth::user();
+
+        //ROLE CHECK FOR RIDER
+        if (!$this->user_service->hasRole($user, 'rider') && $user_type=="rider") {
+            $response = ['message' => 'Forbidden Access!'];
+            return response($response, 403);
+        }
+
+        $result = [];
+        $vehicle_types = VehicleType::select('id','name')->get();
+        if($user_type=="rider") {
+            foreach($vehicle_types as $vehicle_type){
+                $data['id'] = $vehicle_type->id;
+                $data['name'] = $vehicle_type->name;
+
+                $completed = CompletedTrip::where('rider_id',$user->rider->id)->whereRelation('booking','vehicle_type_id',$vehicle_type->id)->where('status','completed')->get()->count();
+                $cancelled = CompletedTrip::where('rider_id',$user->rider->id)->whereRelation('booking','vehicle_type_id',$vehicle_type->id)->where('status','cancelled')->get()->count();
+
+                $data['completed'] = ($completed>0)?true:false;
+                $data['cancelled'] = ($cancelled>0)?true:false;
+                $data['used'] = ($completed || $cancelled)?true:false;
+
+                $result[] = $data;
+            }
+        }
+        else if($user_type=="customer"){
+            foreach($vehicle_types as $vehicle_type){
+                $data['id'] = $vehicle_type->id;
+                $data['name'] = $vehicle_type->name;
+
+                $completed = CompletedTrip::where('user_id',$user->id)->whereRelation('booking','vehicle_type_id',$vehicle_type->id)->where('status','completed')->get()->count();
+                $cancelled = CompletedTrip::where('user_id',$user->id)->whereRelation('booking','vehicle_type_id',$vehicle_type->id)->where('status','cancelled')->get()->count();
+
+                $data['completed'] = ($completed>0)?true:false;
+                $data['cancelled'] = ($cancelled>0)?true:false;
+                $data['used'] = ($completed || $cancelled)?true:false;
+
+                $result[] = $data;
+            }
+        }
+        else{
+            $response = ['message' => 'Invalid User Type!'];;
+            return response($response, 422);
+        }
+
+      
+        $response = ['message' => 'Success!','data'=>$result];;
+        return response($response, 200);
+        
+
+    }
+
+
     public function testFunction()
     {
         dd(\App\Modules\Models\PriceDetail::all()->toArray());
