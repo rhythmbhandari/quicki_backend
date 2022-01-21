@@ -1036,7 +1036,37 @@ class BookingController extends Controller
     *               mediaType="application/json",
     *                @OA\Schema(      
     *                   example={
-    *                     "message": "Admin notified successfully! Wait for the response! "
+    *                     "message": "Success!",
+    *                     "data": {
+    *                       {
+    *                         "id": 1,
+    *                         "name": "bike",
+    *                         "completed": true,
+    *                         "cancelled": true,
+    *                         "used": true
+    *                       },
+    *                       {
+    *                         "id": 2,
+    *                         "name": "car",
+    *                         "completed": false,
+    *                         "cancelled": false,
+    *                         "used": false
+    *                       },
+    *                       {
+    *                         "id": 3,
+    *                         "name": "city_safari",
+    *                         "completed": false,
+    *                         "cancelled": false,
+    *                         "used": false
+    *                       },
+    *                       {
+    *                         "id": 4,
+    *                         "name": "ambulance",
+    *                         "completed": true,
+    *                         "cancelled": false,
+    *                         "used": true
+    *                       }
+    *                     }
     *                   }
     *                 )
     *           )
@@ -1058,13 +1088,6 @@ class BookingController extends Controller
     **/
     function check_used_service($user_type)
     {
-      
-        // if(!($user_type=="customer" || $user_type=="rider"))
-        // {
-        //     $response = ['message' => 'Invalid User Type!'];;
-        //     return response($response, 422);
-        // }
-
         $user = Auth::user();
 
         //ROLE CHECK FOR RIDER

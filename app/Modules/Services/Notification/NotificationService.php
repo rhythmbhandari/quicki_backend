@@ -367,7 +367,13 @@ class NotificationService extends Service
         {
             // dd('asdads', $filter);
             if($filter == "push_notification")
-                $query = $this->notification->where('notification_type','push_notification')->orderBy('created_at','desc')->get();
+                $query = $this->notification
+                // ->where('notification_type','push_notification')
+                ->where(function($query) {
+                    $query->where('notification_type','push_notification')
+                          ->orWhere('notification_type','push_promo_notification');
+                })
+                ->orderBy('created_at','desc')->get();
         }
            
 
@@ -394,11 +400,11 @@ class NotificationService extends Service
             })
             ->editColumn('actions', function (Notification $notification) {
                 // $editRoute = ($notification->notification_type=="push_notification" && (!$notification->read_at) )?route('admin.notification.edit', $notification->id):'';
-                $editRoute = ($notification->notification_type=="push_notification" )?route('admin.notification.edit', $notification->id):'';
-                $deleteRoute = ($notification->notification_type=="push_notification" )?route('admin.notification.destroy', $notification->id):'';
+                $editRoute = ($notification->notification_type=="push_notification" || $notification->notification_type=="push_promo_notification" )?route('admin.notification.edit', $notification->id):'';
+                $deleteRoute = ($notification->notification_type=="push_notification" || $notification->notification_type=="push_promo_notification" )?route('admin.notification.destroy', $notification->id):'';
                 $showRoute = '';//route('admin.notification.show', $notification->id);
                 $mapRoute = '';
-                $optionRouteText = ($notification->notification_type=="push_notification")?route('admin.notification.push', $notification->id):'';
+                $optionRouteText = ($notification->notification_type=="push_notification" || $notification->notification_type=="push_promo_notification")?route('admin.notification.push', $notification->id):'';
                 return getTableHtml($notification, 'actions', $editRoute, $deleteRoute, $showRoute, $optionRouteText, "", $mapRoute);
             })->rawColumns([ 'code', 'image','notification_type', 'recipient_type','message', 'actions', 'title'])
             ->make(true);

@@ -140,7 +140,7 @@ class PromotionVoucherController extends Controller
         $promotion_voucher = PromotionVoucher::findOrFail($promotion_voucher_id);
         $voucher_code = $promotion_voucher->code;
         $related_notification = Notification::where('message','LIKE','%'.$voucher_code.'%')->latest()->first();
-        
+        $request['notification_type'] = 'push_promo_notification';
         $createdNotification = 0;
 
         // dd($related_notification);
@@ -163,6 +163,7 @@ class PromotionVoucherController extends Controller
         else{ //CREATE NEW NOTIFICATION
             $createdNotification = DB::transaction(function () use ($request,  $promotion_voucher ) {
                 $request['recipient_quantity_type'] = "all";
+               
                 $createdNotification =   $this->notification_service->create($request->except('image'));
                 if ($createdNotification) {
 
@@ -183,7 +184,7 @@ class PromotionVoucherController extends Controller
                     }
                     // dd('no');
                     Toastr::success('Voucher Notification created successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
-                   return $createdNotification = Notification::find($id);
+                   return $createdNotification = Notification::find($createdNotification->id);
                 }
                 Toastr::error('Voucher Notification cannot be created.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
                 return null;

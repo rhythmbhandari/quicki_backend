@@ -108,13 +108,33 @@ class NotificationController extends Controller
         
     // }
 
-    /**
+
+/**
     * @OA\Get(
-    *   path="/api/user/notifications",
+    *   path="/api/user/{user_type}/notifications/{notification_type}",
     *   tags={"Notification and Sos"},
-    *   summary="Get User's Notifications",
+    *   summary="Get User/Rider Notifications/Campaigns/Voucher Notification",
     *   security={{"bearerAuth":{}}},
     *
+    *       @OA\Parameter(
+    *          name="page",
+    *          in="query",
+    *          description="pagination"
+    *      ),
+    *     @OA\Parameter(
+    *         name="user_type",
+    *         in="path",
+    *         description="User Type (Allowed Values: 'customer' or 'rider'  )",
+    *         required=true,
+    *      ),
+    *     @OA\Parameter(
+    *         name="notification_type",
+    *         in="path",
+    *         description="Notification Type (Allowed Values: push_notification, push_promo_notification )",
+    *         required=true,
+    *      ),
+    *    
+    *    
     *
     *      @OA\Response(
     *        response=200,
@@ -195,133 +215,57 @@ class NotificationController extends Controller
     *                 )
     *           )
     *      ),
-    *)
-    **/
-    public function getUserNotifications($recipient_type="customer",$recipient_id=null) {
-        if(!$recipient_id)
-        {
-            $user = Auth::user();
-            
-            $recipient_id = $user->id;
-            
-        }
-        $notifications =  Notification::where('recipient_id', $recipient_id)->orderBy('id', 'desc')->paginate(10)->withQueryString();
-        $response = ['message' => 'Success!', 'notifications' => $notifications];
-        return response($response, 200);
-    }
-
-
-    /**
-    * @OA\Get(
-    *   path="/api/rider/notifications",
-    *   tags={"Notification and Sos"},
-    *   summary="Get Rider's Notifications",
-    *   security={{"bearerAuth":{}}},
-    *
-    *
+    *         @OA\Response(
+    *             response=403,
+    *             description="Forbidden Access!"
+    *         ),
     *      @OA\Response(
-    *        response=200,
-    *        description="Success",
-    *          @OA\MediaType(
-    *               mediaType="application/json",
-    *                   @OA\Schema(      
-    *                   example=
-    *                    {
-    *                     "message": "Success!",
-    *                     "notifications": {
-    *                       "current_page": 1,
-    *                       "data": {
-    *                         {
-    *                           "id": 22,
-    *                           "title": "Puryaideu: Ride Update",
-    *                           "message": " The ride has been ACCEPTED!",
-    *                           "image": null,
-    *                           "recipient_id": 1,
-    *                           "recipient_device_token": "eptgkjw5ThWfxnIDLrJ_Pp:APA91bFvCkyvRevMQJErJfbDoZFNGtY6H8ZNdI-pSM--pt6bofgJMu2PZNdAe9PGNpz2wwKXdmZ5GOgcAzZl7EvAtZIJWwW9Xh0xBLwf_Qx2w_Ghz2UMW-1zwzZ_W9V4OHFxbHB7pxNy",
-    *                           "recipient_type": "rider",
-    *                           "recipient_quantity_type": "some",
-    *                           "notification_type": "booking_accepted",
-    *                           "read_at": null,
-    *                           "deleted_at": null,
-    *                           "created_at": "2021-12-20T11:55:17.000000Z",
-    *                           "updated_at": "2021-12-20T11:55:17.000000Z",
-    *                           "thumbnail_path": "assets/media/noimage.png",
-    *                           "image_path": "assets/media/noimage.png"
-    *                         },
-    *                         {
-    *                           "id": 17,
-    *                           "title": "Puryaideu: Ride Update",
-    *                           "message": "Your ride has been COMPLETED!",
-    *                           "image": null,
-    *                           "recipient_id": 1,
-    *                           "recipient_device_token": "eptgkjw5ThWfxnIDLrJ_Pp:APA91bFvCkyvRevMQJErJfbDoZFNGtY6H8ZNdI-pSM--pt6bofgJMu2PZNdAe9PGNpz2wwKXdmZ5GOgcAzZl7EvAtZIJWwW9Xh0xBLwf_Qx2w_Ghz2UMW-1zwzZ_W9V4OHFxbHB7pxNy",
-    *                           "recipient_type": "rider",
-    *                           "recipient_quantity_type": "some",
-    *                           "notification_type": "booking_completed",
-    *                           "read_at": null,
-    *                           "deleted_at": null,
-    *                           "created_at": "2021-12-20T11:33:46.000000Z",
-    *                           "updated_at": "2021-12-20T11:33:46.000000Z",
-    *                           "thumbnail_path": "assets/media/noimage.png",
-    *                           "image_path": "assets/media/noimage.png"
-    *                         },
-    *                       },
-    *                       "first_page_url": "http://127.0.0.1:8000/api/rider/notifications?page=1",
-    *                       "from": 1,
-    *                       "last_page": 1,
-    *                       "last_page_url": "http://127.0.0.1:8000/api/rider/notifications?page=1",
-    *                       "links": {
-    *                         {
-    *                           "url": null,
-    *                           "label": "&laquo; Previous",
-    *                           "active": false
-    *                         },
-    *                         {
-    *                           "url": "http://127.0.0.1:8000/api/rider/notifications?page=1",
-    *                           "label": "1",
-    *                           "active": true
-    *                         },
-    *                         {
-    *                           "url": null,
-    *                           "label": "Next &raquo;",
-    *                           "active": false
-    *                         }
-    *                       },
-    *                       "next_page_url": null,
-    *                       "path": "http://127.0.0.1:8000/api/rider/notifications",
-    *                       "per_page": 10,
-    *                       "prev_page_url": null,
-    *                       "to": 6,
-    *                       "total": 6
-    *                     }
-    *                   }
-    *                 )
-    *           )
-    *      ),
-    *      @OA\Response(
-    *          response=403,
-    *          description="Forbidden Access",
+    *          response=422,
+    *          description="Invalid User Type!",
+    *             @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
     *      ),
     *)
     **/
-    public function getRiderNotifications($recipient_type="rider",$recipient_id=null) {
-        if(!$recipient_id)
-        {
-            $user = Auth::user();
+    public function getAllNotification($user_type,$notification_type,$page=null)
+    {
+        $user = Auth::user();
 
-             //ROLE CHECK FOR RIDER
-             if( ! $this->user_service->hasRole($user, 'rider') )
-             {
-                 $response = ['message' => 'Forbidden Access!'];
-                 return response($response, 403);
-             }
-            $recipient_id = $user->rider->id;
-           
+        //ROLE CHECK FOR RIDER
+        if (!$this->user_service->hasRole($user, 'rider') && $user_type=="rider") {
+            $response = ['message' => 'Forbidden Access!'];
+            return response($response, 403);
         }
-        $notifications =  Notification::where('recipient_id', $recipient_id)->orderBy('id', 'desc')->paginate(10)->withQueryString();
+        $notifications = [];
+        if($user_type == "customer") {
+            $notifications = Notification::where('notification_type',$notification_type)
+                ->where(function($query){
+                    $query->where('recipient_type','customer')
+                    ->orWhere('recipient_type','all');
+                })
+                ->orderBy('id', 'desc')->paginate(10)->withQueryString();
+        }
+        else if($user_type == "rider") {
+            $notifications = Notification::where('notification_type',$notification_type)
+                ->where(function($query){
+                    $query->where('recipient_type','rider')
+                    ->orWhere('recipient_type','all');
+                })
+                ->orderBy('id', 'desc')->paginate(10)->withQueryString();
+        }
+        else {
+            $response = ['message' => 'Invalid User Type!'];;
+            return response($response, 422);
+        }
+
+        $recipient_id = $user->rider->id;
+      
+        // $notifications =  Notification::where('recipient_id', $recipient_id)->orderBy('id', 'desc')->paginate(10)->withQueryString();
         $response = ['message' => 'Success!', 'notifications' => $notifications];
         return response($response, 200);
-    }
 
+
+    }
     
 }

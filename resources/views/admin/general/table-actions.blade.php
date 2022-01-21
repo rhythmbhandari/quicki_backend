@@ -10,7 +10,7 @@
 @endif
 
 @if(!empty($optionalMenuRoute))
-@if(isset($object->notification_type) && $object->notification_type=="push_notification")
+@if(isset($object->notification_type) && ($object->notification_type=="push_notification" || $object->notification_type=="push_promo_notification"  ))
 <a href="{{$optionalMenuRoute}}"><button type="button" id="btnPushNotification" class="btn btn-icon-toggle" data-toggle="tooltip"  title="Push Notification"
         data-placement="top" data-original-title="Send Notification"
         data-id="{{$object->id}}"     data-recipient_type="{{$object->recipient_type}}"

@@ -121,6 +121,9 @@ function getLabel($status)
         case 'push_notification':
             $label = 'label label-lg font-weight-bold label-light-info label-inline';
             break;
+        case 'push_promo_notification':
+            $label = 'label label-lg font-weight-bold label-light-success label-inline';
+            break;
         case 'booking_created':
             $label = 'label label-lg font-weight-bold label-light-primary label-inline';
             break;
@@ -137,6 +140,9 @@ function getLabel($status)
             $label = 'label label-lg font-weight-bold label-light-warning label-inline';
             break;
         case 'customer_ignored':
+            $label = 'label label-lg font-weight-bold label-light-danger label-inline';
+            break;
+        case 'sos_event':
             $label = 'label label-lg font-weight-bold label-light-danger label-inline';
             break;
 

@@ -1675,7 +1675,37 @@
                             "application/json": {
                                 "schema": {
                                     "example": {
-                                        "message": "Admin notified successfully! Wait for the response! "
+                                        "message": "Success!",
+                                        "data": [
+                                            {
+                                                "id": 1,
+                                                "name": "bike",
+                                                "completed": true,
+                                                "cancelled": true,
+                                                "used": true
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "car",
+                                                "completed": false,
+                                                "cancelled": false,
+                                                "used": false
+                                            },
+                                            {
+                                                "id": 3,
+                                                "name": "city_safari",
+                                                "completed": false,
+                                                "cancelled": false,
+                                                "used": false
+                                            },
+                                            {
+                                                "id": 4,
+                                                "name": "ambulance",
+                                                "completed": true,
+                                                "cancelled": false,
+                                                "used": true
+                                            }
+                                        ]
                                     }
                                 }
                             }
@@ -3652,13 +3682,32 @@
                 }
             }
         },
-        "/api/user/notifications": {
+        "/api/user/{user_type}/notifications/{notification_type}": {
             "get": {
                 "tags": [
                     "Notification and Sos"
                 ],
-                "summary": "Get User's Notifications",
-                "operationId": "dddf8a0ea765f44b22171d46095b1898",
+                "summary": "Get User/Rider Notifications/Campaigns/Voucher Notification",
+                "operationId": "5083807be8073fc2bf3b4d36266673c6",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "pagination"
+                    },
+                    {
+                        "name": "user_type",
+                        "in": "path",
+                        "description": "User Type (Allowed Values: 'customer' or 'rider'  )",
+                        "required": true
+                    },
+                    {
+                        "name": "notification_type",
+                        "in": "path",
+                        "description": "Notification Type (Allowed Values: push_notification, push_promo_notification )",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -3737,103 +3786,15 @@
                                 }
                             }
                         }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/rider/notifications": {
-            "get": {
-                "tags": [
-                    "Notification and Sos"
-                ],
-                "summary": "Get Rider's Notifications",
-                "operationId": "2ac926ba2974ce2bbc70173cafbda3c0",
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "example": {
-                                        "message": "Success!",
-                                        "notifications": {
-                                            "current_page": 1,
-                                            "data": [
-                                                {
-                                                    "id": 22,
-                                                    "title": "Puryaideu: Ride Update",
-                                                    "message": " The ride has been ACCEPTED!",
-                                                    "image": null,
-                                                    "recipient_id": 1,
-                                                    "recipient_device_token": "eptgkjw5ThWfxnIDLrJ_Pp:APA91bFvCkyvRevMQJErJfbDoZFNGtY6H8ZNdI-pSM--pt6bofgJMu2PZNdAe9PGNpz2wwKXdmZ5GOgcAzZl7EvAtZIJWwW9Xh0xBLwf_Qx2w_Ghz2UMW-1zwzZ_W9V4OHFxbHB7pxNy",
-                                                    "recipient_type": "rider",
-                                                    "recipient_quantity_type": "some",
-                                                    "notification_type": "booking_accepted",
-                                                    "read_at": null,
-                                                    "deleted_at": null,
-                                                    "created_at": "2021-12-20T11:55:17.000000Z",
-                                                    "updated_at": "2021-12-20T11:55:17.000000Z",
-                                                    "thumbnail_path": "assets/media/noimage.png",
-                                                    "image_path": "assets/media/noimage.png"
-                                                },
-                                                {
-                                                    "id": 17,
-                                                    "title": "Puryaideu: Ride Update",
-                                                    "message": "Your ride has been COMPLETED!",
-                                                    "image": null,
-                                                    "recipient_id": 1,
-                                                    "recipient_device_token": "eptgkjw5ThWfxnIDLrJ_Pp:APA91bFvCkyvRevMQJErJfbDoZFNGtY6H8ZNdI-pSM--pt6bofgJMu2PZNdAe9PGNpz2wwKXdmZ5GOgcAzZl7EvAtZIJWwW9Xh0xBLwf_Qx2w_Ghz2UMW-1zwzZ_W9V4OHFxbHB7pxNy",
-                                                    "recipient_type": "rider",
-                                                    "recipient_quantity_type": "some",
-                                                    "notification_type": "booking_completed",
-                                                    "read_at": null,
-                                                    "deleted_at": null,
-                                                    "created_at": "2021-12-20T11:33:46.000000Z",
-                                                    "updated_at": "2021-12-20T11:33:46.000000Z",
-                                                    "thumbnail_path": "assets/media/noimage.png",
-                                                    "image_path": "assets/media/noimage.png"
-                                                }
-                                            ],
-                                            "first_page_url": "http://127.0.0.1:8000/api/rider/notifications?page=1",
-                                            "from": 1,
-                                            "last_page": 1,
-                                            "last_page_url": "http://127.0.0.1:8000/api/rider/notifications?page=1",
-                                            "links": [
-                                                {
-                                                    "url": null,
-                                                    "label": "&laquo; Previous",
-                                                    "active": false
-                                                },
-                                                {
-                                                    "url": "http://127.0.0.1:8000/api/rider/notifications?page=1",
-                                                    "label": "1",
-                                                    "active": true
-                                                },
-                                                {
-                                                    "url": null,
-                                                    "label": "Next &raquo;",
-                                                    "active": false
-                                                }
-                                            ],
-                                            "next_page_url": null,
-                                            "path": "http://127.0.0.1:8000/api/rider/notifications",
-                                            "per_page": 10,
-                                            "prev_page_url": null,
-                                            "to": 6,
-                                            "total": 6
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     },
                     "403": {
-                        "description": "Forbidden Access"
+                        "description": "Forbidden Access!"
+                    },
+                    "422": {
+                        "description": "Invalid User Type!",
+                        "content": {
+                            "application/json": {}
+                        }
                     }
                 },
                 "security": [

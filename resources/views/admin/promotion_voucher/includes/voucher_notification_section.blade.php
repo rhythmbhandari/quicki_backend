@@ -22,28 +22,7 @@
               
             </div>
             <div class="col-xl-3 col-lg-3 col-sm-6  col-xs-12 ">
-                {{-- <div class="image-input image-input-empty image-input-outline" id="kt_image_1">
-                    <div class="image-input-wrapper" @if(isset($promotion_voucher->image))
-                        style="background-image: url({{asset($promotion_voucher->image_path) }})"
-                        @else
-                        style="background-image: url({{asset('assets/admin/media/users/blank.png')}}"
-                        @endif
-                        ></div>
-                    <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-                        data-action="change" data-toggle="tooltip" title="" data-original-title="Change image">
-                        <i class="fa fa-pen icon-sm text-muted"></i>
-                        <input type="file" name="image" accept=".png, .jpg, .jpeg" @if(isset($promotion_voucher->image)) value="{{asset($promotion_voucher->image_path)}}" @endif />
-                        <input type="hidden" name="image_remove" />
-                    </label>
-                    <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-                        data-action="cancel" data-toggle="tooltip" title="Cancel image">
-                        <i class="ki ki-bold-close icon-xs text-muted"></i>
-                    </span>
-                    <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-                        data-action="remove" data-toggle="tooltip" title="Remove image">
-                        <i class="ki ki-bold-close icon-xs text-muted"></i>
-                    </span>
-                </div> --}}
+               
 
 
                 <label for="image" class="font-weight-bold text-muted ">
@@ -67,7 +46,8 @@
 
         <div class="form-group row">
             <label for="" class="text-muted font-weight-bold">Message:</label>
-            <textarea  name="message" maxlength="255"  required  style="min-height:150px;" class="form-control"    value="" placeholder="Use Promo Code {{$promotion_voucher->code}}"></textarea>
+            <textarea  name="message" maxlength="255"  required  style="min-height:150px;" class="form-control"     placeholder="Use Promo Code {{$promotion_voucher->code}}"
+                >Use Promo Code {{$promotion_voucher->code}}</textarea>
         </div>
     
 
@@ -85,28 +65,7 @@
               
             </div>
             <div class="col-lg-3 col-sm-6  col-xs-12 ">
-                {{-- <div class="image-input image-input-empty image-input-outline" id="kt_image_1">
-                    <div class="image-input-wrapper" @if(isset($related_notification->image))
-                        style="background-image: url({{asset($related_notification->image_path) }})"
-                        @else
-                        style="background-image: url({{asset('assets/admin/media/users/blank.png')}}"
-                        @endif
-                        ></div>
-                    <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-                        data-action="change" data-toggle="tooltip" title="" data-original-title="Change image">
-                        <i class="fa fa-pen icon-sm text-muted"></i>
-                        <input type="file" name="image" accept=".png, .jpg, .jpeg" />
-                        <input type="hidden" name="image_remove" />
-                    </label>
-                    <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-                        data-action="cancel" data-toggle="tooltip" title="Cancel image">
-                        <i class="ki ki-bold-close icon-xs text-muted"></i>
-                    </span>
-                    <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-                        data-action="remove" data-toggle="tooltip" title="Remove image">
-                        <i class="ki ki-bold-close icon-xs text-muted"></i>
-                    </span>
-                </div> --}}
+                
 
                 <label for="image" class="text-muted font-weight-bold">
                     Image: 

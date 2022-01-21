@@ -187,12 +187,14 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   //---------------------------------------------------------------------------------------------------------
   //  NOTIFICATION AND SOS
   //---------------------------------------------------------------------------------------------------------
-  $router->get('/user/notifications', [NotificationController::class, 'getUserNotifications'])->name('user.notifications');
-  $router->get('/rider/notifications', [NotificationController::class, 'getRiderNotifications'])->name('rider.notifications');
+  // $router->get('/user/notifications', [NotificationController::class, 'getUserNotifications'])->name('user.notifications');
+  // $router->get('/rider/notifications', [NotificationController::class, 'getRiderNotifications'])->name('rider.notifications');
   $router->post('/user/sos/create', [SosController::class, 'user_sos_store'])->name('user.sos.store');
   $router->post('/rider/sos/create', [SosController::class, 'rider_sos_store'])->name('rider.sos.store');
   $router->post('/user/sos/event/create', [EventController::class, 'user_event_store'])->name('user.event.store');
   $router->post('/rider/sos/event/create', [EventController::class, 'rider_event_store'])->name('rider.event.store');
+  $router->get('/user/{user_type}/notifications/{notification_type}', [NotificationController::class, 'getAllNotification'])->name('user.get_notifications');
+
 
 
   //---------------------------------------------------------------------------------------------------------
