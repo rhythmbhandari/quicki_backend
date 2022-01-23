@@ -56,7 +56,7 @@ class DocumentRequest extends FormRequest
                         },],
             'documentable_id' => 'required|integer', 
             'type' => 'required|string|max:255',        //bluebook, license, passport, citizenship, etc
-            'document_number' => 'required|string|max:255',
+            'document_number' => 'nullable|string|max:255',
             'issue_date' => 'nullable|date|max:255',
             'expiry_date' => 'nullable|date|max:255',
             'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',

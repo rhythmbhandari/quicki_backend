@@ -40,7 +40,7 @@
                         </label>
                         <div class="col-auto">
                             <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                placeholder="Enter First Name" name="name" value="{{ old('name', isset($promotion_voucher->name) ? $promotion_voucher->name : '') }}" required />
+                                placeholder="Enter Title" name="name" value="{{ old('name', isset($promotion_voucher->name) ? $promotion_voucher->name : '') }}" required />
                             @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

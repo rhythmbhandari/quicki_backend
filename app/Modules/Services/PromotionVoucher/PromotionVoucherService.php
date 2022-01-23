@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Modules\Services\Service;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use Carbon\Carbon;
 
 //models
 use App\Modules\Models\PromotionVoucher;
@@ -55,10 +56,10 @@ class PromotionVoucherService extends Service
                 return $promotion_voucher->max_uses - $promotion_voucher->uses;
             })
             ->editColumn('starts_at', function (PromotionVoucher $promotion_voucher) {
-                return prettyDate($promotion_voucher->starts_at);
+                return formatDate($promotion_voucher->starts_at);
             })
             ->editColumn('expires_at', function (PromotionVoucher $promotion_voucher) {
-                return prettyDate($promotion_voucher->expires_at);
+                return formatDate($promotion_voucher->expires_at);
             })
             ->editColumn('status', function (PromotionVoucher $promotion_voucher) {
                 return getTableHtml($promotion_voucher, 'status');

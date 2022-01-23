@@ -42,6 +42,16 @@ function prettyDate($data)
     return date('d M Y', strtotime($data));
 }
 
+function formatDate($data)
+{
+    return \Carbon\Carbon::parse($data)->format('d M, Y');
+}
+
+function formatTimeStamp($data)
+{
+    return \Carbon\Carbon::parse($data)->format('d M, Y h:m A');
+}
+
 function getLabel($status)
 {
     $label = '';

@@ -13,7 +13,7 @@
             <div class="col-xl-9 col-lg-9 col-sm-6 col-xs-12 ">
                 <div class="form-group row mr-3">
                     <label for="" class="text-muted font-weight-bold">Recipient Type:</label>
-                    <input type="text" class="form-control" disabled value="{{$promotion_voucher->user_type}}">
+                    <input type="text" class="form-control" value="{{$promotion_voucher->user_type}}" name="recipient_type">
                </div>
                <div class="form-group row mr-3">
                     <label for="" class="text-muted font-weight-bold">Title:</label>
