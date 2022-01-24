@@ -23,8 +23,20 @@ class Document extends Model
     ]);
 
     protected $appends = [
-        'thumbnail_path', 'image_path'
+        'thumbnail_path', 'image_path', 'document_for'
     ];
+
+    function getDocumentForAttribute()
+    {
+        if(str_contains( strtolower($this->documentable_type) , "rider"  ))
+            return "rider";
+        else  if(str_contains( strtolower($this->documentable_type) , "user"  ))
+            return "user";
+        else if(str_contains( strtolower($this->documentable_type) , "vehicle"  ))
+            return "vehicle";
+        else 
+            return $this->documentable_type;
+    }
 
     function getImagePathAttribute()
     {

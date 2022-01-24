@@ -306,6 +306,118 @@ class DocumentController extends Controller
 
 
 
+    /**
+    * @OA\Get(
+    *   path="/api/rider/documents",
+    *   tags={"Document"},
+    *   summary="Get Rider's Document",
+    *   security={{"bearerAuth":{}}},
+    *
+    *
+    *      @OA\Response(
+    *        response=200,
+    *        description="Success",
+    *          @OA\MediaType(
+    *               mediaType="application/json",
+    *                   @OA\Schema(      
+    *                   example={
+    *                     "message": "Success!",
+    *                     "documents": {
+    *                       {
+    *                         "id": 36,
+    *                         "documentable_type": "App\\Modules\\Models\\Rider",
+    *                         "documentable_id": 37,
+    *                         "type": "license",
+    *                         "name": null,
+    *                         "document_number": "123456",
+    *                         "issue_date": "2017-08-11",
+    *                         "expiry_date": "2023-12-11",
+    *                         "verified_at": null,
+    *                         "reason": "pending",
+    *                         "image": null,
+    *                         "deleted_at": null,
+    *                         "created_at": "2021-12-11T12:14:31.000000Z",
+    *                         "updated_at": "2021-12-11T12:14:31.000000Z",
+    *                         "thumbnail_path": "assets/media/noimage.png",
+    *                         "image_path": "assets/media/noimage.png",
+    *                         "document_for": "rider"
+    *                       },
+    *                       {
+    *                         "id": 39,
+    *                         "documentable_type": "App\\Modules\\Models\\Vehicle",
+    *                         "documentable_id": 36,
+    *                         "type": "bluebook",
+    *                         "name": "front",
+    *                         "document_number": "123456",
+    *                         "issue_date": "2010-12-23",
+    *                         "expiry_date": "2026-12-22",
+    *                         "verified_at": null,
+    *                         "reason": "pending",
+    *                         "image": null,
+    *                         "deleted_at": null,
+    *                         "created_at": "2021-12-23T12:15:51.000000Z",
+    *                         "updated_at": "2021-12-23T12:15:51.000000Z",
+    *                         "thumbnail_path": "assets/media/noimage.png",
+    *                         "image_path": "assets/media/noimage.png",
+    *                         "document_for": "vehicle"
+    *                       }
+    *                     }
+    *                   }
+    *
+    *                 )
+    *           )
+    *      ),
+    *
+     *      @OA\Response(
+    *          response=403,
+    *          description="Forbidden Access",
+    *      ),
+    *      @OA\Response(
+    *          response=500,
+    *          description="Internal Server Error",
+    *             @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+    *      ),
+    *)
+    **/
+    public function getRiderDocuments()
+    {
+        $user = Auth::user();
+
+        //ROLE CHECK FOR RIDER
+        if( ! $this->user_service->hasRole($user, 'rider') || !$user->rider )
+        {
+            $response = ['message' => 'Forbidden Access!'];
+            return response($response, 403);
+        }
+
+        $rider = $user->rider;
+        $documents = [];
+        if($vehicle = $rider->vehicle)
+        {
+            $documents = Document::where(function($query) use($rider){
+                $query->where('documentable_id',$rider->id)
+                ->where('documentable_type','App\Modules\Models\Rider');
+            })
+            ->orWhere(function($query) use ($vehicle){
+                $query->where('documentable_id',$vehicle->id)
+                ->where('documentable_type','App\Modules\Models\Vehicle');
+            })->get();
+        }else{
+            $documents = Document::where(function($query){
+                $query->where('documentable_id',$rider->id)
+                ->where('documentable_type','App\Modules\Models\Rider');
+            })->get();
+        }
+
+        $response = ['message' => 'Success!','documents'=>$documents];
+        return response($response, 200);
+
+        return response("Internal Server Error!", 500);
+    }
+
+
     //Image for document 
     function uploadFile(Request $request, $document)
     {

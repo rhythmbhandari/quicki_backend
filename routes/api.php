@@ -160,7 +160,7 @@ Route::group(['as' => 'api.', 'middleware' => 'auth:api'], function ($router) {
   $router->post('/document/create', [DocumentController::class, 'store'])->name('document.create');
   $router->post('/document/{document_id}/update', [DocumentController::class, 'update'])->name('document.update');
   $router->get('/document/{document_id}/details', [DocumentController::class, 'getDocument'])->name('document.details');
-
+  $router->get('/rider/documents', [DocumentController::class, 'getRiderDocuments'])->name('rider.documents');
 
   //---------------------------------------------------------------------------------------------------------
   //  VEHICLE
