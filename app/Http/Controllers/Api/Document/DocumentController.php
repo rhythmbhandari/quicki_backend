@@ -104,20 +104,27 @@ class DocumentController extends Controller
      
 
         $documentable = null;
+        // $documentable_type = "";
         //Return 404 response if the documentable model doesn't exist
         if($request->documentable_type == "rider")
         {
             $documentable = Rider::find($request->documentable_id);
+            $request['documentable_type'] = "App\Modules\Models\Rider";
         }
         else if($request->documentable_type == "vehicle")
         {
             $documentable = Vehicle::find($request->documentable_id);
+            $request['documentable_type'] = "App\Modules\Models\Vehicle";
         }
         else if($request->documentable_type == "customer" || $request->documentable_type == "user")
         {
             $documentable = User::find($request->documentable_id);
+            $request['documentable_type'] = "App\Modules\Models\User";
         }
-        else{}
+        else{
+            $response = ['message' => $request->documentable_type.' is invalid!'];
+            return response($response, 422);
+        }
 
         if(!$documentable)
         {
