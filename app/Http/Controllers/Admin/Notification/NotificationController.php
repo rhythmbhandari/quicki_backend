@@ -1,0 +1,275 @@
+<?php
+
+namespace App\Http\Controllers\Admin\Notification;
+
+
+use App\Http\Requests\Admin\Notification\NotificationRequest;
+use App\Http\Requests\Admin\Notification\UpdateNotificationRequest;
+use Illuminate\Support\Facades\DB;
+use Kamaln7\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Log;
+
+use App\Http\Controllers\Controller;
+use App\Modules\Models\Booking;
+use App\Modules\Models\Sos;
+use App\Modules\Models\User;
+use App\Modules\Models\Notification;
+use App\Modules\Models\Rider;
+use App\Modules\Models\Event;
+use App\Modules\Services\Sos\SosService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Modules\Services\Notification\NotificationService;
+use Carbon\Carbon;
+use App\Jobs\PushNotification;
+
+class NotificationController extends Controller
+{
+    protected $sos, $notification_service;
+    function __construct(
+        SosService $sos,
+        NotificationService $notification_service
+    ) {
+        $this->sos = $sos;
+        $this->notification_service = $notification_service;
+    }
+
+    public function getLatestNotification($notification_type="all")
+    {
+        $notifications = $sos = $events = null;
+        
+    
+
+        if($notification_type=="notification")
+        {
+                $notifications = Notification::where('recipient_type','admin')
+                ->where(function ($query) {
+                    $query->where('read_at',NULL)
+                        ->orWhereRelation('booking','status','==', 'pending');
+                })
+                ->orderBy('created_at','desc')->get();
+        }
+        else if($notification_type == "sos")
+        {
+           
+            $sos = Sos::where('created_by_type','!=','admin')->where('status','!=','closed')
+            ->where(function ($query) {
+                $query->where('read_at',NULL)
+                    ->orWhere('status','!=', 'closed');
+            })
+            ->orderBy('created_at','desc')->get();
+        }
+        else if($notification_type == "event")
+        {
+        
+            $events = Event::where('created_by_type','!=','admin')
+            ->where(function ($query) {
+                $query->where('read_at',NULL)
+                    ->orWhereRelation('sos','status','!=', 'closed');
+            })
+            ->orderBy('created_at','desc')->get();
+        }
+        else
+        {
+            
+            $notifications = Notification::where('recipient_type','admin')
+                ->where('read_at',NULL)
+                ->orderBy('created_at','desc')->get();
+                $sos = Sos::where('created_by_type','!=','admin')->where('status','!=','closed')
+                ->where(function ($query) {
+                    $query->where('read_at',NULL)
+                        ->orWhere('status','!=', 'closed');
+                })
+                ->orderBy('created_at','desc')->get();
+            $events = Event::where('created_by_type','!=','admin')
+            ->where(function ($query) {
+                $query->where('read_at',NULL)
+                    ->orWhereRelation('sos','status','!=', 'closed');
+            })
+            ->orderBy('created_at','desc')->get();
+
+        }
+        // dd($notifications, $sos, $events);
+
+        $total_alert = 0;
+        $notification_alert = 0;
+        $notification_alert = isset($notifications)?count($notifications->where('read_at',NULL)):0;
+        // $notification_alert = $notifications->contains('five_minutes_old',true);
+        $sos_alert = 0;
+        $sos_alert = isset($sos)?count($sos->where('read_at',NULL)):0;
+        // $sos_alert = $sos->contains('five_minutes_old',true);
+        $event_alert = 0;
+        $event_alert = isset($events)?count($events->where('read_at',NULL)):0;
+
+        $total_alert =   $notification_alert + $sos_alert + $event_alert;
+        // $event_alert = $events->contains('five_minutes_old',true);
+
+        $response = [
+            "notification_section" =>  isset($notifications) ? view('layouts.admin.includes.notification_section',compact('notifications'))->render() : null  ,
+            "notification_alert" => $notification_alert,
+            "sos_section" =>   isset($sos) ? view('layouts.admin.includes.sos_section',compact('sos'))->render() : null ,
+            "sos_alert" => $sos_alert,
+            "event_section" =>   isset($events) ? view('layouts.admin.includes.event_section',compact('events'))->render() : null ,
+            "event_alert" => $event_alert,
+            'total_alert'=>$total_alert,
+            "notification_type"=>$notification_type
+        ];
+
+        return response($response, 200);
+
+
+    }
+
+
+
+    public function read_booking_notification($notification_id ){
+        $notification = Notification::findOrFail($notification_id);
+
+        if(!$notification->read_at)
+        {   
+            $notification->read_at = Carbon::now();
+            $notification->save();
+        }
+       
+        return redirect()->route('admin.map.dispatcher', ['booking_id'=>$notification->booking_id]);
+    }
+
+    public function read_sos($sos_id){
+        $sos = Sos::findOrFail($sos_id);
+
+        return redirect()->route('admin.sos-detail.create', $sos->id);
+    }
+
+    public function read_event($event_id){
+        $event = Event::findOrFail($event_id);
+
+        return redirect()->route('admin.sos-detail.create', $event->sos->id);
+    }
+
+
+    public function index()
+    {
+        return view('admin.notification.index');
+    }
+
+    public function all_notification_index()
+    {
+        return view('admin.notification.all.index');
+    }
+
+
+    public function getPushNotificationData()
+    {
+        return $this->notification_service->getAllData("push_notification");
+    }
+
+    public function getAllNotificationData()
+    {
+        return $this->notification_service->getAllData();
+    }
+
+    public function show($id)
+    {
+        echo "SHOW NOTIFICATION";
+    }
+
+    public function create()
+    {
+        return view('admin.notification.create');
+    }
+
+    public function edit($id)
+    {
+        $notification = Notification::findOrFail($id);
+        return view('admin.notification.edit', compact('notification'));
+    }
+
+
+    //STORES only the push_notification notifications 
+    public function store(NotificationRequest $request)
+    {
+        // dd($request->all());
+      
+        return DB::transaction(function () use ($request) {
+            $request['recipient_quantity_type'] = "all";
+            $createdNotification =   $this->notification_service->create($request->except('image'));
+            if ($createdNotification) {
+                if ($request->hasFile('image')) {
+                    $this->uploadFile($request, $createdNotification);
+                }
+                Toastr::success('Notification created successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+                return redirect()->route('admin.notification.index');
+            }
+            Toastr::error('Notification cannot be created.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+            return redirect()->route('admin.notification.index');
+        });
+    }
+
+    
+    public function update(UpdateNotificationRequest $request,$id)
+    {
+        // return redirect()->route('admin.notification.index');
+        return DB::transaction(function () use ($request, $id) {
+            $updatedNotification = $this->notification_service->update($request->except('image','code','recipient_type','recipient_quantity_type'),$id);
+            if ($updatedNotification) {
+                if ($request->hasFile('image')) {
+                    $this->uploadFile($request, Notification::find($id));
+                }
+                Toastr::success('Notification updated successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+                return redirect()->route('admin.notification.index');
+            }
+            Toastr::error('Notification cannot be updated.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+            return redirect()->route('admin.notification.index');
+        }); 
+    }
+
+    public function destroy($id)
+    {
+        // return redirect()->route('admin.notification.index');
+        return DB::transaction(function () use ($id) {
+            $result['deleted'] = false;
+            $deletedNotification = $this->notification_service->delete($id);
+            if ($deletedNotification) {
+             
+                Toastr::success('Notification deleted successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+                $result['deleted'] = true;
+                return $results['url'] = route('admin.notification.index');
+            }
+            Toastr::error('Notification cannot be deleted.', 'Oops !!!', ["positionClass" => "toast-bottom-right"]);
+             return $results['url']  = route('admin.notification.index');
+        }); 
+    }
+
+    public function push_notification($notification_id)
+    {
+      
+
+
+        $job = new PushNotification($notification_id, $this->notification_service);
+        dispatch($job);
+
+        Toastr::success('Notifications sent successfully.', 'Success !!!', ["positionClass" => "toast-bottom-right"]);
+        return redirect()->route('admin.notification.index');
+
+    }
+
+
+    // public function show()
+    // {
+    //     return view('admin.notification.show');
+    // }
+
+    function uploadFile(Request $request, $notification)
+    {
+        $file = $request->file('image');
+        $fileName = $this->notification_service->uploadFile($file);
+        if (!empty($notification->image))
+            $this->notification_service->__deleteImages($notification);
+
+        $data['image'] = $fileName;
+        $this->notification_service->updateImage($notification->id, $data);
+    }
+   
+
+}
+

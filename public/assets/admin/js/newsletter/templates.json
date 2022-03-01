@@ -1,0 +1,17 @@
+[
+    {
+        "title": "Template 1",
+        "description": "This is my template1.",
+        "url": "/admin/newsletter/templates/1" 
+    },
+    {
+        "title": "Template 2",
+        "description": "This is my template2.",
+        "url": "/admin/newsletter/templates/2" 
+    },
+    {
+        "title": "Template 3",
+        "description": "This is my template3.",
+        "url":  "/admin/newsletter/templates/3" 
+    }
+]
