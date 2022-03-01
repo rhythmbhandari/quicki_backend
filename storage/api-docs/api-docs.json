@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Puryaideu V2 API",
-        "description": "Puryaideu APIs documentation",
+        "title": "Quicki API",
+        "description": "Quicki APIs documentation",
         "version": "2.0.0"
     },
     "paths": {

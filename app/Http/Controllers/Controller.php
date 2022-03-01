@@ -16,8 +16,8 @@ class Controller extends BaseController
     /**
      * @OA\Info(
      *      version="2.0.0",
-     *      title="Puryaideu V2 API",
-     *      description="Puryaideu APIs documentation"
+     *      title="Quicki V2 API",
+     *      description="Quicki APIs documentation"
      * )
      * @OA\SecurityScheme(
      *      securityScheme="bearerAuth",

@@ -25,97 +25,97 @@ class NotificationService extends Service
         "booking_created" =>
         [
             "default" => [
-                "title" => "Puryaideu: Ride Update",
+                "title" => "Quicki: Ride Update",
                 "body" => " New ride requested!",
             ],
         ],
         "booking_accepted" =>
         [
             "default" => [
-                "title" => "Puryaideu: Ride Update",
+                "title" => "Quicki: Ride Update",
                 "body" => " The ride has been ACCEPTED!",
             ],
             "customer" => [
-                "title" => "Puryaideu: Ride Update",
+                "title" => "Quicki: Ride Update",
                 "body" => " Your ride has been ACCEPTED by a rider!",
             ],
             "rider" => [
-                "title" => "Puryaideu: Ride Update",
+                "title" => "Quicki: Ride Update",
                 "body" => "You ACCEPTED a ride successfully!"
             ]
         ],
         "booking_running" =>
         [
             "default" => [
-                "title" => "Puryaideu: Ride Update",
+                "title" => "Quicki: Ride Update",
                 "body" => "Your ride is RUNNING!"
             ],
             "customer" => [
-                "title" => "Puryaideu: Ride Update",
+                "title" => "Quicki: Ride Update",
                 "body" => "Your ride is RUNNING!"
             ],
             "rider" => [
-                "title" => "Puryaideu: Ride Update",
+                "title" => "Quicki: Ride Update",
                 "body" => "Your ride is RUNNING!"
             ]
         ],
         "booking_completed" =>
         [
             "default" => [
-                "title" => "Puryaideu: Ride Update",
+                "title" => "Quicki: Ride Update",
                 "body" => "Your ride has been COMPLETED!"
             ],
             "customer" => [
-                "title" => "Puryaideu: Ride Update",
+                "title" => "Quicki: Ride Update",
                 "body" => "Your ride has been COMPLETED!"
             ],
             "rider" => [
-                "title" => "Puryaideu: Ride Update",
+                "title" => "Quicki: Ride Update",
                 "body" => "Your ride has been COMPLETED!"
             ]
         ],
         "booking_cancelled" =>
         [
             "default" => [
-                "title" => "Puryaideu: Ride Update",
+                "title" => "Quicki: Ride Update",
                 "body" => "Your ride has been CANCELLED!"
             ],
             "customer" => [
-                "title" => "Puryaideu: Ride Update",
+                "title" => "Quicki: Ride Update",
                 "body" => "Your ride has been CANCELLED!"
             ],
             "rider" => [
-                "title" => "Puryaideu: Ride Update",
+                "title" => "Quicki: Ride Update",
                 "body" => "Your ride has been CANCELLED!"
             ]
         ],
         "booking_paid_success" =>
         [
             "default" => [
-                "title" => "Puryaideu: Ride Payment Update",
+                "title" => "Quicki: Ride Payment Update",
                 "body" => "Payment successful for your most recent ride!"
             ],
             "customer" => [
-                "title" => "Puryaideu: Ride Payment Update",
+                "title" => "Quicki: Ride Payment Update",
                 "body" => "Payment successful for your most recent ride!"
             ],
             "rider" => [
-                "title" => "Puryaideu: Ride Payment Update",
+                "title" => "Quicki: Ride Payment Update",
                 "body" => "Payment successful for your most recent ride!"
             ]
         ],
         "booking_paid_fail" =>
         [
             "default" => [
-                "title" => "Puryaideu: Ride Payment Update",
+                "title" => "Quicki: Ride Payment Update",
                 "body" => "Payment failed for your most recent ride!"
             ],
             "customer" => [
-                "title" => "Puryaideu: Ride Payment Update",
+                "title" => "Quicki: Ride Payment Update",
                 "body" => "Payment failed for your most recent ride!"
             ],
             "rider" => [
-                "title" => "Puryaideu: Ride Payment Update",
+                "title" => "Quicki: Ride Payment Update",
                 "body" => "Payment failed for your most recent ride!"
             ]
         ]
@@ -127,16 +127,16 @@ class NotificationService extends Service
         "default" =>
         [
             "default" => [
-                "title" => "Puryaideu App",
-                "body" => "Welcome to Puryaideu Services!"
+                "title" => "Quicki App",
+                "body" => "Welcome to Quicki Services!"
             ],
             "customer" => [
-                "title" => "Puryaideu App",
-                "body" => "Welcome to Puryaideu customer!"
+                "title" => "Quicki App",
+                "body" => "Welcome to Quicki customer!"
             ],
             "rider" => [
-                "title" => "Puryaideu: Ride Payment Update",
-                "body" => "Welcome to Puryaideu rider!"
+                "title" => "Quicki: Ride Payment Update",
+                "body" => "Welcome to Quicki rider!"
             ]
         ]
     ];
@@ -145,9 +145,9 @@ class NotificationService extends Service
     {
         $this->notification = $notification;
         $this->firebase_notification_service = $firebase_notification_service;
-        $this->title = "PURAIDEY NOTIFICATION TEST ";
-        $this->message = "blah blah blah!!!!!";
-        $this->imageUrl =  Config::get('webapp_url', 'http://puryaideuv2.letitgrownepal.com/') . 'assets/media/logo.png';
+        $this->title = "Quicki NOTIFICATION TEST ";
+        $this->message = "Greetings!!!!!";
+        $this->imageUrl =  Config::get('webapp_url', 'http://127.0.0.1:8000/') . 'assets/media/logo.png';
     }
 
 
@@ -172,7 +172,7 @@ class NotificationService extends Service
     function update($data,$notificationId)
     {
         try {
-            
+
             $notification= Notification::findOrFail($notificationId);
             $updatedNotification = $notification->update($data);
             return $updatedNotification;
@@ -191,7 +191,7 @@ class NotificationService extends Service
 
             $notification = Notification::findOrFail($notificationId);
             return $deleted = $notification->delete();
-      
+
         } catch (Exception $e) {
             return false;
         }
@@ -218,7 +218,7 @@ class NotificationService extends Service
             $title = $message['title'];
             $body = $message['body'];
         }
-       
+
         if ($recipients) {
             //STORE NOTIFICATIONS TO NOTIFICATION TABLE
             if ($recipient_quantity_type != "all") {
@@ -235,7 +235,7 @@ class NotificationService extends Service
                     if ($device_token)
                         $device_tokens[] = $device_token = $device_token->device_token;
 
-      
+
                     $create_data =  [
                         "recipient_id" => $recipient_id,
                         "recipient_type" => $recipient_type,
@@ -264,7 +264,7 @@ class NotificationService extends Service
                     $device_tokens[] = $device_token->device_token;
                 }
 
-                
+
                 $create_data =  [
                     "recipient_id" => null,
                     "recipient_type" => null,
@@ -274,7 +274,7 @@ class NotificationService extends Service
                     "title" => $title,
                     "message" => $body
                 ];
-                
+
                 $this->create($create_data);
 
             }
@@ -287,7 +287,7 @@ class NotificationService extends Service
                     "body" => $body,
                     "sound"=>$sound,
                     "imageUrl" =>  $this->imageUrl,
-                    // "icon"=>$icon 
+                    // "icon"=>$icon
                 ],
                 $device_tokens,
                 [
@@ -297,7 +297,7 @@ class NotificationService extends Service
 
             return $response;
         }
-        
+
     }
 
 
@@ -334,7 +334,7 @@ class NotificationService extends Service
                 "body" => $notification->message,
                 "sound"=> "default",
                 "imageUrl" =>  $this->imageUrl,
-                // "icon"=>$icon 
+                // "icon"=>$icon
             ],
             $device_tokens,
             [
@@ -361,7 +361,7 @@ class NotificationService extends Service
     public function  getAllData($filter = null)
     {
         $query = $this->notification->where('notification_type','!=','push_notification')->orderBy('created_at','desc')->get();
-        
+
         // dd('asdads', $filter);
         if($filter)
         {
@@ -375,7 +375,7 @@ class NotificationService extends Service
                 })
                 ->orderBy('created_at','desc')->get();
         }
-           
+
 
         return DataTables::of($query)
             ->addIndexColumn()
@@ -410,7 +410,7 @@ class NotificationService extends Service
             ->make(true);
     }
 
-    
+
 
 
 

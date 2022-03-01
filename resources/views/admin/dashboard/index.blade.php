@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="row text-center">
-    Welcome to Puryaideu Dashbaord!!
+    Welcome to Quicki Dashboard!!
 </div>
 @endsection
 

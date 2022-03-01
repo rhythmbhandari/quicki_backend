@@ -40,7 +40,7 @@ class NotificationController extends Controller
     *        description="Success",
     *          @OA\MediaType(
     *               mediaType="application/json",
-    *                   @OA\Schema(      
+    *                   @OA\Schema(
     *                   example={}
     *                 )
     *           )
@@ -50,9 +50,9 @@ class NotificationController extends Controller
     public function test_notification()
     {
         $device_token = "ewVH7IGaR9W153EcGzneKb:APA91bGOK19YGdZ5daIv1BkiTwCX00jBmq0MR-AFqvzyW6X05ddDQ4BWhCs92oqAHgsLr6o3AEUGcYrWq8ldEYhsrGSjf53yGlhZTMK5VlHa4UxWb4JMhJ0ZejtrGqceCtGmxlOkSpld";
-        $title = "PURAIDEY NOTIFICATION TEST ";
-        $message = "blah blah blah!!!!!";
-        $imageUrl = Config::get('webapp_url', 'http://puryaideuv2.letitgrownepal.com/') . '/assets/media/logo.png';
+        $title = "Quicki NOTIFICATION TEST ";
+        $message = "Greetings fellow humans";
+        $imageUrl = Config::get('webapp_url', 'http://127.0.0.1:8000/') . '/assets/media/logo.png';
 
         // if($recipient_data == null)
         // {
@@ -68,14 +68,14 @@ class NotificationController extends Controller
         //         ],
         //     ];
         // }
-        
+
 
         // $response =  $this->firebase_notification_service->send(
         //     [
         //         "title" => $title,
         //         "body" => $message,
-        //         "imageUrl" =>  $imageUrl   
-        //     ], 
+        //         "imageUrl" =>  $imageUrl
+        //     ],
         //     [
         //         $device_token
         //     ],
@@ -89,14 +89,14 @@ class NotificationController extends Controller
         //     $this->notification_service->create($recipient_data[0]);
         // }
 
-        $response = $this->notification_service->send_firebase_notification( 
+        $response = $this->notification_service->send_firebase_notification(
             [
                 ['customer', 3 ],
             ],
             "push_notification",
             "individual"
          );
-      
+
 
         return $response;
     }
@@ -105,7 +105,7 @@ class NotificationController extends Controller
 
     // public function saveNotification($device_token, $notification, $notification_type)
     // {
-        
+
     // }
 
 
@@ -133,15 +133,15 @@ class NotificationController extends Controller
     *         description="Notification Type (Allowed Values: push_notification, push_promo_notification )",
     *         required=true,
     *      ),
-    *    
-    *    
+    *
+    *
     *
     *      @OA\Response(
     *        response=200,
     *        description="Success",
     *          @OA\MediaType(
     *               mediaType="application/json",
-    *                   @OA\Schema(      
+    *                   @OA\Schema(
     *                   example=
     *                       {
     *                         "message": "Success!",
@@ -260,12 +260,12 @@ class NotificationController extends Controller
         }
 
         $recipient_id = $user->rider->id;
-      
+
         // $notifications =  Notification::where('recipient_id', $recipient_id)->orderBy('id', 'desc')->paginate(10)->withQueryString();
         $response = ['message' => 'Success!', 'notifications' => $notifications];
         return response($response, 200);
 
 
     }
-    
+
 }

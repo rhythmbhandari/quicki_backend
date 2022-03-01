@@ -168,9 +168,9 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
 
         /*
-        * Settings Providers... 
+        * Settings Providers...
         */
-        
+
         App\Providers\SettingServiceProvider::class,
 
         /*
@@ -242,7 +242,8 @@ return [
 
 
 
-    "webapp_url" => env('WEBAPP_URL', 'http://puryaideuv2.letitgrownepal.com/'),
+    //"webapp_url" => env('WEBAPP_URL', 'http://puryaideuv2.letitgrownepal.com/'),
+    //"webapp_url" => env('WEBAPP_URL', 'http://127.0.0.1:8000/'),
 
     'sparrow_key' => env('SPARROW_KEY', 'v2_16Pr1QjTdtNEhry38axqvcxu9Y3.BZvg'),
 

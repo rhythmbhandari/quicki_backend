@@ -65,7 +65,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
     }).use(plugin).component('Link', _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__.Link).component('Head', _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__.Head).mount(el);
   },
   title: function title(_title) {
-    return "Puryaideu V2 - ".concat(_title);
+    return "Quicki - ".concat(_title);
   }
 });
 _inertiajs_progress__WEBPACK_IMPORTED_MODULE_3__.InertiaProgress.init({
